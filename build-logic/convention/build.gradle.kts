@@ -18,3 +18,16 @@ dependencies {
     implementation(libs.android.gradlePlugin)
     implementation(libs.kotlin.gradlePlugin)
 }
+
+gradlePlugin {
+    plugins {
+        register("AndroidApplicationPlugin") {
+            id = "com.sowhat.justsayit.application"
+            implementationClass = "AndroidApplicationConventionPlugin"
+        }
+        register("AndroidApplicationComposePlugin") {
+            id = "com.sowhat.justsayit.application.compose"
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
+    }
+}
