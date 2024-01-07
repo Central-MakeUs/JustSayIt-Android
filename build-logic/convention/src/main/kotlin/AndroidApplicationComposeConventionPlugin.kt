@@ -1,5 +1,3 @@
-package com
-
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import com.sowhat.convention.configureComposeAndroid
 import org.gradle.api.Plugin
