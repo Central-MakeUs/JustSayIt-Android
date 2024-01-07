@@ -35,6 +35,8 @@ androidxComposeNavigation = "2.6.0"
 
 coilCompose = "2.5.0"
 org-jetbrains-kotlin-jvm = "1.8.10"
+appcompat = "1.6.1"
+material = "1.11.0"
 
 [libraries]
 # for gradle plugins -> for build-logic/build.gradle dependencies
@@ -90,6 +92,8 @@ androidx-compose-navigation = { group = "androidx.navigation", name = "navigatio
 androidx-compose-navigation-test = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxComposeNavigation" }
 
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "coilCompose"}
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
@@ -98,5 +102,6 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }
+com-android-library = { id = "com.android.library", version.ref = "agp" }
 
 [bundles]

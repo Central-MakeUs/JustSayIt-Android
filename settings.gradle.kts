@@ -16,3 +16,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "justsayit"
 include(":app")
+include(":authentication")
+include(":authentication:authentication-data")
+include(":authentication:authentication-domain")
+include(":authentication:authentication-presentation")
