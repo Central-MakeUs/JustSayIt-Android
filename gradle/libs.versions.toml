@@ -1,4 +1,6 @@
 [versions]
+androidGradlePlugin = "8.0.2"
+
 agp = "8.1.0-rc01"
 kotlin = "1.8.10"
 core-ktx = "1.9.0"
@@ -29,8 +31,13 @@ collectionsImmutable = "0.3.5"
 androidxComposeNavigation = "2.6.0"
 
 coilCompose = "2.5.0"
+org-jetbrains-kotlin-jvm = "1.8.10"
 
 [libraries]
+# for gradle plugins -> for build-logic/build.gradle dependencies
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
@@ -87,5 +94,6 @@ org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.re
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }
 
 [bundles]
