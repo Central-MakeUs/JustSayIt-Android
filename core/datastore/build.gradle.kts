@@ -2,6 +2,7 @@
 plugins {
     id("com.sowhat.justsayit.application")
     id("com.sowhat.justsayit.application.hilt")
+    id("com.sowhat.justsayit.application.datastore")
 }
 
 android {

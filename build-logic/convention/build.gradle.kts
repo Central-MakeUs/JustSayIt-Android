@@ -39,5 +39,9 @@ gradlePlugin {
             id = "com.sowhat.justsayit.application.hilt"
             implementationClass = "HiltAndroidConventionPlugin"
         }
+        register("DatastorePlugin") {
+            id = "com.sowhat.justsayit.application.datastore"
+            implementationClass = "DatastoreConventionPlugin"
+        }
     }
 }
