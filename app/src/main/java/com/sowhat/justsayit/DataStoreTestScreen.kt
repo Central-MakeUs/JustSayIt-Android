@@ -15,13 +15,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.datastore.core.DataStore
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.zipdabang.zipdabang_android.common.Constants.TOKEN_NULL
-import com.zipdabang.zipdabang_android.core.data_store.proto.CurrentPlatform
-import com.zipdabang.zipdabang_android.core.data_store.proto.ProtoDataViewModel
-import com.zipdabang.zipdabang_android.core.data_store.proto.Token
-import com.zipdabang.zipdabang_android.core.data_store.proto.tokenDataStore
+import com.sowhat.datastore.model.AuthData
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -30,28 +27,19 @@ import javax.inject.Inject
 
 @Composable
 fun DataStoreTestScreen(
-    dataStore: DataStore<Token>
-) {
 
+) {
     val viewModel = hiltViewModel<ProtoDataViewModel>()
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
 
     var accessToken by remember {
-        mutableStateOf(TOKEN_NULL)
+        mutableStateOf(null)
     }
 
-    LaunchedEffect(key1 = dataStore.data) {
-        dataStore.data.map { tokens ->
-            tokens.accessToken ?: TOKEN_NULL
-        }.collect { accessToken = it }
-    }
-
-    val tokens = viewModel.tokens.collectAsState(initial = Token(
+    val tokens = viewModel.tokens.collectAsState(initial = AuthData(
         null,
         null,
         null,
-        CurrentPlatform.NONE,
+        null,
         null,
         null
     )
@@ -89,7 +77,7 @@ fun DataStoreTestScreen(
         }
 
         Button(onClick = {
-            viewModel.updatePlatform(CurrentPlatform.KAKAO)
+            viewModel.updatePlatform("kakao")
             Log.d(TAG, "${tokens.value}")
         }) {
             Text(text = "PLATFORM To Kakao")
@@ -110,4 +98,10 @@ fun DataStoreTestScreen(
         }
 
     }
+}
+
+@Preview
+@Composable
+fun DatastoreTestPreview() {
+    DataStoreTestScreen()
 }
