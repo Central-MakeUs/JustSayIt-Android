@@ -38,6 +38,9 @@ org-jetbrains-kotlin-jvm = "1.8.10"
 appcompat = "1.6.1"
 material = "1.11.0"
 
+# 네이버 sdk
+nidOauth = "5.9.0"
+
 [libraries]
 # for gradle plugins -> for build-logic/build.gradle dependencies
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -94,6 +97,9 @@ androidx-compose-navigation-test = { group = "androidx.navigation", name = "navi
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "coilCompose"}
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# naver oauth
+nid-oauth = { group = "com.navercorp.nid", name = "oauth-jdk8", version = "nidOauth" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
