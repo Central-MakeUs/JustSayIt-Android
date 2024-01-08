@@ -38,7 +38,7 @@ org-jetbrains-kotlin-jvm = "1.8.10"
 appcompat = "1.6.1"
 material = "1.11.0"
 
-# 네이버 sdk
+# 네이버 sdk -> 왜 버전이 인식이 안되는것인가?
 nidOauth = "5.9.0"
 
 [libraries]
@@ -99,7 +99,7 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 # naver oauth
-nid-oauth = { group = "com.navercorp.nid", name = "oauth-jdk8", version = "nidOauth" }
+nid-oauth = { group = "com.navercorp.nid", name = "oauth-jdk8", version = "5.9.0" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }

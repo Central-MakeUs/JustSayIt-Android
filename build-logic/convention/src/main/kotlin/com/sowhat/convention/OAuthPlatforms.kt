@@ -7,9 +7,8 @@ import org.gradle.kotlin.dsl.dependencies
 
 internal fun Project.configureOAuthPlatforms() {
     val libs = extensions.libs
-    androidExtension.apply {
-        dependencies {
-            add("implementation", libs.findLibrary("nid.oauth").get())
-        }
+//    Extensions
+    dependencies {
+        add("implementation", libs.findLibrary("nid.oauth").get())
     }
 }
