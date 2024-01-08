@@ -35,5 +35,9 @@ gradlePlugin {
             id = "com.sowhat.justsayit.application.oauth"
             implementationClass = "OAuthPlatformConventionPlugin"
         }
+        register("HiltAndroidPlugin") {
+            id = "com.sowhat.justsayit.application.hilt"
+            implementationClass = "HiltAndroidConventionPlugin"
+        }
     }
 }
