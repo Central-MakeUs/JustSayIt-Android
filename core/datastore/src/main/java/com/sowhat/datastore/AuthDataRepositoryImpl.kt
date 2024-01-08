@@ -1,9 +1,7 @@
-package com.sowhat.datastore.model
+package com.sowhat.datastore
 
-import android.content.Context
 import androidx.datastore.core.DataStore
-import com.sowhat.datastore.AuthDataRepository
-import dagger.hilt.android.qualifiers.ApplicationContext
+import com.sowhat.datastore.model.AuthData
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

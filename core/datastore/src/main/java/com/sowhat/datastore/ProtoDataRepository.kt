@@ -1,5 +1,6 @@
-package com.sowhat.datastore.model
+package com.sowhat.datastore
 
+import com.sowhat.datastore.model.AuthData
 import kotlinx.coroutines.flow.Flow
 
 interface AuthDataRepository {
