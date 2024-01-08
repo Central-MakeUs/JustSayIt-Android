@@ -7,6 +7,7 @@ plugins {
     id("kotlinx-serialization")
     id("com.sowhat.justsayit.application")
     id("com.sowhat.justsayit.application.compose")
+    id("com.sowhat.justsayit.application.oauth")
 }
 
 android {
@@ -47,4 +48,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+
+//    implementation(project(":core:oauth"))
+
 }

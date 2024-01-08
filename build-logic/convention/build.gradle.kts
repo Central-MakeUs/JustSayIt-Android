@@ -31,5 +31,9 @@ gradlePlugin {
             id = "com.sowhat.justsayit.application.compose"
             implementationClass = "AndroidApplicationComposeConventionPlugin"
         }
+        register("OAuthPlatformPlugin") {
+            id = "com.sowhat.justsayit.application.oauth"
+            implementationClass = "OAuthPlatformConventionPlugin"
+        }
     }
 }

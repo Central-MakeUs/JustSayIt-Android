@@ -16,6 +16,10 @@ internal fun Project.configureKotlinAndroid() {
     androidExtension.apply {
         compileSdk = 34
 
+        buildFeatures {
+            buildConfig = true
+        }
+
         defaultConfig {
             minSdk = 24
 
@@ -32,6 +36,13 @@ internal fun Project.configureKotlinAndroid() {
         }
 
         buildTypes {
+            val naverClientId = project.properties["NAVER_CLIENT_ID"]
+            val naverClientSecret = project.properties["NAVER_CLIENT_SECRET"]
+            getByName("debug") {
+                buildConfigField("String", "NAVER_CLIENT_ID", naverClientId.toString())
+                buildConfigField("String", "NAVER_CLIENT_SECRET", naverClientSecret.toString())
+            }
+
             getByName("release") {
                 isMinifyEnabled = false
                 proguardFiles(
