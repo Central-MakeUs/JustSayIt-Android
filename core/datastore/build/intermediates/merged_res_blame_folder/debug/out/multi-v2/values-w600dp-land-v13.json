@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.sowhat.datastore-mergeDebugResources-53:/values-w600dp-land-v13/values-w600dp-land-v13.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\PCI S-1\\.gradle\\caches\\transforms-3\\c29e69a868a18eebf9bd212181610013\\transformed\\material-1.11.0\\res\\values-w600dp-land-v13\\values-w600dp-land-v13.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "54",
+                        "endOffsets": "105"
+                    }
+                }
+            ]
+        }
+    ]
+}
