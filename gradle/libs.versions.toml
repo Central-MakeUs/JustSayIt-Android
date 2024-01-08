@@ -27,9 +27,9 @@ okhttp = "4.11.0"
 room = "2.6.1"
 paging = "3.2.1"
 
-androidxDatastore = "1.0.0"
+androidx-datastore = "1.0.0"
 
-collectionsImmutable = "0.3.5"
+collections-immutable = "0.3.5"
 
 androidxComposeNavigation = "2.6.0"
 
@@ -87,9 +87,10 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
 
-datastore-core = { group = "androidx.datastore", name = "datastore", version = "androidxDatastore" }
+datastore-core = { group = "androidx.datastore", name = "datastore-core", version = "1.0.0" }
+datastore = { group = "androidx.datastore", name = "datastore", version = "1.0.0" }
 # 위에 이미 정의해놓은 kotlinx-serialization 필요
-kotilnx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version = "collectionsImmutable" }
+kotilnx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version = "0.3.5" }
 
 androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxComposeNavigation" }
 androidx-compose-navigation-test = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxComposeNavigation" }

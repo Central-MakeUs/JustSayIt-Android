@@ -12,6 +12,7 @@ internal fun Project.configureDatastore() {
     dependencies {
         add("implementation", libs.findLibrary("kotlinx.serialization").get())
         add("implementation", libs.findLibrary("datastore.core").get())
+        add("implementation", libs.findLibrary("datastore").get())
         add("implementation", libs.findLibrary("kotilnx.collections.immutable").get())
     }
 
