@@ -88,20 +88,20 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
 
-datastore-core = { group = "androidx.datastore", name = "datastore-core", version = "1.0.0" }
-datastore = { group = "androidx.datastore", name = "datastore", version = "1.0.0" }
+datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "androidx-datastore" }
+datastore = { group = "androidx.datastore", name = "datastore", version.ref = "androidx-datastore" }
 # 위에 이미 정의해놓은 kotlinx-serialization 필요
-kotilnx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version = "0.3.5" }
+kotilnx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "collections-immutable" }
 
 androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxComposeNavigation" }
 androidx-compose-navigation-test = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxComposeNavigation" }
 
-coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "coilCompose"}
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose"}
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 # naver oauth
-nid-oauth = { group = "com.navercorp.nid", name = "oauth-jdk8", version = "5.9.0" }
+nid-oauth = { group = "com.navercorp.nid", name = "oauth-jdk8", version.ref = "nidOauth" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }

@@ -49,5 +49,9 @@ gradlePlugin {
             id = "com.sowhat.justsayit.application.datastore"
             implementationClass = "DatastoreConventionPlugin"
         }
+        register("CommonLibraryPlugin") {
+            id = "com.sowhat.justsayit.application.common"
+            implementationClass = "CommonLibrariesConventionPlugin"
+        }
     }
 }
