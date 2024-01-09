@@ -53,9 +53,8 @@ fun Cell(
                 text = title,
                 style = JustSayItTheme.Typography.body3,
             )
-
-
         }
+        
         trailingIcon?.let {
             Icon(
                 painter = painterResource(id = it),
