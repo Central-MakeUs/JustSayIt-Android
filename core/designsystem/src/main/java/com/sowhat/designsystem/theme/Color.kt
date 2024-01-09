@@ -7,6 +7,8 @@ data class JustSayItColor(
     val subTypo: Color,
     val mainBackground: Color,
     val subBackground: Color,
+    val mainSurface: Color,
+    val subSurface: Color,
     val angry: Color,
     val happy: Color,
     val surprise: Color,
