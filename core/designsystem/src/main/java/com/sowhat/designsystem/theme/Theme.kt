@@ -13,6 +13,7 @@ fun JustSayItTheme(
     content: @Composable () -> Unit
 ) {
     val typography = JustSayItTypography()
+    val shape = JustSayItShape()
     val colorScheme = remember {
         if (darkTheme) DarkColorScheme else LightColorScheme
     }
@@ -20,6 +21,7 @@ fun JustSayItTheme(
     CompositionLocalProvider(
         LocalColors provides colorScheme,
         LocalTypography provides typography,
+        LocalShapes provides shape
     ) {
         content()
     }
@@ -29,9 +31,12 @@ object JustSayItTheme {
     val Colors: JustSayItColor
         @Composable
         get() = LocalColors.current
-    val Typography : JustSayItTypography
+    val Typography: JustSayItTypography
         @Composable
         get() = LocalTypography.current
+    val Shapes: JustSayItShape
+        @Composable
+        get() = LocalShapes.current
 }
 
 val LightColorScheme = JustSayItColor(
@@ -58,4 +63,4 @@ val DarkColorScheme = JustSayItColor(
 
 val LocalTypography = staticCompositionLocalOf { JustSayItTypography() }
 val LocalColors = staticCompositionLocalOf { LightColorScheme }
-
+val LocalShapes = staticCompositionLocalOf { JustSayItShape() }

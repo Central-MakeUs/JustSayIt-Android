@@ -35,7 +35,8 @@ private val HeadlineR = TextStyle(
     fontWeight = FontWeight.Normal,
     fontSize = 24.sp,
     lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
-    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em)
+    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
+    color = Gray900
 )
 
 private val Heading2 = TextStyle(
@@ -43,7 +44,8 @@ private val Heading2 = TextStyle(
     fontWeight = FontWeight.Normal,
     fontSize = 22.sp,
     lineHeight = TextUnit(value = 1.45f, type = TextUnitType.Em),
-    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em)
+    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
+    color = Gray900
 )
 
 private val Heading3 = TextStyle(
@@ -51,7 +53,8 @@ private val Heading3 = TextStyle(
     fontWeight = FontWeight.Normal,
     fontSize = 20.sp,
     lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
-    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em)
+    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
+    color = Gray900
 )
 
 private val Heading4 = TextStyle(
@@ -59,7 +62,8 @@ private val Heading4 = TextStyle(
     fontWeight = FontWeight.Normal,
     fontSize = 20.sp,
     lineHeight = TextUnit(value = 1.45f, type = TextUnitType.Em),
-    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em)
+    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
+    color = Gray900
 )
 
 private val Body1 = TextStyle(
@@ -67,7 +71,8 @@ private val Body1 = TextStyle(
     fontWeight = FontWeight.Normal,
     fontSize = 16.sp,
     lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
-    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em)
+    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
+    color = Gray900
 )
 
 private val Body2 = TextStyle(
@@ -75,7 +80,8 @@ private val Body2 = TextStyle(
     fontWeight = FontWeight.Bold,
     fontSize = 16.sp,
     lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
-    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em)
+    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
+    color = Gray900
 )
 
 private val Body3 = TextStyle(
@@ -83,7 +89,8 @@ private val Body3 = TextStyle(
     fontWeight = FontWeight.Medium,
     fontSize = 14.sp,
     lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
-    letterSpacing = TextUnit(value = 0.8f, type = TextUnitType.Em)
+    letterSpacing = TextUnit(value = 0.8f, type = TextUnitType.Em),
+    color = Gray900
 )
 
 private val Body4 = TextStyle(
@@ -91,7 +98,8 @@ private val Body4 = TextStyle(
     fontWeight = FontWeight.Bold,
     fontSize = 14.sp,
     lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
-    letterSpacing = TextUnit(value = 0.8f, type = TextUnitType.Em)
+    letterSpacing = TextUnit(value = 0.8f, type = TextUnitType.Em),
+    color = Gray900
 )
 
 private val Detail1 = TextStyle(
@@ -99,7 +107,8 @@ private val Detail1 = TextStyle(
     fontWeight = FontWeight.Medium,
     fontSize = 12.sp,
     lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
-    letterSpacing = TextUnit(value = 0.8f, type = TextUnitType.Em)
+    letterSpacing = TextUnit(value = 0.8f, type = TextUnitType.Em),
+    color = Gray900
 )
 
 private val Detail2 = TextStyle(
@@ -107,6 +116,7 @@ private val Detail2 = TextStyle(
     fontWeight = FontWeight.Bold,
     fontSize = 12.sp,
     lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
-    letterSpacing = TextUnit(value = 0.8f, type = TextUnitType.Em)
+    letterSpacing = TextUnit(value = 0.8f, type = TextUnitType.Em),
+    color = Gray900
 )
 
