@@ -2,6 +2,17 @@ package com.sowhat.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
+data class JustSayItColor(
+    val mainTypo: Color,
+    val subTypo: Color,
+    val mainBackground: Color,
+    val subBackground: Color,
+    val angry: Color,
+    val happy: Color,
+    val surprise: Color,
+    val sad: Color
+)
+
 val Gray50 = Color(0xFFFAFAFA)
 val Gray100 = Color(0xFFF5F5F5)
 val Gray200 = Color(0xFFEEEEEE)
