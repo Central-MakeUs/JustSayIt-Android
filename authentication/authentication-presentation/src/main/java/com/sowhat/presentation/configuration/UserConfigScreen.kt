@@ -5,37 +5,31 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.DefaultTextField
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
 import com.sowhat.presentation.common.COMPLETE
+import com.sowhat.presentation.common.CONFIG_ID_PLACEHOLDER
+import com.sowhat.presentation.common.CONFIG_ID_TITLE
 import com.sowhat.presentation.component.ProfileImage
 
 @Composable
-fun UserConfigRoute() {
-    var id by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    val isValid by rememberSaveable {
-        derivedStateOf {
-            id.length in (2..12)
-        }
-    }
-
+fun UserConfigRoute(
+    viewModel: UserConfigViewModel = hiltViewModel()
+) {
     UserConfigScreen(
-        id = id,
-        isValid = isValid,
+        id = viewModel.id,
+        isValid = viewModel.isValid,
         onIdChange = { changedId ->
-            id = changedId
+            viewModel.id = changedId
         }
     )
 }
@@ -68,12 +62,14 @@ fun UserConfigScreen(
                 badgeDrawable = com.sowhat.designsystem.R.drawable.ic_camera_24,
                 badgeBackgroundColor = Gray200,
                 badgeIconTint = Gray400,
-                onClick = {}
+                onClick = {
+
+                }
             )
 
             DefaultTextField(
-                title = "아이디",
-                placeholder = "2자 이상 12자 이하",
+                title = CONFIG_ID_TITLE,
+                placeholder = CONFIG_ID_PLACEHOLDER,
                 value = id,
                 onValueChange = onIdChange
             )
