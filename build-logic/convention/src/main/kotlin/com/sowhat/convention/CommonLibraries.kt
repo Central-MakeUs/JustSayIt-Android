@@ -8,5 +8,8 @@ internal fun Project.configureCommonLibraries() {
 //    Extensions
     dependencies {
         add("implementation", libs.findLibrary("coil.compose").get())
+        add("implementation", libs.findLibrary("androidx.compose.navigation").get())
+        add("implementation", libs.findLibrary("androidx.compose.navigation.test").get())
+        add("implementation", libs.findLibrary("androidx.navigation.common.ktx").get())
     }
 }

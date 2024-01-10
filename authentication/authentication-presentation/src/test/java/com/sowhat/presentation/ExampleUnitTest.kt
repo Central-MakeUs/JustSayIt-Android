@@ -1,4 +1,4 @@
-package com.sowhat.authentication_presentation
+package com.sowhat.presentation
 
 import org.junit.Test
 

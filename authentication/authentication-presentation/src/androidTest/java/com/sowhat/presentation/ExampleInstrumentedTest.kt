@@ -1,4 +1,4 @@
-package com.sowhat.authentication_presentation
+package com.sowhat.presentation
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
