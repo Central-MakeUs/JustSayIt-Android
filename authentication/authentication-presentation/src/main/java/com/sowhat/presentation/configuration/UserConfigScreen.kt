@@ -1,5 +1,8 @@
 package com.sowhat.presentation.configuration
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -25,12 +28,26 @@ import com.sowhat.presentation.component.ProfileImage
 fun UserConfigRoute(
     viewModel: UserConfigViewModel = hiltViewModel()
 ) {
+    val imagePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri ->
+            // the returned result from the file picker : Uri
+            // to display -> read the uri and convert it into a bitmap -> Coil Image Library
+            viewModel.hasImage = uri != null
+            viewModel.imageUri = uri
+        }
+    )
+
     UserConfigScreen(
         id = viewModel.id,
         isValid = viewModel.isValid,
         onIdChange = { changedId ->
             viewModel.id = changedId
-        }
+        },
+        onProfileClick = {
+            imagePicker.launch("image/*")
+        },
+        profileUri = viewModel.imageUri
     )
 }
 
@@ -39,7 +56,9 @@ fun UserConfigScreen(
     modifier: Modifier = Modifier,
     id: String,
     isValid: Boolean,
-    onIdChange: (String) -> Unit
+    profileUri: Uri?,
+    onIdChange: (String) -> Unit,
+    onProfileClick: () -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -58,13 +77,11 @@ fun UserConfigScreen(
                 .padding(paddingValues)
         ) {
             ProfileImage(
-                profileUri = "https://github.com/kmkim2689/Android-Wiki/assets/101035437/88d7b249-ad72-4be9-8d79-38dc942e0a7f",
+                profileUri = profileUri ?: "https://github.com/kmkim2689/Android-Wiki/assets/101035437/88d7b249-ad72-4be9-8d79-38dc942e0a7f",
                 badgeDrawable = com.sowhat.designsystem.R.drawable.ic_camera_24,
                 badgeBackgroundColor = Gray200,
                 badgeIconTint = Gray400,
-                onClick = {
-
-                }
+                onClick = onProfileClick
             )
 
             DefaultTextField(
@@ -94,6 +111,8 @@ fun UserConfigScreenPreview() {
             id = changedId
             isValid = id.length in (2..12)
         },
-        isValid = isValid
+        isValid = isValid,
+        onProfileClick = {},
+        profileUri = null
     )
 }

@@ -16,7 +16,7 @@ import com.sowhat.presentation.common.SIGN_IN
 import com.sowhat.presentation.common.SignInPlatform
 import com.sowhat.presentation.component.Logo
 import com.sowhat.presentation.component.SignIn
-import com.sowhat.presentation.util.NaverOAuthClient
+import com.sowhat.util.NaverOAuthClient
 import kotlinx.coroutines.launch
 
 @Composable
