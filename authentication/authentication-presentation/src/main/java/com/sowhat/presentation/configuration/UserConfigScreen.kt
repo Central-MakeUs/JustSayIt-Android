@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,9 +25,18 @@ fun UserConfigRoute() {
         mutableStateOf("")
     }
 
+    val isValid by rememberSaveable {
+        derivedStateOf {
+            id.length in (2..12)
+        }
+    }
+
     UserConfigScreen(
         id = id,
-        onIdChange = { changedId -> id = changedId }
+        isValid = isValid,
+        onIdChange = { changedId ->
+            id = changedId
+        }
     )
 }
 
@@ -34,6 +44,7 @@ fun UserConfigRoute() {
 fun UserConfigScreen(
     modifier: Modifier = Modifier,
     id: String,
+    isValid: Boolean,
     onIdChange: (String) -> Unit
 ) {
     Scaffold(
@@ -42,7 +53,8 @@ fun UserConfigScreen(
             AppBar(
                 title = null,
                 navigationIcon = null,
-                actionText = COMPLETE
+                actionText = COMPLETE,
+                isValid = isValid
             )
         }
     ) { paddingValues ->
@@ -76,8 +88,16 @@ fun UserConfigScreenPreview() {
         mutableStateOf("")
     }
 
+    var isValid by rememberSaveable {
+        mutableStateOf(false)
+    }
+
     UserConfigScreen(
         id = id,
-        onIdChange = { changedId -> id = changedId }
+        onIdChange = { changedId ->
+            id = changedId
+            isValid = id.length in (2..12)
+        },
+        isValid = isValid
     )
 }

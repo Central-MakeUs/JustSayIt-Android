@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.bottomBorder
+import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -118,6 +119,61 @@ fun AppBar(
                     text = actionText,
                     onClick = onActionTextClick,
                     textStyle = textStyle
+                )
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppBar(
+    modifier: Modifier = Modifier,
+    title: String?,
+    textStyle: TextStyle = JustSayItTheme.Typography.body1,
+    navigationIcon: Int?,
+    actionText: String?,
+    isValid: Boolean,
+    onNavigationIconClick: () -> Unit = {},
+    onActionTextClick: () -> Unit = {}
+) {
+    CenterAlignedTopAppBar(
+        modifier = modifier
+            .height(48.dp)
+            .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = JustSayItTheme.Colors.mainSurface,
+        ),
+        title = {
+            title?.let {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = title,
+                        style = JustSayItTheme.Typography.body1
+                    )
+                }
+            }
+        },
+        navigationIcon = {
+            navigationIcon?.let {
+                DefaultIconButton(
+                    iconDrawable = navigationIcon,
+                    onClick = onNavigationIconClick
+                )
+            }
+        },
+        actions = {
+            val textColor = if (isValid) textStyle.color else Gray500
+            actionText?.let {
+                DefaultTextButton(
+                    text = actionText,
+                    onClick = onActionTextClick,
+                    textStyle = textStyle,
+                    textColor = textColor,
+                    enabled = isValid
                 )
             }
         }
