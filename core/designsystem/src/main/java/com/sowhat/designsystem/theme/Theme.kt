@@ -1,7 +1,6 @@
 package com.sowhat.designsystem.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
@@ -18,7 +17,7 @@ fun JustSayItTheme(
     val colorScheme = remember {
         if (darkTheme) DarkColorScheme else LightColorScheme
     }
-    val dimensions = Dimensions()
+    val dimensions = JustSayItDimension()
 
     CompositionLocalProvider(
         LocalColors provides colorScheme,
@@ -40,6 +39,9 @@ object JustSayItTheme {
     val Shapes: JustSayItShape
         @Composable
         get() = LocalShapes.current
+    val Spacing: JustSayItDimension
+        @Composable
+        get() = LocalSpacing.current
 }
 
 val LightColorScheme = JustSayItColor(
@@ -71,4 +73,4 @@ val DarkColorScheme = JustSayItColor(
 val LocalTypography = staticCompositionLocalOf { JustSayItTypography() }
 val LocalColors = staticCompositionLocalOf { LightColorScheme }
 val LocalShapes = staticCompositionLocalOf { JustSayItShape() }
-val LocalSpacing = compositionLocalOf { Dimensions() }
+val LocalSpacing = compositionLocalOf { JustSayItDimension() }

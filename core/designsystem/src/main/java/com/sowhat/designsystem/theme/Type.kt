@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.sp
 import com.sowhat.designsystem.R
 
 data class JustSayItTypography(
+    val headlineB: TextStyle = HeadlineB,
     val headlineR: TextStyle = HeadlineR,
     val heading2: TextStyle = Heading2,
     val heading3: TextStyle = Heading3,
@@ -28,6 +29,15 @@ private val Pretendard = FontFamily(
     Font(R.font.pretendard_regular, FontWeight.Normal, FontStyle.Normal),
     Font(R.font.pretendard_light, FontWeight.Light, FontStyle.Normal),
     Font(R.font.pretendard_thin, FontWeight.Thin, FontStyle.Normal)
+)
+
+private val HeadlineB = TextStyle(
+    fontFamily = Pretendard,
+    fontWeight = FontWeight.Bold,
+    fontSize = 24.sp,
+//    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
+//    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
+    color = Gray900
 )
 
 private val HeadlineR = TextStyle(

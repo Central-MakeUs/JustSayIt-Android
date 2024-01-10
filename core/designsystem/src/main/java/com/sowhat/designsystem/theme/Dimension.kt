@@ -1,10 +1,9 @@
 package com.sowhat.designsystem.theme
 
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-data class Dimensions(
+data class JustSayItDimension(
     val default: Dp = 0.dp,
     val spaceExtraSmall: Dp = 4.dp,
     val spaceSmall: Dp = 8.dp,
