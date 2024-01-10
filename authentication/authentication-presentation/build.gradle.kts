@@ -9,10 +9,8 @@ plugins {
 
 android {
     namespace = "com.sowhat.authentication_presentation"
-    compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 }
