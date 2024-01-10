@@ -1,6 +1,5 @@
 package com.sowhat.presentation.component
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,9 +14,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sowhat.designsystem.component.LoginIconButton
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.Gray600
 import com.sowhat.designsystem.theme.JustSayItTheme
+import com.sowhat.presentation.common.SignInPlatform
+
+@Composable
+fun SignIn(
+    modifier: Modifier = Modifier,
+    headerText: String,
+    signInPlatforms: List<SignInPlatform>
+) {
+    Column(
+        modifier = modifier
+    ) {
+        SignInHeader(headerText = headerText)
+        SignInButtons(signInPlatforms = signInPlatforms)
+    }
+}
 
 @Composable
 fun SignInHeader(
@@ -45,6 +60,30 @@ fun SignInHeader(
             )
             HeaderLine(modifier = Modifier.weight(1f))
         }
+    }
+}
+
+@Composable
+fun SignInButtons(
+    modifier: Modifier = Modifier,
+    signInPlatforms: List<SignInPlatform>
+) {
+    Box(
+        modifier = modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(
+            modifier = Modifier,
+            horizontalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            signInPlatforms.forEach {
+                LoginIconButton(
+                    iconDrawable = it.iconDrawable,
+                    onClick = it.onClick
+                )
+            }
+        }
+
     }
 }
 
