@@ -20,9 +20,9 @@ import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.DefaultTextField
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
-import com.sowhat.presentation.common.COMPLETE
-import com.sowhat.presentation.common.CONFIG_ID_PLACEHOLDER
-import com.sowhat.presentation.common.CONFIG_ID_TITLE
+import com.sowhat.designsystem.common.COMPLETE
+import com.sowhat.designsystem.common.CONFIG_ID_PLACEHOLDER
+import com.sowhat.designsystem.common.CONFIG_ID_TITLE
 import com.sowhat.designsystem.component.ProfileImage
 
 @Composable
