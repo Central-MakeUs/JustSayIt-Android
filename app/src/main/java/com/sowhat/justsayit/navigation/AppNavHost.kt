@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.sowhat.presentation.navigation.ONBOARDING
 import com.sowhat.presentation.navigation.onBoardingScreen
+import com.sowhat.presentation.navigation.userConfigScreen
 
 @Composable
 fun AppNavHost(
@@ -14,5 +15,6 @@ fun AppNavHost(
 ) {
     NavHost(navController = navController, startDestination = ONBOARDING) {
         onBoardingScreen()
+        userConfigScreen()
     }
 }
