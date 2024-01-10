@@ -1,5 +1,6 @@
 package com.sowhat.designsystem.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,9 +27,11 @@ fun DefaultTextButton(
     drawable: Int? = null,
     textStyle: TextStyle = JustSayItTheme.Typography.body1,
     textColor: Color = JustSayItTheme.Colors.mainTypo,
+    enabled: Boolean = true,
     onClick: () -> Unit
 ) {
     TextButton(
+        enabled = enabled,
         contentPadding = PaddingValues(0.dp),
         onClick = onClick
     ) {

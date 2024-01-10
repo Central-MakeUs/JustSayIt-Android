@@ -1,4 +1,4 @@
-package com.sowhat.presentation.util
+package com.sowhat.util
 
 import android.content.Context
 import android.util.Log

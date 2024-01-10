@@ -4,6 +4,7 @@ plugins {
     id("com.sowhat.justsayit.application.compose")
     id("com.sowhat.justsayit.application.common")
     id("com.sowhat.justsayit.application.oauth")
+    id("com.sowhat.justsayit.application.hilt")
 }
 
 android {

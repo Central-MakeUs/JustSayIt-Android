@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--    Represents files in the files/ subdirectory of your app's internal storage area.-->
+    <!-- Context.getFilesDir()로 return될 수 있는 path이다.-->
+    <files-path
+        name="my_images"
+        path="images/" />
+    <!--    Represents files in the cache subdirectory of your app's internal storage area.-->
+    <!-- Context.getFilesDir()로 return될 수 있는 path이다.-->
+    <cache-path
+        name="my_images"
+        path="images/" />
+</paths>
