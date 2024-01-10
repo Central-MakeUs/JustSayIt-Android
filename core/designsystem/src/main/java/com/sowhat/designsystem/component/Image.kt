@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CornerBasedShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -25,7 +24,7 @@ fun ImageContainer(
     borderWidth: Dp? = null,
     borderColor: Color? = null,
     shape: CornerBasedShape? = null,
-    imageUrl: Any,
+    model: Any?,
     contentDescription : String?
 ) {
     Box(
@@ -40,7 +39,7 @@ fun ImageContainer(
     ) {
         AsyncImage(
             modifier = Modifier.fillMaxSize(),
-            model = imageUrl,
+            model = model,
             contentDescription = contentDescription,
             contentScale = ContentScale.Crop
         )
@@ -50,7 +49,7 @@ fun ImageContainer(
 @Composable
 fun ProfileImageContainer(
     modifier: Modifier = Modifier,
-    imageUrl: Any,
+    model: Any?,
     contentDescription: String? = null
 ) {
     ImageContainer(
@@ -58,7 +57,7 @@ fun ProfileImageContainer(
         borderWidth = 2.dp,
         borderColor = JustSayItTheme.Colors.subSurface,
         shape = JustSayItTheme.Shapes.large,
-        imageUrl = imageUrl,
+        model = model,
         contentDescription = contentDescription
     )
 }
@@ -68,6 +67,6 @@ fun ProfileImageContainer(
 fun ProfileImageContainerPreview() {
     ProfileImageContainer(
         modifier = Modifier.size(36.dp),
-        imageUrl = "https://i.stack.imgur.com/6C9Qv.png"
+        model = "https://i.stack.imgur.com/6C9Qv.png"
     )
 }
