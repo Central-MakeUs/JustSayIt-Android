@@ -10,6 +10,7 @@ plugins {
     id("com.sowhat.justsayit.application.oauth")
     id("com.sowhat.justsayit.application.datastore")
     id("com.sowhat.justsayit.application.hilt")
+    id("com.sowhat.justsayit.application.common")
 }
 
 android {
@@ -52,5 +53,8 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     implementation(project(":core:datastore"))
+    implementation(project(":core:designsystem"))
+    implementation(project(":authentication:authentication-presentation"))
+
 
 }

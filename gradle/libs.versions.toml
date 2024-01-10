@@ -102,6 +102,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 
 # naver oauth
 nid-oauth = { group = "com.navercorp.nid", name = "oauth-jdk8", version.ref = "nidOauth" }
+androidx-navigation-common-ktx = { group = "androidx.navigation", name = "navigation-common-ktx", version = "2.7.6" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
