@@ -17,4 +17,5 @@ android {
 
 dependencies {
 //    implementation(libs.androidx.navigation.common.ktx)
+    implementation(project(":core:designsystem"))
 }
