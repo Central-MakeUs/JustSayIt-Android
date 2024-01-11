@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.BUTTON_EDIT_PROFILE
@@ -43,7 +44,7 @@ fun SettingScreen(
         topBar = {
             AppBar(
                 title = SETTING,
-                navigationIcon = com.sowhat.designsystem.R.drawable.ic_back_24,
+                navigationIcon = R.drawable.ic_back_24,
                 actionIcon = null
             )
         }

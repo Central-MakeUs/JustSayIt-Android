@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sowhat.authentication_presentation"
+    namespace = "com.sowhat.user_presentation"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

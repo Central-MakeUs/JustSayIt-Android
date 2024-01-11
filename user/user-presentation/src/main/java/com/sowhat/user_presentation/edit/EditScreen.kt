@@ -3,8 +3,11 @@ package com.sowhat.user_presentation.edit
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -13,17 +16,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.COMPLETE
 import com.sowhat.designsystem.common.CONFIG_ID_PLACEHOLDER
 import com.sowhat.designsystem.common.CONFIG_ID_TITLE
+import com.sowhat.designsystem.common.DropdownItem
 import com.sowhat.designsystem.common.PROFILE_SETTING
 import com.sowhat.designsystem.common.SETTING
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.DefaultTextField
+import com.sowhat.designsystem.component.Dropdown
 import com.sowhat.designsystem.component.ProfileImage
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
@@ -43,18 +54,38 @@ fun EditRoute(
         }
     )
 
+    val dropdownMenuItems = listOf(
+        DropdownItem(
+            title = "사진 업로드하기",
+            onItemClick = {
+                imagePicker.launch("image/*")
+            }
+        ),
+        DropdownItem(
+            title = "기본 이미지로 변경",
+            onItemClick = {
+                viewModel.hasImage = false
+                viewModel.newImageUri = null
+            }
+        )
+    )
+
     EditScreen(
         isValid = viewModel.isValid,
         userName = viewModel.userName,
         profileUrl = viewModel.profileUrl,
         onProfileClick = {
-            imagePicker.launch("image/*")
+//            imagePicker.launch("image/*")
+            viewModel.dropdown = true
         },
         newProfileUri = viewModel.newImageUri,
         newUserName = viewModel.newUserName,
         onUserNameChange = { newName ->
             viewModel.newUserName = newName
-        }
+        },
+        dropdownVisible = viewModel.dropdown,
+        dropdownMenuItems = dropdownMenuItems,
+        onDropdownDismiss = { viewModel.dropdown = false }
     )
 }
 
@@ -67,7 +98,10 @@ fun EditScreen(
     onProfileClick: () -> Unit,
     newProfileUri: Uri?,
     onUserNameChange: (String) -> Unit,
-    newUserName: String
+    newUserName: String,
+    dropdownVisible: Boolean,
+    dropdownMenuItems: List<DropdownItem>,
+    onDropdownDismiss: () -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -87,7 +121,10 @@ fun EditScreen(
             onProfileClick = onProfileClick,
             newProfileUri = newProfileUri,
             onUserNameChange = onUserNameChange,
-            newUserName = newUserName
+            newUserName = newUserName,
+            dropdownVisible = dropdownVisible,
+            dropdownMenuItems = dropdownMenuItems,
+            onDropdownDismiss = onDropdownDismiss
         )
     }
 }
@@ -100,21 +137,28 @@ fun EditScreenContent(
     onProfileClick: () -> Unit,
     newProfileUri: Uri?,
     newUserName: String,
-    onUserNameChange: (String) -> Unit
+    onUserNameChange: (String) -> Unit,
+    dropdownVisible: Boolean,
+    dropdownMenuItems: List<DropdownItem>,
+    onDropdownDismiss: () -> Unit
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         ProfileImage(
+            modifier = Modifier,
             profileUri = newProfileUri ?: profileUrl,
             badgeDrawable = R.drawable.ic_camera_24,
             badgeBackgroundColor = Gray200,
             badgeIconTint = Gray400,
-            onClick = onProfileClick
+            onClick = onProfileClick,
+            dropdownVisible = dropdownVisible,
+            dropdownMenuItems = dropdownMenuItems,
+            onDropdownDismiss = onDropdownDismiss
         )
 
         DefaultTextField(
+            modifier = Modifier,
             title = CONFIG_ID_TITLE,
             placeholder = userName,
             value = newUserName,
@@ -150,6 +194,22 @@ fun EditScreenPreview() {
         newUserName = newUserName,
         onUserNameChange = { newName ->
             newUserName = newName
-        }
+        },
+        dropdownVisible = true,
+        onDropdownDismiss = {},
+        dropdownMenuItems = listOf(
+            DropdownItem(
+                title = "사진 업로드하기",
+                onItemClick = {
+
+                }
+            ),
+            DropdownItem(
+                title = "기본 이미지로 변경",
+                onItemClick = {
+
+                }
+            )
+        )
     )
 }

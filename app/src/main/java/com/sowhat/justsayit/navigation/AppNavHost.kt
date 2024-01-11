@@ -8,14 +8,16 @@ import com.sowhat.presentation.navigation.CONFIGURATION
 import com.sowhat.presentation.navigation.ONBOARDING
 import com.sowhat.presentation.navigation.onBoardingScreen
 import com.sowhat.presentation.navigation.userConfigScreen
+import com.sowhat.user_presentation.navigation.configEditScreen
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,
     snackbarHostState: SnackbarHostState
 ) {
-    NavHost(navController = navController, startDestination = CONFIGURATION) {
+    NavHost(navController = navController, startDestination = "config_edit") {
         onBoardingScreen()
         userConfigScreen()
+        configEditScreen()
     }
 }

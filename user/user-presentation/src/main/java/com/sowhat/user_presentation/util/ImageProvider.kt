@@ -1,9 +1,9 @@
-package com.sowhat.util
+package com.sowhat.user_presentation.util
 
 import android.content.Context
 import android.net.Uri
 import androidx.core.content.FileProvider
-import com.sowhat.authentication_presentation.R
+import com.sowhat.user_presentation.R
 import java.io.File
 
 class ImageProvider : FileProvider(

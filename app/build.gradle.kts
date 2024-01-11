@@ -55,6 +55,7 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(project(":core:designsystem"))
     implementation(project(":authentication:authentication-presentation"))
+    implementation(project(":user:user-presentation"))
 
 
 }
