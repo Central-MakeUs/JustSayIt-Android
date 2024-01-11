@@ -12,3 +12,5 @@ const val CONFIG_ID_PLACEHOLDER = "2자 이상 12자 이하"
 const val PLATFORM_NAVER = "naver"
 
 const val SETTING = "설정"
+
+const val BUTTON_EDIT_PROFILE = "프로필 수정"
