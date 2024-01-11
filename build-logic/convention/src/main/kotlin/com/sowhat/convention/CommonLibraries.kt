@@ -24,12 +24,12 @@ internal fun Project.configureCommonLibraries() {
         implementation(libs, "retrofit.core")
         implementation(libs, "retrofit.kotlin.serialization")
 
-
         implementation(libs, "room.core")
         implementation(libs, "room.ktx")
         implementation(libs, "room.paging")
         kapt(libs, "room.compiler")
 
+        implementation(libs, "kotlinx.serialization")
 
         implementation(libs, "paging.compose")
         implementation(libs, "paging.runtime.ktx")
