@@ -24,6 +24,7 @@ import com.sowhat.designsystem.theme.JustSayItTheme
 
 @Composable
 fun Dropdown(
+    modifier: Modifier = Modifier,
     isVisible: Boolean,
     items: List<DropdownItem>,
     onDismiss: () -> Unit
@@ -33,7 +34,7 @@ fun Dropdown(
         shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape(12.dp))
     ) {
         DropdownMenu(
-            modifier = Modifier
+            modifier = modifier
                 .background(
                     color = JustSayItTheme.Colors.subBackground,
                 )

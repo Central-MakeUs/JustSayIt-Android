@@ -1,6 +1,7 @@
 package com.sowhat.user_presentation.edit
 
 import android.net.Uri
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,4 +26,5 @@ class EditViewModel @Inject constructor(
     val isValid by derivedStateOf {
         userName.length in (2..12) || (newImageUri != null && hasImage)
     }
+    var dropdown by mutableStateOf(false)
 }
