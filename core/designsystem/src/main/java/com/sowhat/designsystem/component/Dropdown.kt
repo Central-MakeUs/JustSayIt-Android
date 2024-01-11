@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sowhat.designsystem.common.DropdownItem
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.JustSayItTheme
 
@@ -81,11 +82,6 @@ fun ColumnScope.DropdownMenus(
         )
     }
 }
-
-data class DropdownItem(
-    val title: String,
-    val onItemClick: () -> Unit
-)
 
 @Preview(showBackground = true, backgroundColor = 0xffffffff)
 @Composable
