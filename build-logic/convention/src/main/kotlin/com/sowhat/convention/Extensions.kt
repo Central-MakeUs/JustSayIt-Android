@@ -7,6 +7,7 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.ExtensionContainer
+import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.getByType
 
 internal val Project.applicationExtension: CommonExtension<*, *, *, *>
@@ -23,3 +24,11 @@ internal val Project.androidExtension: CommonExtension<*, *, *, *>
 
 internal val ExtensionContainer.libs: VersionCatalog
     get() = getByType<VersionCatalogsExtension>().named("libs")
+
+internal fun DependencyHandlerScope.implementation(libs: VersionCatalog, dependency: String) {
+    add("implementation", libs.findLibrary(dependency).get())
+}
+
+internal fun DependencyHandlerScope.kapt(libs: VersionCatalog, dependency: String) {
+    add("kapt", libs.findLibrary(dependency).get())
+}
