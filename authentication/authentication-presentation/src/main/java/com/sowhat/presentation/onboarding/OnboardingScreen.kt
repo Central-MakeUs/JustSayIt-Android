@@ -10,9 +10,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.sowhat.designsystem.R
-import com.sowhat.presentation.common.APP_INTRO
-import com.sowhat.presentation.common.APP_NAME
-import com.sowhat.presentation.common.SIGN_IN
+import com.sowhat.designsystem.common.APP_INTRO
+import com.sowhat.designsystem.common.APP_NAME
+import com.sowhat.designsystem.common.SIGN_IN
 import com.sowhat.presentation.common.SignInPlatform
 import com.sowhat.presentation.component.Logo
 import com.sowhat.presentation.component.SignIn

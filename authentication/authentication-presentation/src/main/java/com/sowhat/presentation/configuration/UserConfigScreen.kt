@@ -15,14 +15,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.sowhat.designsystem.R
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.DefaultTextField
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
-import com.sowhat.presentation.common.COMPLETE
-import com.sowhat.presentation.common.CONFIG_ID_PLACEHOLDER
-import com.sowhat.presentation.common.CONFIG_ID_TITLE
-import com.sowhat.presentation.component.ProfileImage
+import com.sowhat.designsystem.common.COMPLETE
+import com.sowhat.designsystem.common.CONFIG_ID_PLACEHOLDER
+import com.sowhat.designsystem.common.CONFIG_ID_TITLE
+import com.sowhat.designsystem.component.ProfileImage
 
 @Composable
 fun UserConfigRoute(
@@ -78,7 +79,7 @@ fun UserConfigScreen(
         ) {
             ProfileImage(
                 profileUri = profileUri ?: "https://github.com/kmkim2689/Android-Wiki/assets/101035437/88d7b249-ad72-4be9-8d79-38dc942e0a7f",
-                badgeDrawable = com.sowhat.designsystem.R.drawable.ic_camera_24,
+                badgeDrawable = R.drawable.ic_camera_24,
                 badgeBackgroundColor = Gray200,
                 badgeIconTint = Gray400,
                 onClick = onProfileClick

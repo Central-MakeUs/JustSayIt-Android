@@ -33,6 +33,10 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/datastore" />
             <option value="$PROJECT_DIR$/core/designsystem" />
+            <option value="$PROJECT_DIR$/user" />
+            <option value="$PROJECT_DIR$/user/user-data" />
+            <option value="$PROJECT_DIR$/user/user-domain" />
+            <option value="$PROJECT_DIR$/user/user-presentation" />
           </set>
         </option>
       </GradleProjectSettings>

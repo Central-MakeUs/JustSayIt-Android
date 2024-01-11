@@ -1,4 +1,4 @@
-package com.sowhat.presentation.component
+package com.sowhat.designsystem.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,9 +9,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.rippleClickable
-import com.sowhat.designsystem.component.Badge
-import com.sowhat.designsystem.component.ProfileImageContainer
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
 
@@ -65,7 +64,7 @@ fun ProfileImage(
 fun ProfileImagePreview() {
     ProfileImage(
         profileUri = "https://i.stack.imgur.com/6C9Qv.png",
-        badgeDrawable = com.sowhat.designsystem.R.drawable.ic_camera_24,
+        badgeDrawable = R.drawable.ic_camera_24,
         badgeBackgroundColor = Gray200,
         badgeIconTint = Gray400,
         onClick = {}
