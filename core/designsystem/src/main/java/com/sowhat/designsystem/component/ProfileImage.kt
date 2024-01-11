@@ -1,10 +1,12 @@
 package com.sowhat.designsystem.component
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -13,6 +15,7 @@ import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
+import com.sowhat.designsystem.theme.JustSayItTheme
 
 @Composable
 fun ProfileImage(
@@ -36,7 +39,6 @@ fun ProfileImage(
         ProfileImageContainer(
             modifier = Modifier
                 .fillMaxWidth(0.25f)
-                .rippleClickable { onClick() }
                 .constrainAs(profile) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
@@ -46,6 +48,7 @@ fun ProfileImage(
 
         Badge(
             modifier = Modifier
+                .clip(shape = JustSayItTheme.Shapes.circle)
                 .size(40.dp)
                 .rippleClickable { onClick() }
                 .constrainAs(badge) {
