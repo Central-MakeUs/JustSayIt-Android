@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -21,9 +23,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.R
+import com.sowhat.designsystem.common.ActionButtonItem
 import com.sowhat.designsystem.common.Emotion
 import com.sowhat.designsystem.common.bottomBorder
 import com.sowhat.designsystem.theme.Gray500
@@ -188,6 +192,48 @@ fun AppBar(
 @Composable
 fun AppBarHome(
     modifier: Modifier = Modifier,
+    title: String?,
+    actions: List<ActionButtonItem>
+) {
+    CenterAlignedTopAppBar(
+        modifier = modifier
+            .height(48.dp)
+            .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = JustSayItTheme.Colors.mainSurface,
+        ),
+        title = {},
+        navigationIcon = {
+            title?.let {
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(horizontal = JustSayItTheme.Spacing.spaceNormal),
+                        text = title,
+                        style = JustSayItTheme.Typography.headlineB,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+        },
+        actions = {
+            actions.forEach {
+                DefaultIconButton(
+                    iconDrawable = it.icon,
+                    onClick = it.onClick
+                )
+            }
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppBarHome(
+    modifier: Modifier = Modifier,
     onClick: (String) -> Unit
 ) {
     val emotions = Emotion.values().toList()
@@ -241,5 +287,9 @@ fun AppBarPreview() {
         Spacer(modifier = Modifier.height(2.dp))
         AppBar(title = "앱바 미리보기", navigationIcon = null, actionText = null)
         AppBarHome(onClick = {})
+        AppBarHome(title = "그냥, 그렇다고", actions = listOf(
+            ActionButtonItem(icon = R.drawable.ic_camera_24, onClick = {}),
+            ActionButtonItem(icon = R.drawable.ic_menu_24, onClick = {})
+        ))
     }
 }
