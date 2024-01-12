@@ -5,14 +5,12 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.sowhat.common.CONFIGURATION
+import com.sowhat.common.MAIN
+import com.sowhat.common.ONBOARDING
 import com.sowhat.presentation.configuration.UserConfigRoute
 import com.sowhat.presentation.onboarding.OnboardingRoute
 import com.sowhat.presentation.onboarding.OnboardingScreen
-
-const val SPLASH = "splash"
-const val ONBOARDING = "onboarding"
-const val CONFIGURATION = "configuration"
-const val MAIN = "main"
 
 fun NavGraphBuilder.onBoardingScreen(
     navController: NavHostController

@@ -21,7 +21,6 @@ import com.sowhat.presentation.common.SignInPlatform
 import com.sowhat.presentation.component.Logo
 import com.sowhat.presentation.component.SignIn
 import com.sowhat.presentation.component.TermText
-import com.sowhat.presentation.navigation.CONFIGURATION
 import com.sowhat.presentation.navigation.navigateToUserConfig
 import com.sowhat.util.NaverOAuthClient
 import kotlinx.coroutines.launch

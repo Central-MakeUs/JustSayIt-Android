@@ -4,9 +4,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.sowhat.common.ONBOARDING
 import com.sowhat.main_presentation.navigation.mainScreen
-import com.sowhat.presentation.navigation.CONFIGURATION
-import com.sowhat.presentation.navigation.ONBOARDING
 import com.sowhat.presentation.navigation.onBoardingScreen
 import com.sowhat.presentation.navigation.userConfigScreen
 import com.sowhat.user_presentation.navigation.configEditScreen
