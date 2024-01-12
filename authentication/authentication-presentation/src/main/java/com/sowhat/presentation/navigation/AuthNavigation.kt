@@ -12,6 +12,7 @@ import com.sowhat.presentation.onboarding.OnboardingScreen
 const val SPLASH = "splash"
 const val ONBOARDING = "onboarding"
 const val CONFIGURATION = "configuration"
+const val MAIN = "main"
 
 fun NavGraphBuilder.onBoardingScreen(
     navController: NavHostController
@@ -34,5 +35,5 @@ fun NavGraphBuilder.userConfigScreen(
 }
 
 fun NavController.navigateToMain(navOptions: NavOptions? = null) {
-    this.navigate("main", navOptions)
+    this.navigate(MAIN, navOptions)
 }
