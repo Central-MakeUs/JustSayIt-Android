@@ -8,10 +8,11 @@ import com.sowhat.designsystem.theme.SurpriseColor
 
 enum class Emotion(
     val title: String,
-    val color: Color
+    val selectedTint: Color,
+    val unselectedTint: Color
 ) {
-    ANGRY("angry", AngryColor),
-    HAPPY("happy", HappyColor),
-    SURPRISE("surprise", SurpriseColor),
-    SAD("sad", SadColor)
+    ANGRY("angry", AngryColor, AngryColor.copy(alpha = 0.5f)),
+    HAPPY("happy", HappyColor, HappyColor.copy(alpha = 0.5f)),
+    SURPRISE("surprise", SurpriseColor, SurpriseColor.copy(alpha = 0.5f)),
+    SAD("sad", SadColor, SadColor.copy(alpha = 0.5f))
 }
