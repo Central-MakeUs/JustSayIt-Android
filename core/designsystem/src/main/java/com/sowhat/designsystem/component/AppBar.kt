@@ -246,26 +246,34 @@ fun AppBarHome(
             containerColor = JustSayItTheme.Colors.mainSurface,
         ),
         title = {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(
-                        horizontal = JustSayItTheme.Spacing.spaceExtraLarge,
-                        vertical = JustSayItTheme.Spacing.spaceSmall
-                    ),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                emotions.forEachIndexed { index, emotion ->
-                    EmotionButton(
-                        modifier = Modifier,
-                        emotion = emotion,
-                        onClick = onClick
-                    )
-                }
-            }
+            EmotionButtons(emotions, onClick)
         }
     )
+}
+
+@Composable
+private fun EmotionButtons(
+    emotions: List<Emotion>,
+    onClick: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                horizontal = JustSayItTheme.Spacing.spaceExtraLarge,
+                vertical = JustSayItTheme.Spacing.spaceSmall
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        emotions.forEachIndexed { index, emotion ->
+            EmotionButton(
+                modifier = Modifier,
+                emotion = emotion,
+                onClick = onClick
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

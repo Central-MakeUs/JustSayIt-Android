@@ -1,18 +1,15 @@
 package com.sowhat.designsystem.component
 
-import android.widget.Space
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,36 +41,57 @@ fun Tab(
             val isSelected = tabItem == selectedItem
 
             if (index != 0) {
-                Divider(
-                    modifier = Modifier
-                        .padding(vertical = JustSayItTheme.Spacing.spaceSmall)
-                        .width(0.5.dp)
-                        .fillMaxHeight(),
-                    color = Gray200
-                )
+                TabDivider()
             }
 
-            Box(
-                modifier = Modifier
-                    .rippleClickable {
-                        onSelectedItemChange(tabItem)
-                    }
-            ) {
-                Text(
-                    modifier = Modifier
-                        .padding(
-                            horizontal = JustSayItTheme.Spacing.spaceMedium,
-                            vertical = JustSayItTheme.Spacing.spaceSmall
-                        ),
-                    text = tabItem,
-                    style = JustSayItTheme.Typography.detail2
-                        .copy(color = if (isSelected) selectedColor else unselectedColor)
-                )
-            }
+            TabTextButton(
+                onSelectedItemChange = onSelectedItemChange,
+                tabItem = tabItem,
+                isSelected = isSelected,
+                selectedColor = selectedColor,
+                unselectedColor = unselectedColor
+            )
         }
     }
 }
 
+@Composable
+fun RowScope.TabDivider() {
+    Divider(
+        modifier = Modifier
+            .padding(vertical = JustSayItTheme.Spacing.spaceSmall)
+            .width(0.5.dp)
+            .fillMaxHeight(),
+        color = Gray200
+    )
+}
+
+@Composable
+fun RowScope.TabTextButton(
+    onSelectedItemChange: (String) -> Unit,
+    tabItem: String,
+    isSelected: Boolean,
+    selectedColor: Color,
+    unselectedColor: Color
+) {
+    Box(
+        modifier = Modifier
+            .rippleClickable {
+                onSelectedItemChange(tabItem)
+            }
+    ) {
+        Text(
+            modifier = Modifier
+                .padding(
+                    horizontal = JustSayItTheme.Spacing.spaceMedium,
+                    vertical = JustSayItTheme.Spacing.spaceSmall
+                ),
+            text = tabItem,
+            style = JustSayItTheme.Typography.detail2
+                .copy(color = if (isSelected) selectedColor else unselectedColor)
+        )
+    }
+}
 
 
 @Preview(showBackground = true, backgroundColor = 0xffffffff)
