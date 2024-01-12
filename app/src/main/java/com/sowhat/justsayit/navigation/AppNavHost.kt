@@ -4,6 +4,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.sowhat.main_presentation.navigation.mainScreen
 import com.sowhat.presentation.navigation.CONFIGURATION
 import com.sowhat.presentation.navigation.ONBOARDING
 import com.sowhat.presentation.navigation.onBoardingScreen
@@ -16,8 +17,9 @@ fun AppNavHost(
     snackbarHostState: SnackbarHostState
 ) {
     NavHost(navController = navController, startDestination = ONBOARDING) {
-        onBoardingScreen()
-        userConfigScreen()
+        onBoardingScreen(navController = navController)
+        userConfigScreen(navController = navController)
         configEditScreen()
+        mainScreen(appNavController = navController)
     }
 }

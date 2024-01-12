@@ -15,6 +15,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.DefaultTextField
@@ -24,10 +26,12 @@ import com.sowhat.designsystem.common.COMPLETE
 import com.sowhat.designsystem.common.CONFIG_ID_PLACEHOLDER
 import com.sowhat.designsystem.common.CONFIG_ID_TITLE
 import com.sowhat.designsystem.component.ProfileImage
+import com.sowhat.presentation.navigation.navigateToMain
 
 @Composable
 fun UserConfigRoute(
-    viewModel: UserConfigViewModel = hiltViewModel()
+    viewModel: UserConfigViewModel = hiltViewModel(),
+    navController: NavHostController
 ) {
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -41,6 +45,7 @@ fun UserConfigRoute(
 
     UserConfigScreen(
         id = viewModel.id,
+        navController = navController,
         isValid = viewModel.isValid,
         onIdChange = { changedId ->
             viewModel.id = changedId
@@ -55,6 +60,7 @@ fun UserConfigRoute(
 @Composable
 fun UserConfigScreen(
     modifier: Modifier = Modifier,
+    navController: NavHostController,
     id: String,
     isValid: Boolean,
     profileUri: Uri?,
@@ -68,7 +74,10 @@ fun UserConfigScreen(
                 title = null,
                 navigationIcon = null,
                 actionText = COMPLETE,
-                isValid = isValid
+                isValid = isValid,
+                onActionTextClick = {
+                    navController.navigateToMain()
+                }
             )
         }
     ) { paddingValues ->
@@ -106,6 +115,8 @@ fun UserConfigScreenPreview() {
         mutableStateOf(false)
     }
 
+    val navController = rememberNavController()
+
     UserConfigScreen(
         id = id,
         onIdChange = { changedId ->
@@ -114,6 +125,7 @@ fun UserConfigScreenPreview() {
         },
         isValid = isValid,
         onProfileClick = {},
-        profileUri = null
+        profileUri = null,
+        navController = navController
     )
 }

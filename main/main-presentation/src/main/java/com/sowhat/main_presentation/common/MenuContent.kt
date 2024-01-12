@@ -1,7 +1,5 @@
 package com.sowhat.main_presentation.common
 
-import com.sowhat.`main-presentation`.R
-
 sealed class MenuContent(
     val title: String,
     val route: String,

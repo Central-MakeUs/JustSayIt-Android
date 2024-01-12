@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sowhat.main-presentation"
+    namespace = "com.sowhat.main_presentation"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

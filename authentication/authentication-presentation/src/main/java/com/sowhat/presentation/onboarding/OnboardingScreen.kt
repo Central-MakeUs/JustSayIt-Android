@@ -10,6 +10,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.APP_INTRO
 import com.sowhat.designsystem.common.APP_NAME
@@ -19,17 +21,22 @@ import com.sowhat.presentation.common.SignInPlatform
 import com.sowhat.presentation.component.Logo
 import com.sowhat.presentation.component.SignIn
 import com.sowhat.presentation.component.TermText
+import com.sowhat.presentation.navigation.CONFIGURATION
+import com.sowhat.presentation.navigation.navigateToUserConfig
 import com.sowhat.util.NaverOAuthClient
 import kotlinx.coroutines.launch
 
 @Composable
-fun OnboardingRoute() {
-    OnboardingScreen()
+fun OnboardingRoute(
+    navController: NavHostController
+) {
+    OnboardingScreen(navController = navController)
 }
 
 @Composable
 fun OnboardingScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavHostController
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -40,7 +47,7 @@ fun OnboardingScreen(
             onClick = {
                 scope.launch {
                     val accessToken = NaverOAuthClient.signIn(context)
-                    Log.i("OnBoardingScreen", "$accessToken")
+                    if (accessToken != null) navController.navigateToUserConfig()
                 }
             }
         )
@@ -70,7 +77,7 @@ fun OnboardingScreen(
                     bottom.linkTo(parent.bottom, margin = 60.dp)
                 },
             headerText = SIGN_IN,
-            signInPlatforms = signInPlatforms
+            signInPlatforms = signInPlatforms,
         )
 
         TermText(
@@ -86,5 +93,6 @@ fun OnboardingScreen(
 @Preview(showBackground = true, backgroundColor = 0xffffffff)
 @Composable
 fun OnboardingScreenPreview() {
-    OnboardingScreen()
+    val navController = rememberNavController()
+    OnboardingScreen(navController = navController)
 }
