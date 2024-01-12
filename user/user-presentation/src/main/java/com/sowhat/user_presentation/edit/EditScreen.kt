@@ -70,6 +70,8 @@ fun EditRoute(
         )
     )
 
+    val maxLength = 12
+
     EditScreen(
         isValid = viewModel.isValid,
         userName = viewModel.userName,
@@ -81,7 +83,7 @@ fun EditRoute(
         newProfileUri = viewModel.newImageUri,
         newUserName = viewModel.newUserName,
         onUserNameChange = { newName ->
-            viewModel.newUserName = newName
+            if (newName.length <= maxLength) viewModel.newUserName = newName
         },
         dropdownVisible = viewModel.dropdown,
         dropdownMenuItems = dropdownMenuItems,

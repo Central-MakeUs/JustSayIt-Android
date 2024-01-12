@@ -33,6 +33,9 @@ fun UserConfigRoute(
     viewModel: UserConfigViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
+
+    val maxLength = 12
+
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
@@ -48,7 +51,7 @@ fun UserConfigRoute(
         navController = navController,
         isValid = viewModel.isValid,
         onIdChange = { changedId ->
-            viewModel.id = changedId
+            if (changedId.length <= maxLength) viewModel.id = changedId
         },
         onProfileClick = {
             imagePicker.launch("image/*")
@@ -120,7 +123,7 @@ fun UserConfigScreenPreview() {
     UserConfigScreen(
         id = id,
         onIdChange = { changedId ->
-            id = changedId
+            id = if (changedId.length <= 12) changedId else id
             isValid = id.length in (2..12)
         },
         isValid = isValid,
