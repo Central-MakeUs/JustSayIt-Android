@@ -57,6 +57,7 @@ private fun DefaultTextFieldContent(
                 strokeWidth = 1.dp,
                 color = Gray500
             ),
+        maxLines = 1,
         value = value,
         onValueChange = onValueChange,
         textStyle = JustSayItTheme.Typography.heading3,

@@ -1,5 +1,7 @@
 package com.sowhat.designsystem.common
 
+import androidx.compose.ui.unit.dp
+
 const val APP_NAME = "그냥, 그렇다고"
 const val APP_INTRO = "(서비스 한줄 소개)"
 
@@ -15,3 +17,5 @@ const val SETTING = "설정"
 const val PROFILE_SETTING = "프로필 설정"
 
 const val BUTTON_EDIT_PROFILE = "프로필 수정"
+
+const val NAVIGATION_HEIGHT = 60

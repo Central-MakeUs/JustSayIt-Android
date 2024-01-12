@@ -2,11 +2,16 @@ package com.sowhat.designsystem.component
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -18,9 +23,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.R
+import com.sowhat.designsystem.common.ActionButtonItem
+import com.sowhat.designsystem.common.Emotion
 import com.sowhat.designsystem.common.bottomBorder
 import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -181,6 +189,97 @@ fun AppBar(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppBarHome(
+    modifier: Modifier = Modifier,
+    title: String?,
+    actions: List<ActionButtonItem>
+) {
+    CenterAlignedTopAppBar(
+        modifier = modifier
+            .height(48.dp)
+            .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = JustSayItTheme.Colors.mainSurface,
+        ),
+        title = {},
+        navigationIcon = {
+            title?.let {
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(horizontal = JustSayItTheme.Spacing.spaceNormal),
+                        text = title,
+                        style = JustSayItTheme.Typography.headlineB,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+        },
+        actions = {
+            actions.forEach {
+                DefaultIconButton(
+                    iconDrawable = it.icon,
+                    onClick = it.onClick
+                )
+            }
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppBarHome(
+    modifier: Modifier = Modifier,
+    currentEmotion: Emotion,
+    onClick: (String) -> Unit
+) {
+    val emotions = Emotion.values().toList()
+
+    CenterAlignedTopAppBar(
+        modifier = modifier
+            .height(48.dp)
+            .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = JustSayItTheme.Colors.mainSurface,
+        ),
+        title = {
+            EmotionButtons(emotions, currentEmotion, onClick)
+        }
+    )
+}
+
+@Composable
+private fun EmotionButtons(
+    emotions: List<Emotion>,
+    currentEmotion: Emotion,
+    onClick: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                horizontal = JustSayItTheme.Spacing.spaceExtraLarge,
+                vertical = JustSayItTheme.Spacing.spaceSmall
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        emotions.forEachIndexed { index, emotion ->
+            EmotionButton(
+                modifier = Modifier,
+                emotion = emotion,
+                currentEmotion = currentEmotion,
+                onClick = onClick
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
 class ScrollBehavior: TopAppBarScrollBehavior {
     override val flingAnimationSpec: DecayAnimationSpec<Float> = TODO()
     override val isPinned: Boolean = TODO()
@@ -198,5 +297,12 @@ fun AppBarPreview() {
         AppBar(title = "앱바 미리보기", navigationIcon = R.drawable.ic_back_24, actionText = "완료")
         Spacer(modifier = Modifier.height(2.dp))
         AppBar(title = "앱바 미리보기", navigationIcon = null, actionText = null)
+        Spacer(modifier = Modifier.height(2.dp))
+        AppBarHome(onClick = {}, currentEmotion = Emotion.HAPPY)
+        Spacer(modifier = Modifier.height(2.dp))
+        AppBarHome(title = "그냥, 그렇다고", actions = listOf(
+            ActionButtonItem(icon = R.drawable.ic_camera_24, onClick = {}),
+            ActionButtonItem(icon = R.drawable.ic_menu_24, onClick = {})
+        ))
     }
 }

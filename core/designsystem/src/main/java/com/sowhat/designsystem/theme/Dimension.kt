@@ -11,5 +11,6 @@ data class JustSayItDimension(
     val spaceNormal: Dp = 12.dp,
     val spaceMedium: Dp = 16.dp,
     val spaceLarge: Dp = 20.dp,
-    val spaceExtraLarge: Dp = 64.dp,
+    val spaceExtraLarge: Dp = 40.dp,
+    val spaceExtraExtraLarge: Dp = 64.dp,
 )

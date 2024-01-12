@@ -152,8 +152,7 @@ private val Detail1 = TextStyle(
     platformStyle = PlatformTextStyle(
         includeFontPadding = false
     ),
-//    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
-//    letterSpacing = TextUnit(value = 0.8f, type = TextUnitType.Em),
+    lineHeight = 18.sp,
     color = Gray900
 )
 
@@ -165,7 +164,7 @@ private val Detail2 = TextStyle(
         includeFontPadding = false
     ),
 //    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
-//    letterSpacing = TextUnit(value = 0.8f, type = TextUnitType.Em),
+    lineHeight = 18.sp,
     color = Gray900
 )
 

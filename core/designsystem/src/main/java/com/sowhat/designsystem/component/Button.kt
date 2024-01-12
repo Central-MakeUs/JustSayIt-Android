@@ -1,10 +1,12 @@
 package com.sowhat.designsystem.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -12,12 +14,15 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.R
+import com.sowhat.designsystem.common.Emotion
+import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.JustSayItTheme
 
 @Composable
@@ -218,6 +223,30 @@ fun DefaultButtonTiny(
         horizontalPadding = 8.dp,
         verticalPadding = 3.dp,
         onClick = onClick
+    )
+}
+
+@Composable
+fun EmotionButton(
+    modifier: Modifier = Modifier,
+    currentEmotion: Emotion,
+    emotion: Emotion,
+    onClick: (String) -> Unit
+) {
+
+    val tint = if (currentEmotion == emotion) emotion.selectedTint else emotion.unselectedTint
+
+    Box(
+        modifier = modifier
+            .aspectRatio(1f)
+            .clip(JustSayItTheme.Shapes.circle)
+            .rippleClickable {
+                onClick(emotion.title)
+            }
+            .background(
+                color = tint,
+                shape = JustSayItTheme.Shapes.circle
+            )
     )
 }
 
