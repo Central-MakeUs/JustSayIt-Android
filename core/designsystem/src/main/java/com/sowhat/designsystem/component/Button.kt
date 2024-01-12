@@ -229,9 +229,13 @@ fun DefaultButtonTiny(
 @Composable
 fun EmotionButton(
     modifier: Modifier = Modifier,
+    currentEmotion: Emotion,
     emotion: Emotion,
     onClick: (String) -> Unit
 ) {
+
+    val tint = if (currentEmotion == emotion) emotion.selectedTint else emotion.unselectedTint
+
     Box(
         modifier = modifier
             .aspectRatio(1f)
@@ -240,7 +244,7 @@ fun EmotionButton(
                 onClick(emotion.title)
             }
             .background(
-                color = emotion.selectedTint,
+                color = tint,
                 shape = JustSayItTheme.Shapes.circle
             )
     )

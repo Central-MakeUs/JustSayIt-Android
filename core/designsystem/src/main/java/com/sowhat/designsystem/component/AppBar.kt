@@ -234,6 +234,7 @@ fun AppBarHome(
 @Composable
 fun AppBarHome(
     modifier: Modifier = Modifier,
+    currentEmotion: Emotion,
     onClick: (String) -> Unit
 ) {
     val emotions = Emotion.values().toList()
@@ -246,7 +247,7 @@ fun AppBarHome(
             containerColor = JustSayItTheme.Colors.mainSurface,
         ),
         title = {
-            EmotionButtons(emotions, onClick)
+            EmotionButtons(emotions, currentEmotion, onClick)
         }
     )
 }
@@ -254,6 +255,7 @@ fun AppBarHome(
 @Composable
 private fun EmotionButtons(
     emotions: List<Emotion>,
+    currentEmotion: Emotion,
     onClick: (String) -> Unit
 ) {
     Row(
@@ -270,6 +272,7 @@ private fun EmotionButtons(
             EmotionButton(
                 modifier = Modifier,
                 emotion = emotion,
+                currentEmotion = currentEmotion,
                 onClick = onClick
             )
         }
@@ -295,7 +298,7 @@ fun AppBarPreview() {
         Spacer(modifier = Modifier.height(2.dp))
         AppBar(title = "앱바 미리보기", navigationIcon = null, actionText = null)
         Spacer(modifier = Modifier.height(2.dp))
-        AppBarHome(onClick = {})
+        AppBarHome(onClick = {}, currentEmotion = Emotion.HAPPY)
         Spacer(modifier = Modifier.height(2.dp))
         AppBarHome(title = "그냥, 그렇다고", actions = listOf(
             ActionButtonItem(icon = R.drawable.ic_camera_24, onClick = {}),
