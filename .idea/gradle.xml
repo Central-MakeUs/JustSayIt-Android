@@ -35,6 +35,10 @@
             <option value="$PROJECT_DIR$/core/datastore" />
             <option value="$PROJECT_DIR$/core/designsystem" />
             <option value="$PROJECT_DIR$/core/network" />
+            <option value="$PROJECT_DIR$/main" />
+            <option value="$PROJECT_DIR$/main/main-data" />
+            <option value="$PROJECT_DIR$/main/main-domain" />
+            <option value="$PROJECT_DIR$/main/main-presentation" />
             <option value="$PROJECT_DIR$/user" />
             <option value="$PROJECT_DIR$/user/user-data" />
             <option value="$PROJECT_DIR$/user/user-domain" />

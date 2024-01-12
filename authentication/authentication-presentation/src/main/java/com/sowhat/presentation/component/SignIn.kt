@@ -30,7 +30,9 @@ fun SignIn(
         modifier = modifier
     ) {
         SignInHeader(headerText = headerText)
-        SignInButtons(signInPlatforms = signInPlatforms)
+        SignInButtons(
+            signInPlatforms = signInPlatforms
+        )
     }
 }
 
@@ -66,7 +68,7 @@ fun SignInHeader(
 @Composable
 fun SignInButtons(
     modifier: Modifier = Modifier,
-    signInPlatforms: List<SignInPlatform>
+    signInPlatforms: List<SignInPlatform>,
 ) {
     Box(
         modifier = modifier.fillMaxWidth(),
@@ -83,7 +85,6 @@ fun SignInButtons(
                 )
             }
         }
-
     }
 }
 

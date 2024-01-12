@@ -1,9 +1,7 @@
 package com.sowhat.user_presentation.setting
 
-import android.widget.Space
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,11 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.BUTTON_EDIT_PROFILE
-import com.sowhat.designsystem.common.SETTING
+import com.sowhat.designsystem.common.APPBAR_SETTING
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.DefaultButtonFull
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -43,7 +40,7 @@ fun SettingScreen(
         modifier = modifier.fillMaxSize(),
         topBar = {
             AppBar(
-                title = SETTING,
+                title = APPBAR_SETTING,
                 navigationIcon = R.drawable.ic_back_24,
                 actionIcon = null
             )

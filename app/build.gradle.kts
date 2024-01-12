@@ -56,6 +56,8 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":authentication:authentication-presentation"))
     implementation(project(":user:user-presentation"))
+    implementation(project(":main:main-presentation"))
+    implementation(project(":core:common"))
 
 
 }
