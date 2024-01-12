@@ -8,6 +8,7 @@ data class JustSayItColor(
     val mainBackground: Color,
     val subBackground: Color,
     val mainSurface: Color,
+    val onMainSurface: Color,
     val subSurface: Color,
     val angry: Color,
     val happy: Color,
@@ -25,6 +26,8 @@ val Gray600 = Color(0xFF757575)
 val Gray700 = Color(0xFF616161)
 val Gray800 = Color(0xFF424242)
 val Gray900 = Color(0xFF222222)
+
+val NavIconLight = Color(0xFF1C1B1F)
 
 val Black = Color(0xFF000000)
 val White = Color(0xFFFFFFFF)
