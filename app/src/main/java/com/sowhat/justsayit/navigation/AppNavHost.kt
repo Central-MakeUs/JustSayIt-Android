@@ -15,7 +15,7 @@ fun AppNavHost(
     navController: NavHostController,
     snackbarHostState: SnackbarHostState
 ) {
-    NavHost(navController = navController, startDestination = "onboarding") {
+    NavHost(navController = navController, startDestination = ONBOARDING) {
         onBoardingScreen()
         userConfigScreen()
         configEditScreen()

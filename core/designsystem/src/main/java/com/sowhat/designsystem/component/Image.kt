@@ -4,12 +4,14 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -81,9 +83,7 @@ fun TimelineFeedImageContainer(
     contentDescription: String? = null
 ) {
     ImageContainer(
-        modifier = modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
+        modifier = modifier,
         borderWidth = 2.dp,
         borderColor = JustSayItTheme.Colors.subSurface,
         shape = JustSayItTheme.Shapes.medium,
@@ -101,27 +101,37 @@ fun TimelineFeedImages(
 
     Box(
         modifier = modifier
-            .aspectRatio(33 / 10f)
+            .fillMaxWidth()
+            .aspectRatio((33 / 13).toFloat())
     ) {
         when (models.size) {
             in 1..3 -> {
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentPadding = PaddingValues(spacing)
+                Row(
+                    modifier = Modifier,
                 ) {
-                    items(items = models) {
-                        TimelineFeedImageContainer(model = it)
+                    models.forEach {
+                        TimelineFeedImageContainer(
+                            modifier = Modifier
+                                .padding(JustSayItTheme.Spacing.spaceTiny)
+                                // 간격이 동일하게 주어지도록 하기 위함... 이 조치를 취해주지 않으면 사진들이 화면을 벗어나서 차지
+                                .weight(1f),
+                            model = it
+                        )
                     }
                 }
             }
             4 -> {
                 LazyVerticalGrid(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier,
                     columns = GridCells.Fixed(2)
                 ) {
                     items(items = models) {
-                        TimelineFeedImageContainer(model = it)
+                        TimelineFeedImageContainer(
+                            modifier = Modifier
+                                .padding(JustSayItTheme.Spacing.spaceTiny)
+                                .aspectRatio((33 / 13).toFloat()),
+                            model = it
+                        )
                     }
                 }
             }
