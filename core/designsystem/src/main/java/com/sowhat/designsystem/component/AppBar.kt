@@ -294,7 +294,9 @@ fun AppBarPreview() {
         AppBar(title = "앱바 미리보기", navigationIcon = R.drawable.ic_back_24, actionText = "완료")
         Spacer(modifier = Modifier.height(2.dp))
         AppBar(title = "앱바 미리보기", navigationIcon = null, actionText = null)
+        Spacer(modifier = Modifier.height(2.dp))
         AppBarHome(onClick = {})
+        Spacer(modifier = Modifier.height(2.dp))
         AppBarHome(title = "그냥, 그렇다고", actions = listOf(
             ActionButtonItem(icon = R.drawable.ic_camera_24, onClick = {}),
             ActionButtonItem(icon = R.drawable.ic_menu_24, onClick = {})
