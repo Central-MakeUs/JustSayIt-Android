@@ -1,4 +1,4 @@
-package com.sowhat.designsystem.component
+package com.sowhat.main_presentation.component
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.RowScope
@@ -26,17 +26,17 @@ import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.NAVIGATION_HEIGHT
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.JustSayItTheme
+import com.sowhat.main_presentation.common.CenterNavItemContent
+import com.sowhat.main_presentation.common.MenuContent
 
 @Composable
 fun BottomNavigationBar(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    bottomNavItemList: List<BottomNavItem>,
-    centerNavItemIcon: Int,
-    centerNavItemIconTint: Color,
-    centerItemBackground: Color,
+    bottomNavItemList: List<MenuContent>,
+    centerNavItem: CenterNavItemContent,
     bottomNavBackground: Color,
-    onNavItemClick: (BottomNavItem) -> Unit,
+    onNavItemClick: (MenuContent) -> Unit,
     onCenterNavItemClick: () -> Unit
 ) {
     val navBackStackEntry = navController.currentBackStackEntryAsState()
@@ -88,9 +88,9 @@ fun BottomNavigationBar(
                     bottom.linkTo(parent.bottom, margin = floatingButtonSpace)
                 }
                 .size(JustSayItTheme.Spacing.spaceExtraExtraLarge),
-            centerNavItemIcon = centerNavItemIcon,
-            centerNavItemIconTint = centerNavItemIconTint,
-            centerItemBackground = centerItemBackground,
+            centerNavItemIcon = centerNavItem.centerNavItemIcon,
+            centerNavItemIconTint = centerNavItem.centerNavItemIconTint,
+            centerItemBackground = centerNavItem.centerItemBackground,
             onCenterNavItemClick = onCenterNavItemClick
         )
     }
@@ -98,11 +98,11 @@ fun BottomNavigationBar(
 
 @Composable
 fun RowScope.BottomNavigationItem(
-    selectedItem: BottomNavItem,
+    selectedItem: MenuContent,
     isItemSelected: Boolean,
     selectedIcon: Int,
     unSelectedIcon: Int,
-    navItemOnClick: (BottomNavItem) -> Unit,
+    navItemOnClick: (MenuContent) -> Unit,
 ) {
 
     NavigationBarItem(
@@ -142,13 +142,6 @@ fun NavigationCenterItem(
     }
 }
 
-data class BottomNavItem(
-    val route: String,
-    val title: String,
-    val selectedIcon: Int,
-    val unselectedIcon: Int
-)
-
 @Preview(showBackground = true, backgroundColor = 0xffffffff)
 @Composable
 fun BottomNavigationPreview() {
@@ -158,12 +151,14 @@ fun BottomNavigationPreview() {
     BottomNavigationBar(
         navController = navController,
         bottomNavItemList = listOf(
-            BottomNavItem("home", "home", R.drawable.ic_menu_24, R.drawable.ic_camera_24),
-            BottomNavItem("feed", "feed", R.drawable.ic_pen_24, R.drawable.ic_back_24),
+            MenuContent.Home,
+            MenuContent.Feed
         ),
-        centerNavItemIcon = R.drawable.ic_pen_24,
-        centerItemBackground = Color.Black,
-        centerNavItemIconTint = Color.White,
+        centerNavItem = CenterNavItemContent(
+            R.drawable.ic_add_24,
+            JustSayItTheme.Colors.mainBackground,
+            JustSayItTheme.Colors.mainTypo
+        ),
         bottomNavBackground = Color.White,
         onNavItemClick = {},
         onCenterNavItemClick = {}
