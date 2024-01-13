@@ -29,6 +29,10 @@ internal fun DependencyHandlerScope.implementation(libs: VersionCatalog, depende
     add("implementation", libs.findLibrary(dependency).get())
 }
 
+internal fun DependencyHandlerScope.platformImplementation(libs: VersionCatalog, dependency: String) {
+    add("implementation", platform(libs.findLibrary(dependency).get()))
+}
+
 internal fun DependencyHandlerScope.kapt(libs: VersionCatalog, dependency: String) {
     add("kapt", libs.findLibrary(dependency).get())
 }
