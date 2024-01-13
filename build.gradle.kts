@@ -1,5 +1,11 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+    dependencies {
+        classpath(libs.google.services)
+        // for serialization
+        classpath(libs.kotlin.serialization)
+    }
+
     repositories {
         google()
         mavenCentral()
@@ -14,5 +20,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.org.jetbrains.kotlin.jvm) apply false
     alias(libs.plugins.com.android.library) apply false
+    alias(libs.plugins.google.services) apply false
+
 }
 true // Needed to make the Suppress annotation work for the plugins block

@@ -42,11 +42,14 @@ internal fun Project.configureKotlinAndroid() {
             val kakaoNativeAppKey = project.properties["KAKAO_NATIVE_APP_KEY"]
             val kakaoOAuthHost = project.properties["KAKAO_OAUTH_HOST"]
 
+            val googleWebClientId = project.properties["GOOGLE_WEB_CLIENT_ID"]
+
             getByName("debug") {
                 buildConfigField("String", "NAVER_CLIENT_ID", naverClientId.toString())
                 buildConfigField("String", "NAVER_CLIENT_SECRET", naverClientSecret.toString())
                 buildConfigField("String", "KAKAO_NATIVE_APP_KEY", kakaoNativeAppKey.toString())
                 resValue("string", "kakao_oauth_host", kakaoOAuthHost.toString())
+                buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", googleWebClientId.toString())
             }
 
             getByName("release") {

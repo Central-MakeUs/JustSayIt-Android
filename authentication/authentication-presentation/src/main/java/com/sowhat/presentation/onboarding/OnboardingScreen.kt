@@ -1,6 +1,11 @@
 package com.sowhat.presentation.onboarding
 
+import android.app.Activity
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -12,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.auth.api.identity.Identity
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.APP_INTRO
 import com.sowhat.designsystem.common.APP_NAME
@@ -22,6 +28,7 @@ import com.sowhat.presentation.component.Logo
 import com.sowhat.presentation.component.SignIn
 import com.sowhat.presentation.component.TermText
 import com.sowhat.presentation.navigation.navigateToUserConfig
+import com.sowhat.util.GoogleOAuthClient
 import com.sowhat.util.KakaoOAuthClient
 import com.sowhat.util.NaverOAuthClient
 import kotlinx.coroutines.launch
@@ -43,6 +50,32 @@ fun OnboardingScreen(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
+    val googleOAuthClient by lazy {
+        GoogleOAuthClient(context, Identity.getSignInClient(context.applicationContext))
+    }
+
+    suspend fun validateGoogleSignIn(result: ActivityResult) {
+        val accessToken = googleOAuthClient.signInWithIntent(
+            intent = result.data ?: return
+        )
+        Log.d(TAG, "Sign In Result : $accessToken")
+
+        accessToken?.let {
+            navController.navigateToUserConfig()
+        }
+    }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult(),
+        onResult = { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                scope.launch {
+                    validateGoogleSignIn(result)
+                }
+            }
+        }
+    )
+
     val signInPlatforms = listOf(
         SignInPlatform(
             iconDrawable = R.drawable.ic_kakao_54,
@@ -60,6 +93,20 @@ fun OnboardingScreen(
                 scope.launch {
                     val accessToken = NaverOAuthClient.signIn(context)
                     if (accessToken != null) navController.navigateToUserConfig()
+                }
+            }
+        ),
+        SignInPlatform(
+            iconDrawable = R.drawable.ic_google_54,
+            onClick = {
+                scope.launch {
+                    val signInIntentSender = googleOAuthClient.signIn()
+                    Log.d(TAG, "Google Sign In entering")
+                    launcher.launch(
+                        IntentSenderRequest.Builder(
+                            signInIntentSender ?: return@launch
+                        ).build()
+                    )
                 }
             }
         )
@@ -100,6 +147,8 @@ fun OnboardingScreen(
                 .fillMaxWidth()
         )
     }
+
+
 }
 
 @Preview(showBackground = true, backgroundColor = 0xffffffff)
