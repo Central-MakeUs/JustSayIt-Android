@@ -22,6 +22,7 @@ import com.sowhat.presentation.component.Logo
 import com.sowhat.presentation.component.SignIn
 import com.sowhat.presentation.component.TermText
 import com.sowhat.presentation.navigation.navigateToUserConfig
+import com.sowhat.util.KakaoOAuthClient
 import com.sowhat.util.NaverOAuthClient
 import kotlinx.coroutines.launch
 
@@ -37,10 +38,22 @@ fun OnboardingScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
+    val TAG = "OnboardingScreen"
+
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
     val signInPlatforms = listOf(
+        SignInPlatform(
+            iconDrawable = R.drawable.ic_kakao_54,
+            onClick = {
+                scope.launch {
+                    val accessToken = KakaoOAuthClient.signIn(context)
+                    Log.i(TAG, "kakao access token : $accessToken")
+                    if (accessToken != null) navController.navigateToUserConfig()
+                }
+            }
+        ),
         SignInPlatform(
             iconDrawable = R.drawable.ic_naver_54,
             onClick = {

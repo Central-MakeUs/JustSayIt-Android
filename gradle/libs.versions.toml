@@ -42,6 +42,7 @@ material = "1.11.0"
 
 # 네이버 sdk -> 왜 버전이 인식이 안되는것인가?
 nidOauth = "5.9.0"
+kakaoSdk = "2.19.0"
 
 [libraries]
 # for gradle plugins -> for build-logic/build.gradle dependencies
@@ -105,6 +106,10 @@ material = { group = "com.google.android.material", name = "material", version.r
 # naver oauth
 nid-oauth = { group = "com.navercorp.nid", name = "oauth-jdk8", version.ref = "nidOauth" }
 androidx-navigation-common-ktx = { group = "androidx.navigation", name = "navigation-common-ktx", version = "2.7.6" }
+identity-credential-android = { group = "com.android.identity", name = "identity-credential-android", version = "20231002" }
+
+# kakao auth
+kakao-sdk = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakaoSdk" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }

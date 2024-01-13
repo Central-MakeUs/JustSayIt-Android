@@ -38,9 +38,15 @@ internal fun Project.configureKotlinAndroid() {
         buildTypes {
             val naverClientId = project.properties["NAVER_CLIENT_ID"]
             val naverClientSecret = project.properties["NAVER_CLIENT_SECRET"]
+
+            val kakaoNativeAppKey = project.properties["KAKAO_NATIVE_APP_KEY"]
+            val kakaoOAuthHost = project.properties["KAKAO_OAUTH_HOST"]
+
             getByName("debug") {
                 buildConfigField("String", "NAVER_CLIENT_ID", naverClientId.toString())
                 buildConfigField("String", "NAVER_CLIENT_SECRET", naverClientSecret.toString())
+                buildConfigField("String", "KAKAO_NATIVE_APP_KEY", kakaoNativeAppKey.toString())
+                resValue("string", "kakao_oauth_host", kakaoOAuthHost.toString())
             }
 
             getByName("release") {
