@@ -10,5 +10,7 @@ internal fun Project.configureOAuthPlatforms() {
 //    Extensions
     dependencies {
         add("implementation", libs.findLibrary("nid.oauth").get())
+        implementation(libs, "kakao.sdk")
+
     }
 }
