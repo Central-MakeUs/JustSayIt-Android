@@ -33,5 +33,8 @@ internal fun Project.configureCommonLibraries() {
 
         implementation(libs, "paging.compose")
         implementation(libs, "paging.runtime.ktx")
+
+        implementation(libs, "work.runtime.ktx")
+        implementation(libs, "compose.livedata")
     }
 }

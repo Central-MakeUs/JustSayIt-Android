@@ -5,12 +5,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.sowhat.common.CONFIGURATION
-import com.sowhat.common.MAIN
-import com.sowhat.common.ONBOARDING
+import com.sowhat.common.navigation.CONFIGURATION
+import com.sowhat.common.navigation.MAIN
+import com.sowhat.common.navigation.ONBOARDING
 import com.sowhat.presentation.configuration.UserConfigRoute
 import com.sowhat.presentation.onboarding.OnboardingRoute
-import com.sowhat.presentation.onboarding.OnboardingScreen
 
 fun NavGraphBuilder.onBoardingScreen(
     navController: NavHostController
