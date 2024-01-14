@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.COMPLETE
-import com.sowhat.designsystem.common.CONFIG_ID_TITLE
+import com.sowhat.designsystem.common.CONFIG_NICKNAME_TITLE
 import com.sowhat.designsystem.common.DropdownItem
 import com.sowhat.designsystem.common.PROFILE_SETTING
 import com.sowhat.designsystem.component.AppBar
@@ -143,12 +143,15 @@ fun EditScreenContent(
             onClick = onProfileClick,
             dropdownVisible = dropdownVisible,
             dropdownMenuItems = dropdownMenuItems,
-            onDropdownDismiss = onDropdownDismiss
+            onDropdownDismiss = onDropdownDismiss,
+            onItemClick = { dropdownItem ->
+
+            }
         )
 
         DefaultTextField(
             modifier = Modifier,
-            title = CONFIG_ID_TITLE,
+            title = CONFIG_NICKNAME_TITLE,
             placeholder = userName,
             value = newUserName,
             onValueChange = onUserNameChange

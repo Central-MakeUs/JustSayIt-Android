@@ -135,6 +135,6 @@ fun ProfileImagePreview() {
         badgeDrawable = R.drawable.ic_camera_24,
         badgeBackgroundColor = Gray200,
         badgeIconTint = Gray400,
-        onClick = {}
+        onClick = {},
     )
 }
