@@ -1,6 +1,5 @@
 package com.sowhat.designsystem.component
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -115,7 +114,7 @@ fun ProfileImage(
                 drawable = badgeDrawable
             )
 
-            Dropdown(
+            DropdownContents(
                 modifier = Modifier,
                 isVisible = dropdownVisible,
                 items = dropdownMenuItems,
