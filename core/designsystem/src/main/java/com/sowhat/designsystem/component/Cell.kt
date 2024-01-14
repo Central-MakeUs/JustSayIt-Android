@@ -32,7 +32,7 @@ fun Cell(
         modifier = modifier
             .padding(
                 horizontal = 16.dp,
-                vertical = 4.dp
+                vertical = 6.dp
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
