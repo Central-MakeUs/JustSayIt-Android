@@ -8,8 +8,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -24,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.R
@@ -36,10 +42,12 @@ import com.sowhat.designsystem.theme.JustSayItTheme
 fun DropdownHeader(
     modifier: Modifier = Modifier,
     currentMenu: DropdownItem,
-    onClick: () -> Unit
+    isDropdownExpanded: Boolean,
+    onClick: (Boolean) -> Unit
 ) {
+
     Box(modifier = modifier
-        .rippleClickable { onClick() }
+        .rippleClickable { onClick(!isDropdownExpanded) }
     ) {
         Row(
             modifier = Modifier
@@ -78,16 +86,19 @@ fun DropdownContents(
     modifier: Modifier = Modifier,
     isVisible: Boolean,
     items: List<DropdownItem>,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onItemClick: (DropdownItem) -> Unit
 ) {
     // https://stackoverflow.com/questions/66781028/jetpack-compose-dropdownmenu-with-rounded-corners
     MaterialTheme(
-        shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape(12.dp))
+        shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape(12.dp)),
+        colorScheme = MaterialTheme.colorScheme.copy(surface = JustSayItTheme.Colors.mainSurface)
     ) {
         DropdownMenu(
             modifier = modifier
+                .wrapContentWidth(align = Alignment.CenterHorizontally)
                 .background(
-                    color = JustSayItTheme.Colors.subBackground,
+                    color = JustSayItTheme.Colors.mainSurface,
                 )
                 .border(
                     width = 1.dp,
@@ -99,15 +110,22 @@ fun DropdownContents(
                 onDismiss()
             },
         ) {
-            DropdownMenus(items = items, onDismiss = onDismiss)
+            DropdownMenus(
+                modifier = Modifier,
+                items = items,
+                onDismiss = onDismiss,
+                onItemClick = onItemClick
+            )
         }
     }
 }
 
 @Composable
 fun ColumnScope.DropdownMenus(
+    modifier: Modifier = Modifier,
     items: List<DropdownItem>,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onItemClick: (DropdownItem) -> Unit
 ) {
     items.forEachIndexed { index, dropdownItem ->
         if (index != 0) Divider(
@@ -116,19 +134,23 @@ fun ColumnScope.DropdownMenus(
         )
 
         DropdownMenuItem(
-            modifier = Modifier
+            modifier = modifier
+                .wrapContentSize()
                 .background(
-                    color = JustSayItTheme.Colors.subBackground,
+                    color = JustSayItTheme.Colors.mainSurface,
                 )
                 .padding(vertical = 0.dp),
             text = {
-                Text(
+                TextDrawableStart(
+                    modifier = Modifier.fillMaxWidth(),
                     text = dropdownItem.title,
-                    style = JustSayItTheme.Typography.body3
+                    textStyle = JustSayItTheme.Typography.body3,
+                    textColor = JustSayItTheme.Colors.mainTypo,
+                    drawable = dropdownItem.drawable
                 )
             },
             onClick = {
-                dropdownItem.onItemClick()
+                onItemClick(dropdownItem)
                 onDismiss()
             }
         )
@@ -146,10 +168,11 @@ fun DropdownPreview() {
     DropdownContents(
         isVisible = isVisible,
         items = listOf(
-            DropdownItem(title = "Label 1", onItemClick = {}),
-            DropdownItem(title = "Label 2", onItemClick = {}),
+            DropdownItem(title = "Label 1"),
+            DropdownItem(title = "Label 2"),
         ),
-        onDismiss = { isVisible = false }
+        onDismiss = { isVisible = false },
+        onItemClick = {}
     )
 }
 
@@ -160,9 +183,9 @@ fun DropdownHeaderPreview() {
         modifier = Modifier,
         currentMenu = DropdownItem(
             title = "행복",
-            drawable = R.drawable.ic_happy_24,
-            onItemClick = {}
+            drawable = R.drawable.ic_happy_24
         ),
-        onClick = {}
+        onClick = {},
+        isDropdownExpanded = true
     )
 }

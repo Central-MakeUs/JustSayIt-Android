@@ -74,7 +74,8 @@ fun ProfileImage(
     onClick: () -> Unit,
     dropdownVisible: Boolean,
     dropdownMenuItems: List<DropdownItem>,
-    onDropdownDismiss: () -> Unit
+    onDropdownDismiss: () -> Unit,
+    onItemClick: (DropdownItem) -> Unit
 ) {
     ConstraintLayout(
         modifier = modifier
@@ -118,7 +119,8 @@ fun ProfileImage(
                 modifier = Modifier,
                 isVisible = dropdownVisible,
                 items = dropdownMenuItems,
-                onDismiss = onDropdownDismiss
+                onDismiss = onDropdownDismiss,
+                onItemClick = onItemClick
             )
         }
     }

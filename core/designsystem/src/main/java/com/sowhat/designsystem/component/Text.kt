@@ -1,9 +1,13 @@
 package com.sowhat.designsystem.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -24,8 +28,42 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sowhat.designsystem.theme.JustSayItTheme
+
+@Composable
+fun TextDrawableStart(
+    modifier: Modifier = Modifier,
+    text: String,
+    textStyle: TextStyle,
+    textColor: Color,
+    drawable: Int?
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        drawable?.let {
+            Image(
+                painter = painterResource(id = drawable),
+                contentDescription = "icon",
+            )
+
+            Spacer(modifier = Modifier.width(10.dp))
+        }
+
+        Text(
+            modifier = Modifier,
+            text = text,
+            style = textStyle.copy(
+                color = textColor
+            ),
+            textAlign = TextAlign.Center
+        )
+    }
+}
 
 @Composable
 fun TextDrawableEnd(
