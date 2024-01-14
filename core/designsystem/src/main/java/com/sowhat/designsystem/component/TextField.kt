@@ -37,7 +37,7 @@ fun DefaultTextField(
             .fillMaxWidth()
             .padding(
                 horizontal = JustSayItTheme.Spacing.spaceMedium,
-                vertical = JustSayItTheme.Spacing.spaceExtraSmall
+                vertical = JustSayItTheme.Spacing.spaceMedium
             ),
         verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceExtraSmall)
     ) {

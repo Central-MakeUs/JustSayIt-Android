@@ -23,7 +23,11 @@ import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.Emotion
 import com.sowhat.designsystem.common.rippleClickable
+import com.sowhat.designsystem.theme.Gray200
+import com.sowhat.designsystem.theme.Gray500
+import com.sowhat.designsystem.theme.Gray900
 import com.sowhat.designsystem.theme.JustSayItTheme
+import com.sowhat.designsystem.theme.White
 
 @Composable
 fun DefaultButton(
@@ -97,6 +101,39 @@ fun DefaultButtonFull(
 }
 
 @Composable
+fun DefaultButtonFull(
+    modifier: Modifier = Modifier,
+    text: String,
+    textStyle: TextStyle = JustSayItTheme.Typography.body1,
+    drawable: Int? = null,
+    isActive: Boolean,
+    onClick: () -> Unit
+) {
+    Button(
+        modifier = modifier.fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isActive) Gray900 else Gray200
+        ),
+        contentPadding = PaddingValues(0.dp),
+        shape = JustSayItTheme.Shapes.medium,
+        onClick = onClick
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(vertical = 13.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            TextDrawableEnd(
+                text = text,
+                textStyle = textStyle,
+                textColor = if (isActive) White else Gray500,
+                drawable = drawable
+            )
+        }
+    }
+}
+
+@Composable
 fun DefaultButtonDual(
     modifier: Modifier = Modifier,
     btnTextLeft: String,
@@ -130,6 +167,31 @@ fun DefaultButtonDual(
 }
 
 @Composable
+fun DefaultButtonDual(
+    modifier: Modifier = Modifier,
+    buttons: List<String>,
+    activeButton: String,
+    textStyle: TextStyle = JustSayItTheme.Typography.body1,
+    onClick: (String) -> Unit
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        buttons.forEach { buttonItem ->
+            DefaultButtonFull(
+                modifier = Modifier.weight(1f),
+                text = buttonItem,
+                textStyle = textStyle,
+                backgroundColor = if (activeButton == buttonItem) Gray900 else Gray200,
+                textColor = if (activeButton == buttonItem) White else Gray500,
+                onClick = { onClick(buttonItem) }
+            )
+        }
+    }
+}
+
+@Composable
 fun DefaultButtonExtraLarge(
     text: String,
     drawable: Int? = null,
@@ -142,6 +204,24 @@ fun DefaultButtonExtraLarge(
         textColor = textColor,
         drawable = drawable,
         backgroundColor = backgroundColor,
+        horizontalPadding = 16.dp,
+        verticalPadding = 13.dp,
+        onClick = onClick
+    )
+}
+
+@Composable
+fun DefaultButtonExtraLarge(
+    text: String,
+    drawable: Int? = null,
+    isActive: Boolean,
+    onClick: () -> Unit
+) {
+    DefaultButton(
+        text = text,
+        textColor = if (isActive) White else Gray500,
+        drawable = drawable,
+        backgroundColor = if (isActive) Gray900 else Gray200,
         horizontalPadding = 16.dp,
         verticalPadding = 13.dp,
         onClick = onClick
@@ -168,6 +248,24 @@ fun DefaultButtonLarge(
 }
 
 @Composable
+fun DefaultButtonLarge(
+    text: String,
+    drawable: Int? = null,
+    isActive: Boolean,
+    onClick: () -> Unit
+) {
+    DefaultButton(
+        text = text,
+        textColor = if (isActive) White else Gray500,
+        drawable = drawable,
+        backgroundColor = if (isActive) Gray900 else Gray200,
+        horizontalPadding = 16.dp,
+        verticalPadding = 11.dp,
+        onClick = onClick
+    )
+}
+
+@Composable
 fun DefaultButtonMedium(
     text: String,
     drawable: Int? = null,
@@ -180,6 +278,24 @@ fun DefaultButtonMedium(
         textColor = textColor,
         drawable = drawable,
         backgroundColor = backgroundColor,
+        horizontalPadding = 16.dp,
+        verticalPadding = 7.dp,
+        onClick = onClick
+    )
+}
+
+@Composable
+fun DefaultButtonMedium(
+    text: String,
+    drawable: Int? = null,
+    isActive: Boolean,
+    onClick: () -> Unit
+) {
+    DefaultButton(
+        text = text,
+        textColor = if (isActive) White else Gray500,
+        drawable = drawable,
+        backgroundColor = if (isActive) Gray900 else Gray200,
         horizontalPadding = 16.dp,
         verticalPadding = 7.dp,
         onClick = onClick
@@ -207,6 +323,25 @@ fun DefaultButtonSmall(
 }
 
 @Composable
+fun DefaultButtonSmall(
+    text: String,
+    drawable: Int? = null,
+    isActive: Boolean,
+    onClick: () -> Unit
+) {
+    DefaultButton(
+        text = text,
+        textStyle = JustSayItTheme.Typography.detail1,
+        textColor = if (isActive) White else Gray500,
+        drawable = drawable,
+        backgroundColor = if (isActive) Gray900 else Gray200,
+        horizontalPadding = 8.dp,
+        verticalPadding = 5.dp,
+        onClick = onClick
+    )
+}
+
+@Composable
 fun DefaultButtonTiny(
     text: String,
     drawable: Int? = null,
@@ -220,6 +355,25 @@ fun DefaultButtonTiny(
         textColor = textColor,
         drawable = drawable,
         backgroundColor = backgroundColor,
+        horizontalPadding = 8.dp,
+        verticalPadding = 3.dp,
+        onClick = onClick
+    )
+}
+
+@Composable
+fun DefaultButtonTiny(
+    text: String,
+    drawable: Int? = null,
+    isActive: Boolean,
+    onClick: () -> Unit
+) {
+    DefaultButton(
+        text = text,
+        textStyle = JustSayItTheme.Typography.detail1,
+        textColor = if (isActive) White else Gray500,
+        drawable = drawable,
+        backgroundColor = if (isActive) Gray900 else Gray200,
         horizontalPadding = 8.dp,
         verticalPadding = 3.dp,
         onClick = onClick
@@ -269,24 +423,72 @@ fun DefaultButtonPreview() {
         )
         DefaultButtonExtraLarge(
             text = "Button",
+            isActive = true,
+            onClick = {}
+        )
+        DefaultButtonExtraLarge(
+            text = "Button",
+            isActive = false,
             onClick = {}
         )
         DefaultButtonLarge(
             text = "Button",
+            isActive = true,
+            onClick = {}
+        )
+        DefaultButtonLarge(
+            text = "Button",
+            isActive = false,
             onClick = {}
         )
         DefaultButtonMedium(
             text = "Button",
+            isActive = true,
+            onClick = {}
+        )
+        DefaultButtonMedium(
+            text = "Button",
+            isActive = false,
             onClick = {}
         )
         DefaultButtonSmall(
             text = "Button",
+            isActive = true,
+            onClick = {}
+        )
+        DefaultButtonSmall(
+            text = "Button",
+            isActive = false,
             onClick = {}
         )
         DefaultButtonTiny(
             text = "Button",
+            isActive = true,
             onClick = {}
         )
-        DefaultButtonFull(text = "kmkim", onClick = {})
+        DefaultButtonTiny(
+            text = "Button",
+            isActive = false,
+            onClick = {}
+        )
+        DefaultButtonFull(
+            text = "Button",
+            onClick = {}
+        )
+        DefaultButtonFull(
+            text = "Button",
+            isActive = false,
+            onClick = {}
+        )
+        DefaultButtonFull(
+            text = "Button",
+            isActive = true,
+            onClick = {}
+        )
+        DefaultButtonDual(
+            buttons = listOf("Button1", "Button2"),
+            activeButton = "Button1",
+            onClick = {}
+        )
     }
 }

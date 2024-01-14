@@ -1,6 +1,5 @@
 package com.sowhat.designsystem.component
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -75,7 +74,8 @@ fun ProfileImage(
     onClick: () -> Unit,
     dropdownVisible: Boolean,
     dropdownMenuItems: List<DropdownItem>,
-    onDropdownDismiss: () -> Unit
+    onDropdownDismiss: () -> Unit,
+    onItemClick: (DropdownItem) -> Unit
 ) {
     ConstraintLayout(
         modifier = modifier
@@ -115,11 +115,12 @@ fun ProfileImage(
                 drawable = badgeDrawable
             )
 
-            Dropdown(
+            DropdownContents(
                 modifier = Modifier,
                 isVisible = dropdownVisible,
                 items = dropdownMenuItems,
-                onDismiss = onDropdownDismiss
+                onDismiss = onDropdownDismiss,
+                onItemClick = onItemClick
             )
         }
     }
