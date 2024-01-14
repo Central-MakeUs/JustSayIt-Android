@@ -7,14 +7,12 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.sp
 import com.sowhat.designsystem.R
 
 data class JustSayItTypography(
     val headlineB: TextStyle = HeadlineB,
-    val headlineR: TextStyle = HeadlineR,
+    val headlineR: TextStyle = Heading1,
     val heading2: TextStyle = Heading2,
     val heading3: TextStyle = Heading3,
     val heading4: TextStyle = Heading4,
@@ -49,13 +47,14 @@ private val HeadlineB = TextStyle(
     color = Gray900
 )
 
-private val HeadlineR = TextStyle(
+private val Heading1 = TextStyle(
     fontFamily = Pretendard,
     fontWeight = FontWeight.Normal,
     fontSize = 24.sp,
     platformStyle = PlatformTextStyle(
         includeFontPadding = false
     ),
+    lineHeight = 34.sp,
 //    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
     color = Gray900
@@ -63,11 +62,12 @@ private val HeadlineR = TextStyle(
 
 private val Heading2 = TextStyle(
     fontFamily = Pretendard,
-    fontWeight = FontWeight.Normal,
+    fontWeight = FontWeight.Bold,
     fontSize = 22.sp,
     platformStyle = PlatformTextStyle(
         includeFontPadding = false
     ),
+    lineHeight = 32.sp,
 //    lineHeight = TextUnit(value = 1.45f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
     color = Gray900
@@ -80,6 +80,7 @@ private val Heading3 = TextStyle(
     platformStyle = PlatformTextStyle(
         includeFontPadding = false
     ),
+    lineHeight = 28.sp,
 //    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
     color = Gray900
@@ -92,6 +93,7 @@ private val Heading4 = TextStyle(
     platformStyle = PlatformTextStyle(
         includeFontPadding = false
     ),
+    lineHeight = 26.sp,
 //    lineHeight = TextUnit(value = 1.45f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
     color = Gray900
@@ -104,6 +106,7 @@ private val Body1 = TextStyle(
     platformStyle = PlatformTextStyle(
         includeFontPadding = false
     ),
+    lineHeight = 22.sp,
 //    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
 )
@@ -115,6 +118,7 @@ private val Body2 = TextStyle(
     platformStyle = PlatformTextStyle(
         includeFontPadding = false
     ),
+    lineHeight = 22.sp,
 //    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
     color = Gray900
@@ -127,6 +131,7 @@ private val Body3 = TextStyle(
     platformStyle = PlatformTextStyle(
         includeFontPadding = false
     ),
+    lineHeight = 20.sp,
 //    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.8f, type = TextUnitType.Em),
     color = Gray900
@@ -139,6 +144,7 @@ private val Body4 = TextStyle(
     platformStyle = PlatformTextStyle(
         includeFontPadding = false
     ),
+    lineHeight = 20.sp,
 //    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.8f, type = TextUnitType.Em),
     color = Gray900

@@ -44,7 +44,7 @@ fun ImageContainer(
     Box(
         modifier = modifier.composed {
             if (borderWidth != null && borderColor != null && shape != null) {
-                border(width = borderWidth, color = borderColor)
+                border(width = borderWidth, color = borderColor, shape = shape)
                 clip(shape)
             } else {
                 this
