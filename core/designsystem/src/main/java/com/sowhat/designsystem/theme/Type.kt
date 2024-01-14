@@ -106,7 +106,6 @@ private val Body1 = TextStyle(
     ),
 //    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
-    color = Gray900
 )
 
 private val Body2 = TextStyle(
