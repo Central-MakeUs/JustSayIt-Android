@@ -1,4 +1,4 @@
-package com.sowhat.common
+package com.sowhat.common.navigation
 
 const val SPLASH = "splash"
 const val ONBOARDING = "onboarding"
