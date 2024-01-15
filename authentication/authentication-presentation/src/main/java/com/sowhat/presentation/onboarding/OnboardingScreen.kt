@@ -10,18 +10,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.identity.Identity
@@ -38,11 +34,11 @@ import com.sowhat.presentation.common.SignInPlatform
 import com.sowhat.presentation.component.Logo
 import com.sowhat.presentation.component.SignIn
 import com.sowhat.presentation.component.TermText
+import com.sowhat.presentation.navigation.navigateToMain
 import com.sowhat.presentation.navigation.navigateToUserConfig
 import com.sowhat.util.GoogleOAuthClient
 import com.sowhat.util.KakaoOAuthClient
 import com.sowhat.util.NaverOAuthClient
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -55,11 +51,16 @@ fun OnboardingRoute(
 
     ObserveEvents(flow = viewModel.uiEvent) { uiEvent ->
         when (uiEvent) {
-            is SignInEvent.Success -> {
+            is SignInEvent.NavigateToMain -> {
+                Log.i("OnboardingScreen", "navigate to main")
+                navController.navigateToMain()
+            }
+            is SignInEvent.NavigateToSignUp -> {
+                Log.i("OnboardingScreen", "navigate to user config")
                 navController.navigateToUserConfig()
             }
             is SignInEvent.Error -> {
-
+                Log.i("OnboardingScreen", "error")
             }
         }
     }

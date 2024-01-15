@@ -57,12 +57,22 @@ class OnboardingViewModel @Inject constructor(
         when (signInData) {
             is Resource.Loading -> {}
             is Resource.Success -> {
-                signInData.data?.accessToken?.let {
-                    authDataStore.updateAccessToken(it)
-                    _uiEvent.send(SignInEvent.Success)
+                val data = signInData.data
+                if (data?.memberId != null && data?.isJoined == true) {
+                    data.accessToken?.let {
+                        authDataStore.updateAccessToken(it)
+                    }
+                    _uiEvent.send(SignInEvent.NavigateToMain)
                     _uiState.value.copy(isLoading = false, data = signInData.data)
                     return
                 }
+
+                if (data?.isJoined == false) {
+                    _uiEvent.send(SignInEvent.NavigateToSignUp)
+                    _uiState.value.copy(isLoading = false, data = signInData.data)
+                    return
+                }
+
                 _uiState.value.copy(isLoading = false, data = signInData.data)
                 _uiEvent.send(SignInEvent.Error(message = "서버로부터 토큰을 받아올 수 없습니다."))
             }
