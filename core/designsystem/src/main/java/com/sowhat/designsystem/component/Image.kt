@@ -61,6 +61,30 @@ fun ImageContainer(
 }
 
 @Composable
+fun ImageContainer(
+    modifier: Modifier = Modifier,
+    borderWidth: Dp,
+    borderColor: Color,
+    shape: CornerBasedShape,
+    model: Any?,
+    contentDescription : String?
+) {
+    Box(
+        modifier = modifier
+            .border(width = borderWidth, color = borderColor, shape = shape)
+            .clip(shape)
+
+    ) {
+        AsyncImage(
+            modifier = Modifier.fillMaxSize(),
+            model = model,
+            contentDescription = contentDescription,
+            contentScale = ContentScale.Crop
+        )
+    }
+}
+
+@Composable
 fun ProfileImageContainer(
     modifier: Modifier = Modifier,
     model: Any?,
@@ -68,7 +92,7 @@ fun ProfileImageContainer(
 ) {
     ImageContainer(
         modifier = modifier.aspectRatio(1f),
-        borderWidth = 2.dp,
+        borderWidth = 0.5.dp,
         borderColor = JustSayItTheme.Colors.subSurface,
         shape = JustSayItTheme.Shapes.large,
         model = model,

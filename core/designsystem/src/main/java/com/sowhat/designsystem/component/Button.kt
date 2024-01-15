@@ -170,7 +170,7 @@ fun DefaultButtonDual(
 fun DefaultButtonDual(
     modifier: Modifier = Modifier,
     buttons: List<String>,
-    activeButton: String,
+    activeButton: String?,
     textStyle: TextStyle = JustSayItTheme.Typography.body1,
     onClick: (String) -> Unit
 ) {

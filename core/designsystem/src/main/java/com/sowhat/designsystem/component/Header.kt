@@ -33,6 +33,17 @@ fun Header(
     }
 }
 
+@Composable
+fun DefaultHeader(title: String) {
+    Text(
+        text = title,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        style = JustSayItTheme.Typography.body1,
+        color = JustSayItTheme.Colors.mainTypo
+    )
+}
+
 @Preview(showBackground = true, backgroundColor = 0xffffffff)
 @Composable
 fun HeaderPreview() {

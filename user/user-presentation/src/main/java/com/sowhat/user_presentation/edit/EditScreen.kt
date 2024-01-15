@@ -3,8 +3,10 @@ package com.sowhat.user_presentation.edit
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -13,19 +15,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.COMPLETE
-import com.sowhat.designsystem.common.CONFIG_ID_TITLE
+import com.sowhat.designsystem.common.CONFIG_NICKNAME_TITLE
 import com.sowhat.designsystem.common.DropdownItem
 import com.sowhat.designsystem.common.PROFILE_SETTING
+import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.component.AppBar
+import com.sowhat.designsystem.component.Cell
 import com.sowhat.designsystem.component.DefaultTextField
 import com.sowhat.designsystem.component.ProfileImage
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
+import com.sowhat.designsystem.theme.JustSayItTheme
 
 @Composable
 fun EditRoute(
@@ -113,11 +121,14 @@ fun EditScreen(
             newUserName = newUserName,
             dropdownVisible = dropdownVisible,
             dropdownMenuItems = dropdownMenuItems,
-            onDropdownDismiss = onDropdownDismiss
+            onDropdownDismiss = onDropdownDismiss,
+            gender = "남",
+            dob = "1998.11.23"
         )
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun EditScreenContent(
     modifier: Modifier = Modifier,
@@ -129,10 +140,17 @@ fun EditScreenContent(
     onUserNameChange: (String) -> Unit,
     dropdownVisible: Boolean,
     dropdownMenuItems: List<DropdownItem>,
-    onDropdownDismiss: () -> Unit
+    onDropdownDismiss: () -> Unit,
+    gender: String,
+    dob: String
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .background(JustSayItTheme.Colors.mainBackground)
+            .noRippleClickable { keyboardController?.hide() }
     ) {
         ProfileImage(
             modifier = Modifier,
@@ -143,16 +161,23 @@ fun EditScreenContent(
             onClick = onProfileClick,
             dropdownVisible = dropdownVisible,
             dropdownMenuItems = dropdownMenuItems,
-            onDropdownDismiss = onDropdownDismiss
+            onDropdownDismiss = onDropdownDismiss,
+            onItemClick = { dropdownItem ->
+
+            }
         )
 
         DefaultTextField(
             modifier = Modifier,
-            title = CONFIG_ID_TITLE,
+            title = CONFIG_NICKNAME_TITLE,
             placeholder = userName,
             value = newUserName,
             onValueChange = onUserNameChange
         )
+
+        Cell(title = stringResource(id = R.string.title_gender), leadingIcon = null, trailingText = gender)
+
+        Cell(title = stringResource(id = R.string.title_dob), leadingIcon = null, trailingText = dob)
     }
 }
 

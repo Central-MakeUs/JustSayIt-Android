@@ -55,6 +55,7 @@ private val Heading1 = TextStyle(
         includeFontPadding = false
     ),
     lineHeight = 34.sp,
+    letterSpacing = (-0.06).sp,
 //    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
     color = Gray900
@@ -68,6 +69,7 @@ private val Heading2 = TextStyle(
         includeFontPadding = false
     ),
     lineHeight = 32.sp,
+    letterSpacing = (-0.055).sp,
 //    lineHeight = TextUnit(value = 1.45f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
     color = Gray900
@@ -81,6 +83,7 @@ private val Heading3 = TextStyle(
         includeFontPadding = false
     ),
     lineHeight = 28.sp,
+    letterSpacing = (-0.05).sp,
 //    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
     color = Gray900
@@ -94,6 +97,7 @@ private val Heading4 = TextStyle(
         includeFontPadding = false
     ),
     lineHeight = 26.sp,
+    letterSpacing = (-0.045).sp,
 //    lineHeight = TextUnit(value = 1.45f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
     color = Gray900
@@ -107,6 +111,7 @@ private val Body1 = TextStyle(
         includeFontPadding = false
     ),
     lineHeight = 22.sp,
+    letterSpacing = (-0.04).sp,
 //    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
 )
@@ -119,6 +124,7 @@ private val Body2 = TextStyle(
         includeFontPadding = false
     ),
     lineHeight = 22.sp,
+    letterSpacing = (-0.04).sp,
 //    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.75f, type = TextUnitType.Em),
     color = Gray900
@@ -132,6 +138,7 @@ private val Body3 = TextStyle(
         includeFontPadding = false
     ),
     lineHeight = 20.sp,
+    letterSpacing = (-0.028).sp,
 //    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.8f, type = TextUnitType.Em),
     color = Gray900
@@ -145,6 +152,7 @@ private val Body4 = TextStyle(
         includeFontPadding = false
     ),
     lineHeight = 20.sp,
+    letterSpacing = (-0.028).sp,
 //    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
 //    letterSpacing = TextUnit(value = 0.8f, type = TextUnitType.Em),
     color = Gray900
@@ -158,6 +166,7 @@ private val Detail1 = TextStyle(
         includeFontPadding = false
     ),
     lineHeight = 18.sp,
+    letterSpacing = (-0.024).sp,
     color = Gray900
 )
 
@@ -170,6 +179,7 @@ private val Detail2 = TextStyle(
     ),
 //    lineHeight = TextUnit(value = 1.4f, type = TextUnitType.Em),
     lineHeight = 18.sp,
+    letterSpacing = (-0.024).sp,
     color = Gray900
 )
 

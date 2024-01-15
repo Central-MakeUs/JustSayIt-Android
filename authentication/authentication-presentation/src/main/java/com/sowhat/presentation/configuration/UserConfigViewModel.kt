@@ -17,4 +17,5 @@ class UserConfigViewModel @Inject constructor() : ViewModel() {
     val isValid by derivedStateOf {
         id.length in (2..12) && hasImage && imageUri != null
     }
+
 }

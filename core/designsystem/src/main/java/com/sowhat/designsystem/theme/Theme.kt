@@ -47,7 +47,7 @@ object JustSayItTheme {
 val LightColorScheme = JustSayItColor(
     mainTypo = Gray900,
     subTypo = Gray700,
-    mainBackground = Gray100,
+    mainBackground = White,
     subBackground = Gray200,
     mainSurface = White,
     onMainSurface = NavIconLight,
@@ -61,7 +61,7 @@ val LightColorScheme = JustSayItColor(
 val DarkColorScheme = JustSayItColor(
     mainTypo = Gray900,
     subTypo = Gray700,
-    mainBackground = Gray100,
+    mainBackground = White,
     subBackground = Gray200,
     mainSurface = White,
     onMainSurface = NavIconLight,

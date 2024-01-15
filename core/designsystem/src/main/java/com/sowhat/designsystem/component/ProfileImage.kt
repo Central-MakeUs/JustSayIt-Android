@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -116,7 +117,7 @@ fun ProfileImage(
             )
 
             DropdownContents(
-                modifier = Modifier,
+                modifier = Modifier.width(136.dp),
                 isVisible = dropdownVisible,
                 items = dropdownMenuItems,
                 onDismiss = onDropdownDismiss,
@@ -135,6 +136,6 @@ fun ProfileImagePreview() {
         badgeDrawable = R.drawable.ic_camera_24,
         badgeBackgroundColor = Gray200,
         badgeIconTint = Gray400,
-        onClick = {}
+        onClick = {},
     )
 }
