@@ -72,7 +72,7 @@ fun OnboardingRoute(
 }
 
 @Composable
-fun OnboardingScreen(
+private fun OnboardingScreen(
     modifier: Modifier = Modifier,
     onLoginStart: (Platform, String) -> Unit,
     isLoading: Boolean
@@ -144,6 +144,19 @@ fun OnboardingScreen(
         )
     )
 
+    OnboardingScreenContent(
+        modifier = modifier,
+        signInPlatforms = signInPlatforms,
+        isLoading = isLoading
+    )
+}
+
+@Composable
+private fun OnboardingScreenContent(
+    modifier: Modifier,
+    signInPlatforms: List<SignInPlatform>,
+    isLoading: Boolean
+) {
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
@@ -183,8 +196,6 @@ fun OnboardingScreen(
 
         if (isLoading) CenteredCircularProgress()
     }
-
-
 }
 
 @Preview(showBackground = true, backgroundColor = 0xffffffff)
@@ -193,4 +204,3 @@ fun OnboardingScreenPreview() {
     val navController = rememberNavController()
     OnboardingScreen(isLoading = false, onLoginStart = { _, _ ->})
 }
-
