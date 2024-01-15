@@ -1,10 +1,14 @@
 package com.sowhat.presentation.configuration
 
 import android.net.Uri
+import android.view.ViewTreeObserver
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
@@ -20,18 +24,27 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -43,8 +56,10 @@ import com.sowhat.designsystem.theme.Gray400
 import com.sowhat.designsystem.common.COMPLETE
 import com.sowhat.designsystem.common.CONFIG_NICKNAME_PLACEHOLDER
 import com.sowhat.designsystem.common.CONFIG_NICKNAME_TITLE
+import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.component.DefaultButtonFull
 import com.sowhat.designsystem.component.ProfileImage
+import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.presentation.common.TextFieldInfo
 import com.sowhat.presentation.component.DobTextField
@@ -132,7 +147,7 @@ fun UserConfigRoute(
     )
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun UserConfigScreen(
     modifier: Modifier = Modifier,
@@ -146,8 +161,12 @@ fun UserConfigScreen(
     onGenderChange: (String) -> Unit,
     dobItems: List<TextFieldInfo>
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .noRippleClickable { keyboardController?.hide() },
         topBar = {
             AppBar(
                 title = null,
@@ -156,19 +175,51 @@ fun UserConfigScreen(
                 isValid = isValid,
                 onActionTextClick = {}
             )
+        },
+        bottomBar = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(id = R.string.desc_info_immutable),
+                    style = JustSayItTheme.Typography.detail1,
+                    color = Gray500
+                )
+
+                DefaultButtonFull(
+                    modifier = Modifier
+                        .padding(
+                            top = JustSayItTheme.Spacing.spaceSmall,
+                            bottom = JustSayItTheme.Spacing.spaceLarge,
+                            start = JustSayItTheme.Spacing.spaceLarge,
+                            end = JustSayItTheme.Spacing.spaceLarge,
+                        ),
+                    text = stringResource(id = R.string.button_start),
+                    isActive = isValid,
+                    onClick = { navController.navigateToMain() }
+                )
+            }
         }
     ) { paddingValues ->
+
+        val imeState = rememberImeState()
+        val scrollState = rememberScrollState()
+
+        LaunchedEffect(key1 = imeState.value) {
+            if (imeState.value) {
+                scrollState.animateScrollTo(scrollState.maxValue, tween(300))
+            }
+        }
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .imePadding()
+                .background(JustSayItTheme.Colors.mainBackground)
+                .verticalScroll(scrollState)
                 .padding(paddingValues)
         ) {
             ProfileImage(
-                profileUri = profileUri ?: "https://github.com/kmkim2689/Android-Wiki/assets/101035437/88d7b249-ad72-4be9-8d79-38dc942e0a7f",
+                profileUri = profileUri,
                 badgeDrawable = R.drawable.ic_camera_24,
                 badgeBackgroundColor = Gray200,
                 badgeIconTint = Gray400,
@@ -190,18 +241,10 @@ fun UserConfigScreen(
             )
 
             DobTextField(
-                modifier = Modifier.fillMaxWidth().imePadding().imeNestedScroll(),
+                modifier = Modifier
+                    .fillMaxWidth(),
                 title = stringResource(id = R.string.title_dob),
                 items = dobItems
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            DefaultButtonFull(
-                modifier = Modifier.padding(JustSayItTheme.Spacing.spaceLarge).imePadding().imeNestedScroll(),
-                text = stringResource(id = R.string.button_start),
-                isActive = isValid,
-                onClick = { navController.navigateToMain() }
             )
         }
     }
@@ -253,4 +296,27 @@ fun UserConfigScreenPreview() {
             )
         )
     )
+}
+
+@Composable
+fun rememberImeState(): State<Boolean> {
+    val imeState = remember {
+        mutableStateOf(false)
+    }
+
+    val view = LocalView.current
+    DisposableEffect(view) {
+        val listener = ViewTreeObserver.OnGlobalLayoutListener {
+            val isKeyboardOpen = ViewCompat.getRootWindowInsets(view)
+                ?.isVisible(WindowInsetsCompat.Type.ime()) ?: true
+            imeState.value = isKeyboardOpen
+        }
+
+        view.viewTreeObserver.addOnGlobalLayoutListener(listener)
+        onDispose {
+            view.viewTreeObserver.removeOnGlobalLayoutListener(listener)
+        }
+    }
+
+    return imeState
 }
