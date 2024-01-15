@@ -47,6 +47,12 @@ class AuthDataRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateMemberId(memberId: Long) {
+        authDataStore.updateData { authData ->
+            authData.copy(memberId = memberId)
+        }
+    }
+
     override suspend fun resetData() {
         authDataStore.updateData { authData ->
             authData.copy(
