@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -113,7 +114,7 @@ fun OnboardingScreen(
     )
 
     ConstraintLayout(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize().background(JustSayItTheme.Colors.mainBackground)
     ) {
         val (logo, signIn, terms) = createRefs()
         val topSpace = JustSayItTheme.Spacing.spaceExtraExtraLarge

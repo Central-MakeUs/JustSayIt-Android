@@ -89,7 +89,9 @@ fun OutlinedDefaultTextField(
                 modifier = Modifier
                     .fillMaxWidth(),
                 text = placeholder,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                style = JustSayItTheme.Typography.body1,
+                color = Gray500
             )
         },
         textStyle = JustSayItTheme.Typography.body1.copy(textAlign = TextAlign.Center),

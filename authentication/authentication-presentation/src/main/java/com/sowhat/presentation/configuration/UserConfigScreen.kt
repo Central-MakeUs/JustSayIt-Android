@@ -5,8 +5,10 @@ import android.view.ViewTreeObserver
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -147,7 +149,9 @@ fun UserConfigRoute(
     )
 }
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalFoundationApi::class
+)
 @Composable
 fun UserConfigScreen(
     modifier: Modifier = Modifier,
@@ -181,9 +185,11 @@ fun UserConfigScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
+                    modifier = Modifier.basicMarquee(),
                     text = stringResource(id = R.string.desc_info_immutable),
                     style = JustSayItTheme.Typography.detail1,
-                    color = Gray500
+                    color = Gray500,
+                    maxLines = 1
                 )
 
                 DefaultButtonFull(
@@ -244,7 +250,7 @@ fun UserConfigScreen(
                 modifier = Modifier
                     .fillMaxWidth(),
                 title = stringResource(id = R.string.title_dob),
-                items = dobItems
+                items = dobItems,
             )
         }
     }

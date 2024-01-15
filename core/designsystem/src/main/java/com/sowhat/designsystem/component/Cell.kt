@@ -87,7 +87,8 @@ fun Cell(
             .padding(
                 horizontal = 16.dp,
                 vertical = 4.dp
-            ),
+            )
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
