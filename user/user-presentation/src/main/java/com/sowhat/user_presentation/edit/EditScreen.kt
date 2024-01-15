@@ -15,7 +15,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,6 +26,7 @@ import com.sowhat.designsystem.common.COMPLETE
 import com.sowhat.designsystem.common.CONFIG_NICKNAME_TITLE
 import com.sowhat.designsystem.common.DropdownItem
 import com.sowhat.designsystem.common.PROFILE_SETTING
+import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.Cell
 import com.sowhat.designsystem.component.DefaultTextField
@@ -125,6 +128,7 @@ fun EditScreen(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun EditScreenContent(
     modifier: Modifier = Modifier,
@@ -140,10 +144,13 @@ fun EditScreenContent(
     gender: String,
     dob: String
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(JustSayItTheme.Colors.mainBackground)
+            .noRippleClickable { keyboardController?.hide() }
     ) {
         ProfileImage(
             modifier = Modifier,
