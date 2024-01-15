@@ -14,7 +14,7 @@ import retrofit2.http.Query
 interface AuthApi {
     @GET("/members/check")
     suspend fun signIn(
-        @Query("platformToken") platformToken: String
+        @Query("platformToken") platformToken: String?
     ): ResponseBody<SignInResult>
 
     @POST("/members/join")
