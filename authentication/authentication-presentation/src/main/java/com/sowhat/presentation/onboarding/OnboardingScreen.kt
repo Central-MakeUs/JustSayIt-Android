@@ -162,7 +162,7 @@ private fun OnboardingScreenContent(
             .fillMaxSize()
             .background(JustSayItTheme.Colors.mainBackground)
     ) {
-        val (logo, signIn, terms) = createRefs()
+        val (logo, signIn, terms, loading) = createRefs()
         val topSpace = JustSayItTheme.Spacing.spaceExtraExtraLarge
         val signInTermSpace = JustSayItTheme.Spacing.spaceExtraLarge
 
@@ -194,13 +194,19 @@ private fun OnboardingScreenContent(
                 .fillMaxWidth()
         )
 
-        if (isLoading) CenteredCircularProgress()
+        if (isLoading) CenteredCircularProgress(
+            modifier = Modifier.constrainAs(loading) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+        )
     }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xffffffff)
 @Composable
 fun OnboardingScreenPreview() {
-    val navController = rememberNavController()
     OnboardingScreen(isLoading = false, onLoginStart = { _, _ ->})
 }

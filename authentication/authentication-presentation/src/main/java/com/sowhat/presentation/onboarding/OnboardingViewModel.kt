@@ -40,7 +40,7 @@ class OnboardingViewModel @Inject constructor(
         platform: Platform,
         platformToken: String
     ) = viewModelScope.launch {
-        _uiState.value.copy(isLoading = true)
+        _uiState.value = _uiState.value.copy(isLoading = true)
 
         authDataStore.apply {
             updatePlatform(platform = platform.title)
@@ -58,31 +58,46 @@ class OnboardingViewModel @Inject constructor(
             is Resource.Loading -> {}
             is Resource.Success -> {
                 val data = signInData.data
-                if (data?.memberId != null && data?.isJoined == true) {
-                    data.accessToken?.let {
-                        authDataStore.updateAccessToken(it)
-                    }
-                    _uiEvent.send(SignInEvent.NavigateToMain)
-                    _uiState.value.copy(isLoading = false, data = signInData.data)
-                    return
-                }
-
-                if (data?.isJoined == false) {
-                    _uiEvent.send(SignInEvent.NavigateToSignUp)
-                    _uiState.value.copy(isLoading = false, data = signInData.data)
-                    return
-                }
-
-                _uiState.value.copy(isLoading = false, data = signInData.data)
-                _uiEvent.send(SignInEvent.Error(message = "서버로부터 토큰을 받아올 수 없습니다."))
+                consumeSuccessResources(data, signInData)
             }
 
             is Resource.Error -> {
-                _uiState.value.copy(isLoading = false, data = signInData.data)
-                _uiEvent.send(
-                    SignInEvent.Error(message = signInData.message ?: "예상치 못한 오류가 발생했습니다.")
-                )
+                consumeErrorResources(signInData)
             }
         }
+    }
+
+    private suspend fun consumeErrorResources(signInData: Resource<SignIn>) {
+        terminateLoading(data = signInData.data)
+        _uiEvent.send(
+            SignInEvent.Error(message = signInData.message ?: "예상치 못한 오류가 발생했습니다.")
+        )
+    }
+
+    private suspend fun consumeSuccessResources(
+        data: SignIn?,
+        signInData: Resource<SignIn>
+    ) {
+        if (data?.memberId != null && data.isJoined) {
+            data.accessToken?.let {
+                authDataStore.updateAccessToken(it)
+            }
+            terminateLoading(data = signInData.data)
+            _uiEvent.send(SignInEvent.NavigateToMain)
+            return
+        }
+
+        if (data?.isJoined == false) {
+            terminateLoading(data = signInData.data)
+            _uiEvent.send(SignInEvent.NavigateToSignUp)
+            return
+        }
+
+        terminateLoading(data = signInData.data)
+        _uiEvent.send(SignInEvent.Error(message = "서버로부터 토큰을 받아올 수 없습니다."))
+    }
+
+    private fun terminateLoading(data: SignIn?) {
+        _uiState.value = _uiState.value.copy(isLoading = false, data = data)
     }
 }

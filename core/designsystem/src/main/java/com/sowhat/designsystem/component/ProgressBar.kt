@@ -19,9 +19,11 @@ fun CircularProgress() {
 }
 
 @Composable
-fun CenteredCircularProgress() {
+fun CenteredCircularProgress(
+    modifier: Modifier = Modifier,
+) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         CircularProgress()
