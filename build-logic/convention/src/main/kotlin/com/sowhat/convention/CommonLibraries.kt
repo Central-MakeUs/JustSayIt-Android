@@ -36,5 +36,9 @@ internal fun Project.configureCommonLibraries() {
 
         implementation(libs, "work.runtime.ktx")
         implementation(libs, "compose.livedata")
+
+        implementation(libs, "lifecycle.runtime.ktx")
+        implementation(libs, "androidx.lifecycle.viewModelCompose")
+        implementation(libs, "androidx.lifecycle.viewModelKtx")
     }
 }
