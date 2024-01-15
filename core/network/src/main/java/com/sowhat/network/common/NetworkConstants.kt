@@ -1,6 +1,6 @@
 package com.sowhat.network.common
 
-const val BASE_URL = ""
+const val BASE_URL = "https://hanserver.site"
 const val BEARER = "Bearer"
 
 const val KEY_CODE = "code"
