@@ -1,19 +1,19 @@
-package com.sowhat.authentication_data.di
+package com.sowhat.di.repository
 
 import com.sowhat.authentication_data.remote.AuthApi
 import com.sowhat.authentication_data.repository.AuthRepositoryImpl
+import com.sowhat.authentication_domain.repository.AuthRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AuthModule {
+object ProvidesModule {
     @Provides
     @Singleton
-    fun provideAuthApi(retrofit: Retrofit): AuthApi =
-        retrofit.create(AuthApi::class.java)
+    fun provideAuthRepository(authApi: AuthApi): AuthRepository =
+        AuthRepositoryImpl(authApi)
 }
