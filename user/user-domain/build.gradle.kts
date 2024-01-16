@@ -17,6 +17,7 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:datastore"))
     implementation(project(":core:common"))
+    implementation(project(":core:di"))
     implementation(project(":core:designsystem"))
 
 }

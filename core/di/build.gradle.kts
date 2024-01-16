@@ -17,4 +17,6 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":authentication:authentication-data"))
     implementation(project(":authentication:authentication-domain"))
+    implementation(project(":user:user-data"))
+    implementation(project(":user:user-domain"))
 }

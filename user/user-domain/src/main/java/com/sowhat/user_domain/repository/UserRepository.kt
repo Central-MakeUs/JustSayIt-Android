@@ -12,7 +12,7 @@ interface UserRepository {
         memberId: Long
     ): Resource<UserInfoDomain>
 
-    suspend fun editUserInfo(
+    suspend fun updateUserInfo(
         accessToken: String?,
         memberId: Long,
         editInfo: RequestBody,

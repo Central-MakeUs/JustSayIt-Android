@@ -22,7 +22,7 @@ interface UserApi {
 
     @Multipart
     @PATCH("/members/profile/me/{member-id}")
-    suspend fun editUserInfo(
+    suspend fun updateUserInfo(
         @Header("Authorization") accessToken: String?,
         @Path("member-id") memberId: Long,
         @Part("updateProfile") profile: RequestBody,

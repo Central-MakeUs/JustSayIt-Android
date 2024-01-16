@@ -30,7 +30,7 @@ class UserRepositoryImpl(
         getIOErrorResource(e)
     }
 
-    override suspend fun editUserInfo(
+    override suspend fun updateUserInfo(
         accessToken: String?,
         memberId: Long,
         editInfo: RequestBody,
@@ -100,7 +100,7 @@ class UserRepositoryImpl(
         profileImage: MultipartBody.Part?,
         editInfo: RequestBody
     ): Resource<Unit?> {
-        val editUserResult = userApi.editUserInfo(
+        val editUserResult = userApi.updateUserInfo(
             accessToken = accessToken,
             memberId = memberId,
             profileImage = profileImage,
