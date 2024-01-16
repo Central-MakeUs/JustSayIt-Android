@@ -9,5 +9,5 @@ data class NewMember(
     @SerialName("accessToken")
     val accessToken: String,
     @SerialName("memberId")
-    val memberId: Int
+    val memberId: Long
 )

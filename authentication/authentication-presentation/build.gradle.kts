@@ -22,4 +22,5 @@ dependencies {
     implementation(project(":authentication:authentication-domain"))
     implementation(project(":core:di"))
     implementation(project(":core:datastore"))
+    implementation(project(":core:network"))
 }
