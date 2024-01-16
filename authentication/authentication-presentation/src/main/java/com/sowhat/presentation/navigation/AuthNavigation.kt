@@ -20,7 +20,12 @@ fun NavGraphBuilder.onBoardingScreen(
 }
 
 fun NavController.navigateToUserConfig(navOptions: NavOptions? = null) {
-    this.navigate(CONFIGURATION, navOptions)
+    this.navigate(CONFIGURATION) {
+        popUpTo(ONBOARDING) {
+            inclusive = true
+        }
+        launchSingleTop = true
+    }
 }
 
 fun NavGraphBuilder.userConfigScreen(
