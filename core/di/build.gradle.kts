@@ -15,6 +15,7 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
+    implementation(project(":core:datastore"))
     implementation(project(":authentication:authentication-data"))
     implementation(project(":authentication:authentication-domain"))
     implementation(project(":user:user-data"))
