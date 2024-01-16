@@ -1,8 +1,6 @@
 package com.sowhat.authentication_domain.use_case
 
-import com.sowhat.common.wrapper.Resource
-import com.sowhat.common.wrapper.UiState
-import com.sowhat.common.wrapper.ValidationResult
+import com.sowhat.common.model.ValidationResult
 
 class ValidateNicknameUseCase {
     operator fun invoke(nickname: String): ValidationResult {

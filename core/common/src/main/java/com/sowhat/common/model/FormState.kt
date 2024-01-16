@@ -1,8 +1,6 @@
-package com.sowhat.presentation.common
+package com.sowhat.common.model
 
-import android.graphics.Bitmap
 import okhttp3.MultipartBody
-import java.io.File
 
 data class RegistrationFormState(
     val profileImage: MultipartBody.Part? = null,
@@ -16,4 +14,10 @@ data class RegistrationFormState(
     val isMonthValid: Boolean = false,
     val day: String = "",
     val isDayValid: Boolean = false
+)
+
+data class UpdateFormState(
+    val profileImage: MultipartBody.Part? = null,
+    val nickname: String = "",
+    val isNicknameValid: Boolean = false,
 )

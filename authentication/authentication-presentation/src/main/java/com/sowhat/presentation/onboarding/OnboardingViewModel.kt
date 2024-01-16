@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sowhat.authentication_domain.model.SignIn
 import com.sowhat.authentication_domain.use_case.UserSignInUseCase
-import com.sowhat.common.wrapper.Resource
-import com.sowhat.common.wrapper.SignInEvent
-import com.sowhat.common.wrapper.UiState
+import com.sowhat.common.model.Resource
+import com.sowhat.common.model.SignInEvent
+import com.sowhat.common.model.UiState
 import com.sowhat.datastore.AuthDataRepository
 import com.sowhat.network.util.toBearerToken
 import com.sowhat.presentation.common.Platform
@@ -56,7 +56,6 @@ class OnboardingViewModel @Inject constructor(
 
     private suspend fun consumeResources(signInData: Resource<SignIn>) {
         when (signInData) {
-            is Resource.Loading -> {}
             is Resource.Success -> {
                 val data = signInData.data
                 consumeSuccessResources(data, signInData)

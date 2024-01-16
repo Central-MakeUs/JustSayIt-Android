@@ -46,9 +46,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.sowhat.common.util.ObserveEvents
-import com.sowhat.common.wrapper.RegistrationFormEvent
-import com.sowhat.common.wrapper.SignInEvent
-import com.sowhat.common.wrapper.SignUpEvent
+import com.sowhat.common.model.RegistrationFormEvent
+import com.sowhat.common.model.SignUpEvent
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.DefaultTextField
@@ -66,8 +65,6 @@ import com.sowhat.presentation.common.TextFieldInfo
 import com.sowhat.presentation.component.DobTextField
 import com.sowhat.presentation.component.Selection
 import com.sowhat.presentation.navigation.navigateToMain
-import com.sowhat.presentation.navigation.navigateToUserConfig
-import kotlinx.coroutines.flow.collect
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody

@@ -6,7 +6,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -36,8 +35,8 @@ import com.sowhat.designsystem.theme.Gray400
 import com.sowhat.designsystem.theme.JustSayItTheme
 
 @Composable
-fun EditRoute(
-    viewModel: EditViewModel = hiltViewModel()
+fun UpdateRoute(
+    viewModel: UpdateViewModel = hiltViewModel()
 ) {
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -67,7 +66,7 @@ fun EditRoute(
 
     val maxLength = 12
 
-    EditScreen(
+    UpdateScreen(
         isValid = viewModel.isValid,
         userName = viewModel.userName,
         profileUrl = viewModel.profileUrl,
@@ -87,7 +86,7 @@ fun EditRoute(
 }
 
 @Composable
-fun EditScreen(
+fun UpdateScreen(
     modifier: Modifier = Modifier,
     isValid: Boolean,
     userName: String,
@@ -199,7 +198,7 @@ fun EditScreenPreview() {
         }
     }
 
-    EditScreen(
+    UpdateScreen(
         isValid = isValid,
         userName = "케이엠",
         profileUrl = profileUrl,

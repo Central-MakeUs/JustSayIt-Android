@@ -1,6 +1,6 @@
 package com.sowhat.user_domain.use_case
 
-import com.sowhat.common.wrapper.Resource
+import com.sowhat.common.model.Resource
 import com.sowhat.datastore.AuthDataRepository
 import com.sowhat.user_domain.repository.UserRepository
 import kotlinx.coroutines.flow.first
@@ -14,7 +14,7 @@ class UpdateUserInfoUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         editInfo: RequestBody,
-        profileImage: MultipartBody.Part
+        profileImage: MultipartBody.Part?
     ): Resource<Unit?> {
         val authData = authDatastore.authData.first()
         val accessToken = authData.accessToken

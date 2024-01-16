@@ -1,6 +1,6 @@
 package com.sowhat.user_domain.use_case
 
-import com.sowhat.common.wrapper.Resource
+import com.sowhat.common.model.Resource
 import com.sowhat.datastore.AuthDataRepository
 import com.sowhat.user_domain.model.UserInfoDomain
 import com.sowhat.user_domain.repository.UserRepository

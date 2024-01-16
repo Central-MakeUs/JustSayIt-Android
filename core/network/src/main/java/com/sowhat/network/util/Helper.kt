@@ -1,6 +1,6 @@
 package com.sowhat.network.util
 
-import com.sowhat.common.wrapper.Resource
+import com.sowhat.common.model.Resource
 import com.sowhat.network.common.EXCEPTION_UNEXPECTED_ERROR
 import com.sowhat.network.common.ResponseCode
 import kotlinx.serialization.json.Json

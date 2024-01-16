@@ -15,14 +15,14 @@ import com.sowhat.authentication_domain.use_case.ValidateGenderUseCase
 import com.sowhat.authentication_domain.use_case.ValidateMonthUseCase
 import com.sowhat.authentication_domain.use_case.ValidateNicknameUseCase
 import com.sowhat.authentication_domain.use_case.ValidateYearUseCase
-import com.sowhat.common.wrapper.RegistrationFormEvent
-import com.sowhat.common.wrapper.Resource
-import com.sowhat.common.wrapper.SignUpEvent
-import com.sowhat.common.wrapper.UiState
+import com.sowhat.common.model.RegistrationFormEvent
+import com.sowhat.common.model.Resource
+import com.sowhat.common.model.SignUpEvent
+import com.sowhat.common.model.UiState
 import com.sowhat.datastore.AuthDataRepository
 import com.sowhat.network.util.getRequestBody
 import com.sowhat.network.util.toBearerToken
-import com.sowhat.presentation.common.RegistrationFormState
+import com.sowhat.common.model.RegistrationFormState
 import com.sowhat.presentation.common.RegistrationRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -159,7 +159,6 @@ class UserConfigViewModel @Inject constructor(
             )
 
             when (result) {
-                is Resource.Loading -> {}
                 is Resource.Success -> {
                     _uiState.value = _uiState.value.copy(isLoading = false, data = result.data)
                     val accessToken = result.data?.accessToken

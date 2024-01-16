@@ -1,6 +1,6 @@
 package com.sowhat.user_data.repository
 
-import com.sowhat.common.wrapper.Resource
+import com.sowhat.common.model.Resource
 import com.sowhat.network.common.ResponseCode
 import com.sowhat.network.util.getHttpErrorResource
 import com.sowhat.network.util.getIOErrorResource

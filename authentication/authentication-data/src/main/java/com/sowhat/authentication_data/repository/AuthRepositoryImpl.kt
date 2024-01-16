@@ -6,7 +6,7 @@ import com.sowhat.authentication_data.remote.AuthApi
 import com.sowhat.authentication_domain.model.NewMember
 import com.sowhat.authentication_domain.model.SignIn
 import com.sowhat.authentication_domain.repository.AuthRepository
-import com.sowhat.common.wrapper.Resource
+import com.sowhat.common.model.Resource
 import com.sowhat.network.util.getHttpErrorResource
 import com.sowhat.network.util.getIOErrorResource
 import okhttp3.MultipartBody

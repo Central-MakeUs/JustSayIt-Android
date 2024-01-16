@@ -1,6 +1,6 @@
 package com.sowhat.user_domain.repository
 
-import com.sowhat.common.wrapper.Resource
+import com.sowhat.common.model.Resource
 import com.sowhat.user_domain.model.UserInfoDomain
 import okhttp3.MultipartBody
 import okhttp3.RequestBody

@@ -2,8 +2,8 @@ package com.sowhat.user_presentation.setting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sowhat.common.wrapper.Resource
-import com.sowhat.common.wrapper.UiState
+import com.sowhat.common.model.Resource
+import com.sowhat.common.model.UiState
 import com.sowhat.user_domain.model.UserInfoDomain
 import com.sowhat.user_domain.use_case.GetUserInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,7 +31,6 @@ class SettingViewModel @Inject constructor(
 
     private fun updateUiState(userInfo: Resource<UserInfoDomain>) {
         when (userInfo) {
-            is Resource.Loading -> {}
             is Resource.Success -> {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
