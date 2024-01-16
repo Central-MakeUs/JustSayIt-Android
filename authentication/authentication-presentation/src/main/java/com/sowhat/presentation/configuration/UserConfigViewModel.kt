@@ -21,6 +21,7 @@ import com.sowhat.common.wrapper.SignUpEvent
 import com.sowhat.common.wrapper.UiState
 import com.sowhat.datastore.AuthDataRepository
 import com.sowhat.network.util.getRequestBody
+import com.sowhat.network.util.toBearerToken
 import com.sowhat.presentation.common.RegistrationFormState
 import com.sowhat.presentation.common.RegistrationRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -164,10 +165,11 @@ class UserConfigViewModel @Inject constructor(
                     val accessToken = result.data?.accessToken
                     val memberId = result.data?.memberId
                     if (accessToken != null || memberId != null) {
-                        authDataStore.updateAccessToken(accessToken!!)
+                        authDataStore.updateAccessToken(accessToken!!.toBearerToken())
                         authDataStore.updateMemberId(memberId!!)
                         signUpEventChannel.send(SignUpEvent.NavigateToMain)
                     }
+                    signUpEventChannel.send(SignUpEvent.Error("토큰이 없습니다."))
                 }
                 is Resource.Error -> {
                     _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = result.message)

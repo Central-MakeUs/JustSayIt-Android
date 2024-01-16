@@ -8,6 +8,7 @@ import com.sowhat.common.wrapper.Resource
 import com.sowhat.common.wrapper.SignInEvent
 import com.sowhat.common.wrapper.UiState
 import com.sowhat.datastore.AuthDataRepository
+import com.sowhat.network.util.toBearerToken
 import com.sowhat.presentation.common.Platform
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -79,7 +80,7 @@ class OnboardingViewModel @Inject constructor(
     ) {
         if (data?.memberId != null && data.isJoined) {
             data.accessToken?.let {
-                authDataStore.updateAccessToken(it)
+                authDataStore.updateAccessToken(it.toBearerToken())
             }
             terminateLoading(data = signInData.data)
             _uiEvent.send(SignInEvent.NavigateToMain)

@@ -21,6 +21,6 @@ interface AuthApi {
     @Multipart
     suspend fun postNewMember(
         @Part("loginInfo") loginInfo: RequestBody,
-        @Part profileImg: MultipartBody.Part?,
+        @Part("profileImg") profileImg: MultipartBody.Part?,
     ): ResponseBody<NewMemberInfo>
 }
