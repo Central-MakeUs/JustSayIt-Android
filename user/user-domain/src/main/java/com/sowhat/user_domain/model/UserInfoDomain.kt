@@ -11,13 +11,13 @@ data class UserInfoDomain(
     @SerialName("memberId")
     val memberId: Int,
     @SerialName("personalInfo")
-    val personalInfo: PersonalInfo,
+    val personalInfo: PersonalInfoDomain,
     @SerialName("profileInfo")
-    val profileInfo: ProfileInfo
+    val profileInfo: ProfileInfoDomain
 )
 
 @Serializable
-data class ProfileInfo(
+data class ProfileInfoDomain(
     @SerialName("nickname")
     val nickname: String,
     @SerialName("profileImg")
@@ -25,7 +25,7 @@ data class ProfileInfo(
 )
 
 @Serializable
-data class PersonalInfo(
+data class PersonalInfoDomain(
     @SerialName("birth")
     val birth: String,
     @SerialName("gender")
