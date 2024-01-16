@@ -32,5 +32,6 @@ interface UserApi {
     @POST("/members/quit/{member-id}")
     suspend fun withdrawUser(
         @Header("Authorization") accessToken: String?,
+        @Path("member-id") memberId: Long,
     ): ResponseBody<Unit?>
 }

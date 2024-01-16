@@ -1,11 +1,11 @@
-package com.sowhat.user_data.model.remote
+package com.sowhat.user_domain.model
 
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserInfo(
+data class UserInfoDomain(
     @SerialName("loginType")
     val loginType: String,
     @SerialName("memberId")
