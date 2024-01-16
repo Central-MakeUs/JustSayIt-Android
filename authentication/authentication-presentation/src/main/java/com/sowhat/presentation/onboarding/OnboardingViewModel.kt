@@ -60,7 +60,6 @@ class OnboardingViewModel @Inject constructor(
                 val data = signInData.data
                 consumeSuccessResources(data, signInData)
             }
-
             is Resource.Error -> {
                 consumeErrorResources(signInData)
             }

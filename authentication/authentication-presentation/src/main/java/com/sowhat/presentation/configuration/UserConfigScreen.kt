@@ -1,28 +1,21 @@
 package com.sowhat.presentation.configuration
 
+import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.view.ViewTreeObserver
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.gestures.scrollBy
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.imeNestedScroll
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
@@ -31,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
@@ -50,15 +45,19 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.sowhat.common.util.ObserveEvents
+import com.sowhat.common.wrapper.RegistrationFormEvent
+import com.sowhat.common.wrapper.SignInEvent
+import com.sowhat.common.wrapper.SignUpEvent
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.DefaultTextField
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
-import com.sowhat.designsystem.common.COMPLETE
 import com.sowhat.designsystem.common.CONFIG_NICKNAME_PLACEHOLDER
 import com.sowhat.designsystem.common.CONFIG_NICKNAME_TITLE
 import com.sowhat.designsystem.common.noRippleClickable
+import com.sowhat.designsystem.component.CenteredCircularProgress
 import com.sowhat.designsystem.component.DefaultButtonFull
 import com.sowhat.designsystem.component.ProfileImage
 import com.sowhat.designsystem.theme.Gray500
@@ -67,7 +66,13 @@ import com.sowhat.presentation.common.TextFieldInfo
 import com.sowhat.presentation.component.DobTextField
 import com.sowhat.presentation.component.Selection
 import com.sowhat.presentation.navigation.navigateToMain
-import kotlinx.coroutines.launch
+import com.sowhat.presentation.navigation.navigateToUserConfig
+import kotlinx.coroutines.flow.collect
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import java.io.FileOutputStream
 
 @Composable
 fun UserConfigRoute(
@@ -75,95 +80,127 @@ fun UserConfigRoute(
     navController: NavHostController
 ) {
 
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val keyboardHeight = WindowInsets.ime.getBottom(LocalDensity.current)
     val maxLength = 12
+
+    val isLoading = viewModel.uiState.collectAsState().value.isLoading
+
+    ObserveEvents(flow = viewModel.signUpEvent) { uiEvent ->
+        when (uiEvent) {
+            is SignUpEvent.NavigateToMain -> {
+                Log.i("UserConfigScreen", "navigate to main")
+                navController.navigateToMain()
+            }
+            is SignUpEvent.Error -> {
+                Log.i("UserConfigScreen", "error ${uiEvent.message}")
+            }
+        }
+    }
 
     val genders = listOf(
         stringResource(id = R.string.item_gender_male),
         stringResource(id = R.string.item_gender_female)
     )
 
-    var gender by remember {
-        mutableStateOf<String?>(null)
-    }
-
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
-            // the returned result from the file picker : Uri
-            // to display -> read the uri and convert it into a bitmap -> Coil Image Library
-            viewModel.hasImage = uri != null
+            uri?.let {
+                viewModel.onEvent(
+                    RegistrationFormEvent.ProfileChanged(getFile(context, uri))
+                )
+            }
+
             viewModel.imageUri = uri
         }
     )
 
-    var year by remember {
-        mutableStateOf("")
-    }
-
-    var month by remember {
-        mutableStateOf("")
-    }
-
-    var day by remember {
-        mutableStateOf("")
-    }
-
     val dob = listOf(
         TextFieldInfo(
             title = stringResource(id = R.string.placeholder_dob_year),
-            value = year,
+            value = viewModel.formState.year,
             placeholder = stringResource(id = R.string.placeholder_dob_year),
-            onValueChange = { changed -> year = changed }
+            onValueChange = { changed ->
+                viewModel.onEvent(RegistrationFormEvent.YearChanged(changed))
+            }
         ),
         TextFieldInfo(
             title = stringResource(id = R.string.placeholder_dob_month),
-            value = month,
+            value = viewModel.formState.month,
             placeholder = stringResource(id = R.string.placeholder_dob_month),
-            onValueChange = { changed -> month = changed }
+            onValueChange = { changed ->
+                viewModel.onEvent(RegistrationFormEvent.MonthChanged(changed))
+            }
         ),
         TextFieldInfo(
             title = stringResource(id = R.string.placeholder_dob_day),
-            value = day,
+            value = viewModel.formState.day,
             placeholder = stringResource(id = R.string.placeholder_dob_day),
-            onValueChange = { changed -> day = changed }
+            onValueChange = { changed ->
+                viewModel.onEvent(RegistrationFormEvent.DayChanged(changed))
+            }
         )
     )
 
     UserConfigScreen(
         modifier = Modifier,
-        id = viewModel.id,
+        isLoading = isLoading,
+        nickname = viewModel.formState.nickname,
         navController = navController,
-        isValid = viewModel.isValid,
-        onIdChange = { changedId ->
-            if (changedId.length <= maxLength) viewModel.id = changedId
+        isValid = viewModel.isFormValid,
+        onNicknameChange = { changedId ->
+            if (changedId.length <= maxLength) viewModel.onEvent(RegistrationFormEvent.NicknameChanged(changedId))
         },
         onProfileClick = {
             imagePicker.launch("image/*")
         },
         profileUri = viewModel.imageUri,
         genders = genders,
-        onGenderChange = { changedGender -> gender = changedGender },
+        onGenderChange = { changedGender ->
+            viewModel.onEvent(RegistrationFormEvent.GenderChanged(changedGender))
+        },
         dobItems = dob,
+        currentGender = viewModel.formState.gender,
+        onSubmitClick = viewModel::signUp
     )
 }
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalComposeUiApi::class,
+private fun getFile(appContext: Context, uri: Uri): MultipartBody.Part {
+    val cacheDir = appContext.cacheDir
+    val file = File(cacheDir, "profile_image.jpg")
+    val inputStream = appContext.contentResolver.openInputStream(uri)
+    val outputStream = FileOutputStream(file)
+    inputStream!!.copyTo(outputStream)
+
+    val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+    val part = MultipartBody.Part.createFormData("profile", file.name, requestBody)
+
+    inputStream.close()
+
+    return part
+}
+
+@OptIn(
+    ExperimentalComposeUiApi::class,
     ExperimentalFoundationApi::class
 )
 @Composable
 fun UserConfigScreen(
     modifier: Modifier = Modifier,
+    isLoading: Boolean,
     navController: NavHostController,
-    id: String,
+    nickname: String,
     isValid: Boolean,
     profileUri: Uri?,
-    onIdChange: (String) -> Unit,
+    currentGender: String,
+    onNicknameChange: (String) -> Unit,
     onProfileClick: () -> Unit,
     genders: List<String>,
     onGenderChange: (String) -> Unit,
-    dobItems: List<TextFieldInfo>
+    dobItems: List<TextFieldInfo>,
+    onSubmitClick: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -202,7 +239,7 @@ fun UserConfigScreen(
                         ),
                     text = stringResource(id = R.string.button_start),
                     isActive = isValid,
-                    onClick = { navController.navigateToMain() }
+                    onClick = onSubmitClick
                 )
             }
         }
@@ -235,14 +272,14 @@ fun UserConfigScreen(
             DefaultTextField(
                 title = CONFIG_NICKNAME_TITLE,
                 placeholder = CONFIG_NICKNAME_PLACEHOLDER,
-                value = id,
-                onValueChange = onIdChange
+                value = nickname,
+                onValueChange = onNicknameChange
             )
 
             Selection(
                 title = stringResource(id = R.string.title_gender),
                 buttons = genders,
-                activeButton = null,
+                activeButton = currentGender,
                 onClick = onGenderChange
             )
 
@@ -253,6 +290,8 @@ fun UserConfigScreen(
                 items = dobItems,
             )
         }
+
+        if (isLoading) CenteredCircularProgress()
     }
 }
 
@@ -270,8 +309,8 @@ fun UserConfigScreenPreview() {
     val navController = rememberNavController()
 
     UserConfigScreen(
-        id = id,
-        onIdChange = { changedId ->
+        nickname = id,
+        onNicknameChange = { changedId ->
             id = if (changedId.length <= 12) changedId else id
             isValid = id.length in (2..12)
         },
@@ -281,6 +320,7 @@ fun UserConfigScreenPreview() {
         navController = navController,
         genders = listOf("남", "여"),
         onGenderChange = {},
+        isLoading = false,
         dobItems = listOf(
             TextFieldInfo(
                 title = stringResource(id = R.string.placeholder_dob_year),
@@ -300,7 +340,9 @@ fun UserConfigScreenPreview() {
                 placeholder = stringResource(id = R.string.placeholder_dob_day),
                 onValueChange = {  }
             )
-        )
+        ),
+        currentGender = "남",
+        onSubmitClick = {}
     )
 }
 
