@@ -72,6 +72,7 @@ fun PostRoute(
     PostScreen(
         navController = navController,
         formState = formState,
+        isValid = viewModel.isFormValid,
         onEvent = viewModel::onEvent,
         onSubmit = viewModel::submitPost,
         onAddImage = {
@@ -84,6 +85,7 @@ fun PostRoute(
 @Composable
 fun PostScreen(
     navController: NavController,
+    isValid: Boolean,
     formState: PostFormState,
     moods: List<MoodItem>,
     onAddImage: () -> Unit,
@@ -108,7 +110,7 @@ fun PostScreen(
         bottomBar = {
             DefaultButtonFull(
                 text = stringResource(com.sowhat.designsystem.R.string.button_post),
-                isActive = false,
+                isActive = isValid,
                 onClick = { onSubmit() }
             )
         }
