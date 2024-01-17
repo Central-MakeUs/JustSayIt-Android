@@ -47,7 +47,7 @@ fun Chip(
     backgroundColor: Color,
     title: String,
     textColor: Color,
-    onClick: (MoodItem) -> Unit
+    onClick: (String) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -61,7 +61,7 @@ fun Chip(
             .composed {
                 if (isActive) {
                     rippleClickable {
-                        onClick(moodItem)
+                        onClick(moodItem.title)
                     }
                 } else {
                     this
@@ -102,7 +102,7 @@ fun ChipMedium(
     isActive: Boolean = true,
     isSelected: Boolean,
     moodItem: MoodItem,
-    onClick: (MoodItem) -> Unit
+    onClick: (String) -> Unit
 ) {
     Chip(
         isSelected = isSelected,
@@ -125,7 +125,7 @@ fun ChipSmall(
     isSelected: Boolean,
     moodItem: MoodItem,
     modifier: Modifier = Modifier,
-    onClick: (MoodItem) -> Unit
+    onClick: (String) -> Unit
 ) {
     Chip(
         isSelected = isSelected,
@@ -160,11 +160,11 @@ fun ChipPreview() {
             moodItem = MoodItem(
                 drawable = R.drawable.ic_happy_24,
                 title = "행복",
-                onClick = {},
                 selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,
                 unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground,
                 selectedTextColor = JustSayItTheme.Colors.mainBackground,
-                unselectedTextColor = JustSayItTheme.Colors.mainTypo
+                unselectedTextColor = JustSayItTheme.Colors.mainTypo,
+                postData = ""
             )
         )
 
@@ -174,7 +174,7 @@ fun ChipPreview() {
             moodItem = MoodItem(
                 drawable = R.drawable.ic_happy_24,
                 title = "행복",
-                onClick = {},
+                postData = "",
                 selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,
                 unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground,
                 selectedTextColor = JustSayItTheme.Colors.mainBackground,

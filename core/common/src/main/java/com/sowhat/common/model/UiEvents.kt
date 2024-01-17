@@ -38,8 +38,7 @@ sealed class UpdateFormEvent {
 
 sealed class PostFormEvent {
     data class CurrentMoodChanged(val mood: String) : PostFormEvent()
-    data class ImageAdded(val image: Uri?) : PostFormEvent()
-    data class ImageRemoved(val index: Int) : PostFormEvent()
+    data class ImageListUpdated(val images: List<Uri>?) : PostFormEvent()
     data class PostTextChanged(val text: String) : PostFormEvent()
     data class OpenChanged(val open: Boolean) : PostFormEvent()
     data class AnonymousChanged(val anonymous: Boolean) : PostFormEvent()

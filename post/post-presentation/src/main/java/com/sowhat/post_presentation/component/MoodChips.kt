@@ -30,8 +30,8 @@ import com.sowhat.post_presentation.common.SubjectItem
 @Composable
 fun MoodChips(
     modifier: Modifier = Modifier,
-    currentMood: MoodItem,
-    onChange: (MoodItem) -> Unit,
+    currentMood: String?,
+    onChange: (String) -> Unit,
     moodItems: List<MoodItem>
 ) {
     LazyRow(
@@ -44,7 +44,7 @@ fun MoodChips(
         }
 
         itemsIndexed(moodItems) { _, moodItem ->
-            val isSelected = currentMood == moodItem
+            val isSelected = currentMood == moodItem.title
             ChipMedium(
                 moodItem = moodItem,
                 isSelected = isSelected,
@@ -64,8 +64,8 @@ fun MoodChips(
 fun MoodChips(
     modifier: Modifier = Modifier,
     isActive: Boolean = true,
-    onClick: (MoodItem) -> Unit,
-    selectedMoods: List<MoodItem>,
+    onClick: (String) -> Unit,
+    selectedMoods: List<String>,
     moodItems: List<MoodItem>
 ) {
     LazyRow(
@@ -84,7 +84,7 @@ fun MoodChips(
         }
 
         itemsIndexed(moodItems) { _, moodItem ->
-            val isSelected = moodItem in selectedMoods
+            val isSelected = moodItem.title in selectedMoods
             ChipMedium(
                 moodItem = moodItem,
                 isActive = isActive,
@@ -106,14 +106,14 @@ fun MoodChips(
 fun MoodChipsPreview() {
 
     val moods = listOf(
-        MoodItem(com.sowhat.designsystem.R.drawable.ic_happy_24, "기쁨", Color.White, Color.Black, Color.White, Color.Black, {}),
-        MoodItem(com.sowhat.designsystem.R.drawable.ic_sad_24, "슬픔", Color.White, Color.Black, Color.White, Color.Black, {}),
-        MoodItem(com.sowhat.designsystem.R.drawable.ic_angry_24, "화남", Color.White, Color.Black, Color.White, Color.Black, {}),
-        MoodItem(com.sowhat.designsystem.R.drawable.ic_surprise_24, "놀람", Color.White, Color.Black, Color.White, Color.Black, {}),
+        MoodItem(com.sowhat.designsystem.R.drawable.ic_happy_24, "기쁨", "", Color.White, Color.Black, Color.White, Color.Black),
+        MoodItem(com.sowhat.designsystem.R.drawable.ic_sad_24, "슬픔", "", Color.White, Color.Black, Color.White, Color.Black),
+        MoodItem(com.sowhat.designsystem.R.drawable.ic_angry_24, "화남", "", Color.White, Color.Black, Color.White, Color.Black),
+        MoodItem(com.sowhat.designsystem.R.drawable.ic_surprise_24, "놀람", "", Color.White, Color.Black, Color.White, Color.Black),
     )
 
     var selectedMoods = remember {
-        mutableStateListOf<MoodItem>()
+        mutableStateListOf<String>()
     }
 
     Column {

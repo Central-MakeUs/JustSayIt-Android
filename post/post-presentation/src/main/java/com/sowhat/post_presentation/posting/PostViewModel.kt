@@ -30,6 +30,10 @@ class PostViewModel @Inject constructor(
     private val postingEventChannel = Channel<PostingEvent>()
     val postingEvent = postingEventChannel.receiveAsFlow()
 
+    fun submitPost() {
+
+    }
+
     fun onEvent(event: PostFormEvent) {
         when (event) {
             is PostFormEvent.CurrentMoodChanged -> {
@@ -37,13 +41,10 @@ class PostViewModel @Inject constructor(
                     currentMood = event.mood
                 )
             }
-            is PostFormEvent.ImageAdded -> {
-                event.image?.let {
-                    formState.images?.add(it)
-                }
-            }
-            is PostFormEvent.ImageRemoved -> {
-                formState.images?.removeAt(event.index)
+            is PostFormEvent.ImageListUpdated -> {
+                formState = formState.copy(
+                    images = event.images
+                )
             }
             is PostFormEvent.PostTextChanged -> {
                 formState = formState.copy(

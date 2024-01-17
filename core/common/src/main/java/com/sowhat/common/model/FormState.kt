@@ -28,10 +28,10 @@ data class PostFormState(
     val isCurrentMoodValid: Boolean = false,
     val postText: String = "",
     val isPostTextValid: Boolean = false,
-    val images: ArrayList<Uri>? = null,
+    val images: List<Uri> = emptyList(),
     val isImageListValid: Boolean = false,
     val isOpened: Boolean = false,
     val isAnonymous: Boolean = false,
-    val sympathyMoodItems: List<String>? = null,
+    val sympathyMoodItems: List<String> = emptyList(),
     val isSympathyMoodItemsValid: Boolean = false
 )
