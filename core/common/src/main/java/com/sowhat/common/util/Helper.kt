@@ -20,9 +20,14 @@ import java.security.AccessController.getContext
 
 fun getFile(
     appContext: Context,
-    uri: Uri,
+    uri: Uri?,
     partName: String
 ): MultipartBody.Part {
+    // 반드시 서버에서 정의해놓은 이름으로 partName을 설정해야 한다.
+    if (uri == null) {
+        val emptyFile = "".toRequestBody("*/*".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData(partName, "", emptyFile)
+    }
     val cacheDir = appContext.cacheDir
     val file = File(cacheDir, "profile_image.jpg")
     val inputStream = appContext.contentResolver.openInputStream(uri)
@@ -35,20 +40,6 @@ fun getFile(
     inputStream.close()
 
     return part
-//
-//    val file: File? = uri.path?.let { File(it) }
-//    var inputStream: InputStream? = null
-//    try {
-//        inputStream = appContext.contentResolver.openInputStream(uri)
-//    } catch (e: IOException) {
-//        e.printStackTrace()
-//    }
-//    val bitmap = BitmapFactory.decodeStream(inputStream)
-//    val byteArrayOutputStream = ByteArrayOutputStream()
-//    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream)
-//    val requestBody = byteArrayOutputStream.toByteArray().toRequestBody("image/jpg".toMediaTypeOrNull())
-//    val uploadFile = MultipartBody.Part.createFormData("postImg", "${file?.name}" ,requestBody)
-//
-//    return uploadFile
+
 }
 

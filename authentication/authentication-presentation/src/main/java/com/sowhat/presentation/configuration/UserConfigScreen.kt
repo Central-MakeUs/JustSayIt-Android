@@ -64,7 +64,9 @@ import com.sowhat.designsystem.component.DefaultButtonFull
 import com.sowhat.designsystem.component.ProfileImage
 import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
+import com.sowhat.presentation.common.PART_PROFILE_IMG
 import com.sowhat.presentation.common.TextFieldInfo
+import com.sowhat.presentation.common.USER_CONFIG_SCREEN
 import com.sowhat.presentation.component.DobTextField
 import com.sowhat.presentation.component.Selection
 import com.sowhat.presentation.navigation.navigateToMain
@@ -80,6 +82,7 @@ fun UserConfigRoute(
     navController: NavHostController
 ) {
 
+
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val keyboardHeight = WindowInsets.ime.getBottom(LocalDensity.current)
@@ -87,37 +90,36 @@ fun UserConfigRoute(
 
     val isLoading = viewModel.uiState.collectAsState().value.isLoading
 
+    LaunchedEffect(key1 = true) {
+        viewModel.onEvent(
+            RegistrationFormEvent.ProfileChanged(getFile(context, null, PART_PROFILE_IMG))
+        )
+    }
+
     ObserveEvents(flow = viewModel.signUpEvent) { uiEvent ->
         when (uiEvent) {
             is SignUpEvent.NavigateToMain -> {
-                Log.i("UserConfigScreen", "navigate to main")
+                Log.i(USER_CONFIG_SCREEN, "navigate to main")
                 navController.navigateToMain()
             }
             is SignUpEvent.Error -> {
-                Log.i("UserConfigScreen", "error ${uiEvent.message}")
+                Log.i(USER_CONFIG_SCREEN, "error ${uiEvent.message}")
             }
         }
     }
 
-    val genders = listOf(
-        stringResource(id = R.string.item_gender_male),
-        stringResource(id = R.string.item_gender_female)
-    )
+    val genders = listOf(stringResource(id = R.string.item_gender_male), stringResource(id = R.string.item_gender_female))
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
             uri?.let {
-                viewModel.onEvent(
-                    RegistrationFormEvent.ProfileChanged(getFile(context, it, "profileImg"))
-                )
+                val file = getFile(context, it, PART_PROFILE_IMG)
+                viewModel.onEvent(RegistrationFormEvent.ProfileChanged(file))
             }
-
             viewModel.imageUri = uri
         }
     )
-
-
 
     val dob = listOf(
         TextFieldInfo(
@@ -150,7 +152,6 @@ fun UserConfigRoute(
         modifier = Modifier,
         isLoading = isLoading,
         nickname = viewModel.formState.nickname,
-        navController = navController,
         isValid = viewModel.isFormValid,
         onNicknameChange = { changedId ->
             if (changedId.length <= maxLength) viewModel.onEvent(RegistrationFormEvent.NicknameChanged(changedId))
@@ -169,30 +170,6 @@ fun UserConfigRoute(
     )
 }
 
-
-fun getMultipart(appContext: Context, uri: Uri): MultipartBody.Part {
-//    val cacheDir = appContext.cacheDir
-//    val file = File(cacheDir, "profile_image.jpeg")
-//    val inputStream = appContext.contentResolver.openInputStream(uri)
-//    val outputStream = FileOutputStream(file)
-//    inputStream!!.copyTo(outputStream)
-//
-//    val requestBody: RequestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-//    val part = MultipartBody.Part.createFormData("profile", file.name, requestBody)
-//
-//    inputStream.close()
-//
-//    return part
-    val file: File? = uri.path?.let { File(it) }
-    val inputStream = appContext.contentResolver?.openInputStream(uri)
-    val bitmap = BitmapFactory.decodeStream(inputStream)
-    val byteOutputStream = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteOutputStream)
-    val requestBody = byteOutputStream.toByteArray().toRequestBody("image/jpeg".toMediaTypeOrNull())
-    Log.e("UserConfigScreen","${requestBody}.jpeg")
-    return MultipartBody.Part.createFormData("profileImg", "${file?.name}.jpeg", requestBody)
-}
-
 @OptIn(
     ExperimentalComposeUiApi::class,
     ExperimentalFoundationApi::class
@@ -201,7 +178,6 @@ fun getMultipart(appContext: Context, uri: Uri): MultipartBody.Part {
 fun UserConfigScreen(
     modifier: Modifier = Modifier,
     isLoading: Boolean,
-    navController: NavHostController,
     nickname: String,
     isValid: Boolean,
     profileUri: Uri?,
@@ -317,8 +293,6 @@ fun UserConfigScreenPreview() {
         mutableStateOf(false)
     }
 
-    val navController = rememberNavController()
-
     UserConfigScreen(
         nickname = id,
         onNicknameChange = { changedId ->
@@ -328,7 +302,6 @@ fun UserConfigScreenPreview() {
         isValid = isValid,
         onProfileClick = {},
         profileUri = null,
-        navController = navController,
         genders = listOf("남", "여"),
         onGenderChange = {},
         isLoading = false,
