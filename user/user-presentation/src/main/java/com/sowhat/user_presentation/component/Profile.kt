@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import com.sowhat.designsystem.component.ProfileImageContainer
+import com.sowhat.designsystem.component.SquaredImageContainer
 import com.sowhat.designsystem.theme.JustSayItTheme
 
 @Composable
@@ -34,7 +34,7 @@ fun UserProfile(
         horizontalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceNormal),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ProfileImageContainer(
+        SquaredImageContainer(
             modifier = Modifier.weight(0.25f),
             model = profileUrl
         )

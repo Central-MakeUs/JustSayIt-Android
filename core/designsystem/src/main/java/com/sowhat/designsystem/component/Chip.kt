@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.R
+import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Black
 import com.sowhat.designsystem.theme.Gray300
@@ -35,15 +36,16 @@ import com.sowhat.designsystem.theme.White
 
 @Composable
 fun Chip(
-    isSelected: Boolean,
     modifier: Modifier = Modifier,
+    moodItem: MoodItem,
+    isSelected: Boolean,
     drawableStart: Int?,
     drawableSize: Dp,
     textStyle: TextStyle,
     backgroundColor: Color,
     title: String,
     textColor: Color,
-    onClick: (String, Boolean) -> Unit
+    onClick: (MoodItem) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -55,7 +57,7 @@ fun Chip(
                 shape = RoundedCornerShape(50)
             )
             .rippleClickable {
-                onClick(title, !isSelected)
+                onClick(moodItem)
             }
     ) {
         Row(
@@ -88,47 +90,43 @@ fun Chip(
 
 @Composable
 fun ChipMedium(
-    isSelected: Boolean,
     modifier: Modifier = Modifier,
-    drawableStart: Int?,
-    title: String,
-    textColor: Color = JustSayItTheme.Colors.mainTypo,
-    backgroundColor: Color = JustSayItTheme.Colors.mainBackground,
-    onClick: (String, Boolean) -> Unit
+    isSelected: Boolean,
+    moodItem: MoodItem,
+    onClick: (MoodItem) -> Unit
 ) {
     Chip(
         isSelected = isSelected,
         modifier = modifier,
-        drawableStart = drawableStart,
+        drawableStart = moodItem.drawable,
         drawableSize = 24.dp,
         textStyle = JustSayItTheme.Typography.body1,
-        title = title,
+        title = moodItem.title,
         onClick = onClick,
-        textColor = textColor,
-        backgroundColor = backgroundColor
+        textColor = if (isSelected) moodItem.selectedTextColor else moodItem.unselectedTextColor,
+        backgroundColor = if (isSelected) moodItem.selectedBackgroundColor else moodItem.unselectedBackgroundColor,
+        moodItem = moodItem
     )
 }
 
 @Composable
 fun ChipSmall(
     isSelected: Boolean,
+    moodItem: MoodItem,
     modifier: Modifier = Modifier,
-    drawableStart: Int?,
-    title: String,
-    textColor: Color = JustSayItTheme.Colors.mainTypo,
-    backgroundColor: Color = JustSayItTheme.Colors.mainBackground,
-    onClick: (String, Boolean) -> Unit
+    onClick: (MoodItem) -> Unit
 ) {
     Chip(
         isSelected = isSelected,
         modifier = modifier,
-        drawableStart = drawableStart,
+        drawableStart = moodItem.drawable,
         drawableSize = JustSayItTheme.Spacing.spaceLarge,
         textStyle = JustSayItTheme.Typography.detail1,
-        title = title,
+        title = moodItem.title,
         onClick = onClick,
-        textColor = textColor,
-        backgroundColor = backgroundColor
+        textColor = if (isSelected) moodItem.selectedTextColor else moodItem.unselectedTextColor,
+        backgroundColor = if (isSelected) moodItem.selectedBackgroundColor else moodItem.unselectedBackgroundColor,
+        moodItem = moodItem
     )
 }
 
@@ -146,20 +144,30 @@ fun ChipPreview() {
     Column {
         ChipMedium(
             isSelected = isSelected,
-            drawableStart = R.drawable.ic_happy_24,
-            title = "행복",
-            textColor = textColor,
-            onClick = { _, changedState -> isSelected = changedState },
-            backgroundColor = backgroundColor
+            onClick = {},
+            moodItem = MoodItem(
+                drawable = R.drawable.ic_happy_24,
+                title = "행복",
+                onClick = {},
+                selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,
+                unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground,
+                selectedTextColor = JustSayItTheme.Colors.mainBackground,
+                unselectedTextColor = JustSayItTheme.Colors.mainTypo
+            )
         )
 
         ChipSmall(
             isSelected = isSelected,
-            drawableStart = R.drawable.ic_happy_24,
-            title = "행복",
-            textColor = textColor,
-            backgroundColor = backgroundColor,
-            onClick = { _, changedState -> isSelected = changedState }
+            onClick = {},
+            moodItem = MoodItem(
+                drawable = R.drawable.ic_happy_24,
+                title = "행복",
+                onClick = {},
+                selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,
+                unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground,
+                selectedTextColor = JustSayItTheme.Colors.mainBackground,
+                unselectedTextColor = JustSayItTheme.Colors.mainTypo
+            )
         )
     }
 }
