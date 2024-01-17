@@ -1,5 +1,7 @@
 package com.sowhat.network.util
 
+import android.util.Log
+import com.google.gson.Gson
 import com.sowhat.common.model.Resource
 import com.sowhat.network.common.EXCEPTION_UNEXPECTED_ERROR
 import com.sowhat.network.common.ResponseCode
@@ -15,8 +17,12 @@ inline fun <reified T> getRequestBody(body: T): RequestBody {
     val json = Json {
         ignoreUnknownKeys = true
     }
+//    val gson = Gson()
+
     // import kotlinx.serialization.encodeToString 직접 추가하여 오류 방지
-    val jsonString = json.encodeToString(value = body)
+    val jsonString = json.encodeToString(body)
+
+    Log.i("RequestBody", jsonString)
 
     return jsonString.toRequestBody("application/json".toMediaTypeOrNull())
 }

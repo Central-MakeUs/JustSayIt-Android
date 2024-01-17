@@ -25,6 +25,7 @@ object NetworkModule {
             // level : BODY -> logs headers + bodies of request, response
             // NONE, BASIC, HEADERS, BODY
             level = HttpLoggingInterceptor.Level.BODY
+
         }
 
         val client = OkHttpClient.Builder().apply {

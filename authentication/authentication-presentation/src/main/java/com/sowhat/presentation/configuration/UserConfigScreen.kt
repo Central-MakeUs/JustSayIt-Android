@@ -1,6 +1,8 @@
 package com.sowhat.presentation.configuration
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import android.view.ViewTreeObserver
@@ -48,6 +50,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sowhat.common.util.ObserveEvents
 import com.sowhat.common.model.RegistrationFormEvent
 import com.sowhat.common.model.SignUpEvent
+import com.sowhat.common.util.getFile
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.DefaultTextField
@@ -67,9 +70,9 @@ import com.sowhat.presentation.component.Selection
 import com.sowhat.presentation.navigation.navigateToMain
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
 
 @Composable
 fun UserConfigRoute(
@@ -106,13 +109,15 @@ fun UserConfigRoute(
         onResult = { uri ->
             uri?.let {
                 viewModel.onEvent(
-                    RegistrationFormEvent.ProfileChanged(getFile(context, uri))
+                    RegistrationFormEvent.ProfileChanged(getFile(context, it, "profileImg"))
                 )
             }
 
             viewModel.imageUri = uri
         }
     )
+
+
 
     val dob = listOf(
         TextFieldInfo(
@@ -164,19 +169,28 @@ fun UserConfigRoute(
     )
 }
 
-private fun getFile(appContext: Context, uri: Uri): MultipartBody.Part {
-    val cacheDir = appContext.cacheDir
-    val file = File(cacheDir, "profile_image.jpg")
-    val inputStream = appContext.contentResolver.openInputStream(uri)
-    val outputStream = FileOutputStream(file)
-    inputStream!!.copyTo(outputStream)
 
-    val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-    val part = MultipartBody.Part.createFormData("profile", file.name, requestBody)
-
-    inputStream.close()
-
-    return part
+fun getMultipart(appContext: Context, uri: Uri): MultipartBody.Part {
+//    val cacheDir = appContext.cacheDir
+//    val file = File(cacheDir, "profile_image.jpeg")
+//    val inputStream = appContext.contentResolver.openInputStream(uri)
+//    val outputStream = FileOutputStream(file)
+//    inputStream!!.copyTo(outputStream)
+//
+//    val requestBody: RequestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+//    val part = MultipartBody.Part.createFormData("profile", file.name, requestBody)
+//
+//    inputStream.close()
+//
+//    return part
+    val file: File? = uri.path?.let { File(it) }
+    val inputStream = appContext.contentResolver?.openInputStream(uri)
+    val bitmap = BitmapFactory.decodeStream(inputStream)
+    val byteOutputStream = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteOutputStream)
+    val requestBody = byteOutputStream.toByteArray().toRequestBody("image/jpeg".toMediaTypeOrNull())
+    Log.e("UserConfigScreen","${requestBody}.jpeg")
+    return MultipartBody.Part.createFormData("profileImg", "${file?.name}.jpeg", requestBody)
 }
 
 @OptIn(

@@ -68,7 +68,7 @@ class UpdateViewModel @Inject constructor(
         }
     }
 
-    private fun updateUserInfo() {
+    fun updateUserInfo() {
         viewModelScope.launch {
             _updateInfoUiState.value = _updateInfoUiState.value.copy(isLoading = true)
             if (!isFormValid) {

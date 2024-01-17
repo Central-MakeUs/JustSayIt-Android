@@ -17,10 +17,10 @@ interface AuthApi {
         @Query("token") platformToken: String?
     ): ResponseBody<SignInResult>
 
-    @POST("/members/join")
+    @POST("/members/login")
     @Multipart
     suspend fun postNewMember(
         @Part("loginInfo") loginInfo: RequestBody,
-        @Part("profileImg") profileImg: MultipartBody.Part?,
+        @Part profileImg: MultipartBody.Part?,
     ): ResponseBody<NewMemberInfo>
 }

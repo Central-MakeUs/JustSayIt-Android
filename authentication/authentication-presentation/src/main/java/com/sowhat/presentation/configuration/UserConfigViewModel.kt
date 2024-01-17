@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.sowhat.authentication_domain.model.NewMember
 import com.sowhat.authentication_domain.use_case.PostNewMemberUseCase
 import com.sowhat.authentication_domain.use_case.ValidateDayUseCase
@@ -32,6 +33,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -143,18 +149,35 @@ class UserConfigViewModel @Inject constructor(
                 return@launch
             }
 
+            val birth = "${formState.year}-${formState.month}-${formState.day}"
+            val gender = if (formState.gender == "남") "MALE" else "FEMALE"
+            val loginType = platform
+            val nickname = formState.nickname
+            val token = platformToken
+
+//            val jsonObject = JSONObject(
+//            "{\"token\":\"${token}\", " +
+//                    "\"nickname\":\"${nickname}\"," +
+//                    "\"loginType\":\"${loginType}\"," +
+//                    "\"gender\":\"${gender}\"," +
+//                    "\"birth\":\"${birth}\"}"
+//            ).toString()
+
             val requestBody = RegistrationRequest(
-                birth = "${formState.year}-${formState.month}-${formState.day}",
-                gender = if (formState.gender == "남") "MALE" else "FEMALE",
-                loginType = platform,
-                nickname = formState.nickname,
-                token = platformToken
+                token = token,
+                nickname = nickname,
+                loginType = loginType,
+                gender = gender,
+                birth = birth
             )
 
+            val requestPart = getRequestBody(requestBody)
+
+//            val request = Gson().toJson(requestBody).toRequestBody("application/json".toMediaTypeOrNull())
             Log.i("UserConfigScreen", requestBody.toString())
 
             val result = postNewMemberUseCase(
-                loginInfo = getRequestBody(requestBody),
+                loginInfo = requestPart,
                 profileImage = formState.profileImage
             )
 

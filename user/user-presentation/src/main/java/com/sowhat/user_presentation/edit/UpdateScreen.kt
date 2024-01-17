@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,10 +17,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.sowhat.common.model.UpdateFormEvent
+import com.sowhat.common.util.getFile
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.COMPLETE
 import com.sowhat.designsystem.common.CONFIG_NICKNAME_TITLE
@@ -28,23 +32,33 @@ import com.sowhat.designsystem.common.PROFILE_SETTING
 import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.Cell
+import com.sowhat.designsystem.component.CenteredCircularProgress
 import com.sowhat.designsystem.component.DefaultTextField
 import com.sowhat.designsystem.component.ProfileImage
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
 import com.sowhat.designsystem.theme.JustSayItTheme
+import com.sowhat.user_presentation.setting.SettingViewModel
 
 @Composable
 fun UpdateRoute(
-    viewModel: UpdateViewModel = hiltViewModel()
+    settingViewModel: SettingViewModel = hiltViewModel(),
+    updateViewModel: UpdateViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
+
+    val isLoading = settingViewModel.uiState.collectAsState().value.isLoading ||
+            updateViewModel.updateInfoUiState.collectAsState().value.isLoading
+
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
             // the returned result from the file picker : Uri
             // to display -> read the uri and convert it into a bitmap -> Coil Image Library
-            viewModel.hasImage = uri != null
-            viewModel.newImageUri = uri
+            uri?.let {
+                updateViewModel.onEvent(UpdateFormEvent.ProfileChanged(getFile(context, uri, "profileImg")))
+            }
+            updateViewModel.newImageUri = uri
         }
     )
 
@@ -58,8 +72,8 @@ fun UpdateRoute(
         DropdownItem(
             title = "기본 이미지로 변경",
             onItemClick = {
-                viewModel.hasImage = false
-                viewModel.newImageUri = null
+                updateViewModel.onEvent(UpdateFormEvent.ProfileChanged(null))
+                updateViewModel.newImageUri = null
             }
         )
     )
@@ -67,27 +81,30 @@ fun UpdateRoute(
     val maxLength = 12
 
     UpdateScreen(
-        isValid = viewModel.isValid,
-        userName = viewModel.userName,
-        profileUrl = viewModel.profileUrl,
+        isLoading = isLoading,
+        isValid = updateViewModel.isValid,
+        userName = updateViewModel.formState.nickname,
+        profileUrl = settingViewModel.uiState.collectAsState().value.data?.profileInfo?.profileImg ?: "",
         onProfileClick = {
 //            imagePicker.launch("image/*")
-            viewModel.dropdown = true
+            updateViewModel.dropdown = true
         },
-        newProfileUri = viewModel.newImageUri,
-        newUserName = viewModel.newUserName,
+        newProfileUri = updateViewModel.newImageUri,
+        newUserName = updateViewModel.formState.nickname,
         onUserNameChange = { newName ->
-            if (newName.length <= maxLength) viewModel.newUserName = newName
+            if (newName.length <= maxLength) updateViewModel.onEvent(UpdateFormEvent.NicknameChanged(newName))
         },
-        dropdownVisible = viewModel.dropdown,
+        dropdownVisible = updateViewModel.dropdown,
         dropdownMenuItems = dropdownMenuItems,
-        onDropdownDismiss = { viewModel.dropdown = false }
+        onDropdownDismiss = { updateViewModel.dropdown = false },
+        onSubmit = updateViewModel::updateUserInfo
     )
 }
 
 @Composable
 fun UpdateScreen(
     modifier: Modifier = Modifier,
+    isLoading: Boolean,
     isValid: Boolean,
     userName: String,
     profileUrl: String,
@@ -97,7 +114,8 @@ fun UpdateScreen(
     newUserName: String,
     dropdownVisible: Boolean,
     dropdownMenuItems: List<DropdownItem>,
-    onDropdownDismiss: () -> Unit
+    onDropdownDismiss: () -> Unit,
+    onSubmit: () -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -122,8 +140,11 @@ fun UpdateScreen(
             dropdownMenuItems = dropdownMenuItems,
             onDropdownDismiss = onDropdownDismiss,
             gender = "남",
-            dob = "1998.11.23"
+            dob = "1998.11.23",
+            onSubmit = onSubmit
         )
+
+        if (isLoading) CenteredCircularProgress()
     }
 }
 
@@ -141,7 +162,8 @@ fun EditScreenContent(
     dropdownMenuItems: List<DropdownItem>,
     onDropdownDismiss: () -> Unit,
     gender: String,
-    dob: String
+    dob: String,
+    onSubmit: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -223,6 +245,8 @@ fun EditScreenPreview() {
 
                 }
             )
-        )
+        ),
+        isLoading = false,
+        onSubmit = {}
     )
 }
