@@ -29,14 +29,7 @@ import javax.inject.Inject
 class UpdateViewModel @Inject constructor(
     private val updateUserInfoUseCase: UpdateUserInfoUseCase,
 ) : ViewModel() {
-    var profileUrl by mutableStateOf("https://github.com/kmkim2689/Android-Wiki/assets/101035437/88d7b249-ad72-4be9-8d79-38dc942e0a7f")
-    var userName by mutableStateOf("케이엠")
-    var newUserName by mutableStateOf("")
-    var hasImage by mutableStateOf(false)
     var newImageUri by mutableStateOf<Uri?>(null)
-    val isValid by derivedStateOf {
-        userName.length in (2..12) || (newImageUri != null && hasImage)
-    }
     var dropdown by mutableStateOf(false)
 
     private var _updateInfoUiState: MutableStateFlow<UiState<Unit?>> = MutableStateFlow(UiState())
@@ -45,9 +38,11 @@ class UpdateViewModel @Inject constructor(
     var formState by mutableStateOf(UpdateFormState())
         private set
 
-    var imageUri by mutableStateOf<Uri?>(null)
+    val isValid by derivedStateOf {
+        formState.nickname.length in (2..12) || newImageUri != null
+    }
 
-    val isFormValid by derivedStateOf {
+    private val isFormValid by derivedStateOf {
         formState.isNicknameValid
     }
 
@@ -76,7 +71,7 @@ class UpdateViewModel @Inject constructor(
                     isLoading = false,
                     data = null
                 )
-                updateEventChannel.send(UpdateEvent.Error("조건을 만족하지 못하였습니다."))
+                updateEventChannel.send(UpdateEvent.Error("변경 사항이 없습니다."))
                 return@launch
             }
 

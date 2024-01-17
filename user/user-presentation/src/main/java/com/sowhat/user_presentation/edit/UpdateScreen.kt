@@ -1,6 +1,7 @@
 package com.sowhat.user_presentation.edit
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -22,7 +24,14 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.sowhat.common.model.RegistrationFormEvent
+import com.sowhat.common.model.SignUpEvent
+import com.sowhat.common.model.UiState
+import com.sowhat.common.model.UpdateEvent
 import com.sowhat.common.model.UpdateFormEvent
+import com.sowhat.common.model.UpdateFormState
+import com.sowhat.common.util.ObserveEvents
 import com.sowhat.common.util.getFile
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.COMPLETE
@@ -38,10 +47,13 @@ import com.sowhat.designsystem.component.ProfileImage
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
 import com.sowhat.designsystem.theme.JustSayItTheme
+import com.sowhat.user_domain.model.UserInfoDomain
+import com.sowhat.user_presentation.navigation.navigateUpToSetting
 import com.sowhat.user_presentation.setting.SettingViewModel
 
 @Composable
 fun UpdateRoute(
+    navController: NavHostController,
     settingViewModel: SettingViewModel = hiltViewModel(),
     updateViewModel: UpdateViewModel = hiltViewModel(),
 ) {
@@ -49,6 +61,26 @@ fun UpdateRoute(
 
     val isLoading = settingViewModel.uiState.collectAsState().value.isLoading ||
             updateViewModel.updateInfoUiState.collectAsState().value.isLoading
+
+    val uiState = settingViewModel.uiState.collectAsState().value
+
+    LaunchedEffect(key1 = true) {
+        updateViewModel.onEvent(
+            UpdateFormEvent.ProfileChanged(getFile(context, null, "profileImg"))
+        )
+    }
+
+    ObserveEvents(flow = updateViewModel.updateEvent) { uiEvent ->
+        when (uiEvent) {
+            is UpdateEvent.NavigateUp -> {
+                Log.i("UpdateScreen", "navigate to main")
+                navController.navigateUpToSetting()
+            }
+            is UpdateEvent.Error -> {
+                Log.i("UpdateScreen", "error ${uiEvent.message}")
+            }
+        }
+    }
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -64,13 +96,13 @@ fun UpdateRoute(
 
     val dropdownMenuItems = listOf(
         DropdownItem(
-            title = "사진 업로드하기",
+            title =  stringResource(id = R.string.dropdown_upload_image),
             onItemClick = {
                 imagePicker.launch("image/*")
             }
         ),
         DropdownItem(
-            title = "기본 이미지로 변경",
+            title =  stringResource(id = R.string.dropdown_default_image),
             onItemClick = {
                 updateViewModel.onEvent(UpdateFormEvent.ProfileChanged(null))
                 updateViewModel.newImageUri = null
@@ -78,26 +110,22 @@ fun UpdateRoute(
         )
     )
 
-    val maxLength = 12
-
     UpdateScreen(
+        uiState = uiState,
         isLoading = isLoading,
         isValid = updateViewModel.isValid,
-        userName = updateViewModel.formState.nickname,
-        profileUrl = settingViewModel.uiState.collectAsState().value.data?.profileInfo?.profileImg ?: "",
-        onProfileClick = {
-//            imagePicker.launch("image/*")
-            updateViewModel.dropdown = true
-        },
+        formState = updateViewModel.formState,
         newProfileUri = updateViewModel.newImageUri,
-        newUserName = updateViewModel.formState.nickname,
-        onUserNameChange = { newName ->
-            if (newName.length <= maxLength) updateViewModel.onEvent(UpdateFormEvent.NicknameChanged(newName))
-        },
         dropdownVisible = updateViewModel.dropdown,
         dropdownMenuItems = dropdownMenuItems,
-        onDropdownDismiss = { updateViewModel.dropdown = false },
-        onSubmit = updateViewModel::updateUserInfo
+        onSubmit = updateViewModel::updateUserInfo,
+        onEvent = updateViewModel::onEvent,
+        onProfileClick = {
+            updateViewModel.dropdown = true
+        },
+        onDropdownDismiss = {
+            updateViewModel.dropdown = false
+        }
     )
 }
 
@@ -105,17 +133,16 @@ fun UpdateRoute(
 fun UpdateScreen(
     modifier: Modifier = Modifier,
     isLoading: Boolean,
+    uiState: UiState<UserInfoDomain>,
+    formState: UpdateFormState,
     isValid: Boolean,
-    userName: String,
-    profileUrl: String,
     onProfileClick: () -> Unit,
     newProfileUri: Uri?,
-    onUserNameChange: (String) -> Unit,
-    newUserName: String,
     dropdownVisible: Boolean,
     dropdownMenuItems: List<DropdownItem>,
     onDropdownDismiss: () -> Unit,
-    onSubmit: () -> Unit
+    onSubmit: () -> Unit,
+    onEvent: (UpdateFormEvent) -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -124,24 +151,22 @@ fun UpdateScreen(
                 title = PROFILE_SETTING,
                 navigationIcon = R.drawable.ic_back_24,
                 actionText = COMPLETE,
-                isValid = isValid
+                isValid = isValid,
+                onActionTextClick = onSubmit
             )
         }
     ) { paddingValues ->
+
         EditScreenContent(
             modifier = Modifier.padding(paddingValues),
-            userName = userName,
-            profileUrl = profileUrl,
             onProfileClick = onProfileClick,
             newProfileUri = newProfileUri,
-            onUserNameChange = onUserNameChange,
-            newUserName = newUserName,
             dropdownVisible = dropdownVisible,
             dropdownMenuItems = dropdownMenuItems,
             onDropdownDismiss = onDropdownDismiss,
-            gender = "남",
-            dob = "1998.11.23",
-            onSubmit = onSubmit
+            formState = formState,
+            uiState = uiState,
+            onEvent = onEvent
         )
 
         if (isLoading) CenteredCircularProgress()
@@ -152,18 +177,14 @@ fun UpdateScreen(
 @Composable
 fun EditScreenContent(
     modifier: Modifier = Modifier,
-    userName: String,
-    profileUrl: String,
     onProfileClick: () -> Unit,
     newProfileUri: Uri?,
-    newUserName: String,
-    onUserNameChange: (String) -> Unit,
     dropdownVisible: Boolean,
     dropdownMenuItems: List<DropdownItem>,
     onDropdownDismiss: () -> Unit,
-    gender: String,
-    dob: String,
-    onSubmit: () -> Unit
+    formState: UpdateFormState,
+    uiState: UiState<UserInfoDomain>,
+    onEvent: (UpdateFormEvent) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -173,9 +194,10 @@ fun EditScreenContent(
             .background(JustSayItTheme.Colors.mainBackground)
             .noRippleClickable { keyboardController?.hide() }
     ) {
+
         ProfileImage(
             modifier = Modifier,
-            profileUri = newProfileUri ?: profileUrl,
+            profileUri = newProfileUri ?: uiState.data?.profileInfo?.profileImg,
             badgeDrawable = R.drawable.ic_camera_24,
             badgeBackgroundColor = Gray200,
             badgeIconTint = Gray400,
@@ -184,21 +206,36 @@ fun EditScreenContent(
             dropdownMenuItems = dropdownMenuItems,
             onDropdownDismiss = onDropdownDismiss,
             onItemClick = { dropdownItem ->
-
+                dropdownItem.onItemClick?.let { onClick ->
+                    onClick()
+                }
             }
         )
 
         DefaultTextField(
             modifier = Modifier,
             title = CONFIG_NICKNAME_TITLE,
-            placeholder = userName,
-            value = newUserName,
-            onValueChange = onUserNameChange
+            placeholder = uiState.data?.profileInfo?.nickname ?: stringResource(id = R.string.error_server),
+            onValueChange = { updatedValue ->
+                if (updatedValue.length <= 12) {
+                    onEvent(UpdateFormEvent.NicknameChanged(updatedValue))
+                }
+            },
+            value = formState.nickname
         )
 
-        Cell(title = stringResource(id = R.string.title_gender), leadingIcon = null, trailingText = gender)
 
-        Cell(title = stringResource(id = R.string.title_dob), leadingIcon = null, trailingText = dob)
+        Cell(
+            title = stringResource(id = R.string.title_gender),
+            leadingIcon = null,
+            trailingText = uiState.data?.personalInfo?.gender ?: stringResource(id = R.string.error_server)
+        )
+
+        Cell(
+            title = stringResource(id = R.string.title_dob),
+            leadingIcon = null,
+            trailingText = uiState.data?.personalInfo?.birth ?: stringResource(id = R.string.error_server)
+        )
     }
 }
 
@@ -222,14 +259,8 @@ fun EditScreenPreview() {
 
     UpdateScreen(
         isValid = isValid,
-        userName = "케이엠",
-        profileUrl = profileUrl,
         onProfileClick = {},
         newProfileUri = null,
-        newUserName = newUserName,
-        onUserNameChange = { newName ->
-            newUserName = newName
-        },
         dropdownVisible = true,
         onDropdownDismiss = {},
         dropdownMenuItems = listOf(
@@ -246,7 +277,10 @@ fun EditScreenPreview() {
                 }
             )
         ),
+        onSubmit = {},
+        uiState = UiState(),
+        formState = UpdateFormState(),
         isLoading = false,
-        onSubmit = {}
+        onEvent = {}
     )
 }

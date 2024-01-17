@@ -49,6 +49,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.sowhat.common.util.ObserveEvents
 import com.sowhat.common.model.RegistrationFormEvent
+import com.sowhat.common.model.RegistrationFormState
 import com.sowhat.common.model.SignUpEvent
 import com.sowhat.common.util.getFile
 import com.sowhat.designsystem.R
@@ -64,9 +65,16 @@ import com.sowhat.designsystem.component.DefaultButtonFull
 import com.sowhat.designsystem.component.ProfileImage
 import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
+import com.sowhat.presentation.common.GENDERS
+import com.sowhat.presentation.common.MAX_DAY_LENGTH
+import com.sowhat.presentation.common.MAX_MONTH_LENGTH
+import com.sowhat.presentation.common.MAX_NICKNAME_LENGTH
+import com.sowhat.presentation.common.MAX_YEAR_LENGTH
+import com.sowhat.presentation.common.MIMETYPE_IMAGE
 import com.sowhat.presentation.common.PART_PROFILE_IMG
 import com.sowhat.presentation.common.TextFieldInfo
 import com.sowhat.presentation.common.USER_CONFIG_SCREEN
+import com.sowhat.presentation.component.DescButton
 import com.sowhat.presentation.component.DobTextField
 import com.sowhat.presentation.component.Selection
 import com.sowhat.presentation.navigation.navigateToMain
@@ -82,13 +90,11 @@ fun UserConfigRoute(
     navController: NavHostController
 ) {
 
-
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val keyboardHeight = WindowInsets.ime.getBottom(LocalDensity.current)
-    val maxLength = 12
 
-    val isLoading = viewModel.uiState.collectAsState().value.isLoading
+    val uiState = viewModel.uiState.collectAsState().value
+    val formState = viewModel.formState
 
     LaunchedEffect(key1 = true) {
         viewModel.onEvent(
@@ -126,68 +132,61 @@ fun UserConfigRoute(
             title = stringResource(id = R.string.placeholder_dob_year),
             value = viewModel.formState.year,
             placeholder = stringResource(id = R.string.placeholder_dob_year),
-            onValueChange = { changed ->
-                viewModel.onEvent(RegistrationFormEvent.YearChanged(changed))
+            onValueChange = { updatedValue ->
+                if (updatedValue.length <= MAX_YEAR_LENGTH) {
+                    viewModel.onEvent(RegistrationFormEvent.YearChanged(updatedValue))
+                }
             }
         ),
         TextFieldInfo(
             title = stringResource(id = R.string.placeholder_dob_month),
             value = viewModel.formState.month,
             placeholder = stringResource(id = R.string.placeholder_dob_month),
-            onValueChange = { changed ->
-                viewModel.onEvent(RegistrationFormEvent.MonthChanged(changed))
+            onValueChange = { updatedValue ->
+                if (updatedValue.length <= MAX_MONTH_LENGTH) {
+                    viewModel.onEvent(RegistrationFormEvent.MonthChanged(updatedValue))
+                }
             }
         ),
         TextFieldInfo(
             title = stringResource(id = R.string.placeholder_dob_day),
             value = viewModel.formState.day,
             placeholder = stringResource(id = R.string.placeholder_dob_day),
-            onValueChange = { changed ->
-                viewModel.onEvent(RegistrationFormEvent.DayChanged(changed))
+            onValueChange = { updatedValue ->
+                if (updatedValue.length <= MAX_DAY_LENGTH) {
+                    viewModel.onEvent(RegistrationFormEvent.DayChanged(updatedValue))
+                }
             }
         )
     )
 
     UserConfigScreen(
         modifier = Modifier,
-        isLoading = isLoading,
-        nickname = viewModel.formState.nickname,
+        isLoading = uiState.isLoading,
         isValid = viewModel.isFormValid,
-        onNicknameChange = { changedId ->
-            if (changedId.length <= maxLength) viewModel.onEvent(RegistrationFormEvent.NicknameChanged(changedId))
-        },
         onProfileClick = {
-            imagePicker.launch("image/*")
+            imagePicker.launch(MIMETYPE_IMAGE)
         },
         profileUri = viewModel.imageUri,
-        genders = genders,
-        onGenderChange = { changedGender ->
-            viewModel.onEvent(RegistrationFormEvent.GenderChanged(changedGender))
-        },
         dobItems = dob,
-        currentGender = viewModel.formState.gender,
-        onSubmitClick = viewModel::signUp
+        formState = formState,
+        onEvent = viewModel::onEvent,
+        onSubmitClick = viewModel::signUp,
     )
 }
 
-@OptIn(
-    ExperimentalComposeUiApi::class,
-    ExperimentalFoundationApi::class
-)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun UserConfigScreen(
     modifier: Modifier = Modifier,
     isLoading: Boolean,
-    nickname: String,
     isValid: Boolean,
+    formState: RegistrationFormState,
     profileUri: Uri?,
-    currentGender: String,
-    onNicknameChange: (String) -> Unit,
-    onProfileClick: () -> Unit,
-    genders: List<String>,
-    onGenderChange: (String) -> Unit,
     dobItems: List<TextFieldInfo>,
-    onSubmitClick: () -> Unit
+    onProfileClick: () -> Unit,
+    onSubmitClick: () -> Unit,
+    onEvent: (RegistrationFormEvent) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -205,30 +204,10 @@ fun UserConfigScreen(
             )
         },
         bottomBar = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    modifier = Modifier.basicMarquee(),
-                    text = stringResource(id = R.string.desc_info_immutable),
-                    style = JustSayItTheme.Typography.detail1,
-                    color = Gray500,
-                    maxLines = 1
-                )
-
-                DefaultButtonFull(
-                    modifier = Modifier
-                        .padding(
-                            top = JustSayItTheme.Spacing.spaceSmall,
-                            bottom = JustSayItTheme.Spacing.spaceLarge,
-                            start = JustSayItTheme.Spacing.spaceLarge,
-                            end = JustSayItTheme.Spacing.spaceLarge,
-                        ),
-                    text = stringResource(id = R.string.button_start),
-                    isActive = isValid,
-                    onClick = onSubmitClick
-                )
-            }
+            DescButton(
+                isValid = isValid,
+                onSubmitClick = onSubmitClick
+            )
         }
     ) { paddingValues ->
 
@@ -259,15 +238,23 @@ fun UserConfigScreen(
             DefaultTextField(
                 title = CONFIG_NICKNAME_TITLE,
                 placeholder = CONFIG_NICKNAME_PLACEHOLDER,
-                value = nickname,
-                onValueChange = onNicknameChange
+                value = formState.nickname,
+                onValueChange = { updatedValue ->
+                    if (updatedValue.length <= MAX_NICKNAME_LENGTH) {
+                        onEvent(RegistrationFormEvent.NicknameChanged(updatedValue))
+                    }
+                }
             )
 
             Selection(
                 title = stringResource(id = R.string.title_gender),
-                buttons = genders,
-                activeButton = currentGender,
-                onClick = onGenderChange
+                buttons = GENDERS,
+                activeButton = formState.gender,
+                onClick = { updatedValue ->
+                    if (updatedValue in GENDERS) {
+                        onEvent(RegistrationFormEvent.GenderChanged(updatedValue))
+                    }
+                }
             )
 
             DobTextField(
@@ -294,16 +281,9 @@ fun UserConfigScreenPreview() {
     }
 
     UserConfigScreen(
-        nickname = id,
-        onNicknameChange = { changedId ->
-            id = if (changedId.length <= 12) changedId else id
-            isValid = id.length in (2..12)
-        },
         isValid = isValid,
         onProfileClick = {},
         profileUri = null,
-        genders = listOf("남", "여"),
-        onGenderChange = {},
         isLoading = false,
         dobItems = listOf(
             TextFieldInfo(
@@ -325,8 +305,9 @@ fun UserConfigScreenPreview() {
                 onValueChange = {  }
             )
         ),
-        currentGender = "남",
-        onSubmitClick = {}
+        onSubmitClick = {},
+        formState = RegistrationFormState(),
+        onEvent = {}
     )
 }
 
