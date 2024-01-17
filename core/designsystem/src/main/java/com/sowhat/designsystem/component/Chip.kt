@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -38,6 +39,7 @@ import com.sowhat.designsystem.theme.White
 fun Chip(
     modifier: Modifier = Modifier,
     moodItem: MoodItem,
+    isActive: Boolean,
     isSelected: Boolean,
     drawableStart: Int?,
     drawableSize: Dp,
@@ -56,8 +58,14 @@ fun Chip(
                 color = Gray300,
                 shape = RoundedCornerShape(50)
             )
-            .rippleClickable {
-                onClick(moodItem)
+            .composed {
+                if (isActive) {
+                    rippleClickable {
+                        onClick(moodItem)
+                    }
+                } else {
+                    this
+                }
             }
     ) {
         Row(
@@ -91,12 +99,14 @@ fun Chip(
 @Composable
 fun ChipMedium(
     modifier: Modifier = Modifier,
+    isActive: Boolean = true,
     isSelected: Boolean,
     moodItem: MoodItem,
     onClick: (MoodItem) -> Unit
 ) {
     Chip(
         isSelected = isSelected,
+        isActive = isActive,
         modifier = modifier,
         drawableStart = moodItem.drawable,
         drawableSize = 24.dp,
@@ -111,6 +121,7 @@ fun ChipMedium(
 
 @Composable
 fun ChipSmall(
+    isActive: Boolean,
     isSelected: Boolean,
     moodItem: MoodItem,
     modifier: Modifier = Modifier,
@@ -126,7 +137,8 @@ fun ChipSmall(
         onClick = onClick,
         textColor = if (isSelected) moodItem.selectedTextColor else moodItem.unselectedTextColor,
         backgroundColor = if (isSelected) moodItem.selectedBackgroundColor else moodItem.unselectedBackgroundColor,
-        moodItem = moodItem
+        moodItem = moodItem,
+        isActive = isActive
     )
 }
 
@@ -167,7 +179,8 @@ fun ChipPreview() {
                 unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground,
                 selectedTextColor = JustSayItTheme.Colors.mainBackground,
                 unselectedTextColor = JustSayItTheme.Colors.mainTypo
-            )
+            ),
+            isActive = true
         )
     }
 }

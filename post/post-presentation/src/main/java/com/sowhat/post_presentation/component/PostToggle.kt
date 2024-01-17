@@ -14,6 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,7 +34,12 @@ fun PostToggle(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(JustSayItTheme.Spacing.spaceMedium),
+            .padding(JustSayItTheme.Spacing.spaceMedium)
+            .composed {
+                if (!isActivated) {
+                    alpha(0.3f)
+                } else this
+            },
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -42,13 +49,11 @@ fun PostToggle(
             subTitle = subject.subTitle
         )
 
-        if (isActivated) {
-            Toggle(
-                modifier = Modifier.padding(4.dp),
-                isChecked = isChecked,
-                onCheckedChange = onCheckedChange
-            )
-        }
+        Toggle(
+            modifier = Modifier.padding(4.dp),
+            isChecked = isChecked,
+            onCheckedChange = onCheckedChange
+        )
     }
 }
 
