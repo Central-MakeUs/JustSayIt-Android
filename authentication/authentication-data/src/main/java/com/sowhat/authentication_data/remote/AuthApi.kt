@@ -17,7 +17,7 @@ interface AuthApi {
         @Query("token") platformToken: String?
     ): ResponseBody<SignInResult>
 
-    @POST("/members/join")
+    @POST("/members/login")
     @Multipart
     suspend fun postNewMember(
         @Part("loginInfo") loginInfo: RequestBody,

@@ -1,4 +1,4 @@
-package com.sowhat.common.wrapper
+package com.sowhat.common.model
 
 data class UiState<T>(
     val isLoading: Boolean = false,

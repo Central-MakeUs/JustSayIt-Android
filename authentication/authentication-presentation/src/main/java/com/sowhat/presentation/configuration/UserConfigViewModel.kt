@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.sowhat.authentication_domain.model.NewMember
 import com.sowhat.authentication_domain.use_case.PostNewMemberUseCase
 import com.sowhat.authentication_domain.use_case.ValidateDayUseCase
@@ -15,13 +16,14 @@ import com.sowhat.authentication_domain.use_case.ValidateGenderUseCase
 import com.sowhat.authentication_domain.use_case.ValidateMonthUseCase
 import com.sowhat.authentication_domain.use_case.ValidateNicknameUseCase
 import com.sowhat.authentication_domain.use_case.ValidateYearUseCase
-import com.sowhat.common.wrapper.RegistrationFormEvent
-import com.sowhat.common.wrapper.Resource
-import com.sowhat.common.wrapper.SignUpEvent
-import com.sowhat.common.wrapper.UiState
+import com.sowhat.common.model.RegistrationFormEvent
+import com.sowhat.common.model.Resource
+import com.sowhat.common.model.SignUpEvent
+import com.sowhat.common.model.UiState
 import com.sowhat.datastore.AuthDataRepository
 import com.sowhat.network.util.getRequestBody
-import com.sowhat.presentation.common.RegistrationFormState
+import com.sowhat.network.util.toBearerToken
+import com.sowhat.common.model.RegistrationFormState
 import com.sowhat.presentation.common.RegistrationRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -31,6 +33,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -142,32 +149,49 @@ class UserConfigViewModel @Inject constructor(
                 return@launch
             }
 
+            val birth = "${formState.year}-${formState.month}-${formState.day}"
+            val gender = if (formState.gender == "남") "MALE" else "FEMALE"
+            val loginType = platform
+            val nickname = formState.nickname
+            val token = platformToken
+
+//            val jsonObject = JSONObject(
+//            "{\"token\":\"${token}\", " +
+//                    "\"nickname\":\"${nickname}\"," +
+//                    "\"loginType\":\"${loginType}\"," +
+//                    "\"gender\":\"${gender}\"," +
+//                    "\"birth\":\"${birth}\"}"
+//            ).toString()
+
             val requestBody = RegistrationRequest(
-                birth = "${formState.year}-${formState.month}-${formState.day}",
-                gender = if (formState.gender == "남") "MALE" else "FEMALE",
-                loginType = platform,
-                nickname = formState.nickname,
-                token = platformToken
+                token = token,
+                nickname = nickname,
+                loginType = loginType,
+                gender = gender,
+                birth = birth
             )
 
+            val requestPart = getRequestBody(requestBody)
+
+//            val request = Gson().toJson(requestBody).toRequestBody("application/json".toMediaTypeOrNull())
             Log.i("UserConfigScreen", requestBody.toString())
 
             val result = postNewMemberUseCase(
-                loginInfo = getRequestBody(requestBody),
+                loginInfo = requestPart,
                 profileImage = formState.profileImage
             )
 
             when (result) {
-                is Resource.Loading -> {}
                 is Resource.Success -> {
                     _uiState.value = _uiState.value.copy(isLoading = false, data = result.data)
                     val accessToken = result.data?.accessToken
                     val memberId = result.data?.memberId
                     if (accessToken != null || memberId != null) {
-                        authDataStore.updateAccessToken(accessToken!!)
+                        authDataStore.updateAccessToken(accessToken!!.toBearerToken())
                         authDataStore.updateMemberId(memberId!!)
                         signUpEventChannel.send(SignUpEvent.NavigateToMain)
                     }
+                    signUpEventChannel.send(SignUpEvent.Error("토큰이 없습니다."))
                 }
                 is Resource.Error -> {
                     _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = result.message)

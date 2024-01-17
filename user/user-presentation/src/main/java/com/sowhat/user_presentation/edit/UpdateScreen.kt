@@ -1,15 +1,17 @@
 package com.sowhat.user_presentation.edit
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,10 +19,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.sowhat.common.model.RegistrationFormEvent
+import com.sowhat.common.model.SignUpEvent
+import com.sowhat.common.model.UiState
+import com.sowhat.common.model.UpdateEvent
+import com.sowhat.common.model.UpdateFormEvent
+import com.sowhat.common.model.UpdateFormState
+import com.sowhat.common.util.ObserveEvents
+import com.sowhat.common.util.getFile
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.COMPLETE
 import com.sowhat.designsystem.common.CONFIG_NICKNAME_TITLE
@@ -29,76 +41,108 @@ import com.sowhat.designsystem.common.PROFILE_SETTING
 import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.Cell
+import com.sowhat.designsystem.component.CenteredCircularProgress
 import com.sowhat.designsystem.component.DefaultTextField
 import com.sowhat.designsystem.component.ProfileImage
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
 import com.sowhat.designsystem.theme.JustSayItTheme
+import com.sowhat.user_domain.model.UserInfoDomain
+import com.sowhat.user_presentation.navigation.navigateUpToSetting
+import com.sowhat.user_presentation.setting.SettingViewModel
 
 @Composable
-fun EditRoute(
-    viewModel: EditViewModel = hiltViewModel()
+fun UpdateRoute(
+    navController: NavHostController,
+    settingViewModel: SettingViewModel = hiltViewModel(),
+    updateViewModel: UpdateViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
+
+    val isLoading = settingViewModel.uiState.collectAsState().value.isLoading ||
+            updateViewModel.updateInfoUiState.collectAsState().value.isLoading
+
+    val uiState = settingViewModel.uiState.collectAsState().value
+
+    LaunchedEffect(key1 = true) {
+        updateViewModel.onEvent(
+            UpdateFormEvent.ProfileChanged(getFile(context, null, "profileImg"))
+        )
+    }
+
+    ObserveEvents(flow = updateViewModel.updateEvent) { uiEvent ->
+        when (uiEvent) {
+            is UpdateEvent.NavigateUp -> {
+                Log.i("UpdateScreen", "navigate to main")
+                navController.navigateUpToSetting()
+            }
+            is UpdateEvent.Error -> {
+                Log.i("UpdateScreen", "error ${uiEvent.message}")
+            }
+        }
+    }
+
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
             // the returned result from the file picker : Uri
             // to display -> read the uri and convert it into a bitmap -> Coil Image Library
-            viewModel.hasImage = uri != null
-            viewModel.newImageUri = uri
+            uri?.let {
+                updateViewModel.onEvent(UpdateFormEvent.ProfileChanged(getFile(context, uri, "profileImg")))
+            }
+            updateViewModel.newImageUri = uri
         }
     )
 
     val dropdownMenuItems = listOf(
         DropdownItem(
-            title = "사진 업로드하기",
+            title =  stringResource(id = R.string.dropdown_upload_image),
             onItemClick = {
                 imagePicker.launch("image/*")
             }
         ),
         DropdownItem(
-            title = "기본 이미지로 변경",
+            title =  stringResource(id = R.string.dropdown_default_image),
             onItemClick = {
-                viewModel.hasImage = false
-                viewModel.newImageUri = null
+                updateViewModel.onEvent(UpdateFormEvent.ProfileChanged(null))
+                updateViewModel.newImageUri = null
             }
         )
     )
 
-    val maxLength = 12
-
-    EditScreen(
-        isValid = viewModel.isValid,
-        userName = viewModel.userName,
-        profileUrl = viewModel.profileUrl,
-        onProfileClick = {
-//            imagePicker.launch("image/*")
-            viewModel.dropdown = true
-        },
-        newProfileUri = viewModel.newImageUri,
-        newUserName = viewModel.newUserName,
-        onUserNameChange = { newName ->
-            if (newName.length <= maxLength) viewModel.newUserName = newName
-        },
-        dropdownVisible = viewModel.dropdown,
+    UpdateScreen(
+        uiState = uiState,
+        isLoading = isLoading,
+        isValid = updateViewModel.isValid,
+        formState = updateViewModel.formState,
+        newProfileUri = updateViewModel.newImageUri,
+        dropdownVisible = updateViewModel.dropdown,
         dropdownMenuItems = dropdownMenuItems,
-        onDropdownDismiss = { viewModel.dropdown = false }
+        onSubmit = updateViewModel::updateUserInfo,
+        onEvent = updateViewModel::onEvent,
+        onProfileClick = {
+            updateViewModel.dropdown = true
+        },
+        onDropdownDismiss = {
+            updateViewModel.dropdown = false
+        }
     )
 }
 
 @Composable
-fun EditScreen(
+fun UpdateScreen(
     modifier: Modifier = Modifier,
+    isLoading: Boolean,
+    uiState: UiState<UserInfoDomain>,
+    formState: UpdateFormState,
     isValid: Boolean,
-    userName: String,
-    profileUrl: String,
     onProfileClick: () -> Unit,
     newProfileUri: Uri?,
-    onUserNameChange: (String) -> Unit,
-    newUserName: String,
     dropdownVisible: Boolean,
     dropdownMenuItems: List<DropdownItem>,
-    onDropdownDismiss: () -> Unit
+    onDropdownDismiss: () -> Unit,
+    onSubmit: () -> Unit,
+    onEvent: (UpdateFormEvent) -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -107,24 +151,25 @@ fun EditScreen(
                 title = PROFILE_SETTING,
                 navigationIcon = R.drawable.ic_back_24,
                 actionText = COMPLETE,
-                isValid = isValid
+                isValid = isValid,
+                onActionTextClick = onSubmit
             )
         }
     ) { paddingValues ->
+
         EditScreenContent(
             modifier = Modifier.padding(paddingValues),
-            userName = userName,
-            profileUrl = profileUrl,
             onProfileClick = onProfileClick,
             newProfileUri = newProfileUri,
-            onUserNameChange = onUserNameChange,
-            newUserName = newUserName,
             dropdownVisible = dropdownVisible,
             dropdownMenuItems = dropdownMenuItems,
             onDropdownDismiss = onDropdownDismiss,
-            gender = "남",
-            dob = "1998.11.23"
+            formState = formState,
+            uiState = uiState,
+            onEvent = onEvent
         )
+
+        if (isLoading) CenteredCircularProgress()
     }
 }
 
@@ -132,17 +177,14 @@ fun EditScreen(
 @Composable
 fun EditScreenContent(
     modifier: Modifier = Modifier,
-    userName: String,
-    profileUrl: String,
     onProfileClick: () -> Unit,
     newProfileUri: Uri?,
-    newUserName: String,
-    onUserNameChange: (String) -> Unit,
     dropdownVisible: Boolean,
     dropdownMenuItems: List<DropdownItem>,
     onDropdownDismiss: () -> Unit,
-    gender: String,
-    dob: String
+    formState: UpdateFormState,
+    uiState: UiState<UserInfoDomain>,
+    onEvent: (UpdateFormEvent) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -152,9 +194,10 @@ fun EditScreenContent(
             .background(JustSayItTheme.Colors.mainBackground)
             .noRippleClickable { keyboardController?.hide() }
     ) {
+
         ProfileImage(
             modifier = Modifier,
-            profileUri = newProfileUri ?: profileUrl,
+            profileUri = newProfileUri ?: uiState.data?.profileInfo?.profileImg,
             badgeDrawable = R.drawable.ic_camera_24,
             badgeBackgroundColor = Gray200,
             badgeIconTint = Gray400,
@@ -163,21 +206,36 @@ fun EditScreenContent(
             dropdownMenuItems = dropdownMenuItems,
             onDropdownDismiss = onDropdownDismiss,
             onItemClick = { dropdownItem ->
-
+                dropdownItem.onItemClick?.let { onClick ->
+                    onClick()
+                }
             }
         )
 
         DefaultTextField(
             modifier = Modifier,
             title = CONFIG_NICKNAME_TITLE,
-            placeholder = userName,
-            value = newUserName,
-            onValueChange = onUserNameChange
+            placeholder = uiState.data?.profileInfo?.nickname ?: stringResource(id = R.string.error_server),
+            onValueChange = { updatedValue ->
+                if (updatedValue.length <= 12) {
+                    onEvent(UpdateFormEvent.NicknameChanged(updatedValue))
+                }
+            },
+            value = formState.nickname
         )
 
-        Cell(title = stringResource(id = R.string.title_gender), leadingIcon = null, trailingText = gender)
 
-        Cell(title = stringResource(id = R.string.title_dob), leadingIcon = null, trailingText = dob)
+        Cell(
+            title = stringResource(id = R.string.title_gender),
+            leadingIcon = null,
+            trailingText = uiState.data?.personalInfo?.gender ?: stringResource(id = R.string.error_server)
+        )
+
+        Cell(
+            title = stringResource(id = R.string.title_dob),
+            leadingIcon = null,
+            trailingText = uiState.data?.personalInfo?.birth ?: stringResource(id = R.string.error_server)
+        )
     }
 }
 
@@ -199,16 +257,10 @@ fun EditScreenPreview() {
         }
     }
 
-    EditScreen(
+    UpdateScreen(
         isValid = isValid,
-        userName = "케이엠",
-        profileUrl = profileUrl,
         onProfileClick = {},
         newProfileUri = null,
-        newUserName = newUserName,
-        onUserNameChange = { newName ->
-            newUserName = newName
-        },
         dropdownVisible = true,
         onDropdownDismiss = {},
         dropdownMenuItems = listOf(
@@ -224,6 +276,11 @@ fun EditScreenPreview() {
 
                 }
             )
-        )
+        ),
+        onSubmit = {},
+        uiState = UiState(),
+        formState = UpdateFormState(),
+        isLoading = false,
+        onEvent = {}
     )
 }

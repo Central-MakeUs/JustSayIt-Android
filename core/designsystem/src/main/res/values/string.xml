@@ -14,4 +14,9 @@
     <string name="placeholder_dob_day">DD</string>
 
     <string name="button_start">시작하기</string>
+
+    <string name="dropdown_upload_image">사진 업로드하기</string>
+    <string name="dropdown_default_image">기본 이미지로 변경</string>
+
+    <string name="error_server">서버 에러</string>
 </resources>

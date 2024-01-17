@@ -1,4 +1,4 @@
-package com.sowhat.common.wrapper
+package com.sowhat.common.model
 
 sealed class Resource<T: Any?>(
     val data: T? = null,
@@ -7,5 +7,4 @@ sealed class Resource<T: Any?>(
 ) {
     class Success<T>(data: T, code: String, message: String) : Resource<T>(data, code, message)
     class Error<T>(data: T? = null, code: String? = null, message: String) : Resource<T>(data, code, message)
-    class Loading<T> : Resource<T>()
 }

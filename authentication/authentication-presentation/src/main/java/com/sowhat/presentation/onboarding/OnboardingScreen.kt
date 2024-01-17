@@ -19,10 +19,9 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.identity.Identity
 import com.sowhat.common.util.ObserveEvents
-import com.sowhat.common.wrapper.SignInEvent
+import com.sowhat.common.model.SignInEvent
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.APP_INTRO
 import com.sowhat.designsystem.common.APP_NAME

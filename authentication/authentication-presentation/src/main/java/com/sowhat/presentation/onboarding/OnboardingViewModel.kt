@@ -4,10 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sowhat.authentication_domain.model.SignIn
 import com.sowhat.authentication_domain.use_case.UserSignInUseCase
-import com.sowhat.common.wrapper.Resource
-import com.sowhat.common.wrapper.SignInEvent
-import com.sowhat.common.wrapper.UiState
+import com.sowhat.common.model.Resource
+import com.sowhat.common.model.SignInEvent
+import com.sowhat.common.model.UiState
 import com.sowhat.datastore.AuthDataRepository
+import com.sowhat.network.util.toBearerToken
 import com.sowhat.presentation.common.Platform
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -55,7 +56,6 @@ class OnboardingViewModel @Inject constructor(
 
     private suspend fun consumeResources(signInData: Resource<SignIn>) {
         when (signInData) {
-            is Resource.Loading -> {}
             is Resource.Success -> {
                 val data = signInData.data
                 consumeSuccessResources(data, signInData)
@@ -79,7 +79,7 @@ class OnboardingViewModel @Inject constructor(
     ) {
         if (data?.memberId != null && data.isJoined) {
             data.accessToken?.let {
-                authDataStore.updateAccessToken(it)
+                authDataStore.updateAccessToken(it.toBearerToken())
             }
             terminateLoading(data = signInData.data)
             _uiEvent.send(SignInEvent.NavigateToMain)
