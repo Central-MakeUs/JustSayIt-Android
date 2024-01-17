@@ -44,8 +44,9 @@ fun CurrentMoodSelection(
 @Composable
 fun SympathySelection(
     modifier: Modifier = Modifier,
+    isActive: Boolean = true,
     subjectItem: SubjectItem,
-    onChange: (MoodItem) -> Unit,
+    onClick: (MoodItem) -> Unit,
     selectedMoods: List<MoodItem>,
     moodItems: List<MoodItem>
 ) {
@@ -59,13 +60,15 @@ fun SympathySelection(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = JustSayItTheme.Spacing.spaceMedium),
+            isActivated = isActive,
             title = subjectItem.title,
             subTitle = subjectItem.subTitle
         )
 
         MoodChips(
             modifier = Modifier,
-            onChange = onChange,
+            isActive = isActive,
+            onClick = onClick,
             selectedMoods = selectedMoods,
             moodItems = moodItems
         )
