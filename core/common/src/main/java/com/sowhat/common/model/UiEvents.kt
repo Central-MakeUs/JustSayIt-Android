@@ -1,5 +1,6 @@
 package com.sowhat.common.model
 
+import android.net.Uri
 import okhttp3.MultipartBody
 
 sealed class SignInEvent {
@@ -33,4 +34,19 @@ sealed class UpdateFormEvent {
     data class NicknameChanged(val nickname: String) : UpdateFormEvent()
     object Submit: UpdateFormEvent()
 
+}
+
+sealed class PostFormEvent {
+    data class CurrentMoodChanged(val mood: String) : PostFormEvent()
+    data class ImageAdded(val image: Uri?) : PostFormEvent()
+    data class ImageRemoved(val index: Int) : PostFormEvent()
+    data class PostTextChanged(val text: String) : PostFormEvent()
+    data class OpenChanged(val open: Boolean) : PostFormEvent()
+    data class AnonymousChanged(val anonymous: Boolean) : PostFormEvent()
+    data class SympathyItemsChanged(val sympathyItems: List<String>) : PostFormEvent()
+}
+
+sealed class PostingEvent {
+    object NavigateUp : PostingEvent()
+    data class Error(val message: String) : PostingEvent()
 }

@@ -4,7 +4,7 @@ import com.sowhat.common.model.ValidationResult
 
 class ValidateCurrentMoodUseCase {
     operator fun invoke(currentMood: String?): ValidationResult {
-        if (currentMood == null) {
+        if (currentMood.isNullOrBlank()) {
             return ValidationResult(isValid = false)
         }
 

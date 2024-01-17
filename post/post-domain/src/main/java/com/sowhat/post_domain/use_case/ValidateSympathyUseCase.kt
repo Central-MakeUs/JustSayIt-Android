@@ -3,8 +3,8 @@ package com.sowhat.post_domain.use_case
 import com.sowhat.common.model.ValidationResult
 
 class ValidateSympathyUseCase {
-    operator fun invoke(selectedMoodItems: List<String>): ValidationResult {
-        if (selectedMoodItems.isEmpty()) {
+    operator fun invoke(isOpen: Boolean, selectedMoodItems: List<String>): ValidationResult {
+        if (isOpen && selectedMoodItems.isEmpty()) {
             return ValidationResult(isValid = false)
         }
 
