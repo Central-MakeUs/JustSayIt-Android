@@ -2,13 +2,10 @@ package com.sowhat.post_domain.use_case
 
 import com.sowhat.common.model.ValidationResult
 
-class ValidateCurrentMoodUseCase {
-    operator fun invoke(currentMood: String?): ValidationResult {
-        if (currentMood == null) {
-            return ValidationResult(isValid = false)
-        }
+class ValidatePostTextUseCase {
+    operator fun invoke(text: String?): ValidationResult {
 
-        if (currentMood !in listOf("행복", "슬픔", "놀람", "화남")) {
+        if (text.isNullOrBlank()) {
             return ValidationResult(isValid = false)
         }
 
