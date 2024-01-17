@@ -7,4 +7,6 @@ const val CONFIGURATION = "configuration"
 const val SETTING = "setting"
 const val CONFIG_EDIT = "config_edit"
 
+const val POST = "post"
+
 const val MAIN = "main"

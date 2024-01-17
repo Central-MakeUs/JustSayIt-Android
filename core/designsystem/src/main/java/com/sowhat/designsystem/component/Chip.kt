@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -26,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.R
+import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Black
 import com.sowhat.designsystem.theme.Gray300
@@ -35,15 +37,17 @@ import com.sowhat.designsystem.theme.White
 
 @Composable
 fun Chip(
-    isSelected: Boolean,
     modifier: Modifier = Modifier,
+    moodItem: MoodItem,
+    isActive: Boolean,
+    isSelected: Boolean,
     drawableStart: Int?,
     drawableSize: Dp,
     textStyle: TextStyle,
     backgroundColor: Color,
     title: String,
     textColor: Color,
-    onClick: (String, Boolean) -> Unit
+    onClick: (String) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -54,8 +58,14 @@ fun Chip(
                 color = Gray300,
                 shape = RoundedCornerShape(50)
             )
-            .rippleClickable {
-                onClick(title, !isSelected)
+            .composed {
+                if (isActive) {
+                    rippleClickable {
+                        onClick(moodItem.title)
+                    }
+                } else {
+                    this
+                }
             }
     ) {
         Row(
@@ -88,47 +98,47 @@ fun Chip(
 
 @Composable
 fun ChipMedium(
-    isSelected: Boolean,
     modifier: Modifier = Modifier,
-    drawableStart: Int?,
-    title: String,
-    textColor: Color = JustSayItTheme.Colors.mainTypo,
-    backgroundColor: Color = JustSayItTheme.Colors.mainBackground,
-    onClick: (String, Boolean) -> Unit
+    isActive: Boolean = true,
+    isSelected: Boolean,
+    moodItem: MoodItem,
+    onClick: (String) -> Unit
 ) {
     Chip(
         isSelected = isSelected,
+        isActive = isActive,
         modifier = modifier,
-        drawableStart = drawableStart,
+        drawableStart = moodItem.drawable,
         drawableSize = 24.dp,
         textStyle = JustSayItTheme.Typography.body1,
-        title = title,
+        title = moodItem.title,
         onClick = onClick,
-        textColor = textColor,
-        backgroundColor = backgroundColor
+        textColor = if (isSelected) moodItem.selectedTextColor else moodItem.unselectedTextColor,
+        backgroundColor = if (isSelected) moodItem.selectedBackgroundColor else moodItem.unselectedBackgroundColor,
+        moodItem = moodItem
     )
 }
 
 @Composable
 fun ChipSmall(
+    isActive: Boolean,
     isSelected: Boolean,
+    moodItem: MoodItem,
     modifier: Modifier = Modifier,
-    drawableStart: Int?,
-    title: String,
-    textColor: Color = JustSayItTheme.Colors.mainTypo,
-    backgroundColor: Color = JustSayItTheme.Colors.mainBackground,
-    onClick: (String, Boolean) -> Unit
+    onClick: (String) -> Unit
 ) {
     Chip(
         isSelected = isSelected,
         modifier = modifier,
-        drawableStart = drawableStart,
+        drawableStart = moodItem.drawable,
         drawableSize = JustSayItTheme.Spacing.spaceLarge,
         textStyle = JustSayItTheme.Typography.detail1,
-        title = title,
+        title = moodItem.title,
         onClick = onClick,
-        textColor = textColor,
-        backgroundColor = backgroundColor
+        textColor = if (isSelected) moodItem.selectedTextColor else moodItem.unselectedTextColor,
+        backgroundColor = if (isSelected) moodItem.selectedBackgroundColor else moodItem.unselectedBackgroundColor,
+        moodItem = moodItem,
+        isActive = isActive
     )
 }
 
@@ -146,20 +156,31 @@ fun ChipPreview() {
     Column {
         ChipMedium(
             isSelected = isSelected,
-            drawableStart = R.drawable.ic_happy_24,
-            title = "행복",
-            textColor = textColor,
-            onClick = { _, changedState -> isSelected = changedState },
-            backgroundColor = backgroundColor
+            onClick = {},
+            moodItem = MoodItem(
+                drawable = R.drawable.ic_happy_24,
+                title = "행복",
+                selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,
+                unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground,
+                selectedTextColor = JustSayItTheme.Colors.mainBackground,
+                unselectedTextColor = JustSayItTheme.Colors.mainTypo,
+                postData = ""
+            )
         )
 
         ChipSmall(
             isSelected = isSelected,
-            drawableStart = R.drawable.ic_happy_24,
-            title = "행복",
-            textColor = textColor,
-            backgroundColor = backgroundColor,
-            onClick = { _, changedState -> isSelected = changedState }
+            onClick = {},
+            moodItem = MoodItem(
+                drawable = R.drawable.ic_happy_24,
+                title = "행복",
+                postData = "",
+                selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,
+                unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground,
+                selectedTextColor = JustSayItTheme.Colors.mainBackground,
+                unselectedTextColor = JustSayItTheme.Colors.mainTypo
+            ),
+            isActive = true
         )
     }
 }

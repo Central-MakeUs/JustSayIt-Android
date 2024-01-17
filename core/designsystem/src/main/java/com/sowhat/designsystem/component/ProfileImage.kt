@@ -39,7 +39,7 @@ fun ProfileImage(
     ) {
         val (profile, badge) = createRefs()
 
-        ProfileImageContainer(
+        SquaredImageContainer(
             modifier = Modifier
                 .fillMaxWidth(0.25f)
                 .constrainAs(profile) {
@@ -88,7 +88,7 @@ fun ProfileImage(
     ) {
         val (profile, badge) = createRefs()
 
-        ProfileImageContainer(
+        SquaredImageContainer(
             modifier = Modifier
                 .fillMaxWidth(0.25f)
                 .constrainAs(profile) {

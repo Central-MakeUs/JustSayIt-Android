@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="feeling_happy">행복</string>
+    <string name="feeling_sad">슬픔</string>
+    <string name="feeling_surprised">놀람</string>
+    <string name="feeling_angry">화남</string>
+
     <string name="title_nickname">닉네임</string>
     <string name="title_gender">성별</string>
     <string name="title_dob">생년월일</string>
+    <string name="title_select_mood">감정 선택</string>
+    <string name="title_write">글 작성</string>
+    <string name="title_is_open">공개</string>
+    <string name="title_is_anonymous">익명</string>
+    <string name="title_select_sympathy">공감 선택</string>
+
+    <string name="subtitle_select_mood">게시글을 작성할 감정을 선택해주세요.</string>
+    <string name="subtitle_write">업로드할 글을 300자 이내로 작성해주세요.</string>
+    <string name="subtitle_is_open">게시글을 작성할 감정을 선택해주세요.</string>
+    <string name="subtitle_is_anonymous">게시글을 작성할 감정을 선택해주세요.</string>
+    <string name="subtitle_select_sympathy">게시글에 공감받을 감정을 선택해주세요.</string>
 
     <string name="desc_info_immutable">성별과 생년월일은 추후 변경이 불가합니다. 정확히 입력해주세요</string>
 
@@ -14,9 +30,12 @@
     <string name="placeholder_dob_day">DD</string>
 
     <string name="button_start">시작하기</string>
+    <string name="button_post">게시하기</string>
 
     <string name="dropdown_upload_image">사진 업로드하기</string>
     <string name="dropdown_default_image">기본 이미지로 변경</string>
 
     <string name="error_server">서버 에러</string>
+
+    <string name="appbar_post">게시글 쓰기</string>
 </resources>

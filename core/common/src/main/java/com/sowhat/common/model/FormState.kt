@@ -1,5 +1,6 @@
 package com.sowhat.common.model
 
+import android.net.Uri
 import okhttp3.MultipartBody
 
 data class RegistrationFormState(
@@ -20,4 +21,17 @@ data class UpdateFormState(
     val profileImage: MultipartBody.Part? = null,
     val nickname: String = "",
     val isNicknameValid: Boolean = false,
+)
+
+data class PostFormState(
+    val currentMood: String? = null,
+    val isCurrentMoodValid: Boolean = false,
+    val postText: String = "",
+    val isPostTextValid: Boolean = false,
+    val images: List<Uri> = emptyList(),
+    val isImageListValid: Boolean = false,
+    val isOpened: Boolean = false,
+    val isAnonymous: Boolean = false,
+    val sympathyMoodItems: List<String> = emptyList(),
+    val isSympathyMoodItemsValid: Boolean = false
 )
