@@ -14,8 +14,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,6 +31,7 @@ import com.sowhat.common.model.SignUpEvent
 import com.sowhat.common.util.ObserveEvents
 import com.sowhat.common.util.getFile
 import com.sowhat.designsystem.common.MoodItem
+import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.component.AlertDialog
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.DefaultButtonFull
@@ -54,7 +57,7 @@ fun PostRoute(
     val context = LocalContext.current
 
     // TODO MoodItem 데이터 클래스 postData(서버로 실제로 보낼 감정 문자열 데이터) api 확정 시 수정해놓기
-    
+
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
@@ -92,6 +95,7 @@ fun PostRoute(
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PostScreen(
     navController: NavController,
@@ -102,6 +106,8 @@ fun PostScreen(
     onEvent: (PostFormEvent) -> Unit,
     onSubmit: () -> Unit
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     BackHandler(
         enabled = true
     ) {
@@ -113,7 +119,9 @@ fun PostScreen(
     }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .noRippleClickable { keyboardController?.hide() },
         topBar = {
             AppBar(
                 title = stringResource(id = com.sowhat.designsystem.R.string.appbar_post),
