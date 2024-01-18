@@ -1,6 +1,7 @@
 package com.sowhat.post_presentation.posting
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import com.sowhat.common.model.SignUpEvent
 import com.sowhat.common.util.ObserveEvents
 import com.sowhat.common.util.getFile
 import com.sowhat.designsystem.common.MoodItem
+import com.sowhat.designsystem.component.AlertDialog
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.DefaultButtonFull
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -52,7 +54,7 @@ fun PostRoute(
     val context = LocalContext.current
 
     // TODO MoodItem 데이터 클래스 postData(서버로 실제로 보낼 감정 문자열 데이터) api 확정 시 수정해놓기
-
+    
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
@@ -100,7 +102,15 @@ fun PostScreen(
     onEvent: (PostFormEvent) -> Unit,
     onSubmit: () -> Unit
 ) {
-
+    BackHandler(
+        enabled = true
+    ) {
+        if (!formState.isDialogVisible) {
+            onEvent(PostFormEvent.DialogVisibilityChanged(true))
+        } else {
+            onEvent(PostFormEvent.DialogVisibilityChanged(false))
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -220,6 +230,22 @@ fun PostScreen(
                 )
             }
         }
+
+        if (formState.isDialogVisible) {
+            AlertDialog(
+                title = stringResource(id = com.sowhat.designsystem.R.string.dialog_title_posting),
+                subTitle = stringResource(
+                    id = com.sowhat.designsystem.R.string.dialog_subtitle_posting
+                ),
+                buttonContent = stringResource(id = com.sowhat.designsystem.R.string.dialog_button_continue) to stringResource(
+                    id = com.sowhat.designsystem.R.string.dialog_button_stop
+                ),
+                onAccept = {
+                    navController.navigateBack()
+                },
+                onDismiss = { onEvent(PostFormEvent.DialogVisibilityChanged(false)) }
+            )
+        }
     }
 }
 
@@ -276,6 +302,11 @@ fun PostScreenPreview() {
                 is PostFormEvent.SympathyItemsChanged -> {
                     formState = formState.copy(
                         sympathyMoodItems = it.sympathyItems
+                    )
+                }
+                is PostFormEvent.DialogVisibilityChanged -> {
+                    formState = formState.copy(
+                        isDialogVisible = it.isVisible
                     )
                 }
             }

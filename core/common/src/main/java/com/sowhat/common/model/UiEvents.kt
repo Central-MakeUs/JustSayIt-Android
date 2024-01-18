@@ -43,6 +43,7 @@ sealed class PostFormEvent {
     data class OpenChanged(val open: Boolean) : PostFormEvent()
     data class AnonymousChanged(val anonymous: Boolean) : PostFormEvent()
     data class SympathyItemsChanged(val sympathyItems: List<String>) : PostFormEvent()
+    data class DialogVisibilityChanged(val isVisible: Boolean) : PostFormEvent()
 }
 
 sealed class PostingEvent {

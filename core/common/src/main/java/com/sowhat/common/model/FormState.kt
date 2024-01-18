@@ -33,5 +33,6 @@ data class PostFormState(
     val isOpened: Boolean = false,
     val isAnonymous: Boolean = false,
     val sympathyMoodItems: List<String> = emptyList(),
-    val isSympathyMoodItemsValid: Boolean = false
+    val isSympathyMoodItemsValid: Boolean = false,
+    val isDialogVisible: Boolean = false,
 )

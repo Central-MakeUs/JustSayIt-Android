@@ -66,6 +66,11 @@ class PostViewModel @Inject constructor(
                     sympathyMoodItems = event.sympathyItems
                 )
             }
+            is PostFormEvent.DialogVisibilityChanged -> {
+                formState = formState.copy(
+                    isDialogVisible = event.isVisible
+                )
+            }
         }
     }
 }
