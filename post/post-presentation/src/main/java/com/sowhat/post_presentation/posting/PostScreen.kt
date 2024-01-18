@@ -120,8 +120,7 @@ fun PostScreen(
                 navigationIcon = com.sowhat.designsystem.R.drawable.ic_back_24,
                 actionIcon = null,
                 onNavigationIconClick = {
-                    // TODO 이전에 저장 안된다는 문구 필요
-                    navController.navigateBack()
+                    onEvent(PostFormEvent.DialogVisibilityChanged(true))
                 }
             )
         },
