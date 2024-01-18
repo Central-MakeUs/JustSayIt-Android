@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.draw.alpha
 import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.post_presentation.common.SubjectItem
@@ -53,8 +55,14 @@ fun SympathySelection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = JustSayItTheme.Spacing.spaceMedium),
+            .padding(vertical = JustSayItTheme.Spacing.spaceMedium)
+            .composed {
+                if (!isActive) {
+                    alpha(0.3f)
+                } else this
+            },
         verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceNormal)
+
     ) {
         PostSubject(
             modifier = Modifier

@@ -71,8 +71,8 @@ fun Chip(
         Row(
             modifier = modifier
                 .padding(
-                    horizontal = JustSayItTheme.Spacing.spaceNormal,
-                    vertical = JustSayItTheme.Spacing.spaceExtraSmall
+                    horizontal = JustSayItTheme.Spacing.spaceMedium,
+                    vertical = JustSayItTheme.Spacing.spaceSmall
                 ),
             horizontalArrangement = Arrangement
                 .spacedBy(JustSayItTheme.Spacing.spaceSmall),

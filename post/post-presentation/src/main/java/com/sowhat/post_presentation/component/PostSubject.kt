@@ -26,7 +26,7 @@ fun PostSubject(
 ) {
     Column(
         modifier = modifier.composed {
-            if (isActivated) {
+            if (!isActivated) {
                 alpha(alpha = 0.3f)
             } else this
         },

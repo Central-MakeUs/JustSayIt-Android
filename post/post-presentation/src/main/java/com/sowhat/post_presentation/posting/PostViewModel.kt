@@ -43,7 +43,7 @@ class PostViewModel @Inject constructor(
             }
             is PostFormEvent.ImageListUpdated -> {
                 formState = formState.copy(
-                    images = event.images
+                    images = event.images ?: emptyList()
                 )
             }
             is PostFormEvent.PostTextChanged -> {

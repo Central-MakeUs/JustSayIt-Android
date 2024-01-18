@@ -9,11 +9,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.sowhat.common.model.PostFormEvent
 import com.sowhat.common.model.PostFormState
 import com.sowhat.common.model.PostingEvent
@@ -24,6 +30,7 @@ import com.sowhat.common.util.getFile
 import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.DefaultButtonFull
+import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.post_presentation.R
 import com.sowhat.post_presentation.common.SubjectItem
 import com.sowhat.post_presentation.common.rememberMoodItems
@@ -110,6 +117,8 @@ fun PostScreen(
         },
         bottomBar = {
             DefaultButtonFull(
+                modifier = Modifier
+                    .padding(JustSayItTheme.Spacing.spaceMedium),
                 text = stringResource(com.sowhat.designsystem.R.string.button_post),
                 isActive = isValid,
                 onClick = { onSubmit() }
@@ -189,6 +198,7 @@ fun PostScreen(
 
             item {
                 SympathySelection(
+                    isActive = formState.isOpened,
                     subjectItem = SubjectItem(
                         stringResource(id = com.sowhat.designsystem.R.string.title_select_sympathy),
                         stringResource(
@@ -210,4 +220,65 @@ fun PostScreen(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PostScreenPreview() {
+    val navController = rememberNavController()
+    val moods = rememberMoodItems()
+    var formState by remember {
+        mutableStateOf(PostFormState())
+    }
+    var isFormValid by remember {
+        mutableStateOf(
+            formState.isImageListValid
+                    && formState.isCurrentMoodValid
+                    && formState.isPostTextValid
+                    && formState.isSympathyMoodItemsValid
+        )
+
+    }
+    PostScreen(
+        navController = navController,
+        isValid = isFormValid,
+        formState = formState,
+        moods = moods,
+        onAddImage = { /*TODO*/ },
+        onEvent = {
+            when (it) {
+                is PostFormEvent.CurrentMoodChanged -> {
+                    formState = formState.copy(
+                        currentMood = it.mood
+                    )
+                }
+                is PostFormEvent.ImageListUpdated -> {
+                    formState = formState.copy(
+                        images = it.images ?: emptyList()
+                    )
+                }
+                is PostFormEvent.PostTextChanged -> {
+                    formState = formState.copy(
+                        postText = it.text
+                    )
+                }
+                is PostFormEvent.OpenChanged -> {
+                    formState = formState.copy(
+                        isOpened = it.open
+                    )
+                }
+                is PostFormEvent.AnonymousChanged -> {
+                    formState = formState.copy(
+                        isAnonymous = it.anonymous
+                    )
+                }
+                is PostFormEvent.SympathyItemsChanged -> {
+                    formState = formState.copy(
+                        sympathyMoodItems = it.sympathyItems
+                    )
+                }
+            }
+        },
+        onSubmit = {}
+    )
 }

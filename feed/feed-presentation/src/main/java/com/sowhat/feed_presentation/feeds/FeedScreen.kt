@@ -1,15 +1,29 @@
 package com.sowhat.feed_presentation.feeds
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -21,6 +35,7 @@ import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.feed_presentation.common.FeedAppBarEvent
 import com.sowhat.feed_presentation.common.FeedAppBarState
+import com.sowhat.designsystem.common.isScrollingUp
 import com.sowhat.feed_presentation.component.Feed
 
 @Composable
@@ -37,6 +52,7 @@ fun FeedRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreen(
     modifier: Modifier = Modifier,
@@ -44,34 +60,48 @@ fun FeedScreen(
     appBarState: FeedAppBarState,
     onAppBarEvent: (FeedAppBarEvent) -> Unit,
 ) {
+    TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val lazyListState = rememberLazyListState()
+
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize(),
         topBar = {
-            AppBarFeed(
-                currentDropdownItem = appBarState.currentEmotion,
-                dropdownItems = appBarState.emotionDropdownItems,
-                isDropdownExpanded = appBarState.isDropdownExpanded,
-                onDropdownHeaderClick = { isOpen ->
-                    onAppBarEvent(FeedAppBarEvent.DropdownExpandChanged(isOpen))
-                },
-                onDropdownMenuChange = { updatedMenuItem ->
-                    onAppBarEvent(FeedAppBarEvent.EmotionChanged(updatedMenuItem))
-                },
-                tabItems = appBarState.tabItems,
-                selectedTabItem = appBarState.selectedTabItem,
-                selectedTabItemColor = JustSayItTheme.Colors.mainTypo,
-                unselectedTabItemColor = Gray500,
-                onSelectedTabItemChange = { updatedTabItem ->
-                    onAppBarEvent(FeedAppBarEvent.SortChanged(updatedTabItem))
-                }
-            )
+            AnimatedVisibility(
+                visible = lazyListState.isScrollingUp(),
+                enter = expandVertically(),
+                exit = shrinkVertically(),
+            ) {
+                AppBarFeed(
+                    lazyListState = lazyListState,
+                    currentDropdownItem = appBarState.currentEmotion,
+                    dropdownItems = appBarState.emotionDropdownItems,
+                    isDropdownExpanded = appBarState.isDropdownExpanded,
+                    onDropdownHeaderClick = { isOpen ->
+                        onAppBarEvent(FeedAppBarEvent.DropdownExpandChanged(isOpen))
+                    },
+                    onDropdownMenuChange = { updatedMenuItem ->
+                        onAppBarEvent(FeedAppBarEvent.EmotionChanged(updatedMenuItem))
+                    },
+                    tabItems = appBarState.tabItems,
+                    selectedTabItem = appBarState.selectedTabItem,
+                    selectedTabItemColor = JustSayItTheme.Colors.mainTypo,
+                    unselectedTabItemColor = Gray500,
+                    onSelectedTabItemChange = { updatedTabItem ->
+                        onAppBarEvent(FeedAppBarEvent.SortChanged(updatedTabItem))
+                    },
+                )
+
+            }
+
         },
         bottomBar = {},
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(paddingValues),
+            state = lazyListState
         ){
             // TODO 하드코딩된 것 지우기
             item {
