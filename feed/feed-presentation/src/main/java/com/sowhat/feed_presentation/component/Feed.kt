@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.sowhat.designsystem.common.MoodItem
+import com.sowhat.designsystem.common.bottomBorder
 import com.sowhat.designsystem.component.ChipMid
 import com.sowhat.designsystem.component.DefaultIconButton
 import com.sowhat.designsystem.component.ImageContainer
@@ -55,31 +56,40 @@ fun Feed(
         modifier = modifier
             .fillMaxWidth()
             .background(color = JustSayItTheme.Colors.mainBackground)
-            .padding(JustSayItTheme.Spacing.spaceMedium),
+            .padding(vertical = JustSayItTheme.Spacing.spaceMedium),
         verticalArrangement = Arrangement
             .spacedBy(JustSayItTheme.Spacing.spaceMedium)
     ) {
         FeedProfile(
+            modifier = Modifier.padding(start = JustSayItTheme.Spacing.spaceMedium),
             profileUrl = profileUrl,
             nickname = nickname,
             date = date,
             onMenuClick = onMenuClick
         )
 
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = text,
-            style = JustSayItTheme.Typography.body1,
-            color = JustSayItTheme.Colors.mainTypo
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = JustSayItTheme.Spacing.spaceMedium),
+            verticalArrangement = Arrangement
+                .spacedBy(JustSayItTheme.Spacing.spaceMedium)
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = text,
+                style = JustSayItTheme.Typography.body1,
+                color = JustSayItTheme.Colors.mainTypo
+            )
 
-        if (!images.isNullOrEmpty()) TimelineFeedImages(models = images)
-        
-        SympathyChips(
-            currentMood = selectedSympathy,
-            onChange = onSympathyItemClick,
-            availableItems = sympathyItems
-        )
+            if (!images.isNullOrEmpty()) TimelineFeedImages(models = images)
+
+            SympathyChips(
+                currentMood = selectedSympathy,
+                onChange = onSympathyItemClick,
+                availableItems = sympathyItems
+            )
+        }
     }
 }
 

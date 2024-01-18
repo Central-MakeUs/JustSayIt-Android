@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -276,14 +277,15 @@ fun AppBarFeed(
     unselectedTabItemColor: Color,
     onSelectedTabItemChange: (String) -> Unit
 ) {
-    Box(modifier
-        .fillMaxWidth()
-        .height(48.dp)
-        .bottomBorder(
-            strokeWidth = 1.dp,
-            color = JustSayItTheme.Colors.subSurface
-        ),
-        contentAlignment = Alignment.Center
+    Box(
+        modifier
+            .fillMaxWidth()
+            .height(48.dp),
+//        .bottomBorder(
+//            strokeWidth = 1.dp,
+//            color = Gray500
+//        ),
+        contentAlignment = Alignment.BottomCenter
     ) {
         CenterAlignedTopAppBar(
             modifier = Modifier,
@@ -317,6 +319,11 @@ fun AppBarFeed(
             },
         )
 
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = JustSayItTheme.Colors.subBackground
+        )
     }
 }
 
