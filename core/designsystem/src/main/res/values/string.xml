@@ -28,6 +28,7 @@
     <string name="placeholder_dob_year">YYYY</string>
     <string name="placeholder_dob_month">MM</string>
     <string name="placeholder_dob_day">DD</string>
+    <string name="placeholder_post">내용을 작성해주세요.</string>
 
     <string name="button_start">시작하기</string>
     <string name="button_post">게시하기</string>

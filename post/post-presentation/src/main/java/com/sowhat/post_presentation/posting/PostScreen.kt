@@ -148,6 +148,7 @@ fun PostScreen(
                         title = stringResource(id = com.sowhat.designsystem.R.string.title_write),
                         subTitle = stringResource(id = com.sowhat.designsystem.R.string.subtitle_write)
                     ),
+                    placeholder = stringResource(id = com.sowhat.designsystem.R.string.placeholder_post),
                     text = formState.postText,
                     onTextChange = { changedText ->
                         onEvent(PostFormEvent.PostTextChanged(changedText))

@@ -416,18 +416,12 @@ fun SquaredIconButton(
 ) {
     Box(
         modifier = modifier
-            .aspectRatio(1f)
-            .border(
-                width = 0.5.dp,
-                color = JustSayItTheme.Colors.subSurface,
-                shape = JustSayItTheme.Shapes.medium
-            )
-            .clip(JustSayItTheme.Shapes.medium)
             .rippleClickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
         icon?.let {
             Icon(
+                modifier = Modifier,
                 painter = painterResource(id = it),
                 tint = JustSayItTheme.Colors.subTypo,
                 contentDescription = contentDescription
