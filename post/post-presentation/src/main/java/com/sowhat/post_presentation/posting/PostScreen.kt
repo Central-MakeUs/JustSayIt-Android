@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -115,86 +116,98 @@ fun PostScreen(
             )
         }
     ) { paddingValues ->
-        Column(
+        LazyColumn(
             modifier = Modifier.padding(paddingValues)
         ) {
-            CurrentMoodSelection(
-                subjectItem = SubjectItem(
-                    stringResource(id = com.sowhat.designsystem.R.string.title_select_mood),
-                    stringResource(id = com.sowhat.designsystem.R.string.subtitle_select_mood)
-                ),
-                currentMood = formState.currentMood,
-                onChange = { changedMood ->
-                    onEvent(PostFormEvent.CurrentMoodChanged(changedMood))
-                },
-                moodItems = moods
-            )
+            item {
+                CurrentMoodSelection(
+                    subjectItem = SubjectItem(
+                        stringResource(id = com.sowhat.designsystem.R.string.title_select_mood),
+                        stringResource(id = com.sowhat.designsystem.R.string.subtitle_select_mood)
+                    ),
+                    currentMood = formState.currentMood,
+                    onChange = { changedMood ->
+                        onEvent(PostFormEvent.CurrentMoodChanged(changedMood))
+                    },
+                    moodItems = moods
+                )
+            }
 
-            PostText(
-                subject = SubjectItem(
-                    title = stringResource(id = com.sowhat.designsystem.R.string.title_write),
-                    subTitle = stringResource(id = com.sowhat.designsystem.R.string.subtitle_write)
-                ),
-                text = formState.postText,
-                onTextChange = { changedText ->
-                    onEvent(PostFormEvent.PostTextChanged(changedText))
-                },
-                maxLength = 300
-            )
+            item {
+                PostText(
+                    subject = SubjectItem(
+                        title = stringResource(id = com.sowhat.designsystem.R.string.title_write),
+                        subTitle = stringResource(id = com.sowhat.designsystem.R.string.subtitle_write)
+                    ),
+                    text = formState.postText,
+                    onTextChange = { changedText ->
+                        onEvent(PostFormEvent.PostTextChanged(changedText))
+                    },
+                    maxLength = 300
+                )
+            }
 
-            ImageSelection(
-                images = formState.images,
-                onAddClick = { onAddImage() },
-                onImagesChange = { images ->
-                    onEvent(PostFormEvent.ImageListUpdated(images))
-                }
-            )
-
-            PostToggle(
-                subject = SubjectItem(
-                    stringResource(id = com.sowhat.designsystem.R.string.title_is_open),
-                    stringResource(
-                        id = com.sowhat.designsystem.R.string.subtitle_is_open
-                    )
-                ),
-                isActivated = true,
-                isChecked = formState.isOpened,
-                onCheckedChange = { updatedState ->
-                    onEvent(PostFormEvent.OpenChanged(updatedState))
-                }
-            )
-
-            PostToggle(
-                subject = SubjectItem(
-                    stringResource(id = com.sowhat.designsystem.R.string.title_is_anonymous),
-                    stringResource(id = com.sowhat.designsystem.R.string.subtitle_is_anonymous)
-                ),
-                isActivated = formState.isOpened,
-                isChecked = formState.isAnonymous,
-                onCheckedChange = { updatedState ->
-                    onEvent(PostFormEvent.AnonymousChanged(updatedState))
-                }
-            )
-
-            SympathySelection(
-                subjectItem = SubjectItem(
-                    stringResource(id = com.sowhat.designsystem.R.string.title_select_sympathy),
-                    stringResource(
-                        id = com.sowhat.designsystem.R.string.subtitle_select_sympathy
-                    )
-                ),
-                onClick = { changedItem ->
-                    val currentItems = formState.sympathyMoodItems.toMutableList()
-                    if (changedItem in currentItems) {
-                        currentItems.remove(changedItem)
-                    } else {
-                        currentItems.add(changedItem)
+            item {
+                ImageSelection(
+                    images = formState.images,
+                    onAddClick = { onAddImage() },
+                    onImagesChange = { images ->
+                        onEvent(PostFormEvent.ImageListUpdated(images))
                     }
-                    onEvent(PostFormEvent.SympathyItemsChanged(currentItems))
-                },
-                selectedMoods = formState.sympathyMoodItems,
-                moodItems = moods
-            )
+                )
+            }
+
+            item {
+                PostToggle(
+                    subject = SubjectItem(
+                        stringResource(id = com.sowhat.designsystem.R.string.title_is_open),
+                        stringResource(
+                            id = com.sowhat.designsystem.R.string.subtitle_is_open
+                        )
+                    ),
+                    isActivated = true,
+                    isChecked = formState.isOpened,
+                    onCheckedChange = { updatedState ->
+                        onEvent(PostFormEvent.OpenChanged(updatedState))
+                    }
+                )
+            }
+
+            item {
+                PostToggle(
+                    subject = SubjectItem(
+                        stringResource(id = com.sowhat.designsystem.R.string.title_is_anonymous),
+                        stringResource(id = com.sowhat.designsystem.R.string.subtitle_is_anonymous)
+                    ),
+                    isActivated = formState.isOpened,
+                    isChecked = formState.isAnonymous,
+                    onCheckedChange = { updatedState ->
+                        onEvent(PostFormEvent.AnonymousChanged(updatedState))
+                    }
+                )
+            }
+
+            item {
+                SympathySelection(
+                    subjectItem = SubjectItem(
+                        stringResource(id = com.sowhat.designsystem.R.string.title_select_sympathy),
+                        stringResource(
+                            id = com.sowhat.designsystem.R.string.subtitle_select_sympathy
+                        )
+                    ),
+                    onClick = { changedItem ->
+                        val currentItems = formState.sympathyMoodItems.toMutableList()
+                        if (changedItem in currentItems) {
+                            currentItems.remove(changedItem)
+                        } else {
+                            currentItems.add(changedItem)
+                        }
+                        onEvent(PostFormEvent.SympathyItemsChanged(currentItems))
+                    },
+                    selectedMoods = formState.sympathyMoodItems,
+                    moodItems = moods
+                )
+            }
         }
     }
 }
