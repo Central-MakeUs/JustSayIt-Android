@@ -23,13 +23,13 @@ fun CurrentMoodSelection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = JustSayItTheme.Spacing.spaceMedium),
-        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceNormal)
+            .padding(vertical = JustSayItTheme.Spacing.spaceBase),
+        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceSm)
     ) {
         PostSubject(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = JustSayItTheme.Spacing.spaceMedium),
+                .padding(horizontal = JustSayItTheme.Spacing.spaceBase),
             title = subjectItem.title,
             subTitle = subjectItem.subTitle
         )
@@ -55,19 +55,19 @@ fun SympathySelection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = JustSayItTheme.Spacing.spaceMedium)
+            .padding(vertical = JustSayItTheme.Spacing.spaceBase)
             .composed {
                 if (!isActive) {
                     alpha(0.3f)
                 } else this
             },
-        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceNormal)
+        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceSm)
 
     ) {
         PostSubject(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = JustSayItTheme.Spacing.spaceMedium),
+                .padding(horizontal = JustSayItTheme.Spacing.spaceBase),
             isActivated = isActive,
             title = subjectItem.title,
             subTitle = subjectItem.subTitle

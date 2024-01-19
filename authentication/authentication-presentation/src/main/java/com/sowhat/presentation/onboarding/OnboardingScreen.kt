@@ -163,7 +163,7 @@ private fun OnboardingScreenContent(
     ) {
         val (logo, signIn, terms, loading) = createRefs()
         val topSpace = JustSayItTheme.Spacing.spaceExtraExtraLarge
-        val signInTermSpace = JustSayItTheme.Spacing.spaceExtraLarge
+        val signInTermSpace = JustSayItTheme.Spacing.spaceXXL
 
         Logo(
             modifier = Modifier

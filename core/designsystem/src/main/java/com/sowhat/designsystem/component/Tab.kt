@@ -59,7 +59,7 @@ fun Tab(
 fun RowScope.TabDivider() {
     Divider(
         modifier = Modifier
-            .padding(vertical = JustSayItTheme.Spacing.spaceSmall)
+            .padding(vertical = JustSayItTheme.Spacing.spaceXS)
             .width(0.5.dp)
             .fillMaxHeight(),
         color = Gray200
@@ -83,8 +83,8 @@ fun RowScope.TabTextButton(
         Text(
             modifier = Modifier
                 .padding(
-                    horizontal = JustSayItTheme.Spacing.spaceMedium,
-                    vertical = JustSayItTheme.Spacing.spaceSmall
+                    horizontal = JustSayItTheme.Spacing.spaceBase,
+                    vertical = JustSayItTheme.Spacing.spaceXS
                 ),
             text = tabItem,
             style = JustSayItTheme.Typography.detail2

@@ -28,9 +28,9 @@ fun PostText(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(JustSayItTheme.Spacing.spaceMedium),
+            .padding(JustSayItTheme.Spacing.spaceBase),
         verticalArrangement = Arrangement
-            .spacedBy(JustSayItTheme.Spacing.spaceNormal)
+            .spacedBy(JustSayItTheme.Spacing.spaceSm)
     ) {
         PostSubject(
             modifier = Modifier.fillMaxWidth(),

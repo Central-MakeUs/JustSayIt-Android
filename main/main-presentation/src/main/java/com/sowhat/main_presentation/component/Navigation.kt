@@ -49,7 +49,7 @@ fun BottomNavigationBar(
     ) {
 
         val (navigationBar, floatingButton) = createRefs()
-        val floatingButtonSpace = JustSayItTheme.Spacing.spaceMedium
+        val floatingButtonSpace = JustSayItTheme.Spacing.spaceBase
 
         NavigationBar(
             modifier = modifier

@@ -46,6 +46,8 @@
             <option value="$PROJECT_DIR$/post" />
             <option value="$PROJECT_DIR$/post/post-domain" />
             <option value="$PROJECT_DIR$/post/post-presentation" />
+            <option value="$PROJECT_DIR$/report" />
+            <option value="$PROJECT_DIR$/report/report-presentation" />
             <option value="$PROJECT_DIR$/user" />
             <option value="$PROJECT_DIR$/user/user-data" />
             <option value="$PROJECT_DIR$/user/user-domain" />

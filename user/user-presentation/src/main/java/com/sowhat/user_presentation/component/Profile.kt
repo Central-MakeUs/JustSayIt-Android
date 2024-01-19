@@ -30,8 +30,8 @@ fun UserProfile(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(all = JustSayItTheme.Spacing.spaceMedium),
-        horizontalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceNormal),
+            .padding(all = JustSayItTheme.Spacing.spaceBase),
+        horizontalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceSm),
         verticalAlignment = Alignment.CenterVertically
     ) {
         SquaredImageContainer(
@@ -57,7 +57,7 @@ private fun UserInfo(
 ) {
     Column(
         modifier = modifier
-            .padding(vertical = JustSayItTheme.Spacing.spaceLarge),
+            .padding(vertical = JustSayItTheme.Spacing.spaceMd),
         verticalArrangement = Arrangement.Center
     ) {
         Text(
@@ -69,7 +69,7 @@ private fun UserInfo(
 
         Spacer(
             modifier = Modifier
-                .height(JustSayItTheme.Spacing.spaceSmall)
+                .height(JustSayItTheme.Spacing.spaceXS)
         )
 
         PlatformInfo(platform = platformDrawable, email = email)
@@ -92,7 +92,7 @@ fun PlatformInfo(
 
         Spacer(
             modifier = Modifier
-                .width(JustSayItTheme.Spacing.spaceExtraSmall)
+                .width(JustSayItTheme.Spacing.spaceXXS)
         )
         
         Text(

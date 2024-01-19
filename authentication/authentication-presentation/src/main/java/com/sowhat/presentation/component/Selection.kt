@@ -26,8 +26,8 @@ fun Selection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(JustSayItTheme.Spacing.spaceMedium),
-        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceNormal)
+            .padding(JustSayItTheme.Spacing.spaceBase),
+        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceSm)
     ) {
         DefaultHeader(title = title)
 

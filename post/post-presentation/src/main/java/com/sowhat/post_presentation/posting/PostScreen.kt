@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,17 +25,13 @@ import androidx.navigation.compose.rememberNavController
 import com.sowhat.common.model.PostFormEvent
 import com.sowhat.common.model.PostFormState
 import com.sowhat.common.model.PostingEvent
-import com.sowhat.common.model.RegistrationFormEvent
-import com.sowhat.common.model.SignUpEvent
 import com.sowhat.common.util.ObserveEvents
-import com.sowhat.common.util.getFile
 import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.component.AlertDialog
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.DefaultButtonFull
 import com.sowhat.designsystem.theme.JustSayItTheme
-import com.sowhat.post_presentation.R
 import com.sowhat.post_presentation.common.SubjectItem
 import com.sowhat.post_presentation.common.rememberMoodItems
 import com.sowhat.post_presentation.component.CurrentMoodSelection
@@ -45,7 +40,6 @@ import com.sowhat.post_presentation.component.PostText
 import com.sowhat.post_presentation.component.PostToggle
 import com.sowhat.post_presentation.component.SympathySelection
 import com.sowhat.post_presentation.navigation.navigateBack
-import javax.security.auth.Subject
 
 @Composable
 fun PostRoute(
@@ -135,7 +129,7 @@ fun PostScreen(
         bottomBar = {
             DefaultButtonFull(
                 modifier = Modifier
-                    .padding(JustSayItTheme.Spacing.spaceMedium),
+                    .padding(JustSayItTheme.Spacing.spaceBase),
                 text = stringResource(com.sowhat.designsystem.R.string.button_post),
                 isActive = isValid,
                 onClick = { onSubmit() }
