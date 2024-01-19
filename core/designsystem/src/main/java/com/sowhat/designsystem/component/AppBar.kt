@@ -331,6 +331,74 @@ fun AppBarFeed(
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppBarMyPage(
+    modifier: Modifier = Modifier,
+    currentDropdownItem: DropdownItem,
+    dropdownItems: List<DropdownItem>,
+    isDropdownExpanded: Boolean,
+    onDropdownHeaderClick: (Boolean) -> Unit,
+    onDropdownMenuChange: (DropdownItem) -> Unit,
+    tabItems: List<String>,
+    selectedTabItem: String,
+    selectedTabItemColor: Color,
+    unselectedTabItemColor: Color,
+    onSelectedTabItemChange: (String) -> Unit,
+) {
+
+    Box(
+        modifier
+            .fillMaxWidth()
+            .height(48.dp),
+//        .bottomBorder(
+//            strokeWidth = 1.dp,
+//            color = Gray500
+//        ),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        CenterAlignedTopAppBar(
+            modifier = Modifier,
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = JustSayItTheme.Colors.mainSurface,
+            ),
+            title = {},
+            navigationIcon = {
+                DropdownHeader(
+                    currentMenu = currentDropdownItem,
+                    isDropdownExpanded = isDropdownExpanded,
+                    onClick = onDropdownHeaderClick
+                )
+
+                DropdownContents(
+                    modifier = Modifier.width(92.dp),
+                    isVisible = isDropdownExpanded,
+                    items = dropdownItems,
+                    onDismiss = { onDropdownHeaderClick(!isDropdownExpanded) },
+                    onItemClick = onDropdownMenuChange
+                )
+            },
+            actions = {
+                Tab(
+                    selectedItem = selectedTabItem,
+                    items = tabItems,
+                    selectedColor = selectedTabItemColor,
+                    unselectedColor = unselectedTabItemColor,
+                    onSelectedItemChange = onSelectedTabItemChange
+                )
+            },
+        )
+
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = JustSayItTheme.Colors.subBackground
+        )
+    }
+
+
+}
+
 @Composable
 private fun EmotionButtons(
     emotions: List<Emotion>,

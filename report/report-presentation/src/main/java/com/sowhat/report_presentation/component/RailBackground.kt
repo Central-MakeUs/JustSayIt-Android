@@ -1,5 +1,6 @@
 package com.sowhat.report_presentation.component
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,7 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sowhat.designsystem.common.DropdownItem
 import com.sowhat.designsystem.common.MoodItem
+import com.sowhat.designsystem.component.AppBarFeed
+import com.sowhat.designsystem.component.AppBarMyPage
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.JustSayItTheme
 
@@ -77,6 +81,7 @@ fun Rail(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
 fun RailBackgroundPreview() {
@@ -106,7 +111,6 @@ fun RailBackgroundPreview() {
             contentPadding = PaddingValues(vertical = JustSayItTheme.Spacing.spaceBase)
         ) {
             items(count = 20) { index ->
-
                 val item = when {
                     index % 4 == 0 ->  MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_happy_24, postData = "HAPPY",
                         title = "행복", selectedTextColor = Color.White,
