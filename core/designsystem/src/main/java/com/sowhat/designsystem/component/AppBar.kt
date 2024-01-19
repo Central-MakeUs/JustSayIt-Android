@@ -1,7 +1,12 @@
 package com.sowhat.designsystem.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,13 +19,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.TopAppBarState
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +48,7 @@ import com.sowhat.designsystem.common.ActionButtonItem
 import com.sowhat.designsystem.common.DropdownItem
 import com.sowhat.designsystem.common.Emotion
 import com.sowhat.designsystem.common.bottomBorder
+import com.sowhat.designsystem.common.isScrollingUp
 import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
 
@@ -265,6 +275,7 @@ fun AppBarHome(
 @Composable
 fun AppBarFeed(
     modifier: Modifier = Modifier,
+    lazyListState: LazyListState,
     currentDropdownItem: DropdownItem,
     dropdownItems: List<DropdownItem>,
     isDropdownExpanded: Boolean,
@@ -274,16 +285,18 @@ fun AppBarFeed(
     selectedTabItem: String,
     selectedTabItemColor: Color,
     unselectedTabItemColor: Color,
-    onSelectedTabItemChange: (String) -> Unit
+    onSelectedTabItemChange: (String) -> Unit,
 ) {
-    Box(modifier
-        .fillMaxWidth()
-        .height(48.dp)
-        .bottomBorder(
-            strokeWidth = 1.dp,
-            color = JustSayItTheme.Colors.subSurface
-        ),
-        contentAlignment = Alignment.Center
+
+    Box(
+        modifier
+            .fillMaxWidth()
+            .height(48.dp),
+//        .bottomBorder(
+//            strokeWidth = 1.dp,
+//            color = Gray500
+//        ),
+        contentAlignment = Alignment.BottomCenter
     ) {
         CenterAlignedTopAppBar(
             modifier = Modifier,
@@ -317,7 +330,14 @@ fun AppBarFeed(
             },
         )
 
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = JustSayItTheme.Colors.subBackground
+        )
     }
+
+
 }
 
 @Composable
@@ -356,6 +376,7 @@ class ScrollBehavior: TopAppBarScrollBehavior {
     override val state: TopAppBarState = TODO()
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun AppBarPreview() {
@@ -408,7 +429,8 @@ fun AppBarPreview() {
             selectedTabItem = currentTabItem,
             selectedTabItemColor = JustSayItTheme.Colors.mainTypo,
             unselectedTabItemColor = Gray500,
-            onSelectedTabItemChange = { tabItem -> currentTabItem = tabItem }
+            onSelectedTabItemChange = { tabItem -> currentTabItem = tabItem },
+            lazyListState = rememberLazyListState()
         )
     }
 }

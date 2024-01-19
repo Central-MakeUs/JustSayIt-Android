@@ -2,6 +2,7 @@ package com.sowhat.designsystem.component
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -11,8 +12,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -120,11 +123,22 @@ fun TimelineFeedImages(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio((33 / 13).toFloat())
+            .aspectRatio(1f)
     ) {
         when (models.size) {
-            in 1..3 -> {
-                Row(
+            0 -> {}
+            1 -> {
+                models.forEach {
+                    TimelineFeedImageContainer(
+                        // 간격이 동일하게 주어지도록 하기 위함... 이 조치를 취해주지 않으면 사진들이 화면을 벗어나서 차지
+                        modifier = Modifier
+                            .padding(JustSayItTheme.Spacing.spaceTiny),
+                        model = it
+                    )
+                }
+            }
+            2 -> {
+                Column(
                     modifier = Modifier,
                 ) {
                     models.forEach {
@@ -132,8 +146,31 @@ fun TimelineFeedImages(
                             modifier = Modifier
                                 .padding(JustSayItTheme.Spacing.spaceTiny)
                                 // 간격이 동일하게 주어지도록 하기 위함... 이 조치를 취해주지 않으면 사진들이 화면을 벗어나서 차지
-                                .weight(1f),
+                                .weight(2f),
                             model = it
+                        )
+                    }
+                }
+            }
+            3 -> {
+                LazyVerticalGrid(
+                    modifier = Modifier,
+                    columns = GridCells.Fixed(2)
+                ) {
+                    itemsIndexed(
+                        items = models,
+                        span = { index: Int, _: String ->
+                            val span = if (index == 0) 2 else 1
+                            GridItemSpan(span)
+                        }
+                    ) {index, item ->
+                        val ratio = if (index == 0) 2f else 1f
+                        
+                        TimelineFeedImageContainer(
+                            modifier = Modifier
+                                .padding(JustSayItTheme.Spacing.spaceTiny)
+                                .aspectRatio(ratio),
+                            model = item
                         )
                     }
                 }
@@ -147,7 +184,7 @@ fun TimelineFeedImages(
                         TimelineFeedImageContainer(
                             modifier = Modifier
                                 .padding(JustSayItTheme.Spacing.spaceTiny)
-                                .aspectRatio((33 / 13).toFloat()),
+                                .aspectRatio(1f),
                             model = it
                         )
                     }
@@ -160,17 +197,38 @@ fun TimelineFeedImages(
 @Preview
 @Composable
 fun ProfileImageContainerPreview() {
-    SquaredImageContainer(
-        modifier = Modifier.size(36.dp),
-        model = "https://i.stack.imgur.com/6C9Qv.png"
-    )
-    
-    Spacer(modifier = Modifier.height(16.dp))
-    
-    TimelineFeedImages(models = listOf(
-        "https://i.stack.imgur.com/6C9Qv.png",
-        "https://i.stack.imgur.com/6C9Qv.png",
-        "https://i.stack.imgur.com/6C9Qv.png",
-        "https://i.stack.imgur.com/6C9Qv.png",
-    ))
+    Column {
+        SquaredImageContainer(
+            modifier = Modifier.size(36.dp),
+            model = "https://i.stack.imgur.com/6C9Qv.png"
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        TimelineFeedImages(models = listOf(
+            "https://i.stack.imgur.com/6C9Qv.png",
+        ))
+
+
+        TimelineFeedImages(models = listOf(
+            "https://i.stack.imgur.com/6C9Qv.png",
+            "https://i.stack.imgur.com/6C9Qv.png",
+        ))
+
+        TimelineFeedImages(models = listOf(
+            "https://i.stack.imgur.com/6C9Qv.png",
+            "https://i.stack.imgur.com/6C9Qv.png",
+            "https://i.stack.imgur.com/6C9Qv.png",
+        ))
+
+        TimelineFeedImages(models = listOf(
+            "https://i.stack.imgur.com/6C9Qv.png",
+            "https://i.stack.imgur.com/6C9Qv.png",
+            "https://i.stack.imgur.com/6C9Qv.png",
+            "https://i.stack.imgur.com/6C9Qv.png",
+        ))
+    }
+
+
+
 }

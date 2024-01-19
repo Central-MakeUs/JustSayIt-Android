@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sowhat.designsystem.component.ImageContainer
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -30,6 +31,7 @@ import com.sowhat.designsystem.theme.JustSayItTheme
 fun PostTextField(
     modifier: Modifier = Modifier,
     text: String,
+    placeholder: String,
     onTextChange: (String) -> Unit,
     maxLength: Int
 ) {
@@ -94,5 +96,5 @@ fun PostTextFieldPreview() {
 
     val maxLength = 300
 
-    PostTextField(text = text, onTextChange = { text = it }, maxLength = maxLength)
+    PostTextField(text = text, onTextChange = { text = it }, maxLength = maxLength, placeholder = "내용 입력")
 }

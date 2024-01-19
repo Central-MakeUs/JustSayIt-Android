@@ -21,6 +21,7 @@ fun PostText(
     modifier: Modifier = Modifier,
     subject: SubjectItem,
     text: String,
+    placeholder: String,
     onTextChange: (String) -> Unit,
     maxLength: Int
 ) {
@@ -39,6 +40,7 @@ fun PostText(
 
         PostTextField(
             text = text,
+            placeholder = placeholder,
             onTextChange = onTextChange,
             maxLength = maxLength
         )
@@ -57,6 +59,7 @@ fun PostTextPreview() {
         subject = SubjectItem("글쓰기", "글을 씁니다."),
         text = text,
         onTextChange = { text = it },
-        maxLength = 300
+        maxLength = 300,
+        placeholder = "내용을 작성해주세요."
     )
 }

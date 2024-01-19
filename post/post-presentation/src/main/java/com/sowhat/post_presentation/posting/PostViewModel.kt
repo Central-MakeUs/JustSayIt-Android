@@ -43,7 +43,7 @@ class PostViewModel @Inject constructor(
             }
             is PostFormEvent.ImageListUpdated -> {
                 formState = formState.copy(
-                    images = event.images
+                    images = event.images ?: emptyList()
                 )
             }
             is PostFormEvent.PostTextChanged -> {
@@ -64,6 +64,11 @@ class PostViewModel @Inject constructor(
             is PostFormEvent.SympathyItemsChanged -> {
                 formState = formState.copy(
                     sympathyMoodItems = event.sympathyItems
+                )
+            }
+            is PostFormEvent.DialogVisibilityChanged -> {
+                formState = formState.copy(
+                    isDialogVisible = event.isVisible
                 )
             }
         }

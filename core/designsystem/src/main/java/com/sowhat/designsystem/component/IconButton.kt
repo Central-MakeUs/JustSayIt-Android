@@ -12,10 +12,12 @@ import com.sowhat.designsystem.R
 
 @Composable
 fun DefaultIconButton(
+    modifier: Modifier = Modifier,
     iconDrawable: Int,
     onClick: () -> Unit
 ) {
     IconButton(
+        modifier = modifier,
         onClick = onClick
     ) {
         Icon(

@@ -28,6 +28,7 @@
     <string name="placeholder_dob_year">YYYY</string>
     <string name="placeholder_dob_month">MM</string>
     <string name="placeholder_dob_day">DD</string>
+    <string name="placeholder_post">내용을 작성해주세요.</string>
 
     <string name="button_start">시작하기</string>
     <string name="button_post">게시하기</string>
@@ -38,4 +39,9 @@
     <string name="error_server">서버 에러</string>
 
     <string name="appbar_post">게시글 쓰기</string>
+    
+    <string name="dialog_title_posting">작성중인 글이 있어요.</string>
+    <string name="dialog_subtitle_posting">그만 작성하기를 누르면\n작성중인 글은 저장되지 않아요.</string>
+    <string name="dialog_button_continue">계속 작성하기</string>
+    <string name="dialog_button_stop">그만 작성하기</string>
 </resources>
