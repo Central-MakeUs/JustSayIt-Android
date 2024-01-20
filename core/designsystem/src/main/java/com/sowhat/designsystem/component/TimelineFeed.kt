@@ -20,7 +20,7 @@ fun TimelineFeed(
     ConstraintLayout(
         modifier = modifier
             .wrapContentHeight()
-            .padding(horizontal = JustSayItTheme.Spacing.spaceNormal)
+            .padding(horizontal = JustSayItTheme.Spacing.spaceSm)
     ) {
 
     }

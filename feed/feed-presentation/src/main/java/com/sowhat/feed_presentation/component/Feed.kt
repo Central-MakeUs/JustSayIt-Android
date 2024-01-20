@@ -28,7 +28,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.sowhat.designsystem.common.MoodItem
-import com.sowhat.designsystem.common.bottomBorder
 import com.sowhat.designsystem.component.ChipMid
 import com.sowhat.designsystem.component.DefaultIconButton
 import com.sowhat.designsystem.component.ImageContainer
@@ -56,12 +55,12 @@ fun Feed(
         modifier = modifier
             .fillMaxWidth()
             .background(color = JustSayItTheme.Colors.mainBackground)
-            .padding(vertical = JustSayItTheme.Spacing.spaceMedium),
+            .padding(vertical = JustSayItTheme.Spacing.spaceBase),
         verticalArrangement = Arrangement
-            .spacedBy(JustSayItTheme.Spacing.spaceMedium)
+            .spacedBy(JustSayItTheme.Spacing.spaceBase)
     ) {
         FeedProfile(
-            modifier = Modifier.padding(start = JustSayItTheme.Spacing.spaceMedium),
+            modifier = Modifier.padding(start = JustSayItTheme.Spacing.spaceBase),
             profileUrl = profileUrl,
             nickname = nickname,
             date = date,
@@ -71,9 +70,9 @@ fun Feed(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = JustSayItTheme.Spacing.spaceMedium),
+                .padding(horizontal = JustSayItTheme.Spacing.spaceBase),
             verticalArrangement = Arrangement
-                .spacedBy(JustSayItTheme.Spacing.spaceMedium)
+                .spacedBy(JustSayItTheme.Spacing.spaceBase)
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -135,7 +134,7 @@ fun FeedProfileInfo(
     ) {
         FeedProfileImage(modifier = Modifier.size(24.dp), model = profileUrl)
         
-        Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceSmall))
+        Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceXS))
 
         Text(
             text = nickname,
@@ -143,7 +142,7 @@ fun FeedProfileInfo(
             color = JustSayItTheme.Colors.mainTypo
         )
 
-        Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceExtraSmall))
+        Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceXXS))
 
         Text(
             text = date,
@@ -203,7 +202,7 @@ private fun UnselectedList(
             .zIndex(0.5f),
         horizontalArrangement = Arrangement.spacedBy(
             alignment = Alignment.End,
-            space = JustSayItTheme.Spacing.spaceSmall
+            space = JustSayItTheme.Spacing.spaceXS
         )
     ) {
         availableItems.forEachIndexed { index, item ->

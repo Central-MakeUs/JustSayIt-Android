@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,13 +21,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.common.noRippleClickable
-import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.component.ImageContainer
 import com.sowhat.designsystem.component.SquaredIconButton
-import com.sowhat.designsystem.component.SquaredImageContainer
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.JustSayItTheme
-import com.sowhat.post_presentation.R
 
 @Composable
 fun ImageSelection(
@@ -42,12 +38,12 @@ fun ImageSelection(
             .fillMaxWidth()
             .height(72.dp)
             .padding(
-                start = JustSayItTheme.Spacing.spaceMedium,
-                end = JustSayItTheme.Spacing.spaceMedium,
-                bottom = JustSayItTheme.Spacing.spaceMedium,
+                start = JustSayItTheme.Spacing.spaceBase,
+                end = JustSayItTheme.Spacing.spaceBase,
+                bottom = JustSayItTheme.Spacing.spaceBase,
             ),
         horizontalArrangement = Arrangement
-            .spacedBy(JustSayItTheme.Spacing.spaceExtraSmall)
+            .spacedBy(JustSayItTheme.Spacing.spaceXXS)
     ) {
         SquaredIconButton(
             modifier = Modifier
@@ -97,7 +93,7 @@ fun SquaredPostImageContainer(
         contentAlignment = Alignment.TopEnd,
     ) {
         Image(
-            modifier = Modifier.padding(JustSayItTheme.Spacing.spaceExtraSmall),
+            modifier = Modifier.padding(JustSayItTheme.Spacing.spaceXXS),
             painter = painterResource(id = com.sowhat.designsystem.R.drawable.ic_close_20),
             contentDescription = "delete"
         )

@@ -40,7 +40,7 @@ private fun MenuItems(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceExtraSmall)
+        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceXXS)
     ) {
         menus.forEach { menuItem ->
             if (menuItem.trailingIcon != null && menuItem.trailingText == null) {

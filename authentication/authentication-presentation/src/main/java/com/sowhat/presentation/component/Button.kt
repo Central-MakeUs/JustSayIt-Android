@@ -34,10 +34,10 @@ fun DescButton(
         DefaultButtonFull(
             modifier = Modifier
                 .padding(
-                    top = JustSayItTheme.Spacing.spaceSmall,
-                    bottom = JustSayItTheme.Spacing.spaceLarge,
-                    start = JustSayItTheme.Spacing.spaceLarge,
-                    end = JustSayItTheme.Spacing.spaceLarge,
+                    top = JustSayItTheme.Spacing.spaceXS,
+                    bottom = JustSayItTheme.Spacing.spaceMd,
+                    start = JustSayItTheme.Spacing.spaceMd,
+                    end = JustSayItTheme.Spacing.spaceMd,
                 ),
             text = stringResource(id = R.string.button_start),
             isActive = isValid,

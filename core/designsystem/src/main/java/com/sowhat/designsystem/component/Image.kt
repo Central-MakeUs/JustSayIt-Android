@@ -1,9 +1,9 @@
 package com.sowhat.designsystem.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -27,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.JustSayItTheme
 
 @Composable
@@ -70,7 +72,7 @@ fun ImageContainer(
         modifier = modifier
             .border(width = borderWidth, color = borderColor, shape = shape)
             .clip(shape)
-
+            .background(Gray300)
     ) {
         AsyncImage(
             modifier = Modifier.fillMaxSize(),
@@ -197,36 +199,39 @@ fun TimelineFeedImages(
 @Preview
 @Composable
 fun ProfileImageContainerPreview() {
-    Column {
-        SquaredImageContainer(
-            modifier = Modifier.size(36.dp),
-            model = "https://i.stack.imgur.com/6C9Qv.png"
-        )
+    LazyColumn {
+        item {
+            SquaredImageContainer(
+                modifier = Modifier.size(36.dp),
+                model = "https://i.stack.imgur.com/6C9Qv.png"
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        TimelineFeedImages(models = listOf(
-            "https://i.stack.imgur.com/6C9Qv.png",
-        ))
+            TimelineFeedImages(models = listOf(
+                "https://i.stack.imgur.com/6C9Qv.png",
+            ))
 
 
-        TimelineFeedImages(models = listOf(
-            "https://i.stack.imgur.com/6C9Qv.png",
-            "https://i.stack.imgur.com/6C9Qv.png",
-        ))
+            TimelineFeedImages(models = listOf(
+                "https://i.stack.imgur.com/6C9Qv.png",
+                "https://i.stack.imgur.com/6C9Qv.png",
+            ))
 
-        TimelineFeedImages(models = listOf(
-            "https://i.stack.imgur.com/6C9Qv.png",
-            "https://i.stack.imgur.com/6C9Qv.png",
-            "https://i.stack.imgur.com/6C9Qv.png",
-        ))
+            TimelineFeedImages(models = listOf(
+                "https://i.stack.imgur.com/6C9Qv.png",
+                "https://i.stack.imgur.com/6C9Qv.png",
+                "https://i.stack.imgur.com/6C9Qv.png",
+            ))
 
-        TimelineFeedImages(models = listOf(
-            "https://i.stack.imgur.com/6C9Qv.png",
-            "https://i.stack.imgur.com/6C9Qv.png",
-            "https://i.stack.imgur.com/6C9Qv.png",
-            "https://i.stack.imgur.com/6C9Qv.png",
-        ))
+            TimelineFeedImages(models = listOf(
+                "https://i.stack.imgur.com/6C9Qv.png",
+                "https://i.stack.imgur.com/6C9Qv.png",
+                "https://i.stack.imgur.com/6C9Qv.png",
+                "https://i.stack.imgur.com/6C9Qv.png",
+            ))
+        }
+
     }
 
 

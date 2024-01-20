@@ -48,7 +48,7 @@ fun SignInHeader(
         Row(
             modifier = Modifier
                 .fillMaxWidth(0.6f)
-                .padding(vertical = JustSayItTheme.Spacing.spaceLarge),
+                .padding(vertical = JustSayItTheme.Spacing.spaceMd),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {

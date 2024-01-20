@@ -71,11 +71,11 @@ fun Chip(
         Row(
             modifier = modifier
                 .padding(
-                    horizontal = JustSayItTheme.Spacing.spaceMedium,
-                    vertical = JustSayItTheme.Spacing.spaceSmall
+                    horizontal = JustSayItTheme.Spacing.spaceBase,
+                    vertical = JustSayItTheme.Spacing.spaceXS
                 ),
             horizontalArrangement = Arrangement
-                .spacedBy(JustSayItTheme.Spacing.spaceSmall),
+                .spacedBy(JustSayItTheme.Spacing.spaceXS),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -132,11 +132,11 @@ fun MoodChip(
         Row(
             modifier = modifier
                 .padding(
-                    horizontal = JustSayItTheme.Spacing.spaceNormal,
-                    vertical = JustSayItTheme.Spacing.spaceExtraSmall
+                    horizontal = JustSayItTheme.Spacing.spaceSm,
+                    vertical = JustSayItTheme.Spacing.spaceXXS
                 ),
             horizontalArrangement = Arrangement
-                .spacedBy(JustSayItTheme.Spacing.spaceSmall),
+                .spacedBy(JustSayItTheme.Spacing.spaceXS),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -215,7 +215,7 @@ fun ChipSmall(
         isSelected = isSelected,
         modifier = modifier,
         drawableStart = moodItem.drawable,
-        drawableSize = JustSayItTheme.Spacing.spaceLarge,
+        drawableSize = JustSayItTheme.Spacing.spaceMd,
         textStyle = JustSayItTheme.Typography.detail1,
         title = moodItem.title,
         onClick = onClick,

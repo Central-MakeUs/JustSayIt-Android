@@ -5,7 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,7 +21,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sowhat.designsystem.component.ImageContainer
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -50,7 +48,7 @@ fun PostTextField(
        Column(
            modifier = Modifier
                .fillMaxSize()
-               .padding(JustSayItTheme.Spacing.spaceMedium),
+               .padding(JustSayItTheme.Spacing.spaceBase),
            verticalArrangement = Arrangement.SpaceBetween
        ) {
            BasicTextField(

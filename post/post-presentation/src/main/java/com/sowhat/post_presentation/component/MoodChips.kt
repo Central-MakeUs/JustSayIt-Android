@@ -1,21 +1,15 @@
 package com.sowhat.post_presentation.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.alpha
@@ -24,8 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.sowhat.designsystem.component.ChipMedium
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.designsystem.common.MoodItem
-import com.sowhat.post_presentation.R
-import com.sowhat.post_presentation.common.SubjectItem
 
 @Composable
 fun MoodChips(
@@ -37,10 +29,10 @@ fun MoodChips(
     LazyRow(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement
-            .spacedBy(JustSayItTheme.Spacing.spaceExtraSmall)
+            .spacedBy(JustSayItTheme.Spacing.spaceXXS)
     ) {
         item {
-            Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceMedium))
+            Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceBase))
         }
 
         itemsIndexed(moodItems) { _, moodItem ->
@@ -55,7 +47,7 @@ fun MoodChips(
         }
 
         item {
-            Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceMedium))
+            Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceBase))
         }
     }
 }
@@ -77,10 +69,10 @@ fun MoodChips(
                 } else this
             },
         horizontalArrangement = Arrangement
-            .spacedBy(JustSayItTheme.Spacing.spaceExtraSmall)
+            .spacedBy(JustSayItTheme.Spacing.spaceXXS)
     ) {
         item {
-            Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceMedium))
+            Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceBase))
         }
 
         itemsIndexed(moodItems) { _, moodItem ->
@@ -96,7 +88,7 @@ fun MoodChips(
         }
 
         item {
-            Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceMedium))
+            Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceBase))
         }
     }
 }

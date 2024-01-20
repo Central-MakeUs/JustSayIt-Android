@@ -1,6 +1,5 @@
 package com.sowhat.designsystem.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -45,7 +44,7 @@ fun AlertDialog(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(JustSayItTheme.Spacing.spaceLarge),
+                    .padding(JustSayItTheme.Spacing.spaceMd),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(28.dp)
             ) {
@@ -73,7 +72,7 @@ private fun DialogButtons(
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement
-            .spacedBy(JustSayItTheme.Spacing.spaceSmall)
+            .spacedBy(JustSayItTheme.Spacing.spaceXS)
     ) {
         DefaultButtonFull(
             modifier = Modifier.weight(1f),
@@ -100,7 +99,7 @@ private fun DialogText(title: String, subTitle: String) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceMedium)
+        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceBase)
     ) {
         Text(
             text = title,

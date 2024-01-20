@@ -36,8 +36,8 @@ private fun Title(title: String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = JustSayItTheme.Spacing.spaceMedium,
-                    vertical = JustSayItTheme.Spacing.spaceSmall
+                    horizontal = JustSayItTheme.Spacing.spaceBase,
+                    vertical = JustSayItTheme.Spacing.spaceXS
                 ),
             text = title,
             style = JustSayItTheme.Typography.headlineB,
@@ -56,8 +56,8 @@ private fun Subtitle(subTitle: String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = JustSayItTheme.Spacing.spaceMedium,
-                    vertical = JustSayItTheme.Spacing.spaceSmall
+                    horizontal = JustSayItTheme.Spacing.spaceBase,
+                    vertical = JustSayItTheme.Spacing.spaceXS
                 ),
             text = subTitle,
             style = JustSayItTheme.Typography.body4,

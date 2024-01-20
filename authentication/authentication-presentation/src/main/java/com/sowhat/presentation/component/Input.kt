@@ -23,8 +23,8 @@ fun DobTextField(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(JustSayItTheme.Spacing.spaceMedium),
-        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceNormal)
+            .padding(JustSayItTheme.Spacing.spaceBase),
+        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceSm)
     ) {
         DefaultHeader(title = title)
 
@@ -32,7 +32,7 @@ fun DobTextField(
             modifier = Modifier.fillMaxWidth()
         ) {
             items.forEachIndexed { index, item ->
-                if (index != 0) Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceExtraSmall))
+                if (index != 0) Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceXXS))
 
                 OutlinedDefaultTextField(
                     modifier = Modifier.weight(1f),

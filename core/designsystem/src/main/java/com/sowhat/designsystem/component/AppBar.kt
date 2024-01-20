@@ -1,12 +1,7 @@
 package com.sowhat.designsystem.component
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,20 +11,17 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.TopAppBarState
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,7 +40,6 @@ import com.sowhat.designsystem.common.ActionButtonItem
 import com.sowhat.designsystem.common.DropdownItem
 import com.sowhat.designsystem.common.Emotion
 import com.sowhat.designsystem.common.bottomBorder
-import com.sowhat.designsystem.common.isScrollingUp
 import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
 
@@ -230,7 +221,7 @@ fun AppBarHome(
                 ) {
                     Text(
                         modifier = Modifier
-                            .padding(horizontal = JustSayItTheme.Spacing.spaceNormal),
+                            .padding(horizontal = JustSayItTheme.Spacing.spaceSm),
                         text = title,
                         style = JustSayItTheme.Typography.headlineB,
                         textAlign = TextAlign.Center
@@ -340,6 +331,74 @@ fun AppBarFeed(
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppBarMyPage(
+    modifier: Modifier = Modifier,
+    currentDropdownItem: DropdownItem,
+    dropdownItems: List<DropdownItem>,
+    isDropdownExpanded: Boolean,
+    onDropdownHeaderClick: (Boolean) -> Unit,
+    onDropdownMenuChange: (DropdownItem) -> Unit,
+    tabItems: List<String>,
+    selectedTabItem: String,
+    selectedTabItemColor: Color,
+    unselectedTabItemColor: Color,
+    onSelectedTabItemChange: (String) -> Unit,
+) {
+
+    Box(
+        modifier
+            .fillMaxWidth()
+            .height(48.dp),
+//        .bottomBorder(
+//            strokeWidth = 1.dp,
+//            color = Gray500
+//        ),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        CenterAlignedTopAppBar(
+            modifier = Modifier,
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = JustSayItTheme.Colors.mainSurface,
+            ),
+            title = {},
+            navigationIcon = {
+                DropdownHeader(
+                    currentMenu = currentDropdownItem,
+                    isDropdownExpanded = isDropdownExpanded,
+                    onClick = onDropdownHeaderClick
+                )
+
+                DropdownContents(
+                    modifier = Modifier.width(92.dp),
+                    isVisible = isDropdownExpanded,
+                    items = dropdownItems,
+                    onDismiss = { onDropdownHeaderClick(!isDropdownExpanded) },
+                    onItemClick = onDropdownMenuChange
+                )
+            },
+            actions = {
+                Tab(
+                    selectedItem = selectedTabItem,
+                    items = tabItems,
+                    selectedColor = selectedTabItemColor,
+                    unselectedColor = unselectedTabItemColor,
+                    onSelectedItemChange = onSelectedTabItemChange
+                )
+            },
+        )
+
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = JustSayItTheme.Colors.subBackground
+        )
+    }
+
+
+}
+
 @Composable
 private fun EmotionButtons(
     emotions: List<Emotion>,
@@ -350,8 +409,8 @@ private fun EmotionButtons(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                horizontal = JustSayItTheme.Spacing.spaceExtraLarge,
-                vertical = JustSayItTheme.Spacing.spaceSmall
+                horizontal = JustSayItTheme.Spacing.spaceXXL,
+                vertical = JustSayItTheme.Spacing.spaceXS
             ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically

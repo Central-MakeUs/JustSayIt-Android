@@ -11,16 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.sowhat.common.model.UiState
@@ -97,7 +93,7 @@ private fun SettingScreenContent(
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = JustSayItTheme.Spacing.spaceNormal),
+                .padding(vertical = JustSayItTheme.Spacing.spaceSm),
             thickness = 0.5.dp,
             color = JustSayItTheme.Colors.subBackground
         )
@@ -144,7 +140,7 @@ private fun ProfileSection(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = JustSayItTheme.Spacing.spaceMedium),
+                .padding(horizontal = JustSayItTheme.Spacing.spaceBase),
             contentAlignment = Alignment.Center
         ) {
             DefaultButtonFull(
@@ -155,7 +151,7 @@ private fun ProfileSection(
             )
         }
 
-        Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceMedium))
+        Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))
     }
 }
 
