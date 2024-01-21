@@ -13,7 +13,8 @@ data class JustSayItColor(
     val angry: Color,
     val happy: Color,
     val surprise: Color,
-    val sad: Color
+    val sad: Color,
+    val inactiveTypo: Color,
 )
 
 val Gray50 = Color(0xFFFAFAFA)

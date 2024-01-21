@@ -7,6 +7,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -31,9 +32,7 @@ fun MainScreen(
     val mainNavController = rememberNavController()
     val scope = rememberCoroutineScope()
 
-    val menus = listOf(
-        MenuContent.Home, MenuContent.Feed
-    )
+    val menus = listOf(MenuContent.Home, MenuContent.My, MenuContent.Notification, MenuContent.Setting)
 
     val centerNavItem = CenterNavItemContent(
         centerNavItemIconTint = JustSayItTheme.Colors.mainBackground,
@@ -49,8 +48,12 @@ fun MainScreen(
                 bottomNavItemList = menus,
                 centerNavItem = centerNavItem,
                 bottomNavBackground = JustSayItTheme.Colors.mainSurface,
-                onNavItemClick = { },
-                onCenterNavItemClick = { }
+                onNavItemClick = {
+
+                },
+                onCenterNavItemClick = {
+                    
+                }
             )
         }
     ) { paddingValues ->
@@ -60,4 +63,11 @@ fun MainScreen(
 
         }
     }
+}
+
+@Preview
+@Composable
+fun MainScreenPreview() {
+    val navController = rememberNavController()
+    MainScreen(appNavController = navController)
 }

@@ -1,19 +1,30 @@
 package com.sowhat.main_presentation.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,6 +35,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.NAVIGATION_HEIGHT
+import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.main_presentation.common.CenterNavItemContent
@@ -46,10 +58,11 @@ fun BottomNavigationBar(
         modifier = Modifier
             .fillMaxWidth()
             .height(NAVIGATION_HEIGHT.dp)
+            .background(Color.Transparent)
     ) {
 
         val (navigationBar, floatingButton) = createRefs()
-        val floatingButtonSpace = JustSayItTheme.Spacing.spaceBase
+        val floatingButtonSpace = 6.dp
 
         NavigationBar(
             modifier = modifier
@@ -60,6 +73,7 @@ fun BottomNavigationBar(
                 }
                 .fillMaxWidth()
                 .fillMaxHeight(0.8f)
+                .background(JustSayItTheme.Colors.mainBackground)
                 .border(width = 0.5.dp, color = Gray300),
             containerColor = bottomNavBackground
 //            containerColor = JustSayItTheme.Colors.mainSurface,
@@ -68,7 +82,7 @@ fun BottomNavigationBar(
             bottomNavItemList.forEachIndexed { index, navItem ->
                 val isSelected = currentDestination == navItem.route
 
-                if (index != 0) Spacer(modifier = Modifier.width(58.dp))
+                if (index == 2) Spacer(modifier = Modifier.width(58.dp))
 
                 BottomNavigationItem(
                     selectedItem = navItem,
@@ -106,16 +120,27 @@ fun RowScope.BottomNavigationItem(
 ) {
 
     NavigationBarItem(
+        modifier = Modifier.padding(vertical = JustSayItTheme.Spacing.spaceXXS),
         selected = isItemSelected,
         onClick = { navItemOnClick(selectedItem) },
         icon = {
             val currentIcon = if (isItemSelected) selectedIcon else unSelectedIcon
+            val tint = if (isItemSelected) JustSayItTheme.Colors.mainTypo else JustSayItTheme.Colors.inactiveTypo
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    painter = painterResource(id = currentIcon),
+                    contentDescription = selectedItem.title,
+                    tint = tint
+                )
 
-            Icon(
-                painter = painterResource(id = currentIcon),
-                contentDescription = selectedItem.title,
-                tint = JustSayItTheme.Colors.onMainSurface
-            )
+                Text(
+                    text = selectedItem.title,
+                    color = tint,
+                    style = JustSayItTheme.Typography.detail1
+                )
+            }
         }
     )
 }
@@ -128,11 +153,14 @@ fun NavigationCenterItem(
     centerItemBackground: Color,
     onCenterNavItemClick: () -> Unit
 ) {
-    FloatingActionButton(
+    FilledTonalIconButton(
         modifier = modifier,
         onClick = onCenterNavItemClick,
-        containerColor = centerItemBackground,
-        shape = JustSayItTheme.Shapes.circle
+        shape = JustSayItTheme.Shapes.circle,
+        colors = IconButtonDefaults.filledTonalIconButtonColors(
+            containerColor = JustSayItTheme.Colors.mainTypo,
+            contentColor = JustSayItTheme.Colors.mainBackground
+        )
     ) {
         Icon(
             painter = painterResource(id = centerNavItemIcon),
@@ -152,7 +180,7 @@ fun BottomNavigationPreview() {
         navController = navController,
         bottomNavItemList = listOf(
             MenuContent.Home,
-            MenuContent.Feed
+            MenuContent.My
         ),
         centerNavItem = CenterNavItemContent(
             R.drawable.ic_add_24,
