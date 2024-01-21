@@ -1,5 +1,6 @@
 package com.sowhat.main_presentation.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,12 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.sowhat.common.navigation.POST
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.main_presentation.common.CenterNavItemContent
 import com.sowhat.main_presentation.common.MenuContent
 import com.sowhat.main_presentation.component.BottomNavigationBar
+import com.sowhat.main_presentation.navigation.MainNavHost
 
 @Composable
 fun MainRoute(
@@ -49,18 +53,30 @@ fun MainScreen(
                 centerNavItem = centerNavItem,
                 bottomNavBackground = JustSayItTheme.Colors.mainSurface,
                 onNavItemClick = {
-
+                    mainNavController.navigate(it.route) {
+                        popUpTo(mainNavController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
                 },
                 onCenterNavItemClick = {
-                    
+                    mainNavController.navigate(POST) {
+                        launchSingleTop = true
+                    }
                 }
             )
         }
     ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier.padding(paddingValues)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
-
+            MainNavHost(
+                appNavController = appNavController,
+                mainNavController = mainNavController,
+            )
         }
     }
 }

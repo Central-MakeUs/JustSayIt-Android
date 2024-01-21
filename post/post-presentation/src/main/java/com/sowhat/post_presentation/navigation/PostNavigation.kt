@@ -8,10 +8,10 @@ import com.sowhat.common.navigation.POST
 import com.sowhat.post_presentation.posting.PostRoute
 
 fun NavGraphBuilder.postScreen(
-    navController: NavHostController
+    appNavController: NavHostController
 ) {
     composable(route = POST) {
-        PostRoute(navController = navController)
+        PostRoute(navController = appNavController)
     }
 }
 

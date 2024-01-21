@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.DropdownItem
 import com.sowhat.designsystem.common.MoodItem
@@ -33,8 +34,10 @@ import com.sowhat.report_presentation.component.RailBackground
 import com.sowhat.report_presentation.component.Report
 
 @Composable
-fun MyPageRoute() {
-
+fun MyPageRoute(
+    navController: NavController
+) {
+    MyPageScreen()
 }
 
 @Composable

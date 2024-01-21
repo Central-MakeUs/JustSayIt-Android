@@ -10,10 +10,10 @@ import com.sowhat.user_presentation.edit.UpdateRoute
 import com.sowhat.user_presentation.setting.SettingRoute
 
 fun NavGraphBuilder.settingScreen(
-    navController: NavHostController
+    appNavController: NavHostController
 ) {
     composable(route = SETTING) {
-        SettingRoute(navController = navController)
+        SettingRoute(navController = appNavController)
     }
 }
 
