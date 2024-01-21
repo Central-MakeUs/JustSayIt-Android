@@ -1,5 +1,6 @@
 package com.sowhat.designsystem.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
 import com.sowhat.designsystem.theme.JustSayItTheme
+import com.sowhat.designsystem.theme.ProfileBackground
 
 @Composable
 fun ProfileImage(
@@ -46,7 +48,7 @@ fun ProfileImage(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 },
-            model = profileUri
+            model = profileUri ?: "https://github.com/Central-MakeUs/JustSayIt-Android/assets/101035437/9c7a1028-c783-4251-99cd-f5f4d8d0b251"
         )
 
         Badge(
@@ -95,7 +97,7 @@ fun ProfileImage(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 },
-            model = profileUri
+            model = profileUri ?: "https://github.com/Central-MakeUs/JustSayIt-Android/assets/101035437/9c7a1028-c783-4251-99cd-f5f4d8d0b251"
         )
 
         Box(
