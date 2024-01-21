@@ -13,27 +13,22 @@ fun NavGraphBuilder.settingScreen(
     appNavController: NavHostController
 ) {
     composable(route = SETTING) {
-        SettingRoute(navController = appNavController)
+        SettingRoute(appNavController = appNavController)
     }
 }
 
 fun NavController.navigateToUpdate() {
-    this.navigate(SETTING)
+    this.navigate(CONFIG_EDIT)
 }
 
 fun NavGraphBuilder.userInfoUpdateScreen(
-    navController: NavHostController
+    appNavController: NavHostController
 ) {
     composable(route = CONFIG_EDIT) {
-        UpdateRoute(navController = navController)
+        UpdateRoute(appNavController = appNavController)
     }
 }
 
 fun NavController.navigateUpToSetting() {
-    this.navigate(SETTING) {
-        popUpTo(CONFIG_EDIT) {
-            inclusive = true
-        }
-        launchSingleTop = true
-    }
+    this.popBackStack()
 }

@@ -29,6 +29,5 @@ fun MainNavGraph(
         notificationScreen(appNavController = appNavController)
 
         settingScreen(appNavController = appNavController)
-        userInfoUpdateScreen(appNavController)
     }
 }

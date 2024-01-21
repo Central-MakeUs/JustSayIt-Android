@@ -19,8 +19,9 @@ fun AppNavHost(
     NavHost(navController = navController, startDestination = ONBOARDING) {
         onBoardingScreen(navController = navController)
         userConfigScreen(navController = navController)
-        userInfoUpdateScreen(navController = navController)
+        userInfoUpdateScreen(appNavController = navController)
         mainScreen(appNavController = navController)
         postScreen(appNavController = navController)
+        userInfoUpdateScreen(appNavController = navController)
     }
 }

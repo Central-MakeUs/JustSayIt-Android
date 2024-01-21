@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -37,7 +39,7 @@ import com.sowhat.user_presentation.navigation.navigateToUpdate
 @Composable
 fun SettingRoute(
     viewModel: SettingViewModel = hiltViewModel(),
-    navController: NavHostController
+    appNavController: NavHostController
 ) {
     LaunchWhenStarted {
         viewModel.getUserInfo()
@@ -45,7 +47,7 @@ fun SettingRoute(
 
     SettingScreen(
         uiState = viewModel.uiState.collectAsState().value,
-        navController = navController
+        appNavController = appNavController
     )
 }
 
@@ -53,7 +55,7 @@ fun SettingRoute(
 fun SettingScreen(
     modifier: Modifier = Modifier,
     uiState: UiState<UserInfoDomain>,
-    navController: NavHostController
+    appNavController: NavHostController
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -70,7 +72,8 @@ fun SettingScreen(
         } else {
             SettingScreenContent(
                 modifier = Modifier.padding(paddingValues),
-                navController = navController
+                appNavController = appNavController,
+                uiState = uiState
             )
         }
     }
@@ -79,15 +82,20 @@ fun SettingScreen(
 @Composable
 private fun SettingScreenContent(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    appNavController: NavHostController,
+    uiState: UiState<UserInfoDomain>
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(JustSayItTheme.Colors.mainBackground)
+            .verticalScroll(scrollState)
     ) {
         ProfileSection(
-            navController = navController
+            appNavController = appNavController,
+            uiState = uiState
         )
 
         Divider(
@@ -123,18 +131,23 @@ private fun SettingScreenContent(
 @Composable
 private fun ProfileSection(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    appNavController: NavHostController,
+    uiState: UiState<UserInfoDomain>
 ) {
+
+    val profileInfo = uiState.data?.profileInfo
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(JustSayItTheme.Colors.mainBackground)
     ) {
         UserProfile(
-            userName = "kmkim",
+            userName = profileInfo?.nickname ?: "",
+            // TODO 서버에서 넘겨주는 정보 플랫폼 및 이메일 추가되면 변경하기
             platformDrawable = R.drawable.ic_naver_16,
-            email = "kmkim7575@gmail.com",
-            profileUrl = "https://github.com/kmkim2689/Android-Wiki/assets/101035437/88d7b249-ad72-4be9-8d79-38dc942e0a7f"
+            email = "네이버",
+            profileUrl = profileInfo?.profileImg ?: ""
         )
 
         Box(
@@ -146,7 +159,7 @@ private fun ProfileSection(
             DefaultButtonFull(
                 text = BUTTON_EDIT_PROFILE,
                 onClick = {
-                    navController.navigateToUpdate()
+                    appNavController.navigateToUpdate()
                 }
             )
         }
@@ -159,5 +172,5 @@ private fun ProfileSection(
 @Composable
 fun SettingScreenPreview() {
     val navController = rememberNavController()
-    SettingScreen(uiState = UiState(), navController = navController)
+    SettingScreen(uiState = UiState(), appNavController = navController)
 }

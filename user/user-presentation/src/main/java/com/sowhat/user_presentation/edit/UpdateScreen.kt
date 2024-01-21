@@ -25,12 +25,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.sowhat.common.model.RegistrationFormEvent
-import com.sowhat.common.model.SignUpEvent
+import androidx.navigation.compose.rememberNavController
 import com.sowhat.common.model.UiState
 import com.sowhat.common.model.UpdateEvent
 import com.sowhat.common.model.UpdateFormEvent
 import com.sowhat.common.model.UpdateFormState
+import com.sowhat.common.util.LaunchWhenStarted
 import com.sowhat.common.util.ObserveEvents
 import com.sowhat.common.util.getFile
 import com.sowhat.designsystem.R
@@ -53,7 +53,7 @@ import com.sowhat.user_presentation.setting.SettingViewModel
 
 @Composable
 fun UpdateRoute(
-    navController: NavHostController,
+    appNavController: NavHostController,
     settingViewModel: SettingViewModel = hiltViewModel(),
     updateViewModel: UpdateViewModel = hiltViewModel(),
 ) {
@@ -63,6 +63,10 @@ fun UpdateRoute(
             updateViewModel.updateInfoUiState.collectAsState().value.isLoading
 
     val uiState = settingViewModel.uiState.collectAsState().value
+
+    LaunchWhenStarted {
+        settingViewModel.getUserInfo()
+    }
 
     LaunchedEffect(key1 = true) {
         updateViewModel.onEvent(
@@ -74,7 +78,7 @@ fun UpdateRoute(
         when (uiEvent) {
             is UpdateEvent.NavigateUp -> {
                 Log.i("UpdateScreen", "navigate to main")
-                navController.navigateUpToSetting()
+                appNavController.navigateUpToSetting()
             }
             is UpdateEvent.Error -> {
                 Log.i("UpdateScreen", "error ${uiEvent.message}")
@@ -111,6 +115,7 @@ fun UpdateRoute(
     )
 
     UpdateScreen(
+        appNavController = appNavController,
         uiState = uiState,
         isLoading = isLoading,
         isValid = updateViewModel.isValid,
@@ -132,6 +137,7 @@ fun UpdateRoute(
 @Composable
 fun UpdateScreen(
     modifier: Modifier = Modifier,
+    appNavController: NavHostController,
     isLoading: Boolean,
     uiState: UiState<UserInfoDomain>,
     formState: UpdateFormState,
@@ -152,7 +158,10 @@ fun UpdateScreen(
                 navigationIcon = R.drawable.ic_back_24,
                 actionText = COMPLETE,
                 isValid = isValid,
-                onActionTextClick = onSubmit
+                onActionTextClick = onSubmit,
+                onNavigationIconClick = {
+                    appNavController.navigateUpToSetting()
+                }
             )
         }
     ) { paddingValues ->
@@ -281,6 +290,7 @@ fun EditScreenPreview() {
         uiState = UiState(),
         formState = UpdateFormState(),
         isLoading = false,
-        onEvent = {}
+        onEvent = {},
+        appNavController = rememberNavController()
     )
 }
