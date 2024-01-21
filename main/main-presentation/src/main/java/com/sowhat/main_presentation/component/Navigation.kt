@@ -2,7 +2,6 @@ package com.sowhat.main_presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -12,19 +11,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FilledTonalIconButton
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,7 +31,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.NAVIGATION_HEIGHT
-import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.main_presentation.common.CenterNavItemContent
@@ -44,14 +39,14 @@ import com.sowhat.main_presentation.common.MenuContent
 @Composable
 fun BottomNavigationBar(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
+    mainNavController: NavHostController,
     bottomNavItemList: List<MenuContent>,
     centerNavItem: CenterNavItemContent,
     bottomNavBackground: Color,
     onNavItemClick: (MenuContent) -> Unit,
     onCenterNavItemClick: () -> Unit
 ) {
-    val navBackStackEntry = navController.currentBackStackEntryAsState()
+    val navBackStackEntry = mainNavController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry.value?.destination?.route
 
     ConstraintLayout(
@@ -141,7 +136,10 @@ fun RowScope.BottomNavigationItem(
                     style = JustSayItTheme.Typography.detail1
                 )
             }
-        }
+        },
+        colors = NavigationBarItemDefaults.colors(
+            indicatorColor = JustSayItTheme.Colors.mainBackground
+        )
     )
 }
 
@@ -177,7 +175,7 @@ fun BottomNavigationPreview() {
     val navController = rememberNavController()
 
     BottomNavigationBar(
-        navController = navController,
+        mainNavController = navController,
         bottomNavItemList = listOf(
             MenuContent.Home,
             MenuContent.My

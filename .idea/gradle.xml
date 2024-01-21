@@ -43,6 +43,8 @@
             <option value="$PROJECT_DIR$/main/main-data" />
             <option value="$PROJECT_DIR$/main/main-domain" />
             <option value="$PROJECT_DIR$/main/main-presentation" />
+            <option value="$PROJECT_DIR$/notification" />
+            <option value="$PROJECT_DIR$/notification/notification-presentation" />
             <option value="$PROJECT_DIR$/post" />
             <option value="$PROJECT_DIR$/post/post-domain" />
             <option value="$PROJECT_DIR$/post/post-presentation" />

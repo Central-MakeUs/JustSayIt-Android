@@ -1,13 +1,13 @@
-package com.sowhat.user_presentation.util
+package com.sowhat.authentication_presentation.util
 
 import android.content.Context
 import android.net.Uri
 import androidx.core.content.FileProvider
-import com.sowhat.user_presentation.R
+import com.sowhat.authentication_presentation.R
 import java.io.File
 
 class ImageProvider : FileProvider(
-    R.xml.user_file_paths
+    R.xml.file_paths
 ) {
     companion object {
         fun getImageUri(context: Context): Uri {

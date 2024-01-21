@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
         <provider
-            android:name="com.sowhat.util.ImageProvider"
-            android:authorities="com.sowhat.util.fileprovider"
+            android:name="com.sowhat.authentication_presentation.util.ImageProvider"
+            android:authorities="com.sowhat.authentication_presentation.util.fileprovider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data

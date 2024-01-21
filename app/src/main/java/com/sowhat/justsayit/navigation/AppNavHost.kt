@@ -6,8 +6,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.sowhat.common.navigation.ONBOARDING
 import com.sowhat.main_presentation.navigation.mainScreen
-import com.sowhat.presentation.navigation.onBoardingScreen
-import com.sowhat.presentation.navigation.userConfigScreen
+import com.sowhat.authentication_presentation.navigation.onBoardingScreen
+import com.sowhat.authentication_presentation.navigation.userConfigScreen
+import com.sowhat.post_presentation.navigation.postScreen
 import com.sowhat.user_presentation.navigation.userInfoUpdateScreen
 
 @Composable
@@ -20,5 +21,6 @@ fun AppNavHost(
         userConfigScreen(navController = navController)
         userInfoUpdateScreen(navController = navController)
         mainScreen(appNavController = navController)
+        postScreen(appNavController = navController)
     }
 }

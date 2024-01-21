@@ -7,9 +7,9 @@ import com.sowhat.common.navigation.HOME
 import com.sowhat.feed_presentation.feeds.FeedRoute
 
 fun NavGraphBuilder.homeScreen(
-    navController: NavHostController
+    appNavController: NavHostController
 ) {
     composable(route = HOME) {
-        FeedRoute(navController = navController)
+        FeedRoute(navController = appNavController)
     }
 }

@@ -1,23 +1,25 @@
 package com.sowhat.main_presentation.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.sowhat.common.navigation.POST
+import com.sowhat.designsystem.common.NAVIGATION_HEIGHT
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.main_presentation.common.CenterNavItemContent
 import com.sowhat.main_presentation.common.MenuContent
 import com.sowhat.main_presentation.component.BottomNavigationBar
-import com.sowhat.main_presentation.navigation.MainNavHost
+import com.sowhat.main_presentation.navigation.MainNavGraph
+import com.sowhat.main_presentation.navigation.navigateToMenu
+import com.sowhat.main_presentation.navigation.navigateToPost
 
 @Composable
 fun MainRoute(
@@ -48,22 +50,15 @@ fun MainScreen(
         modifier = modifier.fillMaxSize(),
         bottomBar = {
             BottomNavigationBar(
-                navController = mainNavController,
+                mainNavController = mainNavController,
                 bottomNavItemList = menus,
                 centerNavItem = centerNavItem,
                 bottomNavBackground = JustSayItTheme.Colors.mainSurface,
                 onNavItemClick = {
-                    mainNavController.navigate(it.route) {
-                        popUpTo(mainNavController.graph.findStartDestination().id) {
-                            inclusive = true
-                        }
-                        launchSingleTop = true
-                    }
+                    mainNavController.navigateToMenu(it)
                 },
                 onCenterNavItemClick = {
-                    mainNavController.navigate(POST) {
-                        launchSingleTop = true
-                    }
+                    appNavController.navigateToPost()
                 }
             )
         }
@@ -71,9 +66,12 @@ fun MainScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = (NAVIGATION_HEIGHT * 0.8).dp
+                )
         ) {
-            MainNavHost(
+            MainNavGraph(
                 appNavController = appNavController,
                 mainNavController = mainNavController,
             )
