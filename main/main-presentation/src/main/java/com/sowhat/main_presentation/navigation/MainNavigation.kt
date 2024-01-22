@@ -28,7 +28,9 @@ fun NavController.navigateToMenu(menuItem: MenuContent) {
     navigate(menuItem.route) {
         popUpTo(this@navigateToMenu.graph.findStartDestination().id) {
             inclusive = true
+            saveState = true
         }
         launchSingleTop = true
+        restoreState = true
     }
 }
