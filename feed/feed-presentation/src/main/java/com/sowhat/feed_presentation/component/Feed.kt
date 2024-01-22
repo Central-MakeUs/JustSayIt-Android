@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.sowhat.designsystem.common.MoodItem
-import com.sowhat.designsystem.component.ChipMid
+import com.sowhat.designsystem.common.bottomBorder
+import com.sowhat.designsystem.component.ChipSm
 import com.sowhat.designsystem.component.DefaultIconButton
 import com.sowhat.designsystem.component.ImageContainer
 import com.sowhat.designsystem.component.TimelineFeedImages
@@ -54,10 +54,13 @@ fun Feed(
     onMenuClick: () -> Unit,
     onFeedClick: () -> Unit,
 ) {
+
     Column(
         modifier = modifier
             .fillMaxWidth()
             .background(color = JustSayItTheme.Colors.mainBackground)
+            // bottomBorder 순서가 padding 앞에 와야 경계선이 아이템의 최하단에 형성
+            .bottomBorder(0.5.dp, Gray300, JustSayItTheme.Spacing.spaceBase)
             .padding(vertical = JustSayItTheme.Spacing.spaceBase),
         verticalArrangement = Arrangement
             .spacedBy(JustSayItTheme.Spacing.spaceBase)
@@ -85,7 +88,9 @@ fun Feed(
             )
 
             if (!images.isNullOrEmpty()) TimelineFeedImages(models = images)
+        }
 
+        Column {
             SympathyChips(
                 currentMood = selectedSympathy,
                 onChange = onSympathyItemClick,
@@ -184,9 +189,20 @@ fun SympathyChips(
             modifier = modifier.fillMaxWidth(),
             contentAlignment = Alignment.CenterEnd
         ) {
-            SelectedSympathy(availableItems, currentMood, collapse, onChange)
+            SelectedSympathy(
+                availableItems,
+                currentMood,
+                collapse,
+                onChange
+            )
 
-            UnselectedList(modifier, availableItems, currentMood, collapse, onChange)
+            UnselectedList(
+                modifier,
+                availableItems,
+                currentMood,
+                collapse,
+                onChange
+            )
         }
     }
 }
@@ -209,6 +225,10 @@ private fun UnselectedList(
         ),
         reverseLayout = true
     ) {
+        item {
+            Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceXS))
+        }
+
         itemsIndexed(availableItems) {index, item ->
             val isSelected = currentMood == item
             AnimatedVisibility(
@@ -220,7 +240,7 @@ private fun UnselectedList(
                     fullWidth * (availableItems.size - index - 1)
                 } + fadeOut()
             ) {
-                ChipMid(
+                ChipSm(
                     moodItem = item,
                     isSelected = isSelected,
                     onClick = { item: MoodItem ->
@@ -228,6 +248,10 @@ private fun UnselectedList(
                     }
                 )
             }
+        }
+
+        item {
+            Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceXS))
         }
     }
 }
@@ -243,12 +267,14 @@ private fun SelectedSympathy(
         val isSelected = currentMood == item
 
         AnimatedVisibility(
-            modifier = Modifier.zIndex(1f),
+            modifier = Modifier
+                .zIndex(1f)
+                .padding(end = JustSayItTheme.Spacing.spaceBase),
             visible = (collapse && isSelected),
             enter = fadeIn(),
             exit = fadeOut()
         ) {
-            ChipMid(
+            ChipSm(
                 modifier = Modifier.zIndex(1f),
                 moodItem = item,
                 isSelected = isSelected,

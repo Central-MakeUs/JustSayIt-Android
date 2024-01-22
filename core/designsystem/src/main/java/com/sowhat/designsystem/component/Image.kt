@@ -158,7 +158,8 @@ fun TimelineFeedImages(
             3 -> {
                 LazyVerticalGrid(
                     modifier = Modifier,
-                    columns = GridCells.Fixed(2)
+                    columns = GridCells.Fixed(2),
+                    userScrollEnabled = false
                 ) {
                     itemsIndexed(
                         items = models,
@@ -181,7 +182,8 @@ fun TimelineFeedImages(
             4 -> {
                 LazyVerticalGrid(
                     modifier = Modifier,
-                    columns = GridCells.Fixed(2)
+                    columns = GridCells.Fixed(2),
+                    userScrollEnabled = false
                 ) {
                     items(items = models) {
                         TimelineFeedImageContainer(
