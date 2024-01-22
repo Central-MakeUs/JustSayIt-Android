@@ -18,4 +18,4 @@ const val PROFILE_SETTING = "프로필 설정"
 
 const val BUTTON_EDIT_PROFILE = "프로필 수정"
 
-const val NAVIGATION_HEIGHT = 60
+const val NAVIGATION_HEIGHT = 64

@@ -17,5 +17,10 @@ android {
 dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:common"))
+    implementation(project(":feed:feed-presentation"))
+    implementation(project(":post:post-presentation"))
+    implementation(project(":report:report-presentation"))
+    implementation(project(":user:user-presentation"))
+    implementation(project(":notification:notification-presentation"))
 
 }

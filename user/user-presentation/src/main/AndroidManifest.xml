@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
-        <provider
-            android:name="com.sowhat.user_presentation.util.ImageProvider"
-            android:authorities="com.sowhat.user_presentation.util.fileprovider"
-            android:grantUriPermissions="true"
-            android:exported="false">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
+<!--        <provider-->
+<!--            android:name="com.sowhat.user_presentation.util.ImageProvider"-->
+<!--            android:authorities="com.sowhat.user_presentation.util.fileprovider"-->
+<!--            android:grantUriPermissions="true"-->
+<!--            android:exported="false">-->
+<!--            <meta-data-->
+<!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
+<!--                android:resource="@xml/user_file_paths" />-->
+<!--        </provider>-->
     </application>
 </manifest>

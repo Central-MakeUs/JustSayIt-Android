@@ -48,9 +48,10 @@ fun PostToggle(
         )
 
         Toggle(
-            modifier = Modifier.padding(4.dp),
+            modifier = Modifier,
             isChecked = isChecked,
-            onCheckedChange = onCheckedChange
+            onCheckedChange = onCheckedChange,
+            isEnabled = isActivated
         )
     }
 }

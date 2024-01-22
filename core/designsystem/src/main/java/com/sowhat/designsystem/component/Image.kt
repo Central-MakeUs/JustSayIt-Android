@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.JustSayItTheme
+import com.sowhat.designsystem.theme.ProfileBackground
 
 @Composable
 fun ImageContainer(
@@ -72,7 +73,7 @@ fun ImageContainer(
         modifier = modifier
             .border(width = borderWidth, color = borderColor, shape = shape)
             .clip(shape)
-            .background(Gray300)
+            .background(ProfileBackground)
     ) {
         AsyncImage(
             modifier = Modifier.fillMaxSize(),
@@ -107,7 +108,7 @@ fun TimelineFeedImageContainer(
 ) {
     ImageContainer(
         modifier = modifier,
-        borderWidth = 2.dp,
+        borderWidth = 0.5.dp,
         borderColor = JustSayItTheme.Colors.subSurface,
         shape = JustSayItTheme.Shapes.medium,
         model = model,
@@ -157,7 +158,8 @@ fun TimelineFeedImages(
             3 -> {
                 LazyVerticalGrid(
                     modifier = Modifier,
-                    columns = GridCells.Fixed(2)
+                    columns = GridCells.Fixed(2),
+                    userScrollEnabled = false
                 ) {
                     itemsIndexed(
                         items = models,
@@ -180,7 +182,8 @@ fun TimelineFeedImages(
             4 -> {
                 LazyVerticalGrid(
                     modifier = Modifier,
-                    columns = GridCells.Fixed(2)
+                    columns = GridCells.Fixed(2),
+                    userScrollEnabled = false
                 ) {
                     items(items = models) {
                         TimelineFeedImageContainer(

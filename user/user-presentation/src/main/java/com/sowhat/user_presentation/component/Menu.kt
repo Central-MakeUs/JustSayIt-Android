@@ -19,7 +19,7 @@ fun Menu(
     menus: List<MenuItem>
 ) {
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxWidth()
     ) {
         Header(
             modifier = Modifier.fillMaxWidth(),

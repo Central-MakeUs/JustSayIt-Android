@@ -13,7 +13,8 @@ data class JustSayItColor(
     val angry: Color,
     val happy: Color,
     val surprise: Color,
-    val sad: Color
+    val sad: Color,
+    val inactiveTypo: Color,
 )
 
 val Gray50 = Color(0xFFFAFAFA)
@@ -26,6 +27,8 @@ val Gray600 = Color(0xFF757575)
 val Gray700 = Color(0xFF616161)
 val Gray800 = Color(0xFF424242)
 val Gray900 = Color(0xFF222222)
+
+val ProfileBackground = Color(0xFFD9D9D9)
 
 val NavIconLight = Color(0xFF1C1B1F)
 

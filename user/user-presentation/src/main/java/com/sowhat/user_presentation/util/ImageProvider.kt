@@ -7,7 +7,7 @@ import com.sowhat.user_presentation.R
 import java.io.File
 
 class ImageProvider : FileProvider(
-    R.xml.file_paths
+    R.xml.user_file_paths
 ) {
     companion object {
         fun getImageUri(context: Context): Uri {

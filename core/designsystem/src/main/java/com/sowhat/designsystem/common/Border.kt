@@ -12,11 +12,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 
-fun Modifier.bottomBorder(strokeWidth: Dp, color: Color) = composed(
+fun Modifier.bottomBorder(strokeWidth: Dp, color: Color, horizontalPadding: Dp = 0.dp) = composed(
     factory = {
         val density = LocalDensity.current
         val strokeWidthPx = density.run { strokeWidth.toPx() }
+        val horizontalPaddingPx = density.run { horizontalPadding.toPx() }
 
         Modifier.drawBehind {
             val width = size.width
@@ -24,8 +26,8 @@ fun Modifier.bottomBorder(strokeWidth: Dp, color: Color) = composed(
 
             drawLine(
                 color = color,
-                start = Offset(x = 0f, y = height),
-                end = Offset(x = width , y = height),
+                start = Offset(x = 0f + horizontalPaddingPx, y = height),
+                end = Offset(x = width - horizontalPaddingPx , y = height),
                 strokeWidth = strokeWidthPx
             )
         }
