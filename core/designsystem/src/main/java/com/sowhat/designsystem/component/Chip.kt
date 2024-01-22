@@ -71,8 +71,10 @@ fun Chip(
         Row(
             modifier = modifier
                 .padding(
-                    horizontal = JustSayItTheme.Spacing.spaceBase,
-                    vertical = JustSayItTheme.Spacing.spaceXS
+                    start = JustSayItTheme.Spacing.spaceSm,
+                    end = JustSayItTheme.Spacing.spaceBase,
+                    top = JustSayItTheme.Spacing.spaceXS,
+                    bottom = JustSayItTheme.Spacing.spaceXS
                 ),
             horizontalArrangement = Arrangement
                 .spacedBy(JustSayItTheme.Spacing.spaceXS),
@@ -181,7 +183,7 @@ fun ChipMedium(
 }
 
 @Composable
-fun ChipMid(
+fun ChipSm(
     modifier: Modifier = Modifier,
     isActive: Boolean = true,
     isSelected: Boolean,
@@ -194,7 +196,7 @@ fun ChipMid(
         modifier = modifier,
         drawableStart = moodItem.drawable,
         drawableSize = 24.dp,
-        textStyle = JustSayItTheme.Typography.body1,
+        textStyle = JustSayItTheme.Typography.detail1,
         title = moodItem.title,
         onClick = onClick,
         textColor = if (isSelected) moodItem.selectedTextColor else moodItem.unselectedTextColor,

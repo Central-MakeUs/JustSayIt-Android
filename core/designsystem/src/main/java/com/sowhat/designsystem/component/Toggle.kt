@@ -22,9 +22,10 @@ fun Toggle(
     modifier: Modifier = Modifier,
     isChecked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    isEnabled: Boolean
 ) {
     Switch(
-        modifier = modifier.height(16.dp).width(48.dp),
+        modifier = modifier.height(36.dp),
         checked = isChecked,
         onCheckedChange = onCheckedChange,
         colors = SwitchDefaults.colors(
@@ -34,10 +35,17 @@ fun Toggle(
             uncheckedTrackColor = JustSayItTheme.Colors.subBackground,
             checkedBorderColor = JustSayItTheme.Colors.mainTypo,
             uncheckedBorderColor = JustSayItTheme.Colors.subBackground,
+            disabledCheckedThumbColor = White,
+            disabledUncheckedThumbColor = White,
+            disabledCheckedTrackColor = JustSayItTheme.Colors.mainTypo,
+            disabledUncheckedTrackColor = JustSayItTheme.Colors.subBackground,
+            disabledCheckedBorderColor = JustSayItTheme.Colors.mainTypo,
+            disabledUncheckedBorderColor = JustSayItTheme.Colors.subBackground
         ),
         thumbContent = {
             // 공백으로 두어야 thumb가 track에 꽉 차게 된다.
-        }
+        },
+        enabled = isEnabled
     )
 }
 
@@ -47,5 +55,5 @@ fun TogglePreview() {
     var isChecked by remember {
         mutableStateOf(false)
     }
-    Toggle(isChecked = isChecked, onCheckedChange = { newState -> isChecked = newState })
+    Toggle(isChecked = isChecked, onCheckedChange = { newState -> isChecked = newState }, isEnabled = true)
 }

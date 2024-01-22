@@ -69,7 +69,8 @@ fun MoodChips(
                 } else this
             },
         horizontalArrangement = Arrangement
-            .spacedBy(JustSayItTheme.Spacing.spaceXXS)
+            .spacedBy(JustSayItTheme.Spacing.spaceXXS),
+        userScrollEnabled = isActive
     ) {
         item {
             Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceBase))
