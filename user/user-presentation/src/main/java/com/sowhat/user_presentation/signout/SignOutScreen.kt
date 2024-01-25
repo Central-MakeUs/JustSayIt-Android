@@ -84,6 +84,7 @@ private fun ScreenDialog(
             onAccept = onSignOut,
             onDismiss = {
                 onEvent(SignOutEvent.SignOutVisibilityChanged(false))
+                appNavController.popBackStack()
             }
         )
     }
