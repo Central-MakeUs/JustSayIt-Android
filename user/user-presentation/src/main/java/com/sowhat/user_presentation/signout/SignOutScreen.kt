@@ -7,28 +7,94 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.sowhat.common.model.PostingEvent
+import com.sowhat.common.model.SignOutEvent
+import com.sowhat.common.util.ObserveEvents
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.R
+import com.sowhat.designsystem.component.AlertDialog
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.user_presentation.common.MenuItem
+import com.sowhat.user_presentation.common.SignOutUiState
 import com.sowhat.user_presentation.component.Menu
+import com.sowhat.user_presentation.navigation.navigateToOnboarding
 import com.sowhat.user_presentation.navigation.navigateUpToSetting
+import kotlinx.coroutines.flow.update
 
 @Composable
 fun SignOutRoute(
-    appNavController: NavController
+    appNavController: NavController,
+    viewModel: SignOutViewModel = hiltViewModel()
 ) {
-    SignOutScreen(appNavController = appNavController)
+
+    val uiState = viewModel.uiState.collectAsState().value
+
+    SignOutScreen(
+        appNavController = appNavController,
+        onEvent = viewModel::onEvent
+    )
+
+    ScreenDialog(
+        uiState = uiState,
+        onSignOut = viewModel::signOut,
+        onWithdraw = viewModel::withdraw,
+        onEvent = viewModel::onEvent
+    )
+
+    ObserveEvents(flow = viewModel.signOutEvent) { uiEvent ->
+        when (uiEvent) {
+            is PostingEvent.Error -> {
+
+            }
+            is PostingEvent.NavigateUp -> {
+                appNavController.navigateToOnboarding()
+            }
+        }
+    }
+
+}
+
+@Composable
+private fun ScreenDialog(
+    uiState: SignOutUiState,
+    onSignOut: () -> Unit,
+    onWithdraw: () -> Unit,
+    onEvent: (SignOutEvent) -> Unit
+) {
+    if (uiState.showSignOut) {
+        AlertDialog(
+            title = stringResource(id = R.string.dialog_title_sign_out),
+            subTitle = stringResource(id = R.string.dialog_subtitle_sign_out),
+            buttonContent = stringResource(id = R.string.dialog_button_cancel)
+                    to stringResource(id = R.string.dialog_button_sign_out),
+            onAccept = onSignOut,
+            onDismiss = { onEvent(SignOutEvent.SignOutVisibilityChanged(false)) }
+        )
+    }
+
+    if (uiState.showWithdraw) {
+        AlertDialog(
+            title = stringResource(id = R.string.dialog_title_sign_out),
+            subTitle = stringResource(id = R.string.dialog_subtitle_sign_out),
+            buttonContent = stringResource(id = R.string.dialog_button_cancel)
+                    to stringResource(id = R.string.dialog_button_sign_out),
+            onAccept = onWithdraw,
+            onDismiss = { onEvent(SignOutEvent.WithdrawVisibilityChanged(false)) }
+        )
+    }
 }
 
 @Composable
 fun SignOutScreen(
-    appNavController: NavController
+    appNavController: NavController,
+    onEvent: (SignOutEvent) -> Unit
 ) {
     Scaffold(
         modifier = Modifier
@@ -45,14 +111,18 @@ fun SignOutScreen(
             )
         }
     ) { paddingValues ->
-        SignOutScreenContent(paddingValues = paddingValues)
+        SignOutScreenContent(
+            paddingValues = paddingValues,
+            onEvent = onEvent
+        )
     }
 }
 
 @Composable
 private fun SignOutScreenContent(
     modifier: Modifier = Modifier,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    onEvent: (SignOutEvent) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -66,15 +136,11 @@ private fun SignOutScreenContent(
             menus = listOf(
                 MenuItem(
                     title = stringResource(id = R.string.setting_item_sign_out),
-                    onClick = {
-                        // TODO 로그아웃 이후 화면 이동 구현
-                    }
+                    onClick = { onEvent(SignOutEvent.SignOutVisibilityChanged(true)) }
                 ),
                 MenuItem(
                     title = stringResource(id = R.string.setting_item_withdraw),
-                    onClick = {
-                        // TODO 회원탈퇴 성공 후 화면 이동 구현
-                    }
+                    onClick = { onEvent(SignOutEvent.WithdrawVisibilityChanged(true)) }
                 )
             )
         )
@@ -84,5 +150,24 @@ private fun SignOutScreenContent(
 @Preview
 @Composable
 fun SignOutScreenPreview() {
-    SignOutScreen(appNavController = rememberNavController())
+    val onEvent = { event: SignOutEvent ->
+        when (event) {
+            is SignOutEvent.SignOutVisibilityChanged -> {
+                // update : for mutablestateflow -> concurrently update
+//                _uiState.update {
+//                    uiState.value.copy(showSignOut = event.isVisible)
+//                }
+            }
+            is SignOutEvent.WithdrawVisibilityChanged -> {
+//                _uiState.update {
+//                    uiState.value.copy(showWithdraw = event.isVisible)
+//                }
+            }
+        }
+    }
+
+    SignOutScreen(
+        appNavController = rememberNavController(),
+        onEvent = onEvent
+    )
 }

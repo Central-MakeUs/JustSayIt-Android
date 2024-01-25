@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.sowhat.common.navigation.CONFIG_EDIT
+import com.sowhat.common.navigation.ONBOARDING
 import com.sowhat.common.navigation.SETTING
 import com.sowhat.common.navigation.SIGN_OUT
 import com.sowhat.user_presentation.edit.UpdateRoute
@@ -20,7 +21,9 @@ fun NavGraphBuilder.settingScreen(
 }
 
 fun NavController.navigateToUpdate() {
-    this.navigate(CONFIG_EDIT)
+    this.navigate(CONFIG_EDIT) {
+        launchSingleTop = true
+    }
 }
 
 fun NavGraphBuilder.userInfoUpdateScreen(
@@ -44,5 +47,16 @@ fun NavGraphBuilder.signOutScreen(
 }
 
 fun NavController.navigateToSignOut() {
-    this.navigate(SIGN_OUT)
+    this.navigate(SIGN_OUT) {
+        launchSingleTop = true
+    }
+}
+
+fun NavController.navigateToOnboarding() {
+    this.navigate(ONBOARDING) {
+        popUpTo(SIGN_OUT) {
+            inclusive = true
+        }
+        launchSingleTop = true
+    }
 }

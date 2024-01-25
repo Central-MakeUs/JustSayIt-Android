@@ -1,8 +1,8 @@
 package com.sowhat.user_presentation.signout
 
 import androidx.lifecycle.ViewModel
+import com.sowhat.common.model.PostingEvent
 import com.sowhat.common.model.SignOutEvent
-import com.sowhat.common.model.SignOutPostingEvent
 import com.sowhat.user_presentation.common.SignOutUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -20,8 +20,16 @@ class SignOutViewModel @Inject constructor(
     private var _uiState = MutableStateFlow(SignOutUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val signOutEventChannel = Channel<SignOutPostingEvent>()
+    private val signOutEventChannel = Channel<PostingEvent>()
     val signOutEvent = signOutEventChannel.receiveAsFlow()
+
+    fun signOut() {
+
+    }
+
+    fun withdraw() {
+
+    }
 
     fun onEvent(event: SignOutEvent) {
         when (event) {
