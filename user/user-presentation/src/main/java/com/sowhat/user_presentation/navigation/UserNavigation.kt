@@ -6,8 +6,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.sowhat.common.navigation.CONFIG_EDIT
 import com.sowhat.common.navigation.SETTING
+import com.sowhat.common.navigation.SIGN_OUT
 import com.sowhat.user_presentation.edit.UpdateRoute
 import com.sowhat.user_presentation.setting.SettingRoute
+import com.sowhat.user_presentation.signout.SignOutRoute
 
 fun NavGraphBuilder.settingScreen(
     appNavController: NavHostController
@@ -31,4 +33,16 @@ fun NavGraphBuilder.userInfoUpdateScreen(
 
 fun NavController.navigateUpToSetting() {
     this.popBackStack()
+}
+
+fun NavGraphBuilder.signOutScreen(
+    appNavController: NavHostController
+) {
+    composable(route = SIGN_OUT) {
+        SignOutRoute(appNavController = appNavController)
+    }
+}
+
+fun NavController.navigateToSignOut() {
+    this.navigate(SIGN_OUT)
 }

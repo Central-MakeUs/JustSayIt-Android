@@ -15,16 +15,18 @@ import com.sowhat.user_presentation.common.MenuItem
 @Composable
 fun Menu(
     modifier: Modifier = Modifier,
-    title: String,
+    title: String?,
     menus: List<MenuItem>
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
-        Header(
-            modifier = Modifier.fillMaxWidth(),
-            title = title
-        )
+        title?.let {
+            Header(
+                modifier = Modifier.fillMaxWidth(),
+                title = title
+            )
+        }
 
         MenuItems(
             modifier = Modifier.fillMaxWidth(),
@@ -57,6 +59,14 @@ private fun MenuItems(
                     title = menuItem.title,
                     leadingIcon = menuItem.leadingIcon,
                     trailingText = menuItem.trailingText,
+                    onClick = menuItem.onClick
+                )
+            } else {
+                Cell(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = menuItem.title,
+                    leadingIcon = null,
+                    trailingText = null,
                     onClick = menuItem.onClick
                 )
             }

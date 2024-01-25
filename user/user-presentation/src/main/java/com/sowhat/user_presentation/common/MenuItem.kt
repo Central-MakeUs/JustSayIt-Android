@@ -9,6 +9,17 @@ data class MenuItem(
 ) {
     constructor(
         title: String,
+        onClick: (() -> Unit)? = null
+    ) : this(
+        leadingIcon = null,
+        title = title,
+        trailingIcon = null,
+        trailingText = null,
+        onClick = onClick
+    )
+
+    constructor(
+        title: String,
         trailingIcon: Int,
         onClick: (() -> Unit)? = null
     ): this(
