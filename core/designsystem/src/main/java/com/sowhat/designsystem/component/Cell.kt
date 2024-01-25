@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.rippleClickable
+import com.sowhat.designsystem.theme.Gray600
 import com.sowhat.designsystem.theme.JustSayItTheme
 
 @Composable
@@ -33,22 +34,22 @@ fun Cell(
             .padding(
                 horizontal = 16.dp,
                 vertical = 6.dp
-            ),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(
-            modifier = Modifier.composed {
+            ).composed {
                 onClick?.let {
                     rippleClickable { onClick() }
                 } ?: this
             },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(
+            modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(0.dp)
         ) {
             leadingIcon?.let {
                 Icon(
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier.padding(end = 8.dp),
                     painter = painterResource(id = it),
                     contentDescription = "leadingIcon"
                 )
@@ -68,7 +69,8 @@ fun Cell(
         trailingIcon?.let {
             Icon(
                 painter = painterResource(id = it),
-                contentDescription = "leadingIcon"
+                contentDescription = "leadingIcon",
+                tint = Gray600
             )
         }
     }
@@ -88,16 +90,17 @@ fun Cell(
                 horizontal = 16.dp,
                 vertical = 4.dp
             )
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(
-            modifier = Modifier.composed {
+            .fillMaxWidth()
+            .composed {
                 onClick?.let {
                     rippleClickable { onClick() }
                 } ?: this
             },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(
+            modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {

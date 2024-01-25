@@ -6,6 +6,7 @@ const val CONFIGURATION = "configuration"
 
 const val SETTING = "setting"
 const val CONFIG_EDIT = "config_edit"
+const val SIGN_OUT = "sign_out"
 
 const val HOME = "home"
 

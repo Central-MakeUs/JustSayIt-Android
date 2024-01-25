@@ -50,3 +50,8 @@ sealed class PostingEvent {
     object NavigateUp : PostingEvent()
     data class Error(val message: String) : PostingEvent()
 }
+
+sealed class SignOutEvent {
+    data class SignOutVisibilityChanged(val isVisible: Boolean) : SignOutEvent()
+    data class WithdrawVisibilityChanged(val isVisible: Boolean) : SignOutEvent()
+}

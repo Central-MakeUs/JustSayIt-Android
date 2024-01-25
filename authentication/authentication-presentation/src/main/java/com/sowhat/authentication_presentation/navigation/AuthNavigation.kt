@@ -36,6 +36,11 @@ fun NavGraphBuilder.userConfigScreen(
     }
 }
 
-fun NavController.navigateToMain(navOptions: NavOptions? = null) {
-    this.navigate(MAIN, navOptions)
+fun NavController.navigateToMain(popUpTo: String) {
+    this.navigate(MAIN) {
+        popUpTo(popUpTo) {
+            inclusive = true
+        }
+        launchSingleTop = true
+    }
 }

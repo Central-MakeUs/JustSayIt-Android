@@ -1,5 +1,6 @@
 package com.sowhat.authentication_presentation.onboarding
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sowhat.authentication_domain.model.SignIn
@@ -39,17 +40,24 @@ class OnboardingViewModel @Inject constructor(
 
     fun signIn(
         platform: Platform,
-        platformToken: String
+        derivedPlatformToken: String
     ) = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(isLoading = true)
 
-        authDataStore.apply {
-            updatePlatform(platform = platform.title)
-            updatePlatformToken(platformToken = platformToken)
+        val platformToken = tokens.await().platformToken
+        Log.i("OnboardingScreen", "platformToken : $platformToken")
+
+        if (platformToken.isNullOrBlank()) {
+            Log.i("OnboardingScreen", "platformToken is null : $platformToken")
+            authDataStore.apply {
+                updatePlatform(platform = platform.title)
+                updatePlatformToken(platformToken = derivedPlatformToken)
+            }
         }
 
-        val platformToken = tokens.await().platformToken
-        val signInData = signInUseCase(platformToken)
+        // 만약 액세스 토큰이 없을 때 갱신되었을 수 있기 때문에 여기에 새로 선언
+        val newPlatformToken = authDataStore.authData.first().platformToken
+        val signInData = signInUseCase(newPlatformToken)
 
         consumeResources(signInData)
     }
@@ -81,6 +89,7 @@ class OnboardingViewModel @Inject constructor(
             data.accessToken?.let {
                 authDataStore.updateAccessToken(it.toBearerToken())
             }
+            authDataStore.updateMemberId(data.memberId!!)
             terminateLoading(data = signInData.data)
             _uiEvent.send(SignInEvent.NavigateToMain)
             return

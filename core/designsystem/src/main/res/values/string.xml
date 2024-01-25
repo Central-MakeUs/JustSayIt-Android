@@ -49,4 +49,23 @@
     <string name="dialog_subtitle_posting">그만 작성하기를 누르면\n작성중인 글은 저장되지 않아요.</string>
     <string name="dialog_button_continue">계속 작성하기</string>
     <string name="dialog_button_stop">그만 작성하기</string>
+    <string name="dialog_title_sign_out">로그아웃</string>
+    <string name="dialog_subtitle_sign_out">로그아웃 하시겠어요?</string>
+    <string name="dialog_title_withdraw">탈퇴하기</string>
+    <string name="dialog_subtitle_withdraw">탈퇴하기를 누르면 감정 리포트,\n개인 설정 등 모든 활동 기록이 영구 삭제돼요</string>
+    <string name="dialog_button_sign_out">로그아웃</string>
+    <string name="dialog_button_withdraw">탈퇴하기</string>
+    <string name="dialog_button_cancel">취소</string>
+
+    <string name="setting_title_normal">일반</string>
+    <string name="setting_item_contact">개발자에게 연락하기</string>
+    <string name="setting_item_terms">이용약관</string>
+    <string name="setting_item_privacy">개인정보 보호 정책</string>
+    <string name="setting_item_version">앱 버전</string>
+
+    <string name="setting_title_setting">설정</string>
+    <string name="setting_item_indie_info">개인 정보 관리</string>
+
+    <string name="setting_item_sign_out">로그아웃</string>
+    <string name="setting_item_withdraw">회원탈퇴</string>
 </resources>

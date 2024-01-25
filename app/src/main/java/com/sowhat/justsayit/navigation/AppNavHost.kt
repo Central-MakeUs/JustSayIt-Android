@@ -9,6 +9,7 @@ import com.sowhat.main_presentation.navigation.mainScreen
 import com.sowhat.authentication_presentation.navigation.onBoardingScreen
 import com.sowhat.authentication_presentation.navigation.userConfigScreen
 import com.sowhat.post_presentation.navigation.postScreen
+import com.sowhat.user_presentation.navigation.signOutScreen
 import com.sowhat.user_presentation.navigation.userInfoUpdateScreen
 
 @Composable
@@ -23,5 +24,6 @@ fun AppNavHost(
         mainScreen(appNavController = navController)
         postScreen(appNavController = navController)
         userInfoUpdateScreen(appNavController = navController)
+        signOutScreen(appNavController = navController)
     }
 }

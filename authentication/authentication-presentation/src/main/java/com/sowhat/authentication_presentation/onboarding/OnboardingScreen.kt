@@ -38,6 +38,7 @@ import com.sowhat.authentication_presentation.navigation.navigateToUserConfig
 import com.sowhat.authentication_presentation.util.GoogleOAuthClient
 import com.sowhat.authentication_presentation.util.KakaoOAuthClient
 import com.sowhat.authentication_presentation.util.NaverOAuthClient
+import com.sowhat.common.navigation.ONBOARDING
 import kotlinx.coroutines.launch
 
 @Composable
@@ -52,7 +53,7 @@ fun OnboardingRoute(
         when (uiEvent) {
             is SignInEvent.NavigateToMain -> {
                 Log.i("OnboardingScreen", "navigate to main")
-                navController.navigateToMain()
+                navController.navigateToMain(popUpTo = ONBOARDING)
             }
             is SignInEvent.NavigateToSignUp -> {
                 Log.i("OnboardingScreen", "navigate to user config")
