@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.sowhat.common.navigation.CONFIG_EDIT
+import com.sowhat.common.navigation.MAIN
 import com.sowhat.common.navigation.ONBOARDING
 import com.sowhat.common.navigation.SETTING
 import com.sowhat.common.navigation.SIGN_OUT
@@ -54,8 +55,11 @@ fun NavController.navigateToSignOut() {
 
 fun NavController.navigateToOnboarding() {
     this.navigate(ONBOARDING) {
-        popUpTo(SIGN_OUT) {
+        // popUpTo의 경우 들어가는 route는 해당 route 위에 쌓여있는 모든 화면을 빼겠다는 의미. 따라서 SIGN_OUT이 아닌 MAIN으로 명시
+        // inclusive를 true로 하면 해당 route도 포함시켜서 뺀다는 의미
+        popUpTo(MAIN) {
             inclusive = true
         }
+        launchSingleTop = true
     }
 }

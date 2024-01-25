@@ -1,5 +1,6 @@
 package com.sowhat.user_presentation.signout
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -45,6 +46,7 @@ fun SignOutRoute(
     )
 
     ScreenDialog(
+        appNavController = appNavController,
         uiState = uiState,
         onSignOut = viewModel::signOut,
         onWithdraw = viewModel::withdraw,
@@ -58,6 +60,7 @@ fun SignOutRoute(
             }
             is PostingEvent.NavigateUp -> {
                 appNavController.navigateToOnboarding()
+                Log.i("SignOutScreen", appNavController.visibleEntries.value.toString())
             }
         }
     }
@@ -66,6 +69,7 @@ fun SignOutRoute(
 
 @Composable
 private fun ScreenDialog(
+    appNavController: NavController,
     uiState: SignOutUiState,
     onSignOut: () -> Unit,
     onWithdraw: () -> Unit,
@@ -78,7 +82,9 @@ private fun ScreenDialog(
             buttonContent = stringResource(id = R.string.dialog_button_cancel)
                     to stringResource(id = R.string.dialog_button_sign_out),
             onAccept = onSignOut,
-            onDismiss = { onEvent(SignOutEvent.SignOutVisibilityChanged(false)) }
+            onDismiss = {
+                onEvent(SignOutEvent.SignOutVisibilityChanged(false))
+            }
         )
     }
 
@@ -89,7 +95,10 @@ private fun ScreenDialog(
             buttonContent = stringResource(id = R.string.dialog_button_cancel)
                     to stringResource(id = R.string.dialog_button_withdraw),
             onAccept = onWithdraw,
-            onDismiss = { onEvent(SignOutEvent.WithdrawVisibilityChanged(false)) }
+            onDismiss = {
+                onEvent(SignOutEvent.WithdrawVisibilityChanged(false))
+                appNavController.popBackStack()
+            }
         )
     }
 }

@@ -67,6 +67,7 @@ import com.sowhat.authentication_presentation.component.DescButton
 import com.sowhat.authentication_presentation.component.DobTextField
 import com.sowhat.authentication_presentation.component.Selection
 import com.sowhat.authentication_presentation.navigation.navigateToMain
+import com.sowhat.common.navigation.CONFIG_EDIT
 
 @Composable
 fun UserConfigRoute(
@@ -90,7 +91,7 @@ fun UserConfigRoute(
         when (uiEvent) {
             is SignUpEvent.NavigateToMain -> {
                 Log.i(USER_CONFIG_SCREEN, "navigate to main")
-                navController.navigateToMain()
+                navController.navigateToMain(popUpTo = CONFIG_EDIT)
             }
             is SignUpEvent.Error -> {
                 Log.i(USER_CONFIG_SCREEN, "error ${uiEvent.message}")
