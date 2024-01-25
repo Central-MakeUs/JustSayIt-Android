@@ -312,7 +312,7 @@ fun DialogPreview() {
 fun SelectionDialogPreview() {
     val items = listOf("광고/도배글이에요.", "음란물이에요.", "도박이에요.")
     var selected by remember {
-        mutableStateOf(items[0])
+        mutableStateOf<String?>(null)
     }
     Column(
         modifier = Modifier.fillMaxSize()
