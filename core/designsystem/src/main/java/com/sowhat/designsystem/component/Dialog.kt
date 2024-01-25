@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -64,10 +65,60 @@ fun AlertDialog(
 }
 
 @Composable
+fun AlertDialogReverse(
+    modifier: Modifier = Modifier,
+    title: String,
+    subTitle: String,
+    buttonContent: Pair<String, String>,
+    onAccept: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    Dialog(
+        properties = DialogProperties(),
+        onDismissRequest = onDismiss
+    ) {
+        Card(
+            modifier = modifier,
+            shape = JustSayItTheme.Shapes.medium,
+            colors = CardDefaults.cardColors(
+                containerColor =JustSayItTheme.Colors.mainBackground
+            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(JustSayItTheme.Spacing.spaceMd),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(28.dp)
+            ) {
+                DialogText(
+                    title = title,
+                    subTitle = subTitle
+                )
+
+                DialogButtons(
+                    buttonContent = buttonContent,
+                    onDismiss = onDismiss,
+                    onAccept = onAccept,
+                    dismissButtonColor = JustSayItTheme.Colors.subBackground,
+                    dismissTextColor = Gray500,
+                    acceptButtonColor = JustSayItTheme.Colors.mainTypo,
+                    acceptTextColor = White
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun DialogButtons(
     buttonContent: Pair<String, String>,
     onDismiss: () -> Unit,
-    onAccept: () -> Unit
+    onAccept: () -> Unit,
+    dismissButtonColor: Color = JustSayItTheme.Colors.mainTypo,
+    dismissTextColor: Color = White,
+    acceptButtonColor: Color = JustSayItTheme.Colors.subBackground,
+    acceptTextColor: Color = Gray500
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -78,8 +129,8 @@ private fun DialogButtons(
             modifier = Modifier.weight(1f),
             text = buttonContent.first,
             textStyle = JustSayItTheme.Typography.body1,
-            textColor = White,
-            backgroundColor = JustSayItTheme.Colors.mainTypo,
+            textColor = dismissTextColor,
+            backgroundColor = dismissButtonColor,
             onClick = onDismiss
         )
 
@@ -87,8 +138,8 @@ private fun DialogButtons(
             modifier = Modifier.weight(1f),
             text = buttonContent.second,
             textStyle = JustSayItTheme.Typography.body1,
-            textColor = Gray500,
-            backgroundColor = JustSayItTheme.Colors.subBackground,
+            textColor = acceptTextColor,
+            backgroundColor = acceptButtonColor,
             onClick = onAccept
         )
     }

@@ -1,8 +1,10 @@
 package com.sowhat.user_presentation.signout
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.contentColorFor
@@ -20,6 +22,7 @@ import com.sowhat.common.util.ObserveEvents
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.component.AlertDialog
+import com.sowhat.designsystem.component.AlertDialogReverse
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.user_presentation.common.MenuItem
 import com.sowhat.user_presentation.common.SignOutUiState
@@ -69,7 +72,7 @@ private fun ScreenDialog(
     onEvent: (SignOutEvent) -> Unit
 ) {
     if (uiState.showSignOut) {
-        AlertDialog(
+        AlertDialogReverse(
             title = stringResource(id = R.string.dialog_title_sign_out),
             subTitle = stringResource(id = R.string.dialog_subtitle_sign_out),
             buttonContent = stringResource(id = R.string.dialog_button_cancel)
@@ -80,11 +83,11 @@ private fun ScreenDialog(
     }
 
     if (uiState.showWithdraw) {
-        AlertDialog(
-            title = stringResource(id = R.string.dialog_title_sign_out),
-            subTitle = stringResource(id = R.string.dialog_subtitle_sign_out),
+        AlertDialogReverse(
+            title = stringResource(id = R.string.dialog_title_withdraw),
+            subTitle = stringResource(id = R.string.dialog_subtitle_withdraw),
             buttonContent = stringResource(id = R.string.dialog_button_cancel)
-                    to stringResource(id = R.string.dialog_button_sign_out),
+                    to stringResource(id = R.string.dialog_button_withdraw),
             onAccept = onWithdraw,
             onDismiss = { onEvent(SignOutEvent.WithdrawVisibilityChanged(false)) }
         )
@@ -128,10 +131,12 @@ private fun SignOutScreenContent(
         modifier = modifier
             .fillMaxSize()
             .padding(paddingValues)
+            .background(JustSayItTheme.Colors.mainBackground)
     ) {
         Menu(
             modifier = Modifier
-                .padding(vertical = JustSayItTheme.Spacing.spaceSm),
+                .padding(vertical = JustSayItTheme.Spacing.spaceSm)
+                .fillMaxWidth(),
             title = null,
             menus = listOf(
                 MenuItem(
