@@ -57,6 +57,5 @@ fun NavController.navigateToOnboarding() {
         popUpTo(SIGN_OUT) {
             inclusive = true
         }
-        launchSingleTop = true
     }
 }

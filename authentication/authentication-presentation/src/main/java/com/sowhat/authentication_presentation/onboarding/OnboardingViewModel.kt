@@ -44,11 +44,11 @@ class OnboardingViewModel @Inject constructor(
     ) = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(isLoading = true)
 
-        val accessToken = tokens.await().accessToken
-        Log.i("OnboardingScreen", "access token : $accessToken")
+        val platformToken = tokens.await().platformToken
+        Log.i("OnboardingScreen", "platformToken : $platformToken")
 
-        if (accessToken.isNullOrBlank()) {
-            Log.i("OnboardingScreen", "access token is null : $accessToken")
+        if (platformToken.isNullOrBlank()) {
+            Log.i("OnboardingScreen", "platformToken is null : $platformToken")
             authDataStore.apply {
                 updatePlatform(platform = platform.title)
                 updatePlatformToken(platformToken = derivedPlatformToken)
@@ -56,8 +56,8 @@ class OnboardingViewModel @Inject constructor(
         }
 
         // 만약 액세스 토큰이 없을 때 갱신되었을 수 있기 때문에 여기에 새로 선언
-        val platformToken = authDataStore.authData.first().platformToken
-        val signInData = signInUseCase(platformToken)
+        val newPlatformToken = authDataStore.authData.first().platformToken
+        val signInData = signInUseCase(newPlatformToken)
 
         consumeResources(signInData)
     }
