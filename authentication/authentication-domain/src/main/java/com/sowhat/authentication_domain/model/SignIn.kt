@@ -11,5 +11,5 @@ data class SignIn(
     @SerialName("isJoined")
     val isJoined: Boolean,
     @SerialName("memberId")
-    val memberId: Int?
+    val memberId: Long?
 )

@@ -39,15 +39,20 @@ class OnboardingViewModel @Inject constructor(
 
     fun signIn(
         platform: Platform,
-        platformToken: String
+        derivedPlatformToken: String
     ) = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(isLoading = true)
 
-        authDataStore.apply {
-            updatePlatform(platform = platform.title)
-            updatePlatformToken(platformToken = platformToken)
+        val accessToken = tokens.await().accessToken
+
+        if (accessToken.isNullOrBlank()) {
+            authDataStore.apply {
+                updatePlatform(platform = platform.title)
+                updatePlatformToken(platformToken = derivedPlatformToken)
+            }
         }
 
+        // 만약 액세스 토큰이 없을 때 갱신되었을 수 있기 때문에 여기에 선언
         val platformToken = tokens.await().platformToken
         val signInData = signInUseCase(platformToken)
 
@@ -81,6 +86,7 @@ class OnboardingViewModel @Inject constructor(
             data.accessToken?.let {
                 authDataStore.updateAccessToken(it.toBearerToken())
             }
+            authDataStore.updateMemberId(data.memberId!!)
             terminateLoading(data = signInData.data)
             _uiEvent.send(SignInEvent.NavigateToMain)
             return
