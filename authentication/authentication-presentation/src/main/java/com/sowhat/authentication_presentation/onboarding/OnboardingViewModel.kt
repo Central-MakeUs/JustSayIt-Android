@@ -1,5 +1,6 @@
 package com.sowhat.authentication_presentation.onboarding
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sowhat.authentication_domain.model.SignIn
@@ -44,16 +45,18 @@ class OnboardingViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(isLoading = true)
 
         val accessToken = tokens.await().accessToken
+        Log.i("OnboardingScreen", "access token : $accessToken")
 
         if (accessToken.isNullOrBlank()) {
+            Log.i("OnboardingScreen", "access token is null : $accessToken")
             authDataStore.apply {
                 updatePlatform(platform = platform.title)
                 updatePlatformToken(platformToken = derivedPlatformToken)
             }
         }
 
-        // 만약 액세스 토큰이 없을 때 갱신되었을 수 있기 때문에 여기에 선언
-        val platformToken = tokens.await().platformToken
+        // 만약 액세스 토큰이 없을 때 갱신되었을 수 있기 때문에 여기에 새로 선언
+        val platformToken = authDataStore.authData.first().platformToken
         val signInData = signInUseCase(platformToken)
 
         consumeResources(signInData)
