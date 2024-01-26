@@ -34,7 +34,8 @@ fun NotificationScreen() {
             AppBar(
                 title = stringResource(id = R.string.appbar_notification),
                 navigationIcon = null,
-                actionIcon = null
+                actionIcon = null,
+                bottomBorder = true
             )
         }
     ) { paddingValues ->

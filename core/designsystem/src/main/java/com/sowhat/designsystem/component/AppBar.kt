@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.text.TextStyle
@@ -51,7 +52,8 @@ fun AppBar(
     navigationIcon: Int?,
     actionIcon: Int?,
     onNavigationIconClick: () -> Unit = {},
-    onActionIconClick: () -> Unit = {}
+    onActionIconClick: () -> Unit = {},
+    bottomBorder: Boolean = false
 ) {
     Box(
         modifier
@@ -66,7 +68,11 @@ fun AppBar(
         CenterAlignedTopAppBar(
             modifier = modifier
                 .height(48.dp)
-                .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
+                .composed {
+                    if (bottomBorder) {
+                        bottomBorder(strokeWidth = 0.5.dp, color = JustSayItTheme.Colors.subSurface)
+                    } else this
+                },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = JustSayItTheme.Colors.mainSurface,
             ),
@@ -102,11 +108,13 @@ fun AppBar(
             },
         )
 
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp,
-            color = JustSayItTheme.Colors.subBackground
-        )
+        if (bottomBorder) {
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp,
+                color = JustSayItTheme.Colors.subBackground
+            )
+        }
     }
 }
 
@@ -119,7 +127,8 @@ fun AppBar(
     navigationIcon: Int?,
     actionText: String?,
     onNavigationIconClick: () -> Unit = {},
-    onActionTextClick: () -> Unit = {}
+    onActionTextClick: () -> Unit = {},
+    bottomBorder: Boolean = false
 ) {
     Box(
         modifier
@@ -134,7 +143,7 @@ fun AppBar(
         CenterAlignedTopAppBar(
             modifier = modifier
                 .height(48.dp)
-                .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
+                .bottomBorder(strokeWidth = 0.5.dp, color = JustSayItTheme.Colors.subSurface),
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = JustSayItTheme.Colors.mainSurface,
             ),
@@ -171,12 +180,13 @@ fun AppBar(
             }
         )
 
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp,
-            color = JustSayItTheme.Colors.subBackground
-        )
-
+        if (bottomBorder) {
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp,
+                color = JustSayItTheme.Colors.subBackground
+            )
+        }
     }
 }
 
@@ -195,7 +205,7 @@ fun AppBar(
     CenterAlignedTopAppBar(
         modifier = modifier
             .height(48.dp)
-            .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
+            .bottomBorder(strokeWidth = 0.5.dp, color = JustSayItTheme.Colors.subSurface),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = JustSayItTheme.Colors.mainSurface,
         ),
@@ -246,7 +256,7 @@ fun AppBarHome(
     CenterAlignedTopAppBar(
         modifier = modifier
             .height(48.dp)
-            .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
+            .bottomBorder(strokeWidth = 0.5.dp, color = JustSayItTheme.Colors.subSurface),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = JustSayItTheme.Colors.mainSurface,
         ),
@@ -291,7 +301,7 @@ fun AppBarHome(
     CenterAlignedTopAppBar(
         modifier = modifier
             .height(48.dp)
-            .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
+            .bottomBorder(strokeWidth = 0.5.dp, color = JustSayItTheme.Colors.subSurface),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = JustSayItTheme.Colors.mainSurface,
         ),
@@ -362,7 +372,7 @@ fun AppBarFeed(
 
         Divider(
             modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp,
+            thickness = 0.5.dp,
             color = JustSayItTheme.Colors.subBackground
         )
     }
@@ -466,7 +476,7 @@ private fun EmotionButtons(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-class ScrollBehavior: TopAppBarScrollBehavior {
+class ScrollBehavior : TopAppBarScrollBehavior {
     override val flingAnimationSpec: DecayAnimationSpec<Float> = TODO()
     override val isPinned: Boolean = TODO()
     override val nestedScrollConnection: NestedScrollConnection = TODO()
@@ -496,13 +506,17 @@ fun AppBarPreview() {
     var currentItem by remember {
         mutableStateOf(dropdownItems.first())
     }
-    
+
     var currentTabItem by remember {
         mutableStateOf(tabItems.first())
     }
 
     Column {
-        AppBar(title = "설정", navigationIcon = R.drawable.ic_back_24, actionIcon = R.drawable.ic_menu_24)
+        AppBar(
+            title = "설정",
+            navigationIcon = R.drawable.ic_back_24,
+            actionIcon = R.drawable.ic_menu_24
+        )
         Spacer(modifier = Modifier.height(2.dp))
         AppBar(title = "앱바 미리보기", navigationIcon = R.drawable.ic_back_24, actionText = "완료")
         Spacer(modifier = Modifier.height(2.dp))
@@ -510,10 +524,12 @@ fun AppBarPreview() {
         Spacer(modifier = Modifier.height(2.dp))
         AppBarHome(onClick = {}, currentEmotion = Emotion.HAPPY)
         Spacer(modifier = Modifier.height(2.dp))
-        AppBarHome(title = "그냥, 그렇다고", actions = listOf(
-            ActionButtonItem(icon = R.drawable.ic_camera_24, onClick = {}),
-            ActionButtonItem(icon = R.drawable.ic_menu_24, onClick = {})
-        ))
+        AppBarHome(
+            title = "그냥, 그렇다고", actions = listOf(
+                ActionButtonItem(icon = R.drawable.ic_camera_24, onClick = {}),
+                ActionButtonItem(icon = R.drawable.ic_menu_24, onClick = {})
+            )
+        )
         Spacer(modifier = Modifier.height(2.dp))
         AppBarFeed(
             currentDropdownItem = currentItem,
