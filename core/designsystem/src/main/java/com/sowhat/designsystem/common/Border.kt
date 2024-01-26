@@ -33,3 +33,23 @@ fun Modifier.bottomBorder(strokeWidth: Dp, color: Color, horizontalPadding: Dp =
         }
     }
 )
+
+fun Modifier.topBorder(strokeWidth: Dp, color: Color, horizontalPadding: Dp = 0.dp) = composed(
+    factory = {
+        val density = LocalDensity.current
+        val strokeWidthPx = density.run { strokeWidth.toPx() }
+        val horizontalPaddingPx = density.run { horizontalPadding.toPx() }
+
+        Modifier.drawBehind {
+            val width = size.width
+            val height = size.height - strokeWidthPx / 2
+
+            drawLine(
+                color = color,
+                start = Offset(x = 0f + horizontalPaddingPx, y = 0f),
+                end = Offset(x = width - horizontalPaddingPx , y = 0f),
+                strokeWidth = strokeWidthPx
+            )
+        }
+    }
+)

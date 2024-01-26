@@ -51,7 +51,8 @@ fun Cell(
                 Icon(
                     modifier = Modifier.padding(end = 8.dp),
                     painter = painterResource(id = it),
-                    contentDescription = "leadingIcon"
+                    contentDescription = "leadingIcon",
+                    tint = JustSayItTheme.Colors.mainTypo
                 )
             }
 
@@ -63,6 +64,7 @@ fun Cell(
                 overflow = TextOverflow.Ellipsis,
                 text = title,
                 style = JustSayItTheme.Typography.body3,
+                color = JustSayItTheme.Colors.mainTypo
             )
         }
         
@@ -108,7 +110,8 @@ fun Cell(
                 Icon(
                     modifier = Modifier.padding(8.dp),
                     painter = painterResource(id = it),
-                    contentDescription = "leadingIcon"
+                    contentDescription = "leadingIcon",
+                    tint = JustSayItTheme.Colors.mainTypo
                 )
             }
 
@@ -119,6 +122,7 @@ fun Cell(
                 overflow = TextOverflow.Ellipsis,
                 text = title,
                 style = JustSayItTheme.Typography.body3,
+                color = JustSayItTheme.Colors.mainTypo
             )
         }
 
@@ -129,6 +133,7 @@ fun Cell(
                 overflow = TextOverflow.Ellipsis,
                 text = it,
                 style = JustSayItTheme.Typography.body3,
+                color = JustSayItTheme.Colors.mainTypo
             )
         }
     }

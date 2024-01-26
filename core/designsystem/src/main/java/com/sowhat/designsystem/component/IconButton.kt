@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.sowhat.designsystem.R
+import com.sowhat.designsystem.theme.JustSayItTheme
 
 @Composable
 fun DefaultIconButton(
@@ -22,7 +23,8 @@ fun DefaultIconButton(
     ) {
         Icon(
             painter = painterResource(id = iconDrawable),
-            contentDescription = "button icon"
+            contentDescription = "button icon",
+            tint = JustSayItTheme.Colors.mainTypo
         )
     }
 }

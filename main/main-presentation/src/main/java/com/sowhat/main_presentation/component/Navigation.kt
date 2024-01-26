@@ -31,6 +31,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.NAVIGATION_HEIGHT
+import com.sowhat.designsystem.common.bottomBorder
+import com.sowhat.designsystem.common.topBorder
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.main_presentation.common.CenterNavItemContent
@@ -69,7 +71,8 @@ fun BottomNavigationBar(
                 .fillMaxWidth()
                 .fillMaxHeight(0.8f)
                 .background(JustSayItTheme.Colors.mainBackground)
-                .border(width = 0.5.dp, color = Gray300),
+                .topBorder(strokeWidth = 0.5.dp, color = Gray300),
+//            .border(width = 0.5.dp, color = Gray300)
             containerColor = bottomNavBackground
 //            containerColor = JustSayItTheme.Colors.mainSurface,
 //            contentColor = JustSayItTheme.Colors.onMainSurface

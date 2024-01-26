@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Icon
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -38,15 +40,17 @@ fun TextDrawableStart(
     text: String,
     textStyle: TextStyle,
     textColor: Color,
-    drawable: Int?
+    drawable: Int?,
+    drawableSize: Dp?
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        drawable?.let {
+        if (drawable != null && drawableSize != null) {
             Image(
+                modifier = Modifier.size(drawableSize),
                 painter = painterResource(id = drawable),
                 contentDescription = "icon",
             )

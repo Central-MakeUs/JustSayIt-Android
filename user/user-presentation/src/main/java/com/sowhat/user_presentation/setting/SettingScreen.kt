@@ -64,7 +64,7 @@ fun SettingScreen(
         topBar = {
             AppBar(
                 title = APPBAR_SETTING,
-                navigationIcon = R.drawable.ic_back_24,
+                navigationIcon = null,
                 actionIcon = null
             )
         }

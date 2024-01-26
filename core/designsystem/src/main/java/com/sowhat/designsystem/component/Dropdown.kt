@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -48,7 +49,7 @@ fun DropdownHeader(
         Row(
             modifier = Modifier
                 .padding(
-                    horizontal = JustSayItTheme.Spacing.spaceBase,
+                    horizontal = JustSayItTheme.Spacing.spaceSm,
                     vertical = JustSayItTheme.Spacing.spaceXS
                 ),
             horizontalArrangement = Arrangement
@@ -57,6 +58,7 @@ fun DropdownHeader(
         ) {
             currentMenu.drawable?.let {
                 Image(
+                    modifier = Modifier.size(JustSayItTheme.Spacing.spaceXL),
                     painter = painterResource(id = currentMenu.drawable),
                     contentDescription = "dropdown_drawable"
                 )
@@ -97,7 +99,7 @@ fun DropdownContents(
                     color = JustSayItTheme.Colors.mainSurface,
                 )
                 .border(
-                    width = 1.dp,
+                    width = 0.5.dp,
                     color = Gray300,
                     shape = JustSayItTheme.Shapes.medium
                 ),
@@ -125,7 +127,7 @@ fun ColumnScope.DropdownMenus(
 ) {
     items.forEachIndexed { index, dropdownItem ->
         if (index != 0) Divider(
-            thickness = JustSayItTheme.Spacing.spaceTiny,
+            thickness = 0.5.dp,
             color = Gray300,
         )
 
@@ -142,7 +144,8 @@ fun ColumnScope.DropdownMenus(
                     text = dropdownItem.title,
                     textStyle = JustSayItTheme.Typography.body3,
                     textColor = JustSayItTheme.Colors.mainTypo,
-                    drawable = dropdownItem.drawable
+                    drawable = dropdownItem.drawable,
+                    drawableSize = JustSayItTheme.Spacing.spaceLg
                 )
             },
             onClick = {
@@ -179,7 +182,7 @@ fun DropdownHeaderPreview() {
         modifier = Modifier,
         currentMenu = DropdownItem(
             title = "행복",
-            drawable = R.drawable.ic_happy_24
+            drawable = R.drawable.ic_happy_96
         ),
         onClick = {},
         isDropdownExpanded = true

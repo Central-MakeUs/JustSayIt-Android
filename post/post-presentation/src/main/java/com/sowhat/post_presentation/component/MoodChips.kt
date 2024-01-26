@@ -99,10 +99,10 @@ fun MoodChips(
 fun MoodChipsPreview() {
 
     val moods = listOf(
-        MoodItem(com.sowhat.designsystem.R.drawable.ic_happy_24, "기쁨", "", Color.White, Color.Black, Color.White, Color.Black),
-        MoodItem(com.sowhat.designsystem.R.drawable.ic_sad_24, "슬픔", "", Color.White, Color.Black, Color.White, Color.Black),
-        MoodItem(com.sowhat.designsystem.R.drawable.ic_angry_24, "화남", "", Color.White, Color.Black, Color.White, Color.Black),
-        MoodItem(com.sowhat.designsystem.R.drawable.ic_surprise_24, "놀람", "", Color.White, Color.Black, Color.White, Color.Black),
+        MoodItem(com.sowhat.designsystem.R.drawable.ic_happy_96, "기쁨", "", Color.White, Color.Black, Color.White, Color.Black),
+        MoodItem(com.sowhat.designsystem.R.drawable.ic_sad_96, "슬픔", "", Color.White, Color.Black, Color.White, Color.Black),
+        MoodItem(com.sowhat.designsystem.R.drawable.ic_angry_96, "화남", "", Color.White, Color.Black, Color.White, Color.Black),
+        MoodItem(com.sowhat.designsystem.R.drawable.ic_surprise_96, "놀람", "", Color.White, Color.Black, Color.White, Color.Black),
     )
 
     var selectedMoods = remember {

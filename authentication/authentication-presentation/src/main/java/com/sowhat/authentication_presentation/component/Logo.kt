@@ -41,7 +41,8 @@ private fun Title(title: String) {
                 ),
             text = title,
             style = JustSayItTheme.Typography.headlineB,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = JustSayItTheme.Colors.mainTypo
         )
     }
 }
@@ -61,7 +62,8 @@ private fun Subtitle(subTitle: String) {
                 ),
             text = subTitle,
             style = JustSayItTheme.Typography.body4,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = JustSayItTheme.Colors.mainTypo
         )
     }
 }

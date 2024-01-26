@@ -60,13 +60,13 @@ val LightColorScheme = JustSayItColor(
 )
 
 val DarkColorScheme = JustSayItColor(
-    mainTypo = Gray900,
-    subTypo = Gray700,
-    mainBackground = White,
-    subBackground = Gray200,
-    mainSurface = White,
-    onMainSurface = NavIconLight,
-    subSurface = Gray400,
+    mainTypo = White,
+    subTypo = Gray100,
+    mainBackground = Black,
+    subBackground = Gray800,
+    mainSurface = Black,
+    onMainSurface = White,
+    subSurface = Gray800,
     angry = AngryColor,
     happy = HappyColor,
     surprise = SurpriseColor,
