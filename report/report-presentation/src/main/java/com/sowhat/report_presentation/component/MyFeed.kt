@@ -107,7 +107,9 @@ private fun FeedContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = JustSayItTheme.Spacing.spaceBase),
-            text = text
+            text = text,
+            style = JustSayItTheme.Typography.body1,
+            color = JustSayItTheme.Colors.mainTypo
         )
 
         FeedImages(images)
@@ -188,7 +190,7 @@ fun MyFeedPreview() {
         item {
             MyFeed(
                 isPrivate = true,
-                mood = MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_happy_24, postData = "HAPPY",
+                mood = MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_happy_96, postData = "HAPPY",
                     title = "행복", selectedTextColor = Color.White,
                     unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White),
                 isStatusVisible = true,
@@ -203,7 +205,7 @@ fun MyFeedPreview() {
         item {
             MyFeed(
                 isPrivate = true,
-                mood = MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_happy_24, postData = "HAPPY",
+                mood = MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_happy_96, postData = "HAPPY",
                     title = "행복", selectedTextColor = Color.White,
                     unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White),
                 isStatusVisible = true,

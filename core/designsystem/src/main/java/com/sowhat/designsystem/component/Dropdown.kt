@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -57,6 +58,7 @@ fun DropdownHeader(
         ) {
             currentMenu.drawable?.let {
                 Image(
+                    modifier = Modifier.size(JustSayItTheme.Spacing.spaceXL),
                     painter = painterResource(id = currentMenu.drawable),
                     contentDescription = "dropdown_drawable"
                 )
@@ -142,7 +144,8 @@ fun ColumnScope.DropdownMenus(
                     text = dropdownItem.title,
                     textStyle = JustSayItTheme.Typography.body3,
                     textColor = JustSayItTheme.Colors.mainTypo,
-                    drawable = dropdownItem.drawable
+                    drawable = dropdownItem.drawable,
+                    drawableSize = 32.dp
                 )
             },
             onClick = {
@@ -179,7 +182,7 @@ fun DropdownHeaderPreview() {
         modifier = Modifier,
         currentMenu = DropdownItem(
             title = "행복",
-            drawable = R.drawable.ic_happy_24
+            drawable = R.drawable.ic_happy_96
         ),
         onClick = {},
         isDropdownExpanded = true

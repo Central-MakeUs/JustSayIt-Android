@@ -1,14 +1,8 @@
 package com.sowhat.feed_presentation.feeds
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,15 +14,12 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -134,7 +125,7 @@ fun FeedScreen(
 private fun DummyData(count: Int) {
     val moodItems = listOf(
         MoodItem(
-            drawable = R.drawable.ic_happy_24,
+            drawable = R.drawable.ic_happy_96,
             title = "행복",
             postData = "HAPPY",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
@@ -143,7 +134,7 @@ private fun DummyData(count: Int) {
             unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground
         ),
         MoodItem(
-            drawable = R.drawable.ic_sad_24,
+            drawable = R.drawable.ic_sad_96,
             title = "슬픔",
             postData = "SAD",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
@@ -152,7 +143,7 @@ private fun DummyData(count: Int) {
             unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground
         ),
         MoodItem(
-            drawable = R.drawable.ic_surprise_24,
+            drawable = R.drawable.ic_surprise_96,
             title = "놀람",
             postData = "SURPRISED",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
@@ -161,7 +152,7 @@ private fun DummyData(count: Int) {
             unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground
         ),
         MoodItem(
-            drawable = R.drawable.ic_angry_24,
+            drawable = R.drawable.ic_angry_96,
             title = "화남",
             postData = "ANGRY",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,

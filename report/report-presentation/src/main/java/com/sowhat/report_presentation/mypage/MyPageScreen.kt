@@ -65,7 +65,7 @@ fun MyPageScreen(
                 }
                 var currentState by remember {
                     mutableStateOf(
-                        MoodItem(drawable = R.drawable.ic_happy_24, postData = "HAPPY",
+                        MoodItem(drawable = R.drawable.ic_happy_96, postData = "HAPPY",
                             title = "행복", selectedTextColor = Color.White,
                             unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
                     )
@@ -99,16 +99,16 @@ fun MyPageScreen(
                     ) {
                         items(count = 20) { index ->
                             val item = when {
-                                index % 4 == 0 ->  MoodItem(drawable = R.drawable.ic_happy_24, postData = "HAPPY",
+                                index % 4 == 0 ->  MoodItem(drawable = R.drawable.ic_happy_96, postData = "HAPPY",
                                     title = "행복", selectedTextColor = Color.White,
                                     unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
-                                index % 4 == 1 ->  MoodItem(drawable = R.drawable.ic_sad_24, postData = "HAPPY",
+                                index % 4 == 1 ->  MoodItem(drawable = R.drawable.ic_sad_96, postData = "HAPPY",
                                     title = "행복", selectedTextColor = Color.White,
                                     unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
-                                index % 4 == 2 ->  MoodItem(drawable = R.drawable.ic_angry_24, postData = "HAPPY",
+                                index % 4 == 2 ->  MoodItem(drawable = R.drawable.ic_angry_96, postData = "HAPPY",
                                     title = "행복", selectedTextColor = Color.White,
                                     unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
-                                else ->  MoodItem(drawable = R.drawable.ic_surprise_24, postData = "HAPPY",
+                                else ->  MoodItem(drawable = R.drawable.ic_surprise_96, postData = "HAPPY",
                                     title = "행복", selectedTextColor = Color.White,
                                     unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
                             }

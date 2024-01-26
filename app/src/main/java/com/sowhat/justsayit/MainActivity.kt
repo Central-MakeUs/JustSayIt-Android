@@ -3,6 +3,7 @@ package com.sowhat.justsayit
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
@@ -31,15 +32,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    Button(onClick = {
-//                        scope.launch {
-//                            val accessToken = NaverOAuthClient.signIn(context)
-//                            Log.i("MainActivity", "$accessToken")
-//                        }
-//                    }) {
-//                        Text(text = "naver")
-//                    }
-//                    DataStoreTestScreen()
                     AppNavHost(
                         navController = navController,
                         snackbarHostState = snackbarHostState

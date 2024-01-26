@@ -446,10 +446,10 @@ fun AppBarPreview() {
 
     val dropdownItems = listOf(
         DropdownItem("전체", null),
-        DropdownItem("행복", R.drawable.ic_happy_24),
-        DropdownItem("슬픔", R.drawable.ic_sad_24),
-        DropdownItem("놀람", R.drawable.ic_surprise_24),
-        DropdownItem("화남", R.drawable.ic_angry_24),
+        DropdownItem("행복", R.drawable.ic_happy_96),
+        DropdownItem("슬픔", R.drawable.ic_sad_96),
+        DropdownItem("놀람", R.drawable.ic_surprise_96),
+        DropdownItem("화남", R.drawable.ic_angry_96),
     )
 
     val tabItems = listOf("최근글", "인기글")

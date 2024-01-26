@@ -244,7 +244,7 @@ fun ChipPreview() {
             isSelected = isSelected,
             onClick = { item: String -> },
             moodItem = MoodItem(
-                drawable = R.drawable.ic_happy_24,
+                drawable = R.drawable.ic_happy_96,
                 title = "행복",
                 selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,
                 unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground,
@@ -258,7 +258,7 @@ fun ChipPreview() {
             isSelected = isSelected,
             onClick = {},
             moodItem = MoodItem(
-                drawable = R.drawable.ic_happy_24,
+                drawable = R.drawable.ic_happy_96,
                 title = "행복",
                 postData = "",
                 selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,

@@ -291,7 +291,7 @@ private fun SelectedSympathy(
 fun FeedItemPreview() {
     val moodItems = listOf(
         MoodItem(
-            drawable = com.sowhat.designsystem.R.drawable.ic_happy_24,
+            drawable = com.sowhat.designsystem.R.drawable.ic_happy_96,
             title = "행복",
             postData = "HAPPY",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
@@ -300,7 +300,7 @@ fun FeedItemPreview() {
             unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground
         ),
         MoodItem(
-            drawable = com.sowhat.designsystem.R.drawable.ic_sad_24,
+            drawable = com.sowhat.designsystem.R.drawable.ic_sad_96,
             title = "슬픔",
             postData = "SAD",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
@@ -309,7 +309,7 @@ fun FeedItemPreview() {
             unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground
         ),
         MoodItem(
-            drawable = com.sowhat.designsystem.R.drawable.ic_surprise_24,
+            drawable = com.sowhat.designsystem.R.drawable.ic_surprise_96,
             title = "놀람",
             postData = "SURPRISED",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
@@ -318,7 +318,7 @@ fun FeedItemPreview() {
             unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground
         ),
         MoodItem(
-            drawable = com.sowhat.designsystem.R.drawable.ic_angry_24,
+            drawable = com.sowhat.designsystem.R.drawable.ic_angry_96,
             title = "화남",
             postData = "ANGRY",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,

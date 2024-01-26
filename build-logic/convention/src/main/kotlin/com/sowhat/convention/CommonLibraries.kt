@@ -40,5 +40,12 @@ internal fun Project.configureCommonLibraries() {
         implementation(libs, "lifecycle.runtime.ktx")
         implementation(libs, "androidx.lifecycle.viewModelCompose")
         implementation(libs, "androidx.lifecycle.viewModelKtx")
+
+        implementation(libs, "emoji")
+        implementation(libs, "emoji.views")
+        implementation(libs, "emoji.views.helper")
+
+        // for using appcompattextview
+        implementation(libs, "appcompat")
     }
 }

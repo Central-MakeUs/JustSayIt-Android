@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
@@ -26,10 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sowhat.designsystem.common.DropdownItem
 import com.sowhat.designsystem.common.MoodItem
-import com.sowhat.designsystem.component.AppBarFeed
-import com.sowhat.designsystem.component.AppBarMyPage
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.JustSayItTheme
 
@@ -91,7 +87,7 @@ fun RailBackgroundPreview() {
     }
     var currentState by remember {
         mutableStateOf(
-            MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_happy_24, postData = "HAPPY",
+            MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_happy_96, postData = "HAPPY",
                 title = "행복", selectedTextColor = Color.White,
                 unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
         )
@@ -112,16 +108,16 @@ fun RailBackgroundPreview() {
         ) {
             items(count = 20) { index ->
                 val item = when {
-                    index % 4 == 0 ->  MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_happy_24, postData = "HAPPY",
+                    index % 4 == 0 ->  MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_happy_96, postData = "HAPPY",
                         title = "행복", selectedTextColor = Color.White,
                         unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
-                    index % 4 == 1 ->  MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_sad_24, postData = "HAPPY",
+                    index % 4 == 1 ->  MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_sad_96, postData = "HAPPY",
                         title = "행복", selectedTextColor = Color.White,
                         unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
-                    index % 4 == 2 ->  MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_angry_24, postData = "HAPPY",
+                    index % 4 == 2 ->  MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_angry_96, postData = "HAPPY",
                         title = "행복", selectedTextColor = Color.White,
                         unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
-                    else ->  MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_surprise_24, postData = "HAPPY",
+                    else ->  MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_surprise_96, postData = "HAPPY",
                         title = "행복", selectedTextColor = Color.White,
                         unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
                 }
