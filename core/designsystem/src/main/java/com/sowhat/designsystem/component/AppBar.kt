@@ -68,7 +68,8 @@ fun AppBar(
                 ) {
                     Text(
                         text = title,
-                        style = JustSayItTheme.Typography.body1
+                        style = JustSayItTheme.Typography.body1,
+                        color = JustSayItTheme.Colors.mainTypo
                     )
                 }
             }
@@ -118,7 +119,8 @@ fun AppBar(
                 ) {
                     Text(
                         text = title,
-                        style = JustSayItTheme.Typography.body1
+                        style = JustSayItTheme.Typography.body1,
+                        color = JustSayItTheme.Colors.mainTypo
                     )
                 }
             }
@@ -170,7 +172,8 @@ fun AppBar(
                 ) {
                     Text(
                         text = title,
-                        style = JustSayItTheme.Typography.body1
+                        style = JustSayItTheme.Typography.body1,
+                        color = JustSayItTheme.Colors.mainTypo
                     )
                 }
             }
@@ -224,7 +227,8 @@ fun AppBarHome(
                             .padding(horizontal = JustSayItTheme.Spacing.spaceSm),
                         text = title,
                         style = JustSayItTheme.Typography.headlineB,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = JustSayItTheme.Colors.mainTypo
                     )
                 }
             }

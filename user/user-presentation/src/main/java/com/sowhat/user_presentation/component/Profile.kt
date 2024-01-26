@@ -64,7 +64,8 @@ private fun UserInfo(
             text = userName,
             style = JustSayItTheme.Typography.heading3,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            color = JustSayItTheme.Colors.mainTypo
         )
 
         Spacer(

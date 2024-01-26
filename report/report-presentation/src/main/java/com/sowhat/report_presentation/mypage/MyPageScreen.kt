@@ -79,8 +79,8 @@ fun MyPageScreen(
                     onDropdownMenuChange = {},
                     tabItems = listOf("최신순", "오래된순"),
                     selectedTabItem = "최신순",
-                    selectedTabItemColor = Black,
-                    unselectedTabItemColor = Color.Gray,
+                    selectedTabItemColor = JustSayItTheme.Colors.mainTypo,
+                    unselectedTabItemColor = JustSayItTheme.Colors.inactiveTypo,
                     onSelectedTabItemChange = {}
                 )
 

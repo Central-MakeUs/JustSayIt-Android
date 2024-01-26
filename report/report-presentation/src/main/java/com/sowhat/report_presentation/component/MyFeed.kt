@@ -139,7 +139,8 @@ private fun MenuButton(onMenuClick: () -> Unit) {
         Icon(
             modifier = Modifier.padding(JustSayItTheme.Spacing.spaceBase),
             painter = painterResource(id = R.drawable.ic_more_20),
-            contentDescription = "more"
+            contentDescription = "more",
+            tint = JustSayItTheme.Colors.mainTypo
         )
     }
 }
@@ -149,12 +150,14 @@ private fun PrivateStatus(isPrivate: Boolean) {
     if (isPrivate) {
         Icon(
             painter = painterResource(id = R.drawable.ic_lock_16),
-            contentDescription = "locked"
+            contentDescription = "locked",
+            tint = JustSayItTheme.Colors.inactiveTypo
         )
     } else {
         Icon(
             painter = painterResource(id = R.drawable.ic_unlock_16),
-            contentDescription = "locked"
+            contentDescription = "unlocked",
+            tint = JustSayItTheme.Colors.inactiveTypo
         )
     }
 }

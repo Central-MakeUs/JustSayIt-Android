@@ -54,7 +54,7 @@ fun ImageSelection(
                     shape = JustSayItTheme.Shapes.medium
                 )
                 .clip(JustSayItTheme.Shapes.medium)
-                .background(Gray200, shape = JustSayItTheme.Shapes.medium),
+                .background(JustSayItTheme.Colors.subBackground, shape = JustSayItTheme.Shapes.medium),
             icon = com.sowhat.designsystem.R.drawable.ic_camera_24,
             onClick = onAddClick
         )

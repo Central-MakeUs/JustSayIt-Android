@@ -49,7 +49,7 @@ fun DropdownHeader(
         Row(
             modifier = Modifier
                 .padding(
-                    horizontal = JustSayItTheme.Spacing.spaceBase,
+                    horizontal = JustSayItTheme.Spacing.spaceSm,
                     vertical = JustSayItTheme.Spacing.spaceXS
                 ),
             horizontalArrangement = Arrangement
@@ -99,7 +99,7 @@ fun DropdownContents(
                     color = JustSayItTheme.Colors.mainSurface,
                 )
                 .border(
-                    width = 1.dp,
+                    width = 0.5.dp,
                     color = Gray300,
                     shape = JustSayItTheme.Shapes.medium
                 ),
@@ -127,7 +127,7 @@ fun ColumnScope.DropdownMenus(
 ) {
     items.forEachIndexed { index, dropdownItem ->
         if (index != 0) Divider(
-            thickness = JustSayItTheme.Spacing.spaceTiny,
+            thickness = 0.5.dp,
             color = Gray300,
         )
 
@@ -145,7 +145,7 @@ fun ColumnScope.DropdownMenus(
                     textStyle = JustSayItTheme.Typography.body3,
                     textColor = JustSayItTheme.Colors.mainTypo,
                     drawable = dropdownItem.drawable,
-                    drawableSize = 32.dp
+                    drawableSize = JustSayItTheme.Spacing.spaceLg
                 )
             },
             onClick = {

@@ -28,7 +28,8 @@ fun Header(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             text = title,
-            style = JustSayItTheme.Typography.body2
+            style = JustSayItTheme.Typography.body2,
+            color = JustSayItTheme.Colors.mainTypo
         )
     }
 }
