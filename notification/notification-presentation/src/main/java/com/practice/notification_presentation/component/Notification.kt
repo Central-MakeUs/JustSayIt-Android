@@ -9,12 +9,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.theme.Gray400
 import com.sowhat.designsystem.theme.JustSayItTheme
 
@@ -32,7 +35,9 @@ fun Notification(
         modifier = modifier
             .fillMaxWidth()
             .padding(JustSayItTheme.Spacing.spaceBase)
-            .background(JustSayItTheme.Colors.mainBackground)
+            .background(JustSayItTheme.Colors.mainBackground),
+        horizontalArrangement = Arrangement
+            .spacedBy(JustSayItTheme.Spacing.spaceXS)
     ) {
         // 감정 상태
         MoodStatus(
@@ -53,7 +58,8 @@ fun Notification(
 private fun NotificationContent(title: String, content: String, time: String) {
     Column(
         modifier = Modifier
-            .padding(top = JustSayItTheme.Spacing.spaceXXS)
+            .padding(top = JustSayItTheme.Spacing.spaceXXS),
+        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceXXS)
     ) {
         Text(
             text = title,
@@ -63,8 +69,6 @@ private fun NotificationContent(title: String, content: String, time: String) {
             overflow = TextOverflow.Ellipsis,
         )
 
-        Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceXXS))
-
         Text(
             text = content,
             style = JustSayItTheme.Typography.detail1,
@@ -72,8 +76,6 @@ private fun NotificationContent(title: String, content: String, time: String) {
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-
-        Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceTiny))
 
         Text(
             text = time,
@@ -88,9 +90,11 @@ private fun NotificationContent(title: String, content: String, time: String) {
 @Composable
 private fun MoodStatus(drawable: Int, statusText: String) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceXXS)
+        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceXXS),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
+            modifier = Modifier.size(40.dp),
             painter = painterResource(id = drawable),
             contentDescription = "status"
         )

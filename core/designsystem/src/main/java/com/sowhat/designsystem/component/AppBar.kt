@@ -53,44 +53,61 @@ fun AppBar(
     onNavigationIconClick: () -> Unit = {},
     onActionIconClick: () -> Unit = {}
 ) {
-    CenterAlignedTopAppBar(
-        modifier = modifier
-            .height(48.dp)
-            .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = JustSayItTheme.Colors.mainSurface,
-        ),
-        title = { 
-            title?.let {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = title,
-                        style = JustSayItTheme.Typography.body1,
-                        color = JustSayItTheme.Colors.mainTypo
+    Box(
+        modifier
+            .fillMaxWidth()
+            .height(48.dp),
+//        .bottomBorder(
+//            strokeWidth = 1.dp,
+//            color = Gray500
+//        ),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        CenterAlignedTopAppBar(
+            modifier = modifier
+                .height(48.dp)
+                .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = JustSayItTheme.Colors.mainSurface,
+            ),
+            title = {
+                title?.let {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = title,
+                            style = JustSayItTheme.Typography.body1,
+                            color = JustSayItTheme.Colors.mainTypo
+                        )
+                    }
+                }
+            },
+            navigationIcon = {
+                navigationIcon?.let {
+                    DefaultIconButton(
+                        iconDrawable = navigationIcon,
+                        onClick = onNavigationIconClick
                     )
                 }
-            }
-        },
-        navigationIcon = {
-            navigationIcon?.let {
-                DefaultIconButton(
-                    iconDrawable = navigationIcon,
-                    onClick = onNavigationIconClick
-                )
-            }
-        },
-        actions = {
-            actionIcon?.let {
-                DefaultIconButton(
-                    iconDrawable = actionIcon,
-                    onClick = onActionIconClick
-                )
-            }
-        },
-    )
+            },
+            actions = {
+                actionIcon?.let {
+                    DefaultIconButton(
+                        iconDrawable = actionIcon,
+                        onClick = onActionIconClick
+                    )
+                }
+            },
+        )
+
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = JustSayItTheme.Colors.subBackground
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -104,45 +121,63 @@ fun AppBar(
     onNavigationIconClick: () -> Unit = {},
     onActionTextClick: () -> Unit = {}
 ) {
-    CenterAlignedTopAppBar(
-        modifier = modifier
-            .height(48.dp)
-            .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = JustSayItTheme.Colors.mainSurface,
-        ),
-        title = {
-            title?.let {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = title,
-                        style = JustSayItTheme.Typography.body1,
-                        color = JustSayItTheme.Colors.mainTypo
+    Box(
+        modifier
+            .fillMaxWidth()
+            .height(48.dp),
+//        .bottomBorder(
+//            strokeWidth = 1.dp,
+//            color = Gray500
+//        ),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        CenterAlignedTopAppBar(
+            modifier = modifier
+                .height(48.dp)
+                .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = JustSayItTheme.Colors.mainSurface,
+            ),
+            title = {
+                title?.let {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = title,
+                            style = JustSayItTheme.Typography.body1,
+                            color = JustSayItTheme.Colors.mainTypo
+                        )
+                    }
+                }
+            },
+            navigationIcon = {
+                navigationIcon?.let {
+                    DefaultIconButton(
+                        iconDrawable = navigationIcon,
+                        onClick = onNavigationIconClick
+                    )
+                }
+            },
+            actions = {
+                actionText?.let {
+                    DefaultTextButton(
+                        text = actionText,
+                        onClick = onActionTextClick,
+                        textStyle = textStyle
                     )
                 }
             }
-        },
-        navigationIcon = {
-            navigationIcon?.let {
-                DefaultIconButton(
-                    iconDrawable = navigationIcon,
-                    onClick = onNavigationIconClick
-                )
-            }
-        },
-        actions = {
-            actionText?.let {
-                DefaultTextButton(
-                    text = actionText,
-                    onClick = onActionTextClick,
-                    textStyle = textStyle
-                )
-            }
-        }
-    )
+        )
+
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = JustSayItTheme.Colors.subBackground
+        )
+
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

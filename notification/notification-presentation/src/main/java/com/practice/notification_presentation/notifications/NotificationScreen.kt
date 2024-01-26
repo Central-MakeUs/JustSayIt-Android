@@ -1,11 +1,21 @@
 package com.practice.notification_presentation.notifications
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import com.practice.notification_presentation.component.Notification
+import com.sowhat.designsystem.component.AppBar
+import com.sowhat.designsystem.theme.JustSayItTheme
+import com.sowhat.designsystem.R
 
 @Composable
 fun NotificationRoute(
@@ -16,7 +26,38 @@ fun NotificationRoute(
 
 @Composable
 fun NotificationScreen() {
-    Scaffold { paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues))
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentColor = contentColorFor(backgroundColor = JustSayItTheme.Colors.mainBackground),
+        topBar = {
+            AppBar(
+                title = stringResource(id = R.string.appbar_notification),
+                navigationIcon = null,
+                actionIcon = null
+            )
+        }
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier
+                .padding(paddingValues)
+                .background(JustSayItTheme.Colors.mainBackground),
+        ) {
+            items(20) {
+                Notification(
+                    title = "오늘은 피그마 파일 하나를 공유하려고 합니다...",
+                    content = "글에 공감이 추가되었어요.",
+                    time = "1분 전",
+                    drawable = R.drawable.ic_happy_96,
+                    statusText = "행복"
+                )
+            }
+        }
     }
+}
+
+@Preview
+@Composable
+fun NotificationScreenPreview() {
+    NotificationScreen()
 }
