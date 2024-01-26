@@ -1,5 +1,6 @@
 package com.sowhat.authentication_presentation.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,7 +27,8 @@ fun Selection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(JustSayItTheme.Spacing.spaceBase),
+            .padding(JustSayItTheme.Spacing.spaceBase)
+            .background(JustSayItTheme.Colors.mainBackground),
         verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceSm)
     ) {
         DefaultHeader(title = title)

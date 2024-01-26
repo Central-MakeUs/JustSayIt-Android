@@ -1,5 +1,6 @@
 package com.sowhat.authentication_presentation.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,13 +24,16 @@ fun DobTextField(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(JustSayItTheme.Spacing.spaceBase),
+            .padding(JustSayItTheme.Spacing.spaceBase)
+            .background(JustSayItTheme.Colors.mainBackground),
         verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceSm)
     ) {
         DefaultHeader(title = title)
 
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(JustSayItTheme.Colors.mainBackground)
         ) {
             items.forEachIndexed { index, item ->
                 if (index != 0) Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceXXS))

@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.text.TextStyle
@@ -51,46 +52,70 @@ fun AppBar(
     navigationIcon: Int?,
     actionIcon: Int?,
     onNavigationIconClick: () -> Unit = {},
-    onActionIconClick: () -> Unit = {}
+    onActionIconClick: () -> Unit = {},
+    bottomBorder: Boolean = false
 ) {
-    CenterAlignedTopAppBar(
-        modifier = modifier
-            .height(48.dp)
-            .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = JustSayItTheme.Colors.mainSurface,
-        ),
-        title = { 
-            title?.let {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = title,
-                        style = JustSayItTheme.Typography.body1,
-                        color = JustSayItTheme.Colors.mainTypo
+    Box(
+        modifier
+            .fillMaxWidth()
+            .height(48.dp),
+//        .bottomBorder(
+//            strokeWidth = 1.dp,
+//            color = Gray500
+//        ),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        CenterAlignedTopAppBar(
+            modifier = modifier
+                .height(48.dp)
+                .composed {
+                    if (bottomBorder) {
+                        bottomBorder(strokeWidth = 0.5.dp, color = JustSayItTheme.Colors.subSurface)
+                    } else this
+                },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = JustSayItTheme.Colors.mainSurface,
+            ),
+            title = {
+                title?.let {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = title,
+                            style = JustSayItTheme.Typography.body1,
+                            color = JustSayItTheme.Colors.mainTypo
+                        )
+                    }
+                }
+            },
+            navigationIcon = {
+                navigationIcon?.let {
+                    DefaultIconButton(
+                        iconDrawable = navigationIcon,
+                        onClick = onNavigationIconClick
                     )
                 }
-            }
-        },
-        navigationIcon = {
-            navigationIcon?.let {
-                DefaultIconButton(
-                    iconDrawable = navigationIcon,
-                    onClick = onNavigationIconClick
-                )
-            }
-        },
-        actions = {
-            actionIcon?.let {
-                DefaultIconButton(
-                    iconDrawable = actionIcon,
-                    onClick = onActionIconClick
-                )
-            }
-        },
-    )
+            },
+            actions = {
+                actionIcon?.let {
+                    DefaultIconButton(
+                        iconDrawable = actionIcon,
+                        onClick = onActionIconClick
+                    )
+                }
+            },
+        )
+
+        if (bottomBorder) {
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp,
+                color = JustSayItTheme.Colors.subBackground
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,47 +127,67 @@ fun AppBar(
     navigationIcon: Int?,
     actionText: String?,
     onNavigationIconClick: () -> Unit = {},
-    onActionTextClick: () -> Unit = {}
+    onActionTextClick: () -> Unit = {},
+    bottomBorder: Boolean = false
 ) {
-    CenterAlignedTopAppBar(
-        modifier = modifier
-            .height(48.dp)
-            .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = JustSayItTheme.Colors.mainSurface,
-        ),
-        title = {
-            title?.let {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = title,
-                        style = JustSayItTheme.Typography.body1,
-                        color = JustSayItTheme.Colors.mainTypo
+    Box(
+        modifier
+            .fillMaxWidth()
+            .height(48.dp),
+//        .bottomBorder(
+//            strokeWidth = 1.dp,
+//            color = Gray500
+//        ),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        CenterAlignedTopAppBar(
+            modifier = modifier
+                .height(48.dp)
+                .bottomBorder(strokeWidth = 0.5.dp, color = JustSayItTheme.Colors.subSurface),
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = JustSayItTheme.Colors.mainSurface,
+            ),
+            title = {
+                title?.let {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = title,
+                            style = JustSayItTheme.Typography.body1,
+                            color = JustSayItTheme.Colors.mainTypo
+                        )
+                    }
+                }
+            },
+            navigationIcon = {
+                navigationIcon?.let {
+                    DefaultIconButton(
+                        iconDrawable = navigationIcon,
+                        onClick = onNavigationIconClick
+                    )
+                }
+            },
+            actions = {
+                actionText?.let {
+                    DefaultTextButton(
+                        text = actionText,
+                        onClick = onActionTextClick,
+                        textStyle = textStyle
                     )
                 }
             }
-        },
-        navigationIcon = {
-            navigationIcon?.let {
-                DefaultIconButton(
-                    iconDrawable = navigationIcon,
-                    onClick = onNavigationIconClick
-                )
-            }
-        },
-        actions = {
-            actionText?.let {
-                DefaultTextButton(
-                    text = actionText,
-                    onClick = onActionTextClick,
-                    textStyle = textStyle
-                )
-            }
+        )
+
+        if (bottomBorder) {
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.dp,
+                color = JustSayItTheme.Colors.subBackground
+            )
         }
-    )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -160,7 +205,7 @@ fun AppBar(
     CenterAlignedTopAppBar(
         modifier = modifier
             .height(48.dp)
-            .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
+            .bottomBorder(strokeWidth = 0.5.dp, color = JustSayItTheme.Colors.subSurface),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = JustSayItTheme.Colors.mainSurface,
         ),
@@ -211,7 +256,7 @@ fun AppBarHome(
     CenterAlignedTopAppBar(
         modifier = modifier
             .height(48.dp)
-            .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
+            .bottomBorder(strokeWidth = 0.5.dp, color = JustSayItTheme.Colors.subSurface),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = JustSayItTheme.Colors.mainSurface,
         ),
@@ -256,7 +301,7 @@ fun AppBarHome(
     CenterAlignedTopAppBar(
         modifier = modifier
             .height(48.dp)
-            .bottomBorder(strokeWidth = 1.dp, color = JustSayItTheme.Colors.subSurface),
+            .bottomBorder(strokeWidth = 0.5.dp, color = JustSayItTheme.Colors.subSurface),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = JustSayItTheme.Colors.mainSurface,
         ),
@@ -327,7 +372,7 @@ fun AppBarFeed(
 
         Divider(
             modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp,
+            thickness = 0.5.dp,
             color = JustSayItTheme.Colors.subBackground
         )
     }
@@ -431,7 +476,7 @@ private fun EmotionButtons(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-class ScrollBehavior: TopAppBarScrollBehavior {
+class ScrollBehavior : TopAppBarScrollBehavior {
     override val flingAnimationSpec: DecayAnimationSpec<Float> = TODO()
     override val isPinned: Boolean = TODO()
     override val nestedScrollConnection: NestedScrollConnection = TODO()
@@ -461,13 +506,17 @@ fun AppBarPreview() {
     var currentItem by remember {
         mutableStateOf(dropdownItems.first())
     }
-    
+
     var currentTabItem by remember {
         mutableStateOf(tabItems.first())
     }
 
     Column {
-        AppBar(title = "설정", navigationIcon = R.drawable.ic_back_24, actionIcon = R.drawable.ic_menu_24)
+        AppBar(
+            title = "설정",
+            navigationIcon = R.drawable.ic_back_24,
+            actionIcon = R.drawable.ic_menu_24
+        )
         Spacer(modifier = Modifier.height(2.dp))
         AppBar(title = "앱바 미리보기", navigationIcon = R.drawable.ic_back_24, actionText = "완료")
         Spacer(modifier = Modifier.height(2.dp))
@@ -475,10 +524,12 @@ fun AppBarPreview() {
         Spacer(modifier = Modifier.height(2.dp))
         AppBarHome(onClick = {}, currentEmotion = Emotion.HAPPY)
         Spacer(modifier = Modifier.height(2.dp))
-        AppBarHome(title = "그냥, 그렇다고", actions = listOf(
-            ActionButtonItem(icon = R.drawable.ic_camera_24, onClick = {}),
-            ActionButtonItem(icon = R.drawable.ic_menu_24, onClick = {})
-        ))
+        AppBarHome(
+            title = "그냥, 그렇다고", actions = listOf(
+                ActionButtonItem(icon = R.drawable.ic_camera_24, onClick = {}),
+                ActionButtonItem(icon = R.drawable.ic_menu_24, onClick = {})
+            )
+        )
         Spacer(modifier = Modifier.height(2.dp))
         AppBarFeed(
             currentDropdownItem = currentItem,

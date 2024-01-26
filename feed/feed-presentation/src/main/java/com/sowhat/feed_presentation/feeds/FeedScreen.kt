@@ -61,7 +61,8 @@ fun FeedScreen(
 
     Scaffold(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(JustSayItTheme.Colors.mainBackground),
         topBar = {
             AnimatedVisibility(
                 visible = lazyListState.isScrollingUp(),

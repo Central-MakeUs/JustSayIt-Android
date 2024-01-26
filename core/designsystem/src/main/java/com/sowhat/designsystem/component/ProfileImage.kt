@@ -38,6 +38,7 @@ fun ProfileImage(
                 top = 40.dp,
                 bottom = 20.dp
             )
+            .background(JustSayItTheme.Colors.mainBackground)
     ) {
         val (profile, badge) = createRefs()
 
@@ -87,6 +88,7 @@ fun ProfileImage(
                 top = 40.dp,
                 bottom = 20.dp
             )
+            .background(JustSayItTheme.Colors.mainBackground)
     ) {
         val (profile, badge) = createRefs()
 
