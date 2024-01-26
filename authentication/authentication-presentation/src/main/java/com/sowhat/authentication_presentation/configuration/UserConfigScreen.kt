@@ -1,5 +1,6 @@
 package com.sowhat.authentication_presentation.configuration
 
+import android.content.res.Configuration
 import android.net.Uri
 import android.util.Log
 import android.view.ViewTreeObserver
@@ -178,7 +179,8 @@ fun UserConfigScreen(
     Scaffold(
         modifier = modifier
             .fillMaxSize()
-            .noRippleClickable { keyboardController?.hide() },
+            .noRippleClickable { keyboardController?.hide() }
+            .background(JustSayItTheme.Colors.mainBackground),
         topBar = {
             AppBar(
                 title = null,
@@ -255,6 +257,7 @@ fun UserConfigScreen(
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun UserConfigScreenPreview() {
     var id by rememberSaveable {

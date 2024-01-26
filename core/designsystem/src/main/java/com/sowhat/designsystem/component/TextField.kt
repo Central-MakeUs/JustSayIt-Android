@@ -127,7 +127,8 @@ private fun DefaultTextFieldContent(
         value = value,
         singleLine = true,
         onValueChange = onValueChange,
-        textStyle = JustSayItTheme.Typography.heading3,
+        textStyle = JustSayItTheme.Typography.heading3
+            .copy(color = JustSayItTheme.Colors.mainTypo),
         decorationBox = { innerTextField ->
             Box(
                 modifier = Modifier
