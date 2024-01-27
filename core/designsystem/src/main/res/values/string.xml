@@ -62,6 +62,8 @@
     <string name="report_title">오랜만이에요.</string>
     <string name="report_subtitle">%s님,\n지금 기분이 어떠신가요?</string>
 
+    <string name="report_view_report">분석 레포트 보러가기</string>
+
     <string name="setting_title_normal">일반</string>
     <string name="setting_item_contact">개발자에게 연락하기</string>
     <string name="setting_item_terms">이용약관</string>

@@ -30,13 +30,17 @@ fun DefaultIconButton(
 }
 
 @Composable
-fun LoginIconButton(
-    iconDrawable: Int,
+fun ImageButton(
+    modifier: Modifier = Modifier,
+    imageDrawable: Int,
     onClick: () -> Unit
 ) {
-    IconButton(onClick = onClick) {
+    IconButton(
+        modifier = modifier,
+        onClick = onClick
+    ) {
         Image(
-            painter = painterResource(id = iconDrawable),
+            painter = painterResource(id = imageDrawable),
             contentDescription = "login icon"
         )
     }
@@ -50,8 +54,8 @@ fun DefaultIconButtonPreview() {
             iconDrawable = R.drawable.ic_camera_24,
             onClick = {}
         )
-        LoginIconButton(
-            iconDrawable = R.drawable.ic_naver_24,
+        ImageButton(
+            imageDrawable = R.drawable.ic_naver_24,
             onClick = {}
         )
     }

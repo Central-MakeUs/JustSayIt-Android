@@ -53,7 +53,7 @@ fun MyPageScreen(
             modifier = Modifier.padding(paddingValues),
             state = nestedScrollViewState,
             header = {
-                // Report()
+                Report(Modifier,"케이엠", true)
             }
         ) {
             Column(

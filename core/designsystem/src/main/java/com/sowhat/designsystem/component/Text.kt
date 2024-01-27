@@ -71,12 +71,14 @@ fun TextDrawableStart(
 
 @Composable
 fun TextDrawableEnd(
+    modifier: Modifier = Modifier,
     text: String,
     textStyle: TextStyle,
     textColor: Color,
     drawable: Int?
 ) {
     Row(
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(

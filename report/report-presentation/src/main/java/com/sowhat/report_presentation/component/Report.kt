@@ -2,6 +2,7 @@ package com.sowhat.report_presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,10 +16,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.designsystem.R
+import com.sowhat.designsystem.R.drawable.ic_next_16
+import com.sowhat.designsystem.common.Mood
+import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.component.DefaultButtonFull
+import com.sowhat.designsystem.component.TextDrawableEnd
 import com.sowhat.designsystem.theme.Gray500
 
 @Composable
@@ -38,10 +44,28 @@ fun Report(
             .spacedBy(JustSayItTheme.Spacing.spaceBase)
     ) {
         ReportTitle(nickname = nickname)
-
         ReportCard(isActive = isActive)
+        ReportButton(onClick = {})
+    }
+}
 
-
+@Composable
+fun ReportButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = modifier.fillMaxWidth(),
+        contentAlignment = Alignment.CenterEnd
+    ) {
+        TextDrawableEnd(
+            modifier = Modifier
+                .rippleClickable { onClick() },
+            text = stringResource(id = R.string.report_view_report),
+            textStyle = JustSayItTheme.Typography.body3,
+            textColor = JustSayItTheme.Colors.mainTypo,
+            drawable = ic_next_16
+        )
     }
 }
 
@@ -102,9 +126,11 @@ private fun ReportCard(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceBase)
             ) {
-                // TODO 슬라이더
+                // 슬라이더
+                DateSelection()
 
-                // TODO 감정 선택 버튼
+                // 감정 선택 버튼
+                CurrentMoodSelection(availableMoods = Mood.values().toList(), onChange = {})
             }
 
             DefaultButtonFull(
@@ -114,4 +140,10 @@ private fun ReportCard(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun ReportPreview() {
+    Report(nickname = "케이엠", isActive = true)
 }

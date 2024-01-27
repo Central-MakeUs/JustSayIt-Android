@@ -1,11 +1,9 @@
 package com.sowhat.report_presentation.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,17 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.sowhat.designsystem.common.Mood
 import com.sowhat.designsystem.common.dashedBorder
 import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
-import java.nio.channels.Selector
 import kotlin.math.absoluteValue
 
 @Composable
@@ -80,10 +75,11 @@ fun SelectionSlider(
         pagerCount
     }
 
-    val itemSize = 92.dp
+    val itemSize = 84.dp
 
     val configuration = LocalConfiguration.current
-    val screenWidthDp = configuration.screenWidthDp.dp
+    // 64dp는 Card 및 화면 상에서 사용되는 총 horizontal padding
+    val screenWidthDp = configuration.screenWidthDp.dp - 64.dp
 
     // https://medium.com/@domen.lanisnik/exploring-the-official-pager-in-compose-8c2698c49a98
     HorizontalPager(
