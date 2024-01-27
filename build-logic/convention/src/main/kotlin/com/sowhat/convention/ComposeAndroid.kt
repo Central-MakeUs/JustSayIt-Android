@@ -21,6 +21,7 @@ internal fun Project.configureComposeAndroid() {
 
             add("implementation", libs.findLibrary("material3").get())
             add("implementation", libs.findLibrary("ui").get())
+            implementation(libs, "ui.util")
             add("implementation", libs.findLibrary("ui.tooling.preview").get())
             add("androidTestImplementation", libs.findLibrary("androidx.test.ext.junit").get())
             add("androidTestImplementation", libs.findLibrary("espresso.core").get())
