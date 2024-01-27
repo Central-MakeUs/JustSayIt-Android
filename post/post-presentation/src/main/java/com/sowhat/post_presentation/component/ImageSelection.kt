@@ -49,7 +49,7 @@ fun ImageSelection(
             modifier = Modifier
                 .aspectRatio(1f)
                 .border(
-                    width = 0.5.dp,
+                    width = JustSayItTheme.Spacing.border,
                     color = JustSayItTheme.Colors.subSurface,
                     shape = JustSayItTheme.Shapes.medium
                 )
@@ -64,7 +64,7 @@ fun ImageSelection(
                 modifier = modifier
                     .aspectRatio(1f)
                     .border(
-                        width = 0.5.dp,
+                        width = JustSayItTheme.Spacing.border,
                         color = JustSayItTheme.Colors.subSurface,
                         shape = JustSayItTheme.Shapes.medium
                     )
@@ -100,7 +100,7 @@ fun SquaredPostImageContainer(
 
         ImageContainer(
             modifier = Modifier,
-            borderWidth = 0.5.dp,
+            borderWidth = JustSayItTheme.Spacing.border,
             borderColor = JustSayItTheme.Colors.subSurface,
             shape = JustSayItTheme.Shapes.medium,
             model = model,

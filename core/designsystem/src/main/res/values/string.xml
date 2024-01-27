@@ -37,6 +37,7 @@
 
     <string name="button_start">시작하기</string>
     <string name="button_post">게시하기</string>
+    <string name="button_feeling_submit">감정 제출</string>
 
     <string name="dropdown_upload_image">사진 업로드하기</string>
     <string name="dropdown_default_image">기본 이미지로 변경</string>
@@ -57,6 +58,13 @@
     <string name="dialog_button_sign_out">로그아웃</string>
     <string name="dialog_button_withdraw">탈퇴하기</string>
     <string name="dialog_button_cancel">취소</string>
+
+    <string name="report_title">오랜만이에요.</string>
+    <string name="report_subtitle">%s님,\n지금 기분이 어떠신가요?</string>
+
+    <string name="report_view_report">분석 레포트 보러가기</string>
+    <string name="report_badge_public">공개</string>
+    <string name="report_badge_private">비공개</string>
 
     <string name="setting_title_normal">일반</string>
     <string name="setting_item_contact">개발자에게 연락하기</string>

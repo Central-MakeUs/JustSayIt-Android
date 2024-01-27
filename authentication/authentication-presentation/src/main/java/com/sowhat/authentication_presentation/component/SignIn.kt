@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sowhat.designsystem.component.LoginIconButton
+import com.sowhat.designsystem.component.ImageButton
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.Gray600
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -79,8 +79,8 @@ fun SignInButtons(
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             signInPlatforms.forEach {
-                LoginIconButton(
-                    iconDrawable = it.iconDrawable,
+                ImageButton(
+                    imageDrawable = it.iconDrawable,
                     onClick = it.onClick
                 )
             }

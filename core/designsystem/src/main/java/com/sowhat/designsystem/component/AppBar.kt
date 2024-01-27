@@ -70,7 +70,7 @@ fun AppBar(
                 .height(48.dp)
                 .composed {
                     if (bottomBorder) {
-                        bottomBorder(strokeWidth = 0.5.dp, color = JustSayItTheme.Colors.subSurface)
+                        bottomBorder(strokeWidth = JustSayItTheme.Spacing.border, color = JustSayItTheme.Colors.subSurface)
                     } else this
                 },
             colors = TopAppBarDefaults.topAppBarColors(
@@ -143,7 +143,7 @@ fun AppBar(
         CenterAlignedTopAppBar(
             modifier = modifier
                 .height(48.dp)
-                .bottomBorder(strokeWidth = 0.5.dp, color = JustSayItTheme.Colors.subSurface),
+                .bottomBorder(strokeWidth = JustSayItTheme.Spacing.border, color = JustSayItTheme.Colors.subSurface),
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = JustSayItTheme.Colors.mainSurface,
             ),
@@ -205,7 +205,7 @@ fun AppBar(
     CenterAlignedTopAppBar(
         modifier = modifier
             .height(48.dp)
-            .bottomBorder(strokeWidth = 0.5.dp, color = JustSayItTheme.Colors.subSurface),
+            .bottomBorder(strokeWidth = JustSayItTheme.Spacing.border, color = JustSayItTheme.Colors.subSurface),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = JustSayItTheme.Colors.mainSurface,
         ),
@@ -256,7 +256,7 @@ fun AppBarHome(
     CenterAlignedTopAppBar(
         modifier = modifier
             .height(48.dp)
-            .bottomBorder(strokeWidth = 0.5.dp, color = JustSayItTheme.Colors.subSurface),
+            .bottomBorder(strokeWidth = JustSayItTheme.Spacing.border, color = JustSayItTheme.Colors.subSurface),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = JustSayItTheme.Colors.mainSurface,
         ),
@@ -301,7 +301,7 @@ fun AppBarHome(
     CenterAlignedTopAppBar(
         modifier = modifier
             .height(48.dp)
-            .bottomBorder(strokeWidth = 0.5.dp, color = JustSayItTheme.Colors.subSurface),
+            .bottomBorder(strokeWidth = JustSayItTheme.Spacing.border, color = JustSayItTheme.Colors.subSurface),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = JustSayItTheme.Colors.mainSurface,
         ),
@@ -372,7 +372,7 @@ fun AppBarFeed(
 
         Divider(
             modifier = Modifier.fillMaxWidth(),
-            thickness = 0.5.dp,
+            thickness = JustSayItTheme.Spacing.border,
             color = JustSayItTheme.Colors.subBackground
         )
     }

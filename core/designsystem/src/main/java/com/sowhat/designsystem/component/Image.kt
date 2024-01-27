@@ -92,7 +92,7 @@ fun SquaredImageContainer(
 ) {
     ImageContainer(
         modifier = modifier.aspectRatio(1f),
-        borderWidth = 0.5.dp,
+        borderWidth = JustSayItTheme.Spacing.border,
         borderColor = JustSayItTheme.Colors.subSurface,
         shape = JustSayItTheme.Shapes.large,
         model = model,
@@ -108,7 +108,7 @@ fun TimelineFeedImageContainer(
 ) {
     ImageContainer(
         modifier = modifier,
-        borderWidth = 0.5.dp,
+        borderWidth = JustSayItTheme.Spacing.border,
         borderColor = JustSayItTheme.Colors.subSurface,
         shape = JustSayItTheme.Shapes.medium,
         model = model,

@@ -25,10 +25,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.common.noRippleClickable
-import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.component.TimelineFeedImages
 import com.sowhat.designsystem.theme.JustSayItTheme
 
@@ -37,24 +37,42 @@ fun MyFeed(
     modifier: Modifier = Modifier,
     isPrivate: Boolean,
     mood: MoodItem,
+    date: String,
     isStatusVisible: Boolean,
     onMenuClick: () -> Unit,
     text: String,
-    images: List<String>
+    images: List<String>,
+    isScrollInProgress: Boolean
 ) {
-    Row(
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = Color.Transparent),
-        horizontalArrangement = Arrangement
-            .spacedBy(JustSayItTheme.Spacing.spaceXS)
+            .background(color = Color.Transparent)
     ) {
-        MoodStatus(
-            mood = mood,
-            isStatusVisible = isStatusVisible
-        )
 
-        FeedCard(isPrivate, onMenuClick, text, images)
+        if (isStatusVisible && isScrollInProgress) {
+            DateBadge(
+                modifier = Modifier
+                    .padding(top = 48.dp)
+                    .zIndex(2f),
+                date = date
+            )
+        }
+
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .background(color = Color.Transparent),
+            horizontalArrangement = Arrangement
+                .spacedBy(JustSayItTheme.Spacing.spaceXS)
+        ) {
+            MoodStatus(
+                mood = mood,
+                isStatusVisible = isStatusVisible
+            )
+
+            FeedCard(isPrivate, onMenuClick, text, images)
+        }
     }
 }
 
@@ -146,20 +164,8 @@ private fun MenuButton(onMenuClick: () -> Unit) {
 }
 
 @Composable
-private fun PrivateStatus(isPrivate: Boolean) {
-    if (isPrivate) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_lock_16),
-            contentDescription = "locked",
-            tint = JustSayItTheme.Colors.inactiveTypo
-        )
-    } else {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_unlock_16),
-            contentDescription = "unlocked",
-            tint = JustSayItTheme.Colors.inactiveTypo
-        )
-    }
+private fun PrivateStatus(isOpen: Boolean) {
+    OpenStatusBadge(isOpen = isOpen)
 }
 
 @Composable
@@ -199,7 +205,9 @@ fun MyFeedPreview() {
                 isStatusVisible = true,
                 text = "ok\nok",
                 images = emptyList(),
-                onMenuClick = {}
+                onMenuClick = {},
+                date = "22.11.22",
+                isScrollInProgress = true
             )
             
             Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))
@@ -214,7 +222,9 @@ fun MyFeedPreview() {
                 isStatusVisible = true,
                 text = "ok\nok",
                 images = listOf("", "", ""),
-                onMenuClick = {}
+                onMenuClick = {},
+                date = "22.11.23",
+                isScrollInProgress = true
             )
         }
     }

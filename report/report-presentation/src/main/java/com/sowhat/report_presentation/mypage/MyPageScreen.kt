@@ -53,7 +53,7 @@ fun MyPageScreen(
             modifier = Modifier.padding(paddingValues),
             state = nestedScrollViewState,
             header = {
-                Report()
+                Report(Modifier,"케이엠", true)
             }
         ) {
             Column(
@@ -68,6 +68,14 @@ fun MyPageScreen(
                         MoodItem(drawable = R.drawable.ic_happy_96, postData = "HAPPY",
                             title = "행복", selectedTextColor = Color.White,
                             unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
+                    )
+                }
+
+                val isScrollInProgress = lazyListState.isScrollInProgress
+
+                var currentDate by remember {
+                    mutableStateOf(
+                        "24.01.27"
                     )
                 }
 
@@ -86,7 +94,9 @@ fun MyPageScreen(
 
                 RailBackground(
                     lazyListState = lazyListState,
-                    currentMood = currentState
+                    currentMood = currentState,
+                    currentDate = currentDate,
+                    isScrollInProgress = isScrollInProgress
                 ) {
                     LazyColumn(
                         modifier = Modifier
@@ -123,7 +133,9 @@ fun MyPageScreen(
                                 isStatusVisible = if (remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }.value == index) isItemIconVisible.value else true,
                                 text = "ok\nok",
                                 images = emptyList(),
-                                onMenuClick = {}
+                                onMenuClick = {},
+                                date = "22.11.23",
+                                isScrollInProgress = isScrollInProgress
                             )
 
                             Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))

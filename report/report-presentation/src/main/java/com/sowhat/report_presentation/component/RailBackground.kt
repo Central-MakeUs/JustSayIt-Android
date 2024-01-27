@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -34,6 +35,8 @@ fun RailBackground(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState,
     currentMood: MoodItem,
+    currentDate: String,
+    isScrollInProgress: Boolean,
     content: @Composable () -> Unit
 ) {
     Box(
@@ -51,6 +54,16 @@ fun RailBackground(
                 ),
             mood = currentMood,
             isStatusVisible = true
+        )
+
+        DateBadge(
+            modifier = Modifier
+                .padding(
+                    start = JustSayItTheme.Spacing.spaceSm,
+                    top = JustSayItTheme.Spacing.spaceExtraExtraLarge
+                )
+                .zIndex(2f),
+            date = currentDate
         )
 
         content()
@@ -93,9 +106,17 @@ fun RailBackgroundPreview() {
         )
     }
 
+    var currentDate by remember {
+        mutableStateOf(
+            "24.01.27"
+        )
+    }
+
     RailBackground(
         lazyListState = lazyListState,
-        currentMood = currentState
+        currentMood = currentState,
+        currentDate = currentDate,
+        isScrollInProgress = lazyListState.isScrollInProgress
     ) {
         LazyColumn(
             modifier = Modifier
@@ -132,7 +153,9 @@ fun RailBackgroundPreview() {
                     isStatusVisible = if (remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }.value == index) isItemIconVisible.value else true,
                     text = "ok\nok",
                     images = emptyList(),
-                    onMenuClick = {}
+                    onMenuClick = {},
+                    date = "22.11.23",
+                    isScrollInProgress = lazyListState.isScrollInProgress
                 )
 
                 Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))

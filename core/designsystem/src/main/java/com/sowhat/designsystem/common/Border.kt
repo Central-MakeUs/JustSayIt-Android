@@ -8,8 +8,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -53,3 +57,25 @@ fun Modifier.topBorder(strokeWidth: Dp, color: Color, horizontalPadding: Dp = 0.
         }
     }
 )
+
+
+
+fun Modifier.dashedBorder(width: Float, color: Color, cornerRadius: Dp) = composed (
+    factory = {
+        val dashedStroke = Stroke(
+            width = width,
+            pathEffect = PathEffect.dashPathEffect(floatArrayOf(5f, 5f), 0f)
+        )
+
+        Modifier.drawBehind {
+            drawRoundRect(
+                color = color,
+                style = dashedStroke,
+                cornerRadius = CornerRadius(cornerRadius.toPx())
+            )
+        }
+    }
+)
+
+
+
