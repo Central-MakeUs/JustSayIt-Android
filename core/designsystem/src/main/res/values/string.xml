@@ -63,6 +63,8 @@
     <string name="report_subtitle">%s님,\n지금 기분이 어떠신가요?</string>
 
     <string name="report_view_report">분석 레포트 보러가기</string>
+    <string name="report_badge_public">공개</string>
+    <string name="report_badge_private">비공개</string>
 
     <string name="setting_title_normal">일반</string>
     <string name="setting_item_contact">개발자에게 연락하기</string>

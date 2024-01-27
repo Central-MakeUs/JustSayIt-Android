@@ -71,7 +71,7 @@ fun BottomNavigationBar(
                 .fillMaxWidth()
                 .fillMaxHeight(0.8f)
                 .background(JustSayItTheme.Colors.mainBackground)
-                .topBorder(strokeWidth = 0.5.dp, color = Gray300),
+                .topBorder(strokeWidth = JustSayItTheme.Spacing.border, color = Gray300),
 //            .border(width = 0.5.dp, color = Gray300)
             containerColor = bottomNavBackground
 //            containerColor = JustSayItTheme.Colors.mainSurface,

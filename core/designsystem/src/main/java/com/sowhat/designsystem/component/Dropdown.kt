@@ -99,7 +99,7 @@ fun DropdownContents(
                     color = JustSayItTheme.Colors.mainSurface,
                 )
                 .border(
-                    width = 0.5.dp,
+                    width = JustSayItTheme.Spacing.border,
                     color = Gray300,
                     shape = JustSayItTheme.Shapes.medium
                 ),
@@ -127,7 +127,7 @@ fun ColumnScope.DropdownMenus(
 ) {
     items.forEachIndexed { index, dropdownItem ->
         if (index != 0) Divider(
-            thickness = 0.5.dp,
+            thickness = JustSayItTheme.Spacing.border,
             color = Gray300,
         )
 

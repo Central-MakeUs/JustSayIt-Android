@@ -60,7 +60,7 @@ fun Feed(
             .fillMaxWidth()
             .background(color = JustSayItTheme.Colors.mainBackground)
             // bottomBorder 순서가 padding 앞에 와야 경계선이 아이템의 최하단에 형성
-            .bottomBorder(0.5.dp, Gray300, JustSayItTheme.Spacing.spaceBase)
+            .bottomBorder(JustSayItTheme.Spacing.border, Gray300, JustSayItTheme.Spacing.spaceBase)
             .padding(vertical = JustSayItTheme.Spacing.spaceBase),
         verticalArrangement = Arrangement
             .spacedBy(JustSayItTheme.Spacing.spaceBase)

@@ -5,6 +5,7 @@ import androidx.compose.ui.unit.dp
 
 data class JustSayItDimension(
     val default: Dp = 0.dp,
+    val border: Dp = 0.5.dp,
     val spaceTiny: Dp = 2.dp,
     val spaceXXS: Dp = 4.dp,
     val spaceXS: Dp = 8.dp,

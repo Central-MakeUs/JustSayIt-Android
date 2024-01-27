@@ -60,7 +60,7 @@ fun RowScope.TabDivider() {
     Divider(
         modifier = Modifier
             .padding(vertical = JustSayItTheme.Spacing.spaceXS)
-            .width(0.5.dp)
+            .width(JustSayItTheme.Spacing.border)
             .fillMaxHeight(),
         color = Gray200
     )

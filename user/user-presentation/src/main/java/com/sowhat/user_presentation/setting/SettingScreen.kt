@@ -104,7 +104,7 @@ private fun SettingScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = JustSayItTheme.Spacing.spaceSm),
-            thickness = 0.5.dp,
+            thickness = JustSayItTheme.Spacing.border,
             color = JustSayItTheme.Colors.subBackground
         )
 
