@@ -17,15 +17,13 @@ class MultipartConverter @Inject constructor(
 ) {
     fun convertUriIntoMultipart(uris: List<Uri>): List<MultipartBody.Part>? {
         try {
-            if (uris.isEmpty()) {
-                return listOf(getImageMultipartBody(context, null, STORY_IMG, ""))
-            }
+            if (uris.isEmpty()) { return null }
 
             val multipartBodyList = mutableListOf<MultipartBody.Part>()
 
             uris.forEach {
                 val currentTime = System.currentTimeMillis().toString()
-                val file = getImageMultipartBody(context, it, STORY_IMG, currentTime)
+                val file = getImageMultipartBody(context, it, STORY_IMG, "${currentTime}.jpg")
                 multipartBodyList.add(file)
             }
 
@@ -41,7 +39,7 @@ class MultipartConverter @Inject constructor(
             anonymous = formState.isAnonymous,
             content = formState.postText,
             emotion = formState.currentMood?.postData ?: throw Exception("현재 감정이 없습니다."),
-            feelingsOfEmpathy = formState.sympathyMoodItems.map { it.postData },
+            emotionOfEmpathy = formState.sympathyMoodItems.map { it.postData },
             opened = formState.isOpened
         )
 
