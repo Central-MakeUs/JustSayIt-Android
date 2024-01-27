@@ -46,6 +46,7 @@
             <option value="$PROJECT_DIR$/notification" />
             <option value="$PROJECT_DIR$/notification/notification-presentation" />
             <option value="$PROJECT_DIR$/post" />
+            <option value="$PROJECT_DIR$/post/post-data" />
             <option value="$PROJECT_DIR$/post/post-domain" />
             <option value="$PROJECT_DIR$/post/post-presentation" />
             <option value="$PROJECT_DIR$/report" />

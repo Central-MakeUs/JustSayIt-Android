@@ -22,8 +22,8 @@ import com.sowhat.designsystem.common.MoodItem
 @Composable
 fun MoodChips(
     modifier: Modifier = Modifier,
-    currentMood: String?,
-    onChange: (String) -> Unit,
+    currentMood: MoodItem?,
+    onChange: (MoodItem) -> Unit,
     moodItems: List<MoodItem>
 ) {
     LazyRow(
@@ -36,7 +36,7 @@ fun MoodChips(
         }
 
         itemsIndexed(moodItems) { _, moodItem ->
-            val isSelected = currentMood == moodItem.title
+            val isSelected = currentMood == moodItem
             ChipMedium(
                 moodItem = moodItem,
                 isSelected = isSelected,
@@ -56,8 +56,8 @@ fun MoodChips(
 fun MoodChips(
     modifier: Modifier = Modifier,
     isActive: Boolean = true,
-    onClick: (String) -> Unit,
-    selectedMoods: List<String>,
+    onClick: (MoodItem) -> Unit,
+    selectedMoods: List<MoodItem>,
     moodItems: List<MoodItem>
 ) {
     LazyRow(
@@ -77,7 +77,7 @@ fun MoodChips(
         }
 
         itemsIndexed(moodItems) { _, moodItem ->
-            val isSelected = moodItem.title in selectedMoods
+            val isSelected = moodItem in selectedMoods
             ChipMedium(
                 moodItem = moodItem,
                 isActive = isActive,
@@ -106,12 +106,12 @@ fun MoodChipsPreview() {
     )
 
     var selectedMoods = remember {
-        mutableStateListOf<String>()
+        mutableStateListOf<MoodItem>()
     }
 
     Column {
         MoodChips(
-            selectedMoods = selectedMoods,
+            selectedMoods = selectedMoods.toList(),
             onClick = {
                 if (it in selectedMoods) selectedMoods.remove(it)
                 else selectedMoods.add(it)

@@ -21,4 +21,6 @@ dependencies {
     implementation(project(":authentication:authentication-domain"))
     implementation(project(":user:user-data"))
     implementation(project(":user:user-domain"))
+    implementation(project(":post:post-data"))
+    implementation(project(":post:post-domain"))
 }

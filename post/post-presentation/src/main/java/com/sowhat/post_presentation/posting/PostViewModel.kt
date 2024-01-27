@@ -4,20 +4,42 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.sowhat.common.model.PostFormEvent
-import com.sowhat.common.model.PostFormState
+import androidx.lifecycle.viewModelScope
 import com.sowhat.common.model.PostingEvent
+import com.sowhat.common.model.Resource
+import com.sowhat.common.model.UiState
+import com.sowhat.post_domain.use_case.SubmitPostUseCase
+import com.sowhat.post_domain.use_case.ValidateCurrentMoodUseCase
+import com.sowhat.post_domain.use_case.ValidatePostImagesUseCase
+import com.sowhat.post_domain.use_case.ValidatePostTextUseCase
+import com.sowhat.post_domain.use_case.ValidateSympathyUseCase
+import com.sowhat.post_presentation.common.PostFormEvent
+import com.sowhat.post_presentation.common.PostFormState
+import com.sowhat.post_presentation.util.MultipartConverter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 @HiltViewModel
 class PostViewModel @Inject constructor(
-
+    private val savedStateHandle: SavedStateHandle,
+    private val submitPostUseCase: SubmitPostUseCase,
+    private val validateCurrentMoodUseCase: ValidateCurrentMoodUseCase,
+    private val validatePostImagesUseCase: ValidatePostImagesUseCase,
+    private val validatePostTextUseCase: ValidatePostTextUseCase,
+    private val validateSympathyUseCase: ValidateSympathyUseCase,
+    private val multipartConverter: MultipartConverter
 ) : ViewModel() {
     var formState by mutableStateOf(PostFormState())
+        private set
+
+    var uiState by mutableStateOf(UiState<Unit?>())
         private set
 
     val isFormValid by derivedStateOf {
@@ -31,24 +53,68 @@ class PostViewModel @Inject constructor(
     val postingEvent = postingEventChannel.receiveAsFlow()
 
     fun submitPost() {
+        viewModelScope.launch {
+            uiState = uiState.copy(isLoading = true)
+            if (isFormValid) {
+                val multipartList = multipartConverter.convertUriIntoMultipart(formState.images)
+                val requestBody = multipartConverter.getRequestBodyData(formState)
 
+                requestSubmit(requestBody, multipartList)
+            }
+        }
     }
+
+    private suspend fun requestSubmit(
+        requestBody: RequestBody?,
+        multipartList: List<MultipartBody.Part>?
+    ) {
+        requestBody?.let {
+            val result = submitPostUseCase(requestBody, multipartList)
+
+            when (result) {
+                is Resource.Success -> {
+                    uiState = uiState.copy(isLoading = false)
+                    postingEventChannel.send(PostingEvent.NavigateUp)
+                }
+
+                is Resource.Error -> {
+                    uiState = uiState.copy(isLoading = false, errorMessage = result.message)
+                    postingEventChannel.send(
+                        PostingEvent.Error(
+                            result.message
+                                ?: "예상치 못한 오류가 발생했습니다."
+                        )
+                    )
+                }
+            }
+        }
+    }
+
 
     fun onEvent(event: PostFormEvent) {
         when (event) {
             is PostFormEvent.CurrentMoodChanged -> {
+                val mood = event.mood
+                val isValid = validateCurrentMoodUseCase(mood).isValid
                 formState = formState.copy(
-                    currentMood = event.mood
+                    currentMood = mood,
+                    isCurrentMoodValid = isValid
                 )
             }
             is PostFormEvent.ImageListUpdated -> {
+                val uris = event.images
+                val isValid = validatePostImagesUseCase(uris).isValid
                 formState = formState.copy(
-                    images = event.images ?: emptyList()
+                    images = uris ?: emptyList(),
+                    isImageListValid = isValid
                 )
             }
             is PostFormEvent.PostTextChanged -> {
+                val postText = event.text
+                val isValid = validatePostTextUseCase(postText).isValid
                 formState = formState.copy(
-                    postText = event.text
+                    postText = postText,
+                    isPostTextValid = isValid
                 )
             }
             is PostFormEvent.OpenChanged -> {
@@ -62,8 +128,11 @@ class PostViewModel @Inject constructor(
                 )
             }
             is PostFormEvent.SympathyItemsChanged -> {
+                val sympathyItems = event.sympathyItems
+                val isValid = validateSympathyUseCase(formState.isOpened, sympathyItems).isValid
                 formState = formState.copy(
-                    sympathyMoodItems = event.sympathyItems
+                    sympathyMoodItems = sympathyItems,
+                    isSympathyMoodItemsValid = isValid
                 )
             }
             is PostFormEvent.DialogVisibilityChanged -> {

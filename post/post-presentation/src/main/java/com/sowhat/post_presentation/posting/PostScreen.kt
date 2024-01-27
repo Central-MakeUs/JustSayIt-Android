@@ -28,16 +28,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.sowhat.common.model.PostFormEvent
-import com.sowhat.common.model.PostFormState
 import com.sowhat.common.model.PostingEvent
+import com.sowhat.common.model.UiState
 import com.sowhat.common.util.ObserveEvents
 import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.component.AlertDialog
 import com.sowhat.designsystem.component.AppBar
+import com.sowhat.designsystem.component.CenteredCircularProgress
 import com.sowhat.designsystem.component.DefaultButtonFull
 import com.sowhat.designsystem.theme.JustSayItTheme
+import com.sowhat.post_presentation.common.PostFormEvent
+import com.sowhat.post_presentation.common.PostFormState
 import com.sowhat.post_presentation.common.SubjectItem
 import com.sowhat.post_presentation.common.rememberMoodItems
 import com.sowhat.post_presentation.component.CurrentMoodSelection
@@ -53,6 +55,7 @@ fun PostRoute(
     viewModel: PostViewModel = hiltViewModel()
 ) {
     val formState = viewModel.formState
+    val uiState = viewModel.uiState
     val moods = rememberMoodItems()
     val context = LocalContext.current
 
@@ -85,6 +88,7 @@ fun PostRoute(
     PostScreen(
         navController = navController,
         formState = formState,
+        uiState = uiState,
         isValid = viewModel.isFormValid,
         onEvent = viewModel::onEvent,
         onSubmit = viewModel::submitPost,
@@ -101,6 +105,7 @@ fun PostScreen(
     navController: NavController,
     isValid: Boolean,
     formState: PostFormState,
+    uiState: UiState<Unit?>,
     moods: List<MoodItem>,
     onAddImage: () -> Unit,
     onEvent: (PostFormEvent) -> Unit,
@@ -267,6 +272,10 @@ fun PostScreen(
             )
         }
     }
+
+    if (uiState.isLoading) {
+        CenteredCircularProgress()
+    }
 }
 
 @Preview
@@ -331,6 +340,7 @@ fun PostScreenPreview() {
                 }
             }
         },
-        onSubmit = {}
+        onSubmit = {},
+        uiState = UiState<Unit?>()
     )
 }

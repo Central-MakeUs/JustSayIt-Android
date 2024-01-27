@@ -43,7 +43,7 @@ import com.sowhat.common.util.ObserveEvents
 import com.sowhat.common.model.RegistrationFormEvent
 import com.sowhat.common.model.RegistrationFormState
 import com.sowhat.common.model.SignUpEvent
-import com.sowhat.common.util.getFile
+import com.sowhat.common.util.getImageMultipartBody
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.DefaultTextField
@@ -84,7 +84,7 @@ fun UserConfigRoute(
 
     LaunchedEffect(key1 = true) {
         viewModel.onEvent(
-            RegistrationFormEvent.ProfileChanged(getFile(context, null, PART_PROFILE_IMG))
+            RegistrationFormEvent.ProfileChanged(getImageMultipartBody(context, null, PART_PROFILE_IMG, "profile_image"))
         )
     }
 
@@ -106,7 +106,7 @@ fun UserConfigRoute(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
             uri?.let {
-                val file = getFile(context, it, PART_PROFILE_IMG)
+                val file = getImageMultipartBody(context, it, PART_PROFILE_IMG, "profile_image")
                 viewModel.onEvent(RegistrationFormEvent.ProfileChanged(file))
             }
             viewModel.imageUri = uri

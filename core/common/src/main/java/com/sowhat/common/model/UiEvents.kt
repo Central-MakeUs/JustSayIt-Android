@@ -29,22 +29,6 @@ sealed class RegistrationFormEvent {
     object Submit: RegistrationFormEvent()
 }
 
-sealed class UpdateFormEvent {
-    data class ProfileChanged(val image: MultipartBody.Part?) : UpdateFormEvent()
-    data class NicknameChanged(val nickname: String) : UpdateFormEvent()
-    object Submit: UpdateFormEvent()
-
-}
-
-sealed class PostFormEvent {
-    data class CurrentMoodChanged(val mood: String) : PostFormEvent()
-    data class ImageListUpdated(val images: List<Uri>?) : PostFormEvent()
-    data class PostTextChanged(val text: String) : PostFormEvent()
-    data class OpenChanged(val open: Boolean) : PostFormEvent()
-    data class AnonymousChanged(val anonymous: Boolean) : PostFormEvent()
-    data class SympathyItemsChanged(val sympathyItems: List<String>) : PostFormEvent()
-    data class DialogVisibilityChanged(val isVisible: Boolean) : PostFormEvent()
-}
 
 sealed class PostingEvent {
     object NavigateUp : PostingEvent()
@@ -54,4 +38,11 @@ sealed class PostingEvent {
 sealed class SignOutEvent {
     data class SignOutVisibilityChanged(val isVisible: Boolean) : SignOutEvent()
     data class WithdrawVisibilityChanged(val isVisible: Boolean) : SignOutEvent()
+}
+
+sealed class UpdateFormEvent {
+    data class ProfileChanged(val image: MultipartBody.Part?) : UpdateFormEvent()
+    data class NicknameChanged(val nickname: String) : UpdateFormEvent()
+    object Submit: UpdateFormEvent()
+
 }

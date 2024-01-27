@@ -16,8 +16,8 @@ import com.sowhat.post_presentation.common.SubjectItem
 fun CurrentMoodSelection(
     modifier: Modifier = Modifier,
     subjectItem: SubjectItem,
-    currentMood: String?,
-    onChange: (String) -> Unit,
+    currentMood: MoodItem?,
+    onChange: (MoodItem) -> Unit,
     moodItems: List<MoodItem>
 ) {
     Column(
@@ -48,8 +48,8 @@ fun SympathySelection(
     modifier: Modifier = Modifier,
     isActive: Boolean = true,
     subjectItem: SubjectItem,
-    onClick: (String) -> Unit,
-    selectedMoods: List<String>,
+    onClick: (MoodItem) -> Unit,
+    selectedMoods: List<MoodItem>,
     moodItems: List<MoodItem>
 ) {
     Column(

@@ -87,7 +87,7 @@ class OnboardingViewModel @Inject constructor(
     ) {
         if (data?.memberId != null && data.isJoined) {
             data.accessToken?.let {
-                authDataStore.updateAccessToken(it.toBearerToken())
+                authDataStore.updateAccessToken(it)
             }
             authDataStore.updateMemberId(data.memberId!!)
             terminateLoading(data = signInData.data)

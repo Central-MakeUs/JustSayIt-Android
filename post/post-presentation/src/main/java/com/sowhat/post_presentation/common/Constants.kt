@@ -8,12 +8,11 @@ import com.sowhat.post_presentation.R
 
 @Composable
 fun rememberMoodItems(): List<MoodItem> {
-    // TODO : post data 확인 필요
     val moodItems = listOf(
         MoodItem(
             drawable = com.sowhat.designsystem.R.drawable.ic_happy_96,
             title = "행복",
-            postData = "HAPPY",
+            postData = "FEELING001",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
             unselectedTextColor = JustSayItTheme.Colors.mainTypo,
             selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,
@@ -22,7 +21,7 @@ fun rememberMoodItems(): List<MoodItem> {
         MoodItem(
             drawable = com.sowhat.designsystem.R.drawable.ic_sad_96,
             title = "슬픔",
-            postData = "SAD",
+            postData = "FEELING002",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
             unselectedTextColor = JustSayItTheme.Colors.mainTypo,
             selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,
@@ -31,7 +30,7 @@ fun rememberMoodItems(): List<MoodItem> {
         MoodItem(
             drawable = com.sowhat.designsystem.R.drawable.ic_surprise_96,
             title = "놀람",
-            postData = "SURPRISED",
+            postData = "FEELING003",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
             unselectedTextColor = JustSayItTheme.Colors.mainTypo,
             selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,
@@ -40,7 +39,7 @@ fun rememberMoodItems(): List<MoodItem> {
         MoodItem(
             drawable = com.sowhat.designsystem.R.drawable.ic_angry_96,
             title = "화남",
-            postData = "ANGRY",
+            postData = "FEELING004",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
             unselectedTextColor = JustSayItTheme.Colors.mainTypo,
             selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,
