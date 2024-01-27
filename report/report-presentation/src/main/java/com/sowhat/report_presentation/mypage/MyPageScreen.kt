@@ -71,6 +71,14 @@ fun MyPageScreen(
                     )
                 }
 
+                val isScrollInProgress = lazyListState.isScrollInProgress
+
+                var currentDate by remember {
+                    mutableStateOf(
+                        "24.01.27"
+                    )
+                }
+
                 AppBarMyPage(
                     currentDropdownItem = DropdownItem("전체"),
                     dropdownItems = listOf(),
@@ -86,7 +94,9 @@ fun MyPageScreen(
 
                 RailBackground(
                     lazyListState = lazyListState,
-                    currentMood = currentState
+                    currentMood = currentState,
+                    currentDate = currentDate,
+                    isScrollInProgress = isScrollInProgress
                 ) {
                     LazyColumn(
                         modifier = Modifier
@@ -123,7 +133,9 @@ fun MyPageScreen(
                                 isStatusVisible = if (remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }.value == index) isItemIconVisible.value else true,
                                 text = "ok\nok",
                                 images = emptyList(),
-                                onMenuClick = {}
+                                onMenuClick = {},
+                                date = "22.11.23",
+                                isScrollInProgress = isScrollInProgress
                             )
 
                             Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))

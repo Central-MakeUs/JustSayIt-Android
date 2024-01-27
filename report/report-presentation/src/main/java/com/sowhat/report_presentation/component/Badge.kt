@@ -3,6 +3,7 @@ package com.sowhat.report_presentation.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -14,11 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.designsystem.R
@@ -33,12 +36,12 @@ fun OpenStatusBadge(
             .width(76.dp)
             .height(28.dp)
             .clip(JustSayItTheme.Shapes.medium)
+            .background(JustSayItTheme.Colors.mainBackground)
             .border(
                 width = JustSayItTheme.Spacing.border,
                 color = Gray300,
                 shape = JustSayItTheme.Shapes.medium
             )
-            .background(JustSayItTheme.Colors.mainBackground)
             .padding(
                 top = JustSayItTheme.Spacing.spaceXXS,
                 bottom = JustSayItTheme.Spacing.spaceXXS,
@@ -68,6 +71,30 @@ fun OpenStatusBadge(
     }
 }
 
+@Composable
+fun DateBadge(
+    modifier: Modifier = Modifier,
+    date: String
+) {
+    Box(
+        modifier = modifier
+            .clip(JustSayItTheme.Shapes.medium)
+            .background(JustSayItTheme.Colors.mainTypo.copy(alpha = 0.5f))
+    ) {
+        Text(
+            modifier = Modifier
+                .padding(
+                    horizontal = JustSayItTheme.Spacing.spaceXS,
+                    vertical = JustSayItTheme.Spacing.spaceXXS
+                ),
+            text = date,
+            style = JustSayItTheme.Typography.detail1.copy(fontSize = 10.sp, lineHeight = 16.sp),
+            color = JustSayItTheme.Colors.mainBackground
+        )
+    }
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun OpenBadgePreview() {
@@ -75,4 +102,10 @@ fun OpenBadgePreview() {
         OpenStatusBadge(isOpen = true)
         OpenStatusBadge(isOpen = false)
     }
+}
+
+@Preview
+@Composable
+fun DateBadgePreview() {
+    DateBadge(date = "98.11.23")
 }
