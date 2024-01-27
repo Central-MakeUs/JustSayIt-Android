@@ -5,7 +5,7 @@ import com.sowhat.common.model.ValidationResult
 
 class ValidatePostImagesUseCase {
     operator fun invoke(images: List<Uri>?): ValidationResult {
-        if (images?.isNotEmpty() == true && images.size > 4) {
+        if (images?.size!! > 4) {
             return ValidationResult(isValid = false)
         }
 

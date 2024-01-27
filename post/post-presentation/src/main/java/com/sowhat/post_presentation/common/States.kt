@@ -9,10 +9,10 @@ data class PostFormState(
     val postText: String = "",
     val isPostTextValid: Boolean = false,
     val images: List<Uri> = emptyList(),
-    val isImageListValid: Boolean = false,
+    val isImageListValid: Boolean = true,
     val isOpened: Boolean = false,
     val isAnonymous: Boolean = false,
     val sympathyMoodItems: List<MoodItem> = emptyList(),
-    val isSympathyMoodItemsValid: Boolean = false,
+    val isSympathyMoodItemsValid: Boolean = true,
     val isDialogVisible: Boolean = false,
 )

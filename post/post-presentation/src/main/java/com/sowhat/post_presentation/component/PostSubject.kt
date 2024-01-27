@@ -38,7 +38,7 @@ fun PostSubject(
         Text(
             modifier = Modifier.basicMarquee(),
             text = subTitle,
-            maxLines = 1,
+            maxLines = 2,
             style = JustSayItTheme.Typography.detail1,
             color = Gray700
         )

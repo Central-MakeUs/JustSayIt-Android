@@ -5,6 +5,8 @@ import com.sowhat.designsystem.common.MoodItem
 
 class ValidateSympathyUseCase {
     operator fun invoke(isOpen: Boolean, selectedMoodItems: List<MoodItem>): ValidationResult {
+        if (!isOpen) return ValidationResult(isValid = true)
+
         if (isOpen && selectedMoodItems.isEmpty()) {
             return ValidationResult(isValid = false)
         }

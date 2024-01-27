@@ -286,7 +286,7 @@ fun PostScreenPreview() {
     var formState by remember {
         mutableStateOf(PostFormState())
     }
-    var isFormValid by remember {
+    val isFormValid by remember {
         mutableStateOf(
             formState.isImageListValid
                     && formState.isCurrentMoodValid

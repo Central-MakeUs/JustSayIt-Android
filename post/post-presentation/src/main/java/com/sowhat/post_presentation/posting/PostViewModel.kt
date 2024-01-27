@@ -121,6 +121,12 @@ class PostViewModel @Inject constructor(
                 formState = formState.copy(
                     isOpened = event.open
                 )
+                if (!formState.isOpened) {
+                    formState = formState.copy(
+                        isAnonymous = false,
+                        sympathyMoodItems = emptyList()
+                    )
+                }
             }
             is PostFormEvent.AnonymousChanged -> {
                 formState = formState.copy(
