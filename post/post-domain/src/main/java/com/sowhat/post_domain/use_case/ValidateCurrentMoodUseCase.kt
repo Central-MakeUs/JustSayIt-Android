@@ -9,7 +9,7 @@ class ValidateCurrentMoodUseCase {
             return ValidationResult(isValid = false)
         }
 
-        if (currentMood?.postData !in listOf("FEELING001", "FEELING002", "FEELING003", "FEELING004")) {
+        if (currentMood?.postData !in listOf("EMOTION001", "EMOTION002", "EMOTION003", "EMOTION004")) {
             return ValidationResult(isValid = false)
         }
 

@@ -12,7 +12,7 @@ fun rememberMoodItems(): List<MoodItem> {
         MoodItem(
             drawable = com.sowhat.designsystem.R.drawable.ic_happy_96,
             title = "행복",
-            postData = "FEELING001",
+            postData = "EMOTION001",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
             unselectedTextColor = JustSayItTheme.Colors.mainTypo,
             selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,
@@ -21,7 +21,7 @@ fun rememberMoodItems(): List<MoodItem> {
         MoodItem(
             drawable = com.sowhat.designsystem.R.drawable.ic_sad_96,
             title = "슬픔",
-            postData = "FEELING002",
+            postData = "EMOTION002",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
             unselectedTextColor = JustSayItTheme.Colors.mainTypo,
             selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,
@@ -30,7 +30,7 @@ fun rememberMoodItems(): List<MoodItem> {
         MoodItem(
             drawable = com.sowhat.designsystem.R.drawable.ic_surprise_96,
             title = "놀람",
-            postData = "FEELING003",
+            postData = "EMOTION003",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
             unselectedTextColor = JustSayItTheme.Colors.mainTypo,
             selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,
@@ -39,7 +39,7 @@ fun rememberMoodItems(): List<MoodItem> {
         MoodItem(
             drawable = com.sowhat.designsystem.R.drawable.ic_angry_96,
             title = "화남",
-            postData = "FEELING004",
+            postData = "EMOTION004",
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
             unselectedTextColor = JustSayItTheme.Colors.mainTypo,
             selectedBackgroundColor = JustSayItTheme.Colors.mainTypo,

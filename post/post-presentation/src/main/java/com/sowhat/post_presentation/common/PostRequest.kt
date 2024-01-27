@@ -12,7 +12,6 @@ data class PostRequest(
     val content: String,
     @SerialName("emotion")
     val emotion: String,
-    // TODO 서버에 새로 올라가면 emotionOfEmpathy로 변경
     @SerialName("emotionOfEmpathy")
     val emotionOfEmpathy: List<String>,
     @SerialName("opened")

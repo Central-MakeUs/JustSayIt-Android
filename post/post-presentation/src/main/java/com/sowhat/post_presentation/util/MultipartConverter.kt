@@ -17,7 +17,7 @@ class MultipartConverter @Inject constructor(
 ) {
     fun convertUriIntoMultipart(uris: List<Uri>): List<MultipartBody.Part>? {
         try {
-            if (uris.isEmpty()) { return null }
+            if (uris.isEmpty()) return null
 
             val multipartBodyList = mutableListOf<MultipartBody.Part>()
 
