@@ -20,7 +20,6 @@ import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
 import com.sowhat.designsystem.theme.JustSayItTheme
-import com.sowhat.designsystem.theme.ProfileBackground
 
 @Composable
 fun ProfileImage(
@@ -120,7 +119,7 @@ fun ProfileImage(
                 drawable = badgeDrawable
             )
 
-            DropdownContents(
+            MenuContents(
                 modifier = Modifier.width(136.dp),
                 isVisible = dropdownVisible,
                 items = dropdownMenuItems,

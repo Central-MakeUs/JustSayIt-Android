@@ -21,7 +21,7 @@ class FeedViewModel @Inject constructor(
         when (appBarEvent) {
             is FeedAppBarEvent.EmotionChanged -> {
                 appBarState = appBarState.copy(
-                    currentEmotion = appBarEvent.dropdown
+                    currentEmotion = appBarEvent.mood
                 )
             }
             is FeedAppBarEvent.SortChanged -> {

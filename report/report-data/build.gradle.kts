@@ -15,6 +15,7 @@ android {
 
 dependencies {
     implementation(project(":core:network"))
+    implementation(project(":core:database"))
     implementation(project(":report:report-domain"))
     implementation(project(":core:common"))
 }

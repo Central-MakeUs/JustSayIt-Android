@@ -51,5 +51,9 @@ gradlePlugin {
             id = "com.sowhat.justsayit.application.common"
             implementationClass = "CommonLibrariesConventionPlugin"
         }
+        register("RoomPlugin") {
+            id = "com.sowhat.justsayit.application.room"
+            implementationClass = "RoomConventionPlugin"
+        }
     }
 }

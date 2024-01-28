@@ -1,5 +1,16 @@
 package com.sowhat.report_presentation.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,11 +33,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.sowhat.designsystem.common.MoodItem
+import com.sowhat.designsystem.common.Mood
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.JustSayItTheme
 
@@ -34,8 +44,8 @@ import com.sowhat.designsystem.theme.JustSayItTheme
 fun RailBackground(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState,
-    currentMood: MoodItem,
-    currentDate: String,
+    currentMood: Mood?,
+    currentDate: String?,
     isScrollInProgress: Boolean,
     content: @Composable () -> Unit
 ) {
@@ -46,25 +56,39 @@ fun RailBackground(
     ) {
         Rail()
 
-        MoodStatus(
-            modifier = Modifier
-                .padding(
-                    start = JustSayItTheme.Spacing.spaceSm,
-                    top = JustSayItTheme.Spacing.spaceBase
-                ),
-            mood = currentMood,
-            isStatusVisible = true
-        )
+        AnimatedVisibility(
+            visible = isScrollInProgress,
+            enter = fadeIn(initialAlpha = 0.3f),
+            exit = fadeOut()
+        ) {
+            MoodStatus(
+                modifier = Modifier
+                    .padding(
+                        start = JustSayItTheme.Spacing.spaceSm,
+                    ),
+                mood = currentMood,
+                isStatusVisible = true
+            )
+        }
 
-        DateBadge(
+
+        AnimatedVisibility(
             modifier = Modifier
-                .padding(
-                    start = JustSayItTheme.Spacing.spaceSm,
-                    top = JustSayItTheme.Spacing.spaceExtraExtraLarge
-                )
                 .zIndex(2f),
-            date = currentDate
-        )
+            visible = isScrollInProgress,
+            enter = fadeIn(initialAlpha = 0.3f),
+            exit = fadeOut()
+        ) {
+            DateBadge(
+                modifier = Modifier
+                    .padding(
+                        start = JustSayItTheme.Spacing.spaceSm,
+                        top = 48.dp
+                    ),
+                date = currentDate,
+                currentDate = ""
+            )
+        }
 
         content()
     }
@@ -100,9 +124,7 @@ fun RailBackgroundPreview() {
     }
     var currentState by remember {
         mutableStateOf(
-            MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_happy_96, postData = "HAPPY",
-                title = "행복", selectedTextColor = Color.White,
-                unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
+            Mood.HAPPY
         )
     }
 
@@ -129,18 +151,10 @@ fun RailBackgroundPreview() {
         ) {
             items(count = 20) { index ->
                 val item = when {
-                    index % 4 == 0 ->  MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_happy_96, postData = "HAPPY",
-                        title = "행복", selectedTextColor = Color.White,
-                        unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
-                    index % 4 == 1 ->  MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_sad_96, postData = "HAPPY",
-                        title = "행복", selectedTextColor = Color.White,
-                        unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
-                    index % 4 == 2 ->  MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_angry_96, postData = "HAPPY",
-                        title = "행복", selectedTextColor = Color.White,
-                        unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
-                    else ->  MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_surprise_96, postData = "HAPPY",
-                        title = "행복", selectedTextColor = Color.White,
-                        unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White)
+                    index % 4 == 0 ->  Mood.HAPPY
+                    index % 4 == 1 ->  Mood.SAD
+                    index % 4 == 2 ->  Mood.SURPRISED
+                    else ->  Mood.ANGRY
                 }
 
                 if (remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }.value == index) {
@@ -150,12 +164,13 @@ fun RailBackgroundPreview() {
                 MyFeed(
                     isPrivate = true,
                     mood = item,
-                    isStatusVisible = if (remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }.value == index) isItemIconVisible.value else true,
+                    isMoodVisible = if (remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }.value == index) isItemIconVisible.value else true,
                     text = "ok\nok",
                     images = emptyList(),
                     onMenuClick = {},
                     date = "22.11.23",
-                    isScrollInProgress = lazyListState.isScrollInProgress
+                    isScrollInProgress = lazyListState.isScrollInProgress,
+                    currentDate = "22.11.23"
                 )
 
                 Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))

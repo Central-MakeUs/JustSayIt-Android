@@ -31,9 +31,9 @@ data class StoryInfo(
 @Serializable
 data class EmotionOfEmpathy(
     @SerialName("angryCount")
-    val angryCount: Long,
+    val angryCount: Long?,
     @SerialName("happinessCount")
-    val happinessCount: Long,
+    val happinessCount: Long?,
     @SerialName("isAngrySelected")
     val isAngrySelected: Boolean,
     @SerialName("isHappinessSelected")
@@ -43,9 +43,9 @@ data class EmotionOfEmpathy(
     @SerialName("isSurprisedSelected")
     val isSurprisedSelected: Boolean,
     @SerialName("sadnessCount")
-    val sadnessCount: Long,
+    val sadnessCount: Long?,
     @SerialName("surprisedCount")
-    val surprisedCount: Long,
+    val surprisedCount: Long?,
     @SerialName("totalCount")
     val totalCount: Long
 )

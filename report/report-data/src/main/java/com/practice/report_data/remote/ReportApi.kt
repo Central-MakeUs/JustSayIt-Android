@@ -13,7 +13,7 @@ interface ReportApi {
         @Header("Authorization") accessToken: String,
         @Path("sort") sortBy: String,
         @Path("member-id") memberId: Long,
-        @Query("emotion-code") emotionCode: String? = null,
+        @Query("emotion-code") emotionCode: String?,
         @Query("story-id") lastId: Long?,
         @Query("size") size: Int
     ): ResponseBody<MyFeedResponse>

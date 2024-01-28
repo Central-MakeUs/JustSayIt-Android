@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.sowhat.designsystem.R
-import com.sowhat.designsystem.common.MoodItem
+import com.sowhat.designsystem.common.Mood
 import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.component.TimelineFeedImages
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -36,9 +36,10 @@ import com.sowhat.designsystem.theme.JustSayItTheme
 fun MyFeed(
     modifier: Modifier = Modifier,
     isPrivate: Boolean,
-    mood: MoodItem,
+    currentDate: String?,
+    mood: Mood?,
     date: String,
-    isStatusVisible: Boolean,
+    isMoodVisible: Boolean,
     onMenuClick: () -> Unit,
     text: String,
     images: List<String>,
@@ -50,41 +51,49 @@ fun MyFeed(
             .background(color = Color.Transparent)
     ) {
 
-        if (isStatusVisible && isScrollInProgress) {
+        if (isMoodVisible && isScrollInProgress) {
             DateBadge(
                 modifier = Modifier
                     .padding(top = 48.dp)
                     .zIndex(2f),
-                date = date
+                date = date,
+                currentDate = currentDate
             )
         }
 
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .background(color = Color.Transparent),
-            horizontalArrangement = Arrangement
-                .spacedBy(JustSayItTheme.Spacing.spaceXS)
-        ) {
-            MoodStatus(
-                mood = mood,
-                isStatusVisible = isStatusVisible
-            )
-
-            FeedCard(isPrivate, onMenuClick, text, images)
-        }
+//        Row(
+//            modifier = modifier
+//                .fillMaxWidth()
+//                .background(color = Color.Transparent),
+//            horizontalArrangement = Arrangement
+//                .spacedBy(JustSayItTheme.Spacing.spaceXS)
+//        ) {
+//            MoodStatus(
+//                mood = mood,
+//                isStatusVisible = isStatusVisible
+//            )
+//
+//        }
+        FeedCard(
+            modifier = Modifier.padding(start = 36.dp),
+            isPrivate = isPrivate,
+            onMenuClick = onMenuClick,
+            text = text,
+            images = images
+        )
     }
 }
 
 @Composable
 private fun FeedCard(
+    modifier: Modifier = Modifier,
     isPrivate: Boolean,
     onMenuClick: () -> Unit,
     text: String,
     images: List<String>
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
         shape = JustSayItTheme.Shapes.medium,
         colors = CardDefaults.cardColors(
@@ -171,7 +180,7 @@ private fun PrivateStatus(isOpen: Boolean) {
 @Composable
 fun MoodStatus(
     modifier: Modifier = Modifier,
-    mood: MoodItem,
+    mood: Mood?,
     isStatusVisible: Boolean
 ) {
     Box(
@@ -180,12 +189,12 @@ fun MoodStatus(
             .padding(top = JustSayItTheme.Spacing.spaceBase),
         contentAlignment = Alignment.Center
     ) {
-        if (isStatusVisible) {
+        if (isStatusVisible && mood != null) {
             Image(
                 modifier = Modifier
                     .size(24.dp)
                     .aspectRatio(1f),
-                painter = painterResource(id = mood.drawable),
+                painter = painterResource(id = mood.drawable!!),
                 contentDescription = "mood_icon"
             )
         }
@@ -199,15 +208,14 @@ fun MyFeedPreview() {
         item {
             MyFeed(
                 isPrivate = true,
-                mood = MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_happy_96, postData = "HAPPY",
-                    title = "행복", selectedTextColor = Color.White,
-                    unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White),
-                isStatusVisible = true,
+                mood = Mood.HAPPY,
+                isMoodVisible = true,
                 text = "ok\nok",
                 images = emptyList(),
                 onMenuClick = {},
                 date = "22.11.22",
-                isScrollInProgress = true
+                isScrollInProgress = true,
+                currentDate = "22.11.22"
             )
             
             Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))
@@ -216,15 +224,14 @@ fun MyFeedPreview() {
         item {
             MyFeed(
                 isPrivate = true,
-                mood = MoodItem(drawable = com.sowhat.designsystem.R.drawable.ic_happy_96, postData = "HAPPY",
-                    title = "행복", selectedTextColor = Color.White,
-                    unselectedTextColor = Color.White, unselectedBackgroundColor = Color.White, selectedBackgroundColor = Color.White),
-                isStatusVisible = true,
+                mood = Mood.HAPPY,
+                isMoodVisible = true,
                 text = "ok\nok",
                 images = listOf("", "", ""),
                 onMenuClick = {},
                 date = "22.11.23",
-                isScrollInProgress = true
+                isScrollInProgress = true,
+                currentDate = "22.11.23"
             )
         }
     }

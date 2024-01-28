@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.DropdownItem
+import com.sowhat.designsystem.common.Mood
 import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -38,7 +39,7 @@ import com.sowhat.designsystem.theme.JustSayItTheme
 @Composable
 fun DropdownHeader(
     modifier: Modifier = Modifier,
-    currentMenu: DropdownItem,
+    currentMenu: Mood,
     isDropdownExpanded: Boolean,
     onClick: (Boolean) -> Unit
 ) {
@@ -59,7 +60,7 @@ fun DropdownHeader(
             currentMenu.drawable?.let {
                 Image(
                     modifier = Modifier.size(JustSayItTheme.Spacing.spaceXL),
-                    painter = painterResource(id = currentMenu.drawable),
+                    painter = painterResource(id = it),
                     contentDescription = "dropdown_drawable"
                 )
             }
@@ -80,12 +81,51 @@ fun DropdownHeader(
 }
 
 @Composable
-fun DropdownContents(
+fun MenuContents(
     modifier: Modifier = Modifier,
     isVisible: Boolean,
     items: List<DropdownItem>,
     onDismiss: () -> Unit,
     onItemClick: (DropdownItem) -> Unit
+) {
+    // https://stackoverflow.com/questions/66781028/jetpack-compose-dropdownmenu-with-rounded-corners
+    MaterialTheme(
+        shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape(12.dp)),
+        colorScheme = MaterialTheme.colorScheme.copy(surface = JustSayItTheme.Colors.mainSurface)
+    ) {
+        DropdownMenu(
+            modifier = modifier
+                .wrapContentWidth(align = Alignment.CenterHorizontally)
+                .background(
+                    color = JustSayItTheme.Colors.mainSurface,
+                )
+                .border(
+                    width = JustSayItTheme.Spacing.border,
+                    color = Gray300,
+                    shape = JustSayItTheme.Shapes.medium
+                ),
+            expanded = isVisible,
+            onDismissRequest = {
+                onDismiss()
+            },
+        ) {
+            MenuItems(
+                modifier = Modifier,
+                items = items,
+                onDismiss = onDismiss,
+                onItemClick = onItemClick
+            )
+        }
+    }
+}
+
+@Composable
+fun DropdownContents(
+    modifier: Modifier = Modifier,
+    isVisible: Boolean,
+    items: List<Mood>,
+    onDismiss: () -> Unit,
+    onItemClick: (Mood) -> Unit
 ) {
     // https://stackoverflow.com/questions/66781028/jetpack-compose-dropdownmenu-with-rounded-corners
     MaterialTheme(
@@ -120,6 +160,45 @@ fun DropdownContents(
 
 @Composable
 fun ColumnScope.DropdownMenus(
+    modifier: Modifier = Modifier,
+    items: List<Mood>,
+    onDismiss: () -> Unit,
+    onItemClick: (Mood) -> Unit
+) {
+    items.forEachIndexed { index, dropdownItem ->
+        if (index != 0) Divider(
+            thickness = JustSayItTheme.Spacing.border,
+            color = Gray300,
+        )
+
+        DropdownMenuItem(
+            modifier = modifier
+                .wrapContentSize()
+                .background(
+                    color = JustSayItTheme.Colors.mainSurface,
+                )
+                .padding(vertical = 0.dp),
+            text = {
+                TextDrawableStart(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = dropdownItem.title,
+                    textStyle = JustSayItTheme.Typography.body3,
+                    textColor = JustSayItTheme.Colors.mainTypo,
+                    drawable = dropdownItem.drawable,
+                    drawableSize = JustSayItTheme.Spacing.spaceLg
+                )
+            },
+            onClick = {
+                onItemClick(dropdownItem)
+                onDismiss()
+            }
+        )
+    }
+}
+
+
+@Composable
+fun ColumnScope.MenuItems(
     modifier: Modifier = Modifier,
     items: List<DropdownItem>,
     onDismiss: () -> Unit,
@@ -166,10 +245,7 @@ fun DropdownPreview() {
 
     DropdownContents(
         isVisible = isVisible,
-        items = listOf(
-            DropdownItem(title = "Label 1"),
-            DropdownItem(title = "Label 2"),
-        ),
+        items = Mood.values().toList(),
         onDismiss = { isVisible = false },
         onItemClick = {}
     )
@@ -180,10 +256,7 @@ fun DropdownPreview() {
 fun DropdownHeaderPreview() {
     DropdownHeader(
         modifier = Modifier,
-        currentMenu = DropdownItem(
-            title = "행복",
-            drawable = R.drawable.ic_happy_96
-        ),
+        currentMenu = Mood.HAPPY,
         onClick = {},
         isDropdownExpanded = true
     )

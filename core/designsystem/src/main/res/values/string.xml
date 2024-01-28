@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="feeling_all">전체</string>
     <string name="feeling_happy">행복</string>
     <string name="feeling_sad">슬픔</string>
     <string name="feeling_surprised">놀람</string>
@@ -58,6 +59,9 @@
     <string name="dialog_button_sign_out">로그아웃</string>
     <string name="dialog_button_withdraw">탈퇴하기</string>
     <string name="dialog_button_cancel">취소</string>
+
+    <string name="sort_latest">최신순</string>
+    <string name="sort_oldest">오래된순</string>
 
     <string name="report_title">오랜만이에요.</string>
     <string name="report_subtitle">%s님,\n지금 기분이 어떠신가요?</string>
