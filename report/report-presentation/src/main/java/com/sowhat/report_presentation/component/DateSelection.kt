@@ -15,12 +15,21 @@ import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
@@ -74,6 +83,19 @@ fun SelectionSlider(
     ) {
         pagerCount
     }
+
+//    var currentPageIndex by remember { mutableIntStateOf(pagerState.currentPage) }
+//    val hapticFeedback = LocalHapticFeedback.current
+//    LaunchedEffect(pagerState) {
+//        snapshotFlow { pagerState.currentPage }.collect { currentPage ->
+//            // This is required to avoid the trigger when the pager is first loaded
+//            if (currentPageIndex != currentPage) {
+//                hapticFeedback.performHapticFeedback(hapticFeedbackType = HapticFeedbackType.LongPress)
+//                currentPageIndex = currentPage
+//            }
+//            // Anything to be triggered by page-change can be done here
+//        }
+//    }
 
     val itemSize = 84.dp
 

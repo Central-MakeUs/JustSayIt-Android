@@ -1,5 +1,6 @@
 package com.sowhat.report_presentation.mypage
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -50,7 +51,9 @@ fun MyPageScreen(
         val scope = rememberCoroutineScope()
         val nestedScrollViewState = rememberNestedScrollViewState()
         VerticalNestedScrollView(
-            modifier = Modifier.padding(paddingValues),
+            modifier = Modifier
+                .padding(paddingValues)
+                .background(JustSayItTheme.Colors.mainBackground),
             state = nestedScrollViewState,
             header = {
                 Report(Modifier,"케이엠", true)
