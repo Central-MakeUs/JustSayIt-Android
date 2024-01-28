@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.component.ImageContainer
 import com.sowhat.designsystem.component.SquaredIconButton
@@ -92,12 +93,6 @@ fun SquaredPostImageContainer(
         modifier = modifier.aspectRatio(1f),
         contentAlignment = Alignment.TopEnd,
     ) {
-        Image(
-            modifier = Modifier.padding(JustSayItTheme.Spacing.spaceXXS),
-            painter = painterResource(id = com.sowhat.designsystem.R.drawable.ic_close_20),
-            contentDescription = "delete"
-        )
-
         ImageContainer(
             modifier = Modifier,
             borderWidth = JustSayItTheme.Spacing.border,
@@ -105,6 +100,14 @@ fun SquaredPostImageContainer(
             shape = JustSayItTheme.Shapes.medium,
             model = model,
             contentDescription = contentDescription
+        )
+
+        Image(
+            modifier = Modifier
+                .padding(JustSayItTheme.Spacing.spaceXXS)
+                .zIndex(2f),
+            painter = painterResource(id = com.sowhat.designsystem.R.drawable.ic_close_20),
+            contentDescription = "delete"
         )
     }
 }

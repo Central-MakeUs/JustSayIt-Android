@@ -58,13 +58,19 @@ fun PostRoute(
     val uiState = viewModel.uiState
     val moods = rememberMoodItems()
     val context = LocalContext.current
+    val availableImageCount = 4
 
     val imagePicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
+        contract = ActivityResultContracts.GetMultipleContents(),
         onResult = { uri ->
-            uri?.let {
+            uri.let {
                 val currentImages = formState.images.toMutableList()
-                currentImages.add(it)
+                val currentSize = currentImages.size
+                val availableAddCount = availableImageCount - currentSize
+                it.forEachIndexed { index, uri ->
+                    if (index + 1 <= availableAddCount) currentImages.add(uri)
+                }
+
                 viewModel.onEvent(PostFormEvent.ImageListUpdated(currentImages))
             }
         }
