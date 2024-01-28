@@ -181,7 +181,7 @@ class UserConfigViewModel @Inject constructor(
                     val accessToken = result.data?.accessToken
                     val memberId = result.data?.memberId
                     if (accessToken != null || memberId != null) {
-                        authDataStore.updateAccessToken(accessToken!!.toBearerToken())
+                        authDataStore.updateAccessToken(accessToken!!)
                         authDataStore.updateMemberId(memberId!!)
                         signUpEventChannel.send(SignUpEvent.NavigateToMain)
                     }

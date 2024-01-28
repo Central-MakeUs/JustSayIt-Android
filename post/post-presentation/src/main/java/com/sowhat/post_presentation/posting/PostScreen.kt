@@ -28,16 +28,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.sowhat.common.model.PostFormEvent
-import com.sowhat.common.model.PostFormState
 import com.sowhat.common.model.PostingEvent
+import com.sowhat.common.model.UiState
 import com.sowhat.common.util.ObserveEvents
 import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.component.AlertDialog
 import com.sowhat.designsystem.component.AppBar
+import com.sowhat.designsystem.component.CenteredCircularProgress
 import com.sowhat.designsystem.component.DefaultButtonFull
 import com.sowhat.designsystem.theme.JustSayItTheme
+import com.sowhat.post_presentation.common.PostFormEvent
+import com.sowhat.post_presentation.common.PostFormState
 import com.sowhat.post_presentation.common.SubjectItem
 import com.sowhat.post_presentation.common.rememberMoodItems
 import com.sowhat.post_presentation.component.CurrentMoodSelection
@@ -53,18 +55,22 @@ fun PostRoute(
     viewModel: PostViewModel = hiltViewModel()
 ) {
     val formState = viewModel.formState
+    val uiState = viewModel.uiState
     val moods = rememberMoodItems()
     val context = LocalContext.current
-
-    // TODO MoodItem 데이터 클래스 postData(서버로 실제로 보낼 감정 문자열 데이터) api 확정 시 수정해놓기
+    val availableImageCount = 4
 
     val imagePicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
+        contract = ActivityResultContracts.GetMultipleContents(),
         onResult = { uri ->
-            uri?.let {
-                // TODO val file = getFile(context, it, "/* 서버에서 나오는 것대로 수정 필요 */")
+            uri.let {
                 val currentImages = formState.images.toMutableList()
-                currentImages.add(it)
+                val currentSize = currentImages.size
+                val availableAddCount = availableImageCount - currentSize
+                it.forEachIndexed { index, uri ->
+                    if (index + 1 <= availableAddCount) currentImages.add(uri)
+                }
+
                 viewModel.onEvent(PostFormEvent.ImageListUpdated(currentImages))
             }
         }
@@ -85,6 +91,7 @@ fun PostRoute(
     PostScreen(
         navController = navController,
         formState = formState,
+        uiState = uiState,
         isValid = viewModel.isFormValid,
         onEvent = viewModel::onEvent,
         onSubmit = viewModel::submitPost,
@@ -101,6 +108,7 @@ fun PostScreen(
     navController: NavController,
     isValid: Boolean,
     formState: PostFormState,
+    uiState: UiState<Unit?>,
     moods: List<MoodItem>,
     onAddImage: () -> Unit,
     onEvent: (PostFormEvent) -> Unit,
@@ -267,6 +275,10 @@ fun PostScreen(
             )
         }
     }
+
+    if (uiState.isLoading) {
+        CenteredCircularProgress()
+    }
 }
 
 @Preview
@@ -277,7 +289,7 @@ fun PostScreenPreview() {
     var formState by remember {
         mutableStateOf(PostFormState())
     }
-    var isFormValid by remember {
+    val isFormValid by remember {
         mutableStateOf(
             formState.isImageListValid
                     && formState.isCurrentMoodValid
@@ -331,6 +343,7 @@ fun PostScreenPreview() {
                 }
             }
         },
-        onSubmit = {}
+        onSubmit = {},
+        uiState = UiState<Unit?>()
     )
 }

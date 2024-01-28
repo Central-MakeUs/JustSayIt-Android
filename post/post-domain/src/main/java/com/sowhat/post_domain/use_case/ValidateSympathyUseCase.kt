@@ -1,9 +1,12 @@
 package com.sowhat.post_domain.use_case
 
 import com.sowhat.common.model.ValidationResult
+import com.sowhat.designsystem.common.MoodItem
 
 class ValidateSympathyUseCase {
-    operator fun invoke(isOpen: Boolean, selectedMoodItems: List<String>): ValidationResult {
+    operator fun invoke(isOpen: Boolean, selectedMoodItems: List<MoodItem>): ValidationResult {
+        if (!isOpen) return ValidationResult(isValid = true)
+
         if (isOpen && selectedMoodItems.isEmpty()) {
             return ValidationResult(isValid = false)
         }
@@ -13,7 +16,7 @@ class ValidateSympathyUseCase {
         }
 
         selectedMoodItems.forEach {
-            if (it !in listOf("행복", "슬픔", "놀람", "화남")) {
+            if (it.postData !in listOf("EMOTION001", "EMOTION002", "EMOTION003", "EMOTION004")) {
                 return ValidationResult(isValid = false)
             }
         }

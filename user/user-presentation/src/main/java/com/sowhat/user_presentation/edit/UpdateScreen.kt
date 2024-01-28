@@ -32,7 +32,7 @@ import com.sowhat.common.model.UpdateFormEvent
 import com.sowhat.common.model.UpdateFormState
 import com.sowhat.common.util.LaunchWhenStarted
 import com.sowhat.common.util.ObserveEvents
-import com.sowhat.common.util.getFile
+import com.sowhat.common.util.getImageMultipartBody
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.COMPLETE
 import com.sowhat.designsystem.common.CONFIG_NICKNAME_TITLE
@@ -70,7 +70,7 @@ fun UpdateRoute(
 
     LaunchedEffect(key1 = true) {
         updateViewModel.onEvent(
-            UpdateFormEvent.ProfileChanged(getFile(context, null, "profileImg"))
+            UpdateFormEvent.ProfileChanged(null)
         )
     }
 
@@ -92,7 +92,7 @@ fun UpdateRoute(
             // the returned result from the file picker : Uri
             // to display -> read the uri and convert it into a bitmap -> Coil Image Library
             uri?.let {
-                updateViewModel.onEvent(UpdateFormEvent.ProfileChanged(getFile(context, uri, "profileImg")))
+                updateViewModel.onEvent(UpdateFormEvent.ProfileChanged(getImageMultipartBody(context, uri, "profileImg", "profile_image")))
             }
             updateViewModel.newImageUri = uri
         }

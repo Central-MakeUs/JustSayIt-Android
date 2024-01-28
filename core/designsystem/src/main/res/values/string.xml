@@ -19,11 +19,11 @@
     <string name="title_is_anonymous">익명</string>
     <string name="title_select_sympathy">공감 선택</string>
 
-    <string name="subtitle_select_mood">게시글을 작성할 감정을 선택해주세요.</string>
+    <string name="subtitle_select_mood">글에 대한 감정은 하나만 선택할 수 있어요.</string>
     <string name="subtitle_write">업로드할 글을 300자 이내로 작성해주세요.</string>
-    <string name="subtitle_is_open">게시글을 작성할 감정을 선택해주세요.</string>
-    <string name="subtitle_is_anonymous">게시글을 작성할 감정을 선택해주세요.</string>
-    <string name="subtitle_select_sympathy">게시글에 공감받을 감정을 선택해주세요.</string>
+    <string name="subtitle_is_open">글의 공개 여부를 선택해주세요.</string>
+    <string name="subtitle_is_anonymous">공개할 글의 익명 여부를 선택해주세요.\n익명을 선택하지 않을시, 처음 등록한 닉네임으로 표시돼요.</string>
+    <string name="subtitle_select_sympathy">글에 공감받을 감정을 선택해주세요. 여러개 선택할 수 있어요.</string>
 
     <string name="desc_info_immutable">성별과 생년월일은 추후 변경이 불가합니다. 정확히 입력해주세요</string>
 

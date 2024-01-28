@@ -2,10 +2,10 @@ package com.sowhat.designsystem.common
 
 import com.sowhat.designsystem.R
 
-const val MOOD_HAPPY = "FEELING001"
-const val MOOD_SAD = "FEELING002"
-const val MOOD_SURPRISED = "FEELING003"
-const val MOOD_ANGRY = "FEELING004"
+const val MOOD_HAPPY = "EMOTION001"
+const val MOOD_SAD = "EMOTION002"
+const val MOOD_SURPRISED = "EMOTION003"
+const val MOOD_ANGRY = "EMOTION004"
 
 enum class Mood(
     val title: String,

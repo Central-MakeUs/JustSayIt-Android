@@ -47,7 +47,7 @@ fun Chip(
     backgroundColor: Color,
     title: String,
     textColor: Color,
-    onClick: (String) -> Unit
+    onClick: (MoodItem) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -61,7 +61,7 @@ fun Chip(
             .composed {
                 if (isActive) {
                     rippleClickable {
-                        onClick(moodItem.title)
+                        onClick(moodItem)
                     }
                 } else {
                     this
@@ -165,7 +165,7 @@ fun ChipMedium(
     isActive: Boolean = true,
     isSelected: Boolean,
     moodItem: MoodItem,
-    onClick: (String) -> Unit
+    onClick: (MoodItem) -> Unit
 ) {
     Chip(
         isSelected = isSelected,
@@ -211,7 +211,7 @@ fun ChipSmall(
     isSelected: Boolean,
     moodItem: MoodItem,
     modifier: Modifier = Modifier,
-    onClick: (String) -> Unit
+    onClick: (MoodItem) -> Unit
 ) {
     Chip(
         isSelected = isSelected,
@@ -242,7 +242,7 @@ fun ChipPreview() {
     Column {
         ChipMedium(
             isSelected = isSelected,
-            onClick = { item: String -> },
+            onClick = { item -> },
             moodItem = MoodItem(
                 drawable = R.drawable.ic_happy_96,
                 title = "행복",

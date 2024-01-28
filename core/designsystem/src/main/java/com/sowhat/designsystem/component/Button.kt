@@ -119,7 +119,8 @@ fun DefaultButtonFull(
         ),
         contentPadding = PaddingValues(0.dp),
         shape = JustSayItTheme.Shapes.medium,
-        onClick = onClick
+        onClick = onClick,
+        enabled = isActive
     ) {
         Box(
             modifier = Modifier
