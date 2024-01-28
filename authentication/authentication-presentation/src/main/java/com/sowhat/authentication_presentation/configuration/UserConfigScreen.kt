@@ -84,7 +84,7 @@ fun UserConfigRoute(
 
     LaunchedEffect(key1 = true) {
         viewModel.onEvent(
-            RegistrationFormEvent.ProfileChanged(getImageMultipartBody(context, null, PART_PROFILE_IMG, "profile_image"))
+            RegistrationFormEvent.ProfileChanged(null)
         )
     }
 

@@ -70,7 +70,7 @@ fun UpdateRoute(
 
     LaunchedEffect(key1 = true) {
         updateViewModel.onEvent(
-            UpdateFormEvent.ProfileChanged(getImageMultipartBody(context, null, "profileImg", "profile_image"))
+            UpdateFormEvent.ProfileChanged(null)
         )
     }
 
