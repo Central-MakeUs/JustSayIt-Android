@@ -59,13 +59,10 @@ fun PostRoute(
     val moods = rememberMoodItems()
     val context = LocalContext.current
 
-    // TODO MoodItem 데이터 클래스 postData(서버로 실제로 보낼 감정 문자열 데이터) api 확정 시 수정해놓기
-
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
             uri?.let {
-                // TODO val file = getFile(context, it, "/* 서버에서 나오는 것대로 수정 필요 */")
                 val currentImages = formState.images.toMutableList()
                 currentImages.add(it)
                 viewModel.onEvent(PostFormEvent.ImageListUpdated(currentImages))

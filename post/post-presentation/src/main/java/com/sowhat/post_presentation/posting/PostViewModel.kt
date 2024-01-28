@@ -94,11 +94,23 @@ class PostViewModel @Inject constructor(
     fun onEvent(event: PostFormEvent) {
         when (event) {
             is PostFormEvent.CurrentMoodChanged -> {
-                val mood = event.mood
-                val isValid = validateCurrentMoodUseCase(mood).isValid
+                val previousMood = formState.currentMood
+                val selectedMood = event.mood
+                val currentSympathyItems = formState.sympathyMoodItems.toMutableList()
+
+                val isOpen = formState.isOpened
+                if (isOpen && selectedMood !in currentSympathyItems) currentSympathyItems.add(selectedMood)
+
+                previousMood?.let {
+                    val isPreviousItemRemovalValid = it in currentSympathyItems && it != selectedMood
+                    if (isPreviousItemRemovalValid) currentSympathyItems.remove(it)
+                }
+
                 formState = formState.copy(
-                    currentMood = mood,
-                    isCurrentMoodValid = isValid
+                    currentMood = selectedMood,
+                    isCurrentMoodValid = validateCurrentMoodUseCase(selectedMood).isValid,
+                    sympathyMoodItems = currentSympathyItems,
+                    isSympathyMoodItemsValid = validateSympathyUseCase(isOpen, currentSympathyItems).isValid
                 )
             }
             is PostFormEvent.ImageListUpdated -> {
@@ -126,6 +138,13 @@ class PostViewModel @Inject constructor(
                         isAnonymous = false,
                         sympathyMoodItems = emptyList()
                     )
+                } else {
+                    val currentMood = formState.currentMood
+                    currentMood?.let {
+                        formState = formState.copy(
+                            sympathyMoodItems = listOf(currentMood)
+                        )
+                    }
                 }
             }
             is PostFormEvent.AnonymousChanged -> {
@@ -136,6 +155,12 @@ class PostViewModel @Inject constructor(
             is PostFormEvent.SympathyItemsChanged -> {
                 val sympathyItems = event.sympathyItems
                 val isValid = validateSympathyUseCase(formState.isOpened, sympathyItems).isValid
+                val currentMood = formState.currentMood
+                currentMood?.let {
+                    if (currentMood !in sympathyItems) {
+                        return
+                    }
+                }
                 formState = formState.copy(
                     sympathyMoodItems = sympathyItems,
                     isSympathyMoodItemsValid = isValid
