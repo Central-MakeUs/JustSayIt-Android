@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.R
+import com.sowhat.designsystem.common.Mood
 import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Black
@@ -73,8 +76,8 @@ fun Chip(
                 .padding(
                     start = JustSayItTheme.Spacing.spaceSm,
                     end = JustSayItTheme.Spacing.spaceBase,
-                    top = JustSayItTheme.Spacing.spaceXS,
-                    bottom = JustSayItTheme.Spacing.spaceXS
+                    top = JustSayItTheme.Spacing.spaceXXS,
+                    bottom = JustSayItTheme.Spacing.spaceXXS
                 ),
             horizontalArrangement = Arrangement
                 .spacedBy(JustSayItTheme.Spacing.spaceXS),
@@ -91,6 +94,56 @@ fun Chip(
 
             Text(
                 text = title,
+                style = textStyle,
+                color = textColor
+            )
+        }
+    }
+}
+
+@Composable
+fun Chip(
+    modifier: Modifier = Modifier,
+    drawableStart: Int?,
+    drawableSize: Dp,
+    countText: String,
+    textStyle: TextStyle,
+    textColor: Color,
+) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(percent = 50))
+            .background(color = JustSayItTheme.Colors.mainBackground)
+            .border(
+                width = 1.dp,
+                color = Gray300,
+                shape = RoundedCornerShape(50)
+            )
+            .width(80.dp)
+    ) {
+        Row(
+            modifier = modifier
+                .padding(
+                    start = JustSayItTheme.Spacing.spaceSm,
+                    end = JustSayItTheme.Spacing.spaceBase,
+                    top = JustSayItTheme.Spacing.spaceXXS,
+                    bottom = JustSayItTheme.Spacing.spaceXXS
+                )
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            drawableStart?.let {
+                Image(
+                    modifier = Modifier.size(drawableSize),
+                    painter = painterResource(id = drawableStart),
+                    contentDescription = "chip_icon"
+                )
+            }
+
+            Text(
+                text = countText,
                 style = textStyle,
                 color = textColor
             )

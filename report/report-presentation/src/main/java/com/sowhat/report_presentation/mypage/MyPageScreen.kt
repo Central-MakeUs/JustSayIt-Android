@@ -35,8 +35,10 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.practice.database.entity.MyFeedEntity
 import com.sowhat.designsystem.common.Mood
+import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.common.rememberNestedScrollViewState
 import com.sowhat.designsystem.component.AppBarMyPage
+import com.sowhat.designsystem.component.Chip
 import com.sowhat.designsystem.component.VerticalNestedScrollView
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.report_presentation.common.MyFeedEvent
@@ -201,6 +203,9 @@ private fun MyFeedList(
 
                     val isMoodVisible = if (isFirstItem) isItemIconVisible.value else true
 
+                    val sympathyMoodItems = getSympathyMoodItems(item)
+
+
                     MyFeed(
                         currentDate = currentDate,
                         isPrivate = !myFeed.isOpened,
@@ -210,7 +215,8 @@ private fun MyFeedList(
                         images = myFeed.photo,
                         onMenuClick = {},
                         date = myFeed.createdAt.toDate(),
-                        isScrollInProgress = isScrollInProgress
+                        isScrollInProgress = isScrollInProgress,
+                        sympathyMoodItems = sympathyMoodItems
                     )
                 }
 
@@ -218,6 +224,66 @@ private fun MyFeedList(
             }
         }
     }
+}
+
+@Composable
+private fun getSympathyMoodItems(item: MyFeedEntity?): List<@Composable () -> Unit> {
+    val sympathyMoodItems = mutableListOf<@Composable () -> Unit>()
+    val drawableSize = JustSayItTheme.Spacing.spaceLg
+    val textStyle = JustSayItTheme.Typography.detail1
+    val textColor = JustSayItTheme.Colors.mainTypo
+
+    item?.let {
+        if (item.isHappinessSelected) {
+            sympathyMoodItems.add {
+                Chip(
+                    drawableStart = Mood.HAPPY.drawable,
+                    drawableSize = drawableSize,
+                    countText = item.happinessCount.toString(),
+                    textStyle = textStyle,
+                    textColor = textColor
+                )
+            }
+        }
+
+        if (item.isSadnessSelected) {
+            sympathyMoodItems.add {
+                Chip(
+                    drawableStart = Mood.SAD.drawable,
+                    drawableSize = drawableSize,
+                    countText = item.sadnessCount.toString(),
+                    textStyle = textStyle,
+                    textColor = textColor
+                )
+            }
+        }
+
+        if (item.isAngrySelected) {
+            sympathyMoodItems.add {
+                Chip(
+                    drawableStart = Mood.ANGRY.drawable,
+                    drawableSize = drawableSize,
+                    countText = item.angryCount.toString(),
+                    textStyle = textStyle,
+                    textColor = textColor
+                )
+            }
+        }
+
+        if (item.isSurprisedSelected) {
+            sympathyMoodItems.add {
+                Chip(
+                    drawableStart = Mood.SURPRISED.drawable,
+                    drawableSize = drawableSize,
+                    countText = item.surprisedCount.toString(),
+                    textStyle = textStyle,
+                    textColor = textColor
+                )
+            }
+        }
+    }
+
+    return sympathyMoodItems
 }
 
 @Preview
