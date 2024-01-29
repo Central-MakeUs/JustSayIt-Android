@@ -60,6 +60,9 @@
     <string name="dialog_button_withdraw">탈퇴하기</string>
     <string name="dialog_button_cancel">취소</string>
 
+    <string name="popup_edit">수정하기</string>
+    <string name="popup_delete">삭제하기</string>
+
     <string name="sort_latest">최신순</string>
     <string name="sort_oldest">오래된순</string>
 

@@ -25,6 +25,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -38,8 +39,10 @@ import com.sowhat.designsystem.common.Mood
 import com.sowhat.designsystem.common.rememberNestedScrollViewState
 import com.sowhat.designsystem.component.AppBarMyPage
 import com.sowhat.designsystem.component.Chip
+import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.VerticalNestedScrollView
 import com.sowhat.designsystem.theme.JustSayItTheme
+import com.sowhat.designsystem.R
 import com.sowhat.report_presentation.common.MyFeedEvent
 import com.sowhat.report_presentation.common.MyFeedUiState
 import com.sowhat.report_presentation.common.toDate
@@ -153,7 +156,9 @@ private fun MyFeedItemsScreen(
             onFirstItemIndexChange = { myFeed ->
                 currentState = moodItems.find { it.postData == myFeed.writerEmotion }
                 currentDate = myFeed.createdAt.toDate()
-            }
+            },
+            myFeedUiState = myFeedUiState,
+            onEvent = onEvent
         )
     }
 }
@@ -168,6 +173,8 @@ private fun MyFeedList(
     moodItems: List<Mood>,
     isItemIconVisible: State<Boolean>,
     onFirstItemIndexChange: (MyFeedEntity) -> Unit,
+    myFeedUiState: MyFeedUiState,
+    onEvent: (MyFeedEvent) -> Unit
 ) {
     RailBackground(
         lazyListState = lazyListState,
@@ -201,9 +208,32 @@ private fun MyFeedList(
                     }.value == index
 
                     val isMoodVisible = if (isFirstItem) isItemIconVisible.value else true
+                    var isPopupMenuVisible by remember {
+                        mutableStateOf(false)
+                    }
 
                     val sympathyMoodItems = getSympathyMoodItems(item)
 
+                    val popupMenuItems = listOf(
+                        PopupMenuItem(
+                            title = stringResource(id = R.string.popup_edit),
+                            drawable = R.drawable.ic_edit_20,
+                            postData = myFeed.storyId,
+                            contentColor = JustSayItTheme.Colors.mainTypo,
+                            onItemClick = {
+                                // TODO 수정 화면으로 이동
+                            }
+                        ),
+                        PopupMenuItem(
+                            title = stringResource(id = R.string.popup_delete),
+                            drawable = R.drawable.ic_delete_20,
+                            postData = myFeed.storyId,
+                            contentColor = JustSayItTheme.Colors.error,
+                            onItemClick = {
+                                // TODO 삭제 화면으로 이동
+                            }
+                        )
+                    )
 
                     MyFeed(
                         currentDate = currentDate,
@@ -212,11 +242,18 @@ private fun MyFeedList(
                         isMoodVisible = isMoodVisible,
                         text = myFeed.bodyText,
                         images = myFeed.photo,
-                        onMenuClick = {},
+                        onMenuClick = { isPopupMenuVisible = true },
                         date = myFeed.createdAt.toDate(),
                         isScrollInProgress = isScrollInProgress,
                         sympathyMoodItems = sympathyMoodItems,
-                        isEdited = myFeed.createdAt != myFeed.updatedAt
+                        isEdited = myFeed.createdAt != myFeed.updatedAt,
+                        isMenuVisible = isPopupMenuVisible,
+                        popupMenuItem = popupMenuItems,
+                        onPopupMenuDismiss = { isPopupMenuVisible = false },
+                        onMenuItemClick = {
+                            isPopupMenuVisible = false
+                            it.onItemClick?.let { it() }
+                        }
                     )
                 }
 

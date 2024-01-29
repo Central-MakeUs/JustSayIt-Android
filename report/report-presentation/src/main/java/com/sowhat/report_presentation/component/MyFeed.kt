@@ -32,6 +32,8 @@ import androidx.compose.ui.zIndex
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.Mood
 import com.sowhat.designsystem.common.noRippleClickable
+import com.sowhat.designsystem.component.PopupMenuContents
+import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.TimelineFeedImages
 import com.sowhat.designsystem.theme.Gray400
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -49,7 +51,11 @@ fun MyFeed(
     images: List<String>,
     isScrollInProgress: Boolean,
     sympathyMoodItems: List<@Composable () -> Unit>,
-    isEdited: Boolean
+    isEdited: Boolean,
+    isMenuVisible: Boolean,
+    popupMenuItem: List<PopupMenuItem>,
+    onPopupMenuDismiss: () -> Unit,
+    onMenuItemClick: (PopupMenuItem) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -87,7 +93,11 @@ fun MyFeed(
             text = text,
             images = images,
             sympathyMoodItems = sympathyMoodItems,
-            isEdited = isEdited
+            isEdited = isEdited,
+            isMenuVisible = isMenuVisible,
+            popupMenuItem = popupMenuItem,
+            onPopupMenuDismiss = onPopupMenuDismiss,
+            onMenuItemClick = onMenuItemClick
         )
     }
 }
@@ -100,7 +110,11 @@ private fun FeedCard(
     text: String,
     images: List<String>,
     sympathyMoodItems: List<@Composable () -> Unit>,
-    isEdited: Boolean
+    isEdited: Boolean,
+    isMenuVisible: Boolean,
+    popupMenuItem: List<PopupMenuItem>,
+    onPopupMenuDismiss: () -> Unit,
+    onMenuItemClick: (PopupMenuItem) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -113,7 +127,18 @@ private fun FeedCard(
             defaultElevation = 10.dp
         )
     ) {
-        FeedContent(isOpen, onMenuClick, text, images, sympathyMoodItems, isEdited)
+        FeedContent(
+            isOpen = isOpen,
+            onMenuClick = onMenuClick,
+            text = text,
+            images = images,
+            sympathyMoodItems = sympathyMoodItems,
+            isEdited = isEdited,
+            isMenuVisible = isMenuVisible,
+            popupMenuItems = popupMenuItem,
+            onPopupMenuDismiss = onPopupMenuDismiss,
+            onMenuItemClick = onMenuItemClick
+        )
     }
 }
 
@@ -124,7 +149,12 @@ private fun FeedContent(
     text: String,
     images: List<String>,
     sympathyMoodItems: List<@Composable () -> Unit>,
-    isEdited: Boolean
+    isEdited: Boolean,
+    modifier: Modifier = Modifier,
+    isMenuVisible: Boolean,
+    popupMenuItems: List<PopupMenuItem>,
+    onPopupMenuDismiss: () -> Unit,
+    onMenuItemClick: (PopupMenuItem) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -139,7 +169,15 @@ private fun FeedContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             MyFeedMetaData(isOpen = isOpen, isEdited = isEdited)
-            MenuButton(onMenuClick)
+
+            MenuButton(
+                modifier = Modifier,
+                isVisible = isMenuVisible,
+                items = popupMenuItems,
+                onDismiss = onPopupMenuDismiss,
+                onMenuClick = onMenuClick,
+                onItemClick = onMenuItemClick
+            )
         }
 
         Text(
@@ -192,9 +230,16 @@ private fun FeedImages(images: List<String>) {
 }
 
 @Composable
-private fun MenuButton(onMenuClick: () -> Unit) {
+private fun MenuButton(
+    modifier: Modifier = Modifier,
+    isVisible: Boolean,
+    items: List<PopupMenuItem>,
+    onDismiss: () -> Unit,
+    onItemClick: (PopupMenuItem) -> Unit,
+    onMenuClick: () -> Unit
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .noRippleClickable { onMenuClick() }
     ) {
         Icon(
@@ -203,7 +248,36 @@ private fun MenuButton(onMenuClick: () -> Unit) {
             contentDescription = "more",
             tint = JustSayItTheme.Colors.mainTypo
         )
+
+        // Box를 하나 더 두는 이유는
+        // 해당 박스의 우측 하단에 메뉴가 들어가게 되는 특성을 활용해(팝업메뉴가 박스 크기를 초과하기 때문)
+        // 팝업 메뉴의 위치를 조절하기 위함
+        Box(modifier = Modifier.size(JustSayItTheme.Spacing.spaceXXL)) {
+            MyFeedPopupMenu(
+                isVisible = isVisible,
+                items = items,
+                onDismiss = onDismiss,
+                onItemClick = onItemClick
+            )
+        }
     }
+}
+
+@Composable
+private fun MyFeedPopupMenu(
+    modifier: Modifier = Modifier,
+    isVisible: Boolean,
+    items: List<PopupMenuItem>,
+    onDismiss: () -> Unit,
+    onItemClick: (PopupMenuItem) -> Unit
+) {
+    PopupMenuContents(
+        modifier = modifier,
+        isVisible = isVisible,
+        items = items,
+        onDismiss = onDismiss,
+        onItemClick = onItemClick
+    )
 }
 
 @Composable
@@ -263,7 +337,11 @@ fun MyFeedPreview() {
                 isScrollInProgress = true,
                 currentDate = "22.11.22",
                 sympathyMoodItems = emptyList(),
-                isEdited = true
+                isEdited = true,
+                isMenuVisible = false,
+                popupMenuItem = emptyList(),
+                onPopupMenuDismiss = {},
+                onMenuItemClick = {}
             )
             
             Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))
@@ -281,7 +359,11 @@ fun MyFeedPreview() {
                 isScrollInProgress = true,
                 currentDate = "22.11.23",
                 sympathyMoodItems = emptyList(),
-                isEdited = false
+                isEdited = false,
+                isMenuVisible = false,
+                popupMenuItem = emptyList(),
+                onPopupMenuDismiss = {},
+                onMenuItemClick = {}
             )
         }
     }

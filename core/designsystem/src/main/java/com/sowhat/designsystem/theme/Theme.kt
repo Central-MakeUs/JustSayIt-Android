@@ -56,7 +56,8 @@ val LightColorScheme = JustSayItColor(
     happy = HappyColor,
     surprise = SurpriseColor,
     sad = SadColor,
-    inactiveTypo = Gray500
+    inactiveTypo = Gray500,
+    error = Alert
 )
 
 val DarkColorScheme = JustSayItColor(
@@ -71,7 +72,8 @@ val DarkColorScheme = JustSayItColor(
     happy = HappyColor,
     surprise = SurpriseColor,
     sad = SadColor,
-    inactiveTypo = Gray500
+    inactiveTypo = Gray500,
+    error = Alert
 )
 
 val LocalTypography = staticCompositionLocalOf { JustSayItTypography() }

@@ -76,9 +76,9 @@ fun ProfileImage(
     badgeIconTint: Color,
     onClick: () -> Unit,
     dropdownVisible: Boolean,
-    dropdownMenuItems: List<DropdownItem>,
+    dropdownMenuItems: List<PopupMenuItem>,
     onDropdownDismiss: () -> Unit,
-    onItemClick: (DropdownItem) -> Unit
+    onItemClick: (PopupMenuItem) -> Unit
 ) {
     ConstraintLayout(
         modifier = modifier
@@ -119,7 +119,7 @@ fun ProfileImage(
                 drawable = badgeDrawable
             )
 
-            MenuContents(
+            PopupMenuContents(
                 modifier = Modifier.width(136.dp),
                 isVisible = dropdownVisible,
                 items = dropdownMenuItems,

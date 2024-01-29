@@ -164,7 +164,11 @@ fun RailBackgroundPreview() {
                     isScrollInProgress = lazyListState.isScrollInProgress,
                     currentDate = "22.11.23",
                     sympathyMoodItems = emptyList(),
-                    isEdited = true
+                    isEdited = true,
+                    isMenuVisible = false,
+                    popupMenuItem = emptyList(),
+                    onPopupMenuDismiss = {},
+                    onMenuItemClick = {}
                 )
 
                 Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))

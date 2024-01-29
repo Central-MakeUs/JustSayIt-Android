@@ -1,93 +1,33 @@
 package com.sowhat.designsystem.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.DropdownItem
-import com.sowhat.designsystem.common.Mood
-import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.JustSayItTheme
 
 @Composable
-fun DropdownHeader(
-    modifier: Modifier = Modifier,
-    currentMenu: Mood,
-    isDropdownExpanded: Boolean,
-    onClick: (Boolean) -> Unit
-) {
-
-    Box(modifier = modifier
-        .rippleClickable { onClick(!isDropdownExpanded) }
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(
-                    horizontal = JustSayItTheme.Spacing.spaceSm,
-                    vertical = JustSayItTheme.Spacing.spaceXS
-                ),
-            horizontalArrangement = Arrangement
-                .spacedBy(JustSayItTheme.Spacing.spaceXXS),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            currentMenu.drawable?.let {
-                Image(
-                    modifier = Modifier.size(JustSayItTheme.Spacing.spaceXL),
-                    painter = painterResource(id = it),
-                    contentDescription = "dropdown_drawable"
-                )
-            }
-
-            Text(
-                text = currentMenu.title,
-                color = JustSayItTheme.Colors.mainTypo,
-                style = JustSayItTheme.Typography.body2
-            )
-
-            Icon(
-                painter = painterResource(id = R.drawable.ic_down_16),
-                contentDescription = "dropdown_down"
-            )
-        }
-
-    }
-}
-
-
-@Composable
-fun DropdownContents(
+fun PopupMenuContents(
     modifier: Modifier = Modifier,
     isVisible: Boolean,
-    items: List<Mood>,
+    items: List<PopupMenuItem>,
     onDismiss: () -> Unit,
-    onItemClick: (Mood) -> Unit
+    onItemClick: (PopupMenuItem) -> Unit
 ) {
     // https://stackoverflow.com/questions/66781028/jetpack-compose-dropdownmenu-with-rounded-corners
     MaterialTheme(
@@ -110,7 +50,7 @@ fun DropdownContents(
                 onDismiss()
             },
         ) {
-            DropdownMenus(
+            PopupMenuItems(
                 modifier = Modifier,
                 items = items,
                 onDismiss = onDismiss,
@@ -121,13 +61,16 @@ fun DropdownContents(
 }
 
 @Composable
-fun ColumnScope.DropdownMenus(
+fun ColumnScope.PopupMenuItems(
     modifier: Modifier = Modifier,
-    items: List<Mood>,
+    items: List<PopupMenuItem>,
     onDismiss: () -> Unit,
-    onItemClick: (Mood) -> Unit
+    onItemClick: (PopupMenuItem) -> Unit
 ) {
     items.forEachIndexed { index, dropdownItem ->
+
+        val textColor = dropdownItem.contentColor ?: JustSayItTheme.Colors.mainTypo
+
         if (index != 0) Divider(
             thickness = JustSayItTheme.Spacing.border,
             color = Gray300,
@@ -145,7 +88,7 @@ fun ColumnScope.DropdownMenus(
                     modifier = Modifier.fillMaxWidth(),
                     text = dropdownItem.title,
                     textStyle = JustSayItTheme.Typography.body3,
-                    textColor = JustSayItTheme.Colors.mainTypo,
+                    textColor = textColor,
                     drawable = dropdownItem.drawable,
                     drawableSize = JustSayItTheme.Spacing.spaceLg
                 )
@@ -158,29 +101,56 @@ fun ColumnScope.DropdownMenus(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xffffffff)
-@Composable
-fun DropdownPreview() {
 
-    var isVisible by remember {
-        mutableStateOf(true)
-    }
-
-    DropdownContents(
-        isVisible = isVisible,
-        items = Mood.values().toList(),
-        onDismiss = { isVisible = false },
-        onItemClick = {}
+data class PopupMenuItem(
+    val title: String,
+    val drawable: Int? = null,
+    val postData: Long? = null,
+    val onItemClick: (() -> Unit)? = null,
+    val contentColor: Color? = null
+) {
+    constructor(
+        title: String,
+        drawable: Int,
+        onItemClick: () -> Unit
+    ): this(
+        title = title,
+        drawable = drawable,
+        onItemClick = onItemClick,
+        postData = null
     )
-}
 
-@Preview(showBackground = true, backgroundColor = 0xffffffff)
-@Composable
-fun DropdownHeaderPreview() {
-    DropdownHeader(
-        modifier = Modifier,
-        currentMenu = Mood.HAPPY,
-        onClick = {},
-        isDropdownExpanded = true
+    constructor(
+        title: String,
+        drawable: Int,
+        onItemClick: () -> Unit,
+        contentColor: Color
+    ): this(
+        title = title,
+        drawable = drawable,
+        onItemClick = onItemClick,
+        postData = null,
+        contentColor = contentColor
+    )
+
+    constructor(
+        title: String,
+        onItemClick: () -> Unit
+    ): this(
+        title = title,
+        onItemClick = onItemClick,
+        postData = null,
+        drawable = null
+    )
+
+    constructor(
+        title: String,
+        onItemClick: () -> Unit,
+        drawable: Int
+    ): this(
+        title = title,
+        onItemClick = onItemClick,
+        drawable = drawable,
+        postData = null
     )
 }

@@ -43,6 +43,7 @@ import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.Cell
 import com.sowhat.designsystem.component.CenteredCircularProgress
 import com.sowhat.designsystem.component.DefaultTextField
+import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.ProfileImage
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
@@ -98,14 +99,14 @@ fun UpdateRoute(
         }
     )
 
-    val dropdownMenuItems = listOf(
-        DropdownItem(
+    val popupMenuItems = listOf(
+        PopupMenuItem(
             title =  stringResource(id = R.string.dropdown_upload_image),
             onItemClick = {
                 imagePicker.launch("image/*")
             }
         ),
-        DropdownItem(
+        PopupMenuItem(
             title =  stringResource(id = R.string.dropdown_default_image),
             onItemClick = {
                 updateViewModel.onEvent(UpdateFormEvent.ProfileChanged(null))
@@ -122,7 +123,7 @@ fun UpdateRoute(
         formState = updateViewModel.formState,
         newProfileUri = updateViewModel.newImageUri,
         dropdownVisible = updateViewModel.dropdown,
-        dropdownMenuItems = dropdownMenuItems,
+        dropdownMenuItems = popupMenuItems,
         onSubmit = updateViewModel::updateUserInfo,
         onEvent = updateViewModel::onEvent,
         onProfileClick = {
@@ -145,7 +146,7 @@ fun UpdateScreen(
     onProfileClick: () -> Unit,
     newProfileUri: Uri?,
     dropdownVisible: Boolean,
-    dropdownMenuItems: List<DropdownItem>,
+    dropdownMenuItems: List<PopupMenuItem>,
     onDropdownDismiss: () -> Unit,
     onSubmit: () -> Unit,
     onEvent: (UpdateFormEvent) -> Unit
@@ -189,7 +190,7 @@ fun EditScreenContent(
     onProfileClick: () -> Unit,
     newProfileUri: Uri?,
     dropdownVisible: Boolean,
-    dropdownMenuItems: List<DropdownItem>,
+    dropdownMenuItems: List<PopupMenuItem>,
     onDropdownDismiss: () -> Unit,
     formState: UpdateFormState,
     uiState: UiState<UserInfoDomain>,
@@ -214,10 +215,8 @@ fun EditScreenContent(
             dropdownVisible = dropdownVisible,
             dropdownMenuItems = dropdownMenuItems,
             onDropdownDismiss = onDropdownDismiss,
-            onItemClick = { dropdownItem ->
-                dropdownItem.onItemClick?.let { onClick ->
-                    onClick()
-                }
+            onItemClick = { popMenuItem: PopupMenuItem ->
+                popMenuItem.onItemClick?.let { it() }
             }
         )
 
@@ -273,18 +272,7 @@ fun EditScreenPreview() {
         dropdownVisible = true,
         onDropdownDismiss = {},
         dropdownMenuItems = listOf(
-            DropdownItem(
-                title = "사진 업로드하기",
-                onItemClick = {
 
-                }
-            ),
-            DropdownItem(
-                title = "기본 이미지로 변경",
-                onItemClick = {
-
-                }
-            )
         ),
         onSubmit = {},
         uiState = UiState(),
