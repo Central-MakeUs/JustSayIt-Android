@@ -84,12 +84,12 @@ fun ColumnScope.PopupMenuItems(
                 )
                 .padding(vertical = 0.dp),
             text = {
-                TextDrawableStart(
+                TextWithIconStart(
                     modifier = Modifier.fillMaxWidth(),
                     text = dropdownItem.title,
                     textStyle = JustSayItTheme.Typography.body3,
                     textColor = textColor,
-                    drawable = dropdownItem.drawable,
+                    iconDrawable = dropdownItem.drawable,
                     drawableSize = JustSayItTheme.Spacing.spaceLg
                 )
             },

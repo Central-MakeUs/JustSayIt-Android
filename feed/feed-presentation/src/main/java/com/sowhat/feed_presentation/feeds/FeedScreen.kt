@@ -32,6 +32,7 @@ import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.feed_presentation.common.FeedAppBarEvent
 import com.sowhat.feed_presentation.common.FeedAppBarState
 import com.sowhat.designsystem.common.isScrollingUp
+import com.sowhat.designsystem.common.rememberMoodItemsForFeed
 import com.sowhat.feed_presentation.component.Feed
 
 @Composable
@@ -97,6 +98,7 @@ fun FeedScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .background(JustSayItTheme.Colors.mainBackground)
                 .padding(paddingValues),
             state = lazyListState
         ){
@@ -124,44 +126,7 @@ fun FeedScreen(
 
 @Composable
 private fun DummyData(count: Int) {
-    val moodItems = listOf(
-        MoodItem(
-            drawable = R.drawable.ic_happy_96,
-            title = "행복",
-            postData = "HAPPY",
-            selectedTextColor = JustSayItTheme.Colors.mainBackground,
-            unselectedTextColor = JustSayItTheme.Colors.mainTypo,
-            selectedBackgroundColor = JustSayItTheme.Colors.happy,
-            unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground
-        ),
-        MoodItem(
-            drawable = R.drawable.ic_sad_96,
-            title = "슬픔",
-            postData = "SAD",
-            selectedTextColor = JustSayItTheme.Colors.mainBackground,
-            unselectedTextColor = JustSayItTheme.Colors.mainTypo,
-            selectedBackgroundColor = JustSayItTheme.Colors.sad,
-            unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground
-        ),
-        MoodItem(
-            drawable = R.drawable.ic_surprise_96,
-            title = "놀람",
-            postData = "SURPRISED",
-            selectedTextColor = JustSayItTheme.Colors.mainBackground,
-            unselectedTextColor = JustSayItTheme.Colors.mainTypo,
-            selectedBackgroundColor = JustSayItTheme.Colors.surprise,
-            unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground
-        ),
-        MoodItem(
-            drawable = R.drawable.ic_angry_96,
-            title = "화남",
-            postData = "ANGRY",
-            selectedTextColor = JustSayItTheme.Colors.mainBackground,
-            unselectedTextColor = JustSayItTheme.Colors.mainTypo,
-            selectedBackgroundColor = JustSayItTheme.Colors.angry,
-            unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground
-        ),
-    )
+    val moodItems = rememberMoodItemsForFeed(111, 2, 3, 5)
 
     var selectedMood by remember {
         mutableStateOf<MoodItem?>(null)

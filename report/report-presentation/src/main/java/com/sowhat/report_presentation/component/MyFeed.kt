@@ -1,5 +1,6 @@
 package com.sowhat.report_presentation.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +36,7 @@ import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.component.PopupMenuContents
 import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.TimelineFeedImages
+import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.Gray400
 import com.sowhat.designsystem.theme.JustSayItTheme
 
@@ -125,7 +127,8 @@ private fun FeedCard(
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp
-        )
+        ),
+        border = BorderStroke(JustSayItTheme.Spacing.border, Gray300)
     ) {
         FeedContent(
             isOpen = isOpen,

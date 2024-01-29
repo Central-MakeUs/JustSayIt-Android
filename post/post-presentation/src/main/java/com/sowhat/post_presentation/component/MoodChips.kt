@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.sowhat.designsystem.component.ChipMedium
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.designsystem.common.MoodItem
+import com.sowhat.designsystem.common.rememberMoodItems
 
 @Composable
 fun MoodChips(
@@ -98,12 +99,7 @@ fun MoodChips(
 @Composable
 fun MoodChipsPreview() {
 
-    val moods = listOf(
-        MoodItem(com.sowhat.designsystem.R.drawable.ic_happy_96, "기쁨", "", Color.White, Color.Black, Color.White, Color.Black),
-        MoodItem(com.sowhat.designsystem.R.drawable.ic_sad_96, "슬픔", "", Color.White, Color.Black, Color.White, Color.Black),
-        MoodItem(com.sowhat.designsystem.R.drawable.ic_angry_96, "화남", "", Color.White, Color.Black, Color.White, Color.Black),
-        MoodItem(com.sowhat.designsystem.R.drawable.ic_surprise_96, "놀람", "", Color.White, Color.Black, Color.White, Color.Black),
-    )
+    val moods = rememberMoodItems()
 
     var selectedMoods = remember {
         mutableStateListOf<MoodItem>()

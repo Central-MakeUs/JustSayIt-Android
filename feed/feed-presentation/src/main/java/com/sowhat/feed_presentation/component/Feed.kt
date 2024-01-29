@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.common.bottomBorder
+import com.sowhat.designsystem.common.rememberMoodItemsForFeed
 import com.sowhat.designsystem.component.ChipSm
 import com.sowhat.designsystem.component.DefaultIconButton
 import com.sowhat.designsystem.component.ImageContainer
@@ -289,44 +290,7 @@ private fun SelectedSympathy(
 @Preview
 @Composable
 fun FeedItemPreview() {
-    val moodItems = listOf(
-        MoodItem(
-            drawable = com.sowhat.designsystem.R.drawable.ic_happy_96,
-            title = "행복",
-            postData = "HAPPY",
-            selectedTextColor = JustSayItTheme.Colors.mainBackground,
-            unselectedTextColor = JustSayItTheme.Colors.mainTypo,
-            selectedBackgroundColor = JustSayItTheme.Colors.happy,
-            unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground
-        ),
-        MoodItem(
-            drawable = com.sowhat.designsystem.R.drawable.ic_sad_96,
-            title = "슬픔",
-            postData = "SAD",
-            selectedTextColor = JustSayItTheme.Colors.mainBackground,
-            unselectedTextColor = JustSayItTheme.Colors.mainTypo,
-            selectedBackgroundColor = JustSayItTheme.Colors.sad,
-            unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground
-        ),
-        MoodItem(
-            drawable = com.sowhat.designsystem.R.drawable.ic_surprise_96,
-            title = "놀람",
-            postData = "SURPRISED",
-            selectedTextColor = JustSayItTheme.Colors.mainBackground,
-            unselectedTextColor = JustSayItTheme.Colors.mainTypo,
-            selectedBackgroundColor = JustSayItTheme.Colors.surprise,
-            unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground
-        ),
-        MoodItem(
-            drawable = com.sowhat.designsystem.R.drawable.ic_angry_96,
-            title = "화남",
-            postData = "ANGRY",
-            selectedTextColor = JustSayItTheme.Colors.mainBackground,
-            unselectedTextColor = JustSayItTheme.Colors.mainTypo,
-            selectedBackgroundColor = JustSayItTheme.Colors.angry,
-            unselectedBackgroundColor = JustSayItTheme.Colors.mainBackground
-        ),
-    )
+    val moodItems = rememberMoodItemsForFeed(1, 2, 3, 5)
 
     var selectedMood by remember {
         mutableStateOf<MoodItem?>(null)

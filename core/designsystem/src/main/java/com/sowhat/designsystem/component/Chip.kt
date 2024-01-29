@@ -174,6 +174,7 @@ fun MoodChip(
                 color = Gray300,
                 shape = RoundedCornerShape(50)
             )
+            .width(76.dp)
             .composed {
                 if (isActive) {
                     rippleClickable {
@@ -186,12 +187,12 @@ fun MoodChip(
     ) {
         Row(
             modifier = modifier
+                .fillMaxWidth()
                 .padding(
                     horizontal = JustSayItTheme.Spacing.spaceSm,
                     vertical = JustSayItTheme.Spacing.spaceXXS
                 ),
-            horizontalArrangement = Arrangement
-                .spacedBy(JustSayItTheme.Spacing.spaceXS),
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
 

@@ -1,5 +1,7 @@
 package com.sowhat.user_presentation.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -16,7 +18,17 @@ import com.sowhat.user_presentation.signout.SignOutRoute
 fun NavGraphBuilder.settingScreen(
     appNavController: NavHostController
 ) {
-    composable(route = SETTING) {
+    composable(
+        route = SETTING,
+        enterTransition = {
+            EnterTransition.None
+        },
+        exitTransition = {
+            ExitTransition.None
+        },
+        popEnterTransition = null,
+        popExitTransition = null
+    ) {
         SettingRoute(appNavController = appNavController)
     }
 }

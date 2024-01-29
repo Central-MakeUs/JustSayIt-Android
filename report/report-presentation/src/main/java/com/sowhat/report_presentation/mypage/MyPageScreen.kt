@@ -51,6 +51,7 @@ import com.sowhat.report_presentation.common.toDate
 import com.sowhat.report_presentation.component.MyFeed
 import com.sowhat.report_presentation.component.RailBackground
 import com.sowhat.report_presentation.component.Report
+import kotlinx.coroutines.delay
 
 @Composable
 fun MyPageRoute(
@@ -154,6 +155,19 @@ private fun MyFeedItemsScreen(
 
         val isScrollInProgress = lazyListState.isScrollInProgress
 
+        var isCurrentFeedInfoVisible by remember {
+            mutableStateOf(isScrollInProgress)
+        }
+
+        LaunchedEffect(key1 = isScrollInProgress) {
+            if (!isScrollInProgress) {
+                delay(5000)
+                isCurrentFeedInfoVisible = false
+            } else {
+                isCurrentFeedInfoVisible = true
+            }
+        }
+
         AppBarMyPage(
             currentDropdownItem = myFeedUiState.emotion,
             dropdownItems = moodItems,
@@ -177,7 +191,7 @@ private fun MyFeedItemsScreen(
             lazyListState = lazyListState,
             currentState = currentState,
             currentDate = currentDate,
-            isScrollInProgress = isScrollInProgress,
+            isScrollInProgress = isCurrentFeedInfoVisible,
             pagingData = pagingData,
             moodItems = moodItems,
             isItemIconVisible = isItemIconVisible,
@@ -210,86 +224,136 @@ private fun MyFeedList(
         currentDate = currentDate,
         isScrollInProgress = isScrollInProgress
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    horizontal = JustSayItTheme.Spacing.spaceSm
-                ),
-            state = lazyListState,
-            contentPadding = PaddingValues(vertical = JustSayItTheme.Spacing.spaceBase)
-        ) {
-            items(
-                count = pagingData.itemCount,
-                key = pagingData.itemKey { it.storyId },
-                contentType = pagingData.itemContentType { "images" }
-            ) { index ->
-                val item = pagingData[index]
+        MyFeedListContent(
+            lazyListState,
+            pagingData,
+            onFirstItemIndexChange,
+            isItemIconVisible,
+            onEvent,
+            currentDate,
+            moodItems,
+            isScrollInProgress
+        )
+    }
+}
 
-                item?.let { myFeed ->
-                    if (remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }.value == index) {
-                        onFirstItemIndexChange(myFeed)
-                    }
+@Composable
+private fun MyFeedListContent(
+    lazyListState: LazyListState,
+    pagingData: LazyPagingItems<MyFeedEntity>,
+    onFirstItemIndexChange: (MyFeedEntity) -> Unit,
+    isItemIconVisible: State<Boolean>,
+    onEvent: (MyFeedEvent) -> Unit,
+    currentDate: String?,
+    moodItems: List<Mood>,
+    isScrollInProgress: Boolean
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                horizontal = JustSayItTheme.Spacing.spaceSm
+            ),
+        state = lazyListState,
+        contentPadding = PaddingValues(vertical = JustSayItTheme.Spacing.spaceBase)
+    ) {
+        items(
+            count = pagingData.itemCount,
+            key = pagingData.itemKey { it.storyId },
+            contentType = pagingData.itemContentType { "images" }
+        ) { index ->
+            val item = pagingData[index]
 
-                    val isFirstItem = remember {
-                        derivedStateOf { lazyListState.firstVisibleItemIndex }
-                    }.value == index
-
-                    val isMoodVisible = if (isFirstItem) isItemIconVisible.value else true
-                    var isPopupMenuVisible by remember {
-                        mutableStateOf(false)
-                    }
-
-                    val sympathyMoodItems = getSympathyMoodItems(item)
-
-                    val popupMenuItems = listOf(
-                        PopupMenuItem(
-                            title = stringResource(id = R.string.popup_edit),
-                            drawable = R.drawable.ic_edit_20,
-                            postData = myFeed.storyId,
-                            contentColor = JustSayItTheme.Colors.mainTypo,
-                            onItemClick = {
-                                // TODO 수정 화면으로 이동
-                            }
-                        ),
-                        PopupMenuItem(
-                            title = stringResource(id = R.string.popup_delete),
-                            drawable = R.drawable.ic_delete_20,
-                            postData = myFeed.storyId,
-                            contentColor = JustSayItTheme.Colors.error,
-                            onItemClick = {
-                                onEvent(MyFeedEvent.FeedTargetIdChanged(myFeed.storyId))
-                                onEvent(MyFeedEvent.FeedDeleteDialogChanged(true))
-                            }
-                        )
-                    )
-
-                    MyFeed(
-                        currentDate = currentDate,
-                        isOpen = myFeed.isOpened,
-                        mood = moodItems.find { it.postData == myFeed.writerEmotion },
-                        isMoodVisible = isMoodVisible,
-                        text = myFeed.bodyText,
-                        images = myFeed.photo,
-                        onMenuClick = { isPopupMenuVisible = true },
-                        date = myFeed.createdAt.toDate(),
-                        isScrollInProgress = isScrollInProgress,
-                        sympathyMoodItems = sympathyMoodItems,
-                        isEdited = myFeed.createdAt != myFeed.updatedAt,
-                        isMenuVisible = isPopupMenuVisible,
-                        popupMenuItem = popupMenuItems,
-                        onPopupMenuDismiss = { isPopupMenuVisible = false },
-                        onMenuItemClick = {
-                            isPopupMenuVisible = false
-                            it.onItemClick?.let { it() }
-                        }
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))
+            item?.let { myFeed ->
+                FeedItem(
+                    lazyListState,
+                    index,
+                    onFirstItemIndexChange,
+                    myFeed,
+                    isItemIconVisible,
+                    item,
+                    onEvent,
+                    currentDate,
+                    moodItems,
+                    isScrollInProgress
+                )
             }
+
+            Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))
         }
     }
+}
+
+@Composable
+private fun FeedItem(
+    lazyListState: LazyListState,
+    index: Int,
+    onFirstItemIndexChange: (MyFeedEntity) -> Unit,
+    myFeed: MyFeedEntity,
+    isItemIconVisible: State<Boolean>,
+    item: MyFeedEntity?,
+    onEvent: (MyFeedEvent) -> Unit,
+    currentDate: String?,
+    moodItems: List<Mood>,
+    isScrollInProgress: Boolean
+) {
+    if (remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }.value == index) {
+        onFirstItemIndexChange(myFeed)
+    }
+
+    val isFirstItem = remember {
+        derivedStateOf { lazyListState.firstVisibleItemIndex }
+    }.value == index
+
+    val isMoodVisible = if (isFirstItem) isItemIconVisible.value else true
+    var isPopupMenuVisible by remember {
+        mutableStateOf(false)
+    }
+
+    val sympathyMoodItems = getSympathyMoodItems(item)
+
+    val popupMenuItems = listOf(
+        PopupMenuItem(
+            title = stringResource(id = R.string.popup_edit),
+            drawable = R.drawable.ic_edit_20,
+            postData = myFeed.storyId,
+            contentColor = JustSayItTheme.Colors.mainTypo,
+            onItemClick = {
+                // TODO 수정 화면으로 이동
+            }
+        ),
+        PopupMenuItem(
+            title = stringResource(id = R.string.popup_delete),
+            drawable = R.drawable.ic_delete_20,
+            postData = myFeed.storyId,
+            contentColor = JustSayItTheme.Colors.error,
+            onItemClick = {
+                onEvent(MyFeedEvent.FeedTargetIdChanged(myFeed.storyId))
+                onEvent(MyFeedEvent.FeedDeleteDialogChanged(true))
+            }
+        )
+    )
+
+    MyFeed(
+        currentDate = currentDate,
+        isOpen = myFeed.isOpened,
+        mood = moodItems.find { it.postData == myFeed.writerEmotion },
+        isMoodVisible = isMoodVisible,
+        text = myFeed.bodyText,
+        images = myFeed.photo,
+        onMenuClick = { isPopupMenuVisible = true },
+        date = myFeed.createdAt.toDate(),
+        isScrollInProgress = isScrollInProgress,
+        sympathyMoodItems = sympathyMoodItems,
+        isEdited = myFeed.isModified,
+        isMenuVisible = isPopupMenuVisible,
+        popupMenuItem = popupMenuItems,
+        onPopupMenuDismiss = { isPopupMenuVisible = false },
+        onMenuItemClick = {
+            isPopupMenuVisible = false
+            it.onItemClick?.let { it() }
+        }
+    )
 }
 
 @Composable
