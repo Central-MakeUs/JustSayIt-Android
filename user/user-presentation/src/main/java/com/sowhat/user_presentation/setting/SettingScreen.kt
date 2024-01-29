@@ -60,7 +60,9 @@ fun SettingScreen(
     appNavController: NavHostController
 ) {
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(JustSayItTheme.Colors.mainBackground),
         topBar = {
             AppBar(
                 title = APPBAR_SETTING,
@@ -70,7 +72,9 @@ fun SettingScreen(
         }
     ) { paddingValues ->
         if (uiState.isLoading) {
-            CenteredCircularProgress()
+            CenteredCircularProgress(
+                modifier = Modifier.background(JustSayItTheme.Colors.mainBackground)
+            )
         } else {
             SettingScreenContent(
                 modifier = Modifier.padding(paddingValues),

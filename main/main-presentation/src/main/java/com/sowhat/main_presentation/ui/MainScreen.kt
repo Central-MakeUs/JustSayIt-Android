@@ -1,5 +1,6 @@
 package com.sowhat.main_presentation.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,7 +48,9 @@ fun MainScreen(
     )
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(JustSayItTheme.Colors.mainBackground),
         bottomBar = {
             BottomNavigationBar(
                 mainNavController = mainNavController,
@@ -66,6 +69,7 @@ fun MainScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .background(JustSayItTheme.Colors.mainBackground)
                 .padding(
                     top = paddingValues.calculateTopPadding(),
                     bottom = (NAVIGATION_HEIGHT * 0.8).dp

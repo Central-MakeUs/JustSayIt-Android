@@ -70,6 +70,42 @@ fun TextDrawableStart(
 }
 
 @Composable
+fun TextWithIconStart(
+    modifier: Modifier = Modifier,
+    text: String,
+    textStyle: TextStyle,
+    textColor: Color,
+    iconDrawable: Int?,
+    drawableSize: Dp?
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        if (iconDrawable != null && drawableSize != null) {
+            Icon(
+                modifier = Modifier.size(drawableSize),
+                painter = painterResource(id = iconDrawable),
+                contentDescription = "icon",
+                tint = textColor
+            )
+
+            Spacer(modifier = Modifier.width(10.dp))
+        }
+
+        Text(
+            modifier = Modifier,
+            text = text,
+            style = textStyle.copy(
+                color = textColor
+            ),
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
 fun TextDrawableEnd(
     modifier: Modifier = Modifier,
     text: String,

@@ -33,6 +33,7 @@ import com.sowhat.common.model.UiState
 import com.sowhat.common.util.ObserveEvents
 import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.common.noRippleClickable
+import com.sowhat.designsystem.common.rememberMoodItems
 import com.sowhat.designsystem.component.AlertDialog
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.CenteredCircularProgress
@@ -41,7 +42,6 @@ import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.post_presentation.common.PostFormEvent
 import com.sowhat.post_presentation.common.PostFormState
 import com.sowhat.post_presentation.common.SubjectItem
-import com.sowhat.post_presentation.common.rememberMoodItems
 import com.sowhat.post_presentation.component.CurrentMoodSelection
 import com.sowhat.post_presentation.component.ImageSelection
 import com.sowhat.post_presentation.component.PostText
