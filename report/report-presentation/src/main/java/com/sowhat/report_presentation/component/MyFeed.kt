@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -27,20 +25,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.Mood
 import com.sowhat.designsystem.common.noRippleClickable
-import com.sowhat.designsystem.component.Chip
 import com.sowhat.designsystem.component.TimelineFeedImages
+import com.sowhat.designsystem.theme.Gray400
 import com.sowhat.designsystem.theme.JustSayItTheme
 
 @Composable
 fun MyFeed(
     modifier: Modifier = Modifier,
-    isPrivate: Boolean,
+    isOpen: Boolean,
     currentDate: String?,
     mood: Mood?,
     date: String,
@@ -49,7 +48,8 @@ fun MyFeed(
     text: String,
     images: List<String>,
     isScrollInProgress: Boolean,
-    sympathyMoodItems: List<@Composable () -> Unit>
+    sympathyMoodItems: List<@Composable () -> Unit>,
+    isEdited: Boolean
 ) {
     Box(
         modifier = modifier
@@ -82,11 +82,12 @@ fun MyFeed(
 //        }
         FeedCard(
             modifier = Modifier.padding(start = 36.dp),
-            isPrivate = isPrivate,
+            isOpen = isOpen,
             onMenuClick = onMenuClick,
             text = text,
             images = images,
-            sympathyMoodItems = sympathyMoodItems
+            sympathyMoodItems = sympathyMoodItems,
+            isEdited = isEdited
         )
     }
 }
@@ -94,11 +95,12 @@ fun MyFeed(
 @Composable
 private fun FeedCard(
     modifier: Modifier = Modifier,
-    isPrivate: Boolean,
+    isOpen: Boolean,
     onMenuClick: () -> Unit,
     text: String,
     images: List<String>,
-    sympathyMoodItems: List<@Composable () -> Unit>
+    sympathyMoodItems: List<@Composable () -> Unit>,
+    isEdited: Boolean
 ) {
     Card(
         modifier = modifier
@@ -111,17 +113,18 @@ private fun FeedCard(
             defaultElevation = 10.dp
         )
     ) {
-        FeedContent(isPrivate, onMenuClick, text, images, sympathyMoodItems)
+        FeedContent(isOpen, onMenuClick, text, images, sympathyMoodItems, isEdited)
     }
 }
 
 @Composable
 private fun FeedContent(
-    isPrivate: Boolean,
+    isOpen: Boolean,
     onMenuClick: () -> Unit,
     text: String,
     images: List<String>,
-    sympathyMoodItems: List<@Composable () -> Unit>
+    sympathyMoodItems: List<@Composable () -> Unit>,
+    isEdited: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -135,7 +138,7 @@ private fun FeedContent(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            PrivateStatus(isPrivate)
+            MyFeedMetaData(isOpen = isOpen, isEdited = isEdited)
             MenuButton(onMenuClick)
         }
 
@@ -158,7 +161,6 @@ private fun FeedContent(
                 .fillMaxWidth()
                 .padding(top = JustSayItTheme.Spacing.spaceBase),
             reverseLayout = true,
-//            contentPadding = PaddingValues(horizontal = JustSayItTheme.Spacing.spaceBase),
         ) {
             val reversedItems = sympathyMoodItems.asReversed()
 
@@ -205,8 +207,20 @@ private fun MenuButton(onMenuClick: () -> Unit) {
 }
 
 @Composable
-private fun PrivateStatus(isOpen: Boolean) {
-    OpenStatusBadge(isOpen = isOpen)
+private fun MyFeedMetaData(modifier: Modifier = Modifier, isOpen: Boolean, isEdited: Boolean) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceXS),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        OpenStatusBadge(isOpen = isOpen)
+
+        if (isEdited) Text(
+            text = stringResource(id = R.string.report_edited),
+            style = JustSayItTheme.Typography.detail1,
+            color = Gray400
+        )
+    }
 }
 
 @Composable
@@ -239,7 +253,7 @@ fun MyFeedPreview() {
     LazyColumn() {
         item {
             MyFeed(
-                isPrivate = true,
+                isOpen = true,
                 mood = Mood.HAPPY,
                 isMoodVisible = true,
                 text = "ok\nok",
@@ -248,7 +262,8 @@ fun MyFeedPreview() {
                 date = "22.11.22",
                 isScrollInProgress = true,
                 currentDate = "22.11.22",
-                sympathyMoodItems = emptyList()
+                sympathyMoodItems = emptyList(),
+                isEdited = true
             )
             
             Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))
@@ -256,7 +271,7 @@ fun MyFeedPreview() {
 
         item {
             MyFeed(
-                isPrivate = true,
+                isOpen = true,
                 mood = Mood.HAPPY,
                 isMoodVisible = true,
                 text = "ok\nok",
@@ -265,7 +280,8 @@ fun MyFeedPreview() {
                 date = "22.11.23",
                 isScrollInProgress = true,
                 currentDate = "22.11.23",
-                sympathyMoodItems = emptyList()
+                sympathyMoodItems = emptyList(),
+                isEdited = false
             )
         }
     }

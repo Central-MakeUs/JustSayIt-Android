@@ -35,7 +35,6 @@ import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.practice.database.entity.MyFeedEntity
 import com.sowhat.designsystem.common.Mood
-import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.common.rememberNestedScrollViewState
 import com.sowhat.designsystem.component.AppBarMyPage
 import com.sowhat.designsystem.component.Chip
@@ -208,7 +207,7 @@ private fun MyFeedList(
 
                     MyFeed(
                         currentDate = currentDate,
-                        isPrivate = !myFeed.isOpened,
+                        isOpen = myFeed.isOpened,
                         mood = moodItems.find { it.postData == myFeed.writerEmotion },
                         isMoodVisible = isMoodVisible,
                         text = myFeed.bodyText,
@@ -216,7 +215,8 @@ private fun MyFeedList(
                         onMenuClick = {},
                         date = myFeed.createdAt.toDate(),
                         isScrollInProgress = isScrollInProgress,
-                        sympathyMoodItems = sympathyMoodItems
+                        sympathyMoodItems = sympathyMoodItems,
+                        isEdited = myFeed.createdAt != myFeed.updatedAt
                     )
                 }
 
