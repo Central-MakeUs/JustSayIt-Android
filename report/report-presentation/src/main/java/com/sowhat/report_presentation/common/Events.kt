@@ -10,4 +10,6 @@ sealed class MyFeedEvent {
     data class HasNextChanged(val hasNext: Boolean) : MyFeedEvent()
     data class EmotionChanged(val emotion: Mood) : MyFeedEvent()
     data class DropdownOpenChanged(val isOpen: Boolean) : MyFeedEvent()
+    data class FeedDeleteDialogChanged(val isVisible: Boolean) : MyFeedEvent()
+    data class FeedTargetIdChanged(val targetId: Long?) : MyFeedEvent()
 }

@@ -43,6 +43,8 @@ import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.VerticalNestedScrollView
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.designsystem.R
+import com.sowhat.designsystem.component.AlertDialog
+import com.sowhat.designsystem.component.AlertDialogReverse
 import com.sowhat.report_presentation.common.MyFeedEvent
 import com.sowhat.report_presentation.common.MyFeedUiState
 import com.sowhat.report_presentation.common.toDate
@@ -101,6 +103,32 @@ fun MyPageScreen(
                 pagingData = pagingData
             )
         }
+    }
+
+    if (myFeedUiState.isDeleteDialogVisible && myFeedUiState.targetId != null) {
+        AlertDialogReverse(
+            title = stringResource(id = R.string.dialog_title_delete_feed),
+            targetId = myFeedUiState.targetId,
+            subTitle = stringResource(
+                id = R.string.dialog_subtitle_delete_feed
+            ),
+            buttonContent = stringResource(
+                id = R.string.dialog_button_cancel_delete
+            ) to stringResource(
+                id = R.string.dialog_button_delete_feed
+            ),
+            onAccept = {
+                // TODO 뷰모델로 삭제 작업 요청
+
+                // 삭제가 끝나고 나서 진행할 일
+                onEvent(MyFeedEvent.FeedDeleteDialogChanged(false))
+                onEvent(MyFeedEvent.FeedTargetIdChanged(null))
+            },
+            onDismiss = {
+                onEvent(MyFeedEvent.FeedDeleteDialogChanged(false))
+                onEvent(MyFeedEvent.FeedTargetIdChanged(null))
+            }
+        )
     }
 }
 
@@ -230,7 +258,8 @@ private fun MyFeedList(
                             postData = myFeed.storyId,
                             contentColor = JustSayItTheme.Colors.error,
                             onItemClick = {
-                                // TODO 삭제 화면으로 이동
+                                onEvent(MyFeedEvent.FeedTargetIdChanged(myFeed.storyId))
+                                onEvent(MyFeedEvent.FeedDeleteDialogChanged(true))
                             }
                         )
                     )

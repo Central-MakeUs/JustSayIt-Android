@@ -18,5 +18,7 @@ data class MyFeedUiState(
     val emotion: Mood = Mood.values().first(),
     val isDropdownOpen: Boolean = false,
     val sortByItems: List<TabItem> = myPageSortTabItems,
-    val sortBy: TabItem = myPageSortTabItems.first()
+    val sortBy: TabItem = myPageSortTabItems.first(),
+    val isDeleteDialogVisible: Boolean = false,
+    val targetId: Long? = null
 ) : Parcelable // id("kotlin-parcelize")를 gradle에 선언해야 활용 가능

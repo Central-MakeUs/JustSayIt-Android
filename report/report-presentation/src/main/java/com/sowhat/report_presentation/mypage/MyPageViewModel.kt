@@ -77,6 +77,16 @@ class MyPageViewModel @Inject constructor(
                     isDropdownOpen = event.isOpen
                 )
             }
+            is MyFeedEvent.FeedDeleteDialogChanged -> {
+                savedStateHandle[FEED_STATE] = savedStateHandle.get<MyFeedUiState>(FEED_STATE)?.copy(
+                    isDeleteDialogVisible = event.isVisible
+                )
+            }
+            is MyFeedEvent.FeedTargetIdChanged -> {
+                savedStateHandle[FEED_STATE] = savedStateHandle.get<MyFeedUiState>(FEED_STATE)?.copy(
+                    targetId = event.targetId
+                )
+            }
         }
     }
 

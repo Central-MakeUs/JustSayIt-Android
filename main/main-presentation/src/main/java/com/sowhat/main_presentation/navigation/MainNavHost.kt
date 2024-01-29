@@ -25,9 +25,7 @@ fun MainNavGraph(
     ) {
         homeScreen(appNavController = appNavController)
         myScreen(appNavController = appNavController)
-
         notificationScreen(appNavController = appNavController)
-
         settingScreen(appNavController = appNavController)
     }
 }
