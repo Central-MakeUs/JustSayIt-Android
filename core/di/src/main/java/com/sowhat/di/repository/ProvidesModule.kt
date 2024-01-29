@@ -2,6 +2,9 @@ package com.sowhat.di.repository
 
 import com.practice.post_data.remote.PostApi
 import com.practice.post_data.repository.PostRepositoryImpl
+import com.practice.report_data.remote.ReportApi
+import com.practice.report_data.repository.ReportRepositoryImpl
+import com.practice.report_domain.repository.ReportRepository
 import com.sowhat.authentication_data.remote.AuthApi
 import com.sowhat.authentication_data.repository.AuthRepositoryImpl
 import com.sowhat.authentication_domain.repository.AuthRepository
@@ -32,4 +35,9 @@ object ProvidesModule {
     @Singleton
     fun providePostRepository(postApi: PostApi): PostRepository =
         PostRepositoryImpl(postApi)
+
+    @Provides
+    @Singleton
+    fun provideReportRepository(reportApi: ReportApi): ReportRepository =
+        ReportRepositoryImpl(reportApi)
 }

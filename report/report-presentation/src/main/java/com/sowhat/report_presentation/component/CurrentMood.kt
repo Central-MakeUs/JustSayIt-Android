@@ -15,11 +15,13 @@ fun CurrentMood(
     modifier: Modifier = Modifier,
     mood: Mood
 ) {
-    Image(
-        modifier = modifier.size(80.dp),
-        painter = painterResource(id = mood.drawable),
-        contentDescription = "mood"
-    )
+    mood.drawable?.let {
+        Image(
+            modifier = modifier.size(80.dp),
+            painter = painterResource(id = it),
+            contentDescription = "mood"
+        )
+    }
 }
 
 @Preview

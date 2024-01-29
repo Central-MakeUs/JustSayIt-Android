@@ -40,6 +40,8 @@ import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.ActionButtonItem
 import com.sowhat.designsystem.common.DropdownItem
 import com.sowhat.designsystem.common.Emotion
+import com.sowhat.designsystem.common.Mood
+import com.sowhat.designsystem.common.TabItem
 import com.sowhat.designsystem.common.bottomBorder
 import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -316,16 +318,16 @@ fun AppBarHome(
 fun AppBarFeed(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState,
-    currentDropdownItem: DropdownItem,
-    dropdownItems: List<DropdownItem>,
+    currentDropdownItem: Mood,
+    dropdownItems: List<Mood>,
     isDropdownExpanded: Boolean,
     onDropdownHeaderClick: (Boolean) -> Unit,
-    onDropdownMenuChange: (DropdownItem) -> Unit,
-    tabItems: List<String>,
-    selectedTabItem: String,
+    onDropdownMenuChange: (Mood) -> Unit,
+    tabItems: List<TabItem>,
+    selectedTabItem: TabItem,
     selectedTabItemColor: Color,
     unselectedTabItemColor: Color,
-    onSelectedTabItemChange: (String) -> Unit,
+    onSelectedTabItemChange: (TabItem) -> Unit,
 ) {
 
     Box(
@@ -384,16 +386,16 @@ fun AppBarFeed(
 @Composable
 fun AppBarMyPage(
     modifier: Modifier = Modifier,
-    currentDropdownItem: DropdownItem,
-    dropdownItems: List<DropdownItem>,
+    currentDropdownItem: Mood,
+    dropdownItems: List<Mood>,
     isDropdownExpanded: Boolean,
     onDropdownHeaderClick: (Boolean) -> Unit,
-    onDropdownMenuChange: (DropdownItem) -> Unit,
-    tabItems: List<String>,
-    selectedTabItem: String,
+    onDropdownMenuChange: (Mood) -> Unit,
+    tabItems: List<TabItem>,
+    selectedTabItem: TabItem,
     selectedTabItemColor: Color,
     unselectedTabItemColor: Color,
-    onSelectedTabItemChange: (String) -> Unit,
+    onSelectedTabItemChange: (TabItem) -> Unit,
 ) {
 
     Box(
@@ -531,20 +533,20 @@ fun AppBarPreview() {
             )
         )
         Spacer(modifier = Modifier.height(2.dp))
-        AppBarFeed(
-            currentDropdownItem = currentItem,
-            dropdownItems = dropdownItems,
-            isDropdownExpanded = isExpanded,
-            onDropdownHeaderClick = { expanded -> isExpanded = expanded },
-            onDropdownMenuChange = { dropdownItem ->
-                currentItem = dropdownItem
-            },
-            tabItems = tabItems,
-            selectedTabItem = currentTabItem,
-            selectedTabItemColor = JustSayItTheme.Colors.mainTypo,
-            unselectedTabItemColor = Gray500,
-            onSelectedTabItemChange = { tabItem -> currentTabItem = tabItem },
-            lazyListState = rememberLazyListState()
-        )
+//        AppBarFeed(
+//            currentDropdownItem = currentItem,
+//            dropdownItems = dropdownItems,
+//            isDropdownExpanded = isExpanded,
+//            onDropdownHeaderClick = { expanded -> isExpanded = expanded },
+//            onDropdownMenuChange = { dropdownItem ->
+//                currentItem = dropdownItem
+//            },
+//            tabItems = tabItems,
+//            selectedTabItem = currentTabItem,
+//            selectedTabItemColor = JustSayItTheme.Colors.mainTypo,
+//            unselectedTabItemColor = Gray500,
+//            onSelectedTabItemChange = { tabItem -> currentTabItem = tabItem },
+//            lazyListState = rememberLazyListState()
+//        )
     }
 }

@@ -1,20 +1,16 @@
 package com.sowhat.feed_presentation.common
 
-import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.DropdownItem
+import com.sowhat.designsystem.common.Mood
+import com.sowhat.designsystem.common.TabItem
 
 data class FeedAppBarState(
-    var emotionDropdownItems: List<DropdownItem> = listOf(
-        DropdownItem("전체", null),
-        DropdownItem("행복", R.drawable.ic_happy_96),
-        DropdownItem("슬픔", R.drawable.ic_sad_96),
-        DropdownItem("놀람", R.drawable.ic_surprise_96),
-        DropdownItem("화남", R.drawable.ic_angry_96),
-    ),
-    var currentEmotion: DropdownItem = emotionDropdownItems.first(),
+    var emotionItems: List<Mood> = Mood.values().toList(),
+    var currentEmotion: Mood = Mood.values().first(),
     var isDropdownExpanded: Boolean = false,
-    var tabItems: List<String> = listOf(
-        "최근글", "인기글"
+    var tabItems: List<TabItem> = listOf(
+        TabItem("최근글", "latest"),
+        TabItem("인기글", "") // TODO api 나오면 정하기
     ),
-    var selectedTabItem: String = tabItems.first()
+    var selectedTabItem: TabItem = tabItems.first()
 )

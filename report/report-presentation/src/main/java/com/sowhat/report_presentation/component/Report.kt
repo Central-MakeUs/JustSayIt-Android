@@ -22,6 +22,7 @@ import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.R.drawable.ic_next_16
 import com.sowhat.designsystem.common.Mood
+import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.component.DefaultButtonFull
 import com.sowhat.designsystem.component.TextDrawableEnd
@@ -60,7 +61,7 @@ fun ReportButton(
     ) {
         TextDrawableEnd(
             modifier = Modifier
-                .rippleClickable { onClick() },
+                .noRippleClickable { onClick() },
             text = stringResource(id = R.string.report_view_report),
             textStyle = JustSayItTheme.Typography.body3,
             textColor = JustSayItTheme.Colors.mainTypo,

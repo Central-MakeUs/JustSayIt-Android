@@ -15,6 +15,7 @@ data class JustSayItColor(
     val surprise: Color,
     val sad: Color,
     val inactiveTypo: Color,
+    val error: Color
 )
 
 val Gray50 = Color(0xFFFAFAFA)
@@ -39,3 +40,5 @@ val AngryColor = Color(0xFFFF2882)
 val HappyColor = Color(0xFFFFDB09)
 val SurpriseColor = Color(0xFF6600E9)
 val SadColor = Color(0xFF2998FF)
+
+val Alert = Color(0xFFFF0000)

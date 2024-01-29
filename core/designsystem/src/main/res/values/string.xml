@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="feeling_all">전체</string>
     <string name="feeling_happy">행복</string>
     <string name="feeling_sad">슬픔</string>
     <string name="feeling_surprised">놀람</string>
@@ -58,6 +59,20 @@
     <string name="dialog_button_sign_out">로그아웃</string>
     <string name="dialog_button_withdraw">탈퇴하기</string>
     <string name="dialog_button_cancel">취소</string>
+    <string name="dialog_title_delete_feed">게시글 삭제하기</string>
+    <string name="dialog_subtitle_delete_feed">삭제하기 버튼을 누르면 글이 영구 삭제돼요</string>
+    <string name="dialog_button_delete_feed">삭제하기</string>
+    <string name="dialog_button_cancel_delete">취소하기</string>
+    <string name="dialog_title_edit_post">수정중인 글이 있어요.</string>
+    <string name="dialog_subtitle_edit_post">삭제하기 버튼을 누르면 글이 영구 삭제돼요</string>
+    <string name="dialog_button_stop_edit">그만 수정하기</string>
+    <string name="dialog_button_continue_edit">계속 수정하기</string>
+
+    <string name="popup_edit">수정하기</string>
+    <string name="popup_delete">삭제하기</string>
+
+    <string name="sort_latest">최신순</string>
+    <string name="sort_oldest">오래된순</string>
 
     <string name="report_title">오랜만이에요.</string>
     <string name="report_subtitle">%s님,\n지금 기분이 어떠신가요?</string>
@@ -65,6 +80,7 @@
     <string name="report_view_report">분석 레포트 보러가기</string>
     <string name="report_badge_public">공개</string>
     <string name="report_badge_private">비공개</string>
+    <string name="report_edited">edited</string>
 
     <string name="setting_title_normal">일반</string>
     <string name="setting_item_contact">개발자에게 연락하기</string>

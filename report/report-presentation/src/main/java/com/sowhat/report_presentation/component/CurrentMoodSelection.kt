@@ -27,11 +27,13 @@ fun CurrentMoodSelection(
             )
     ) {
         availableMoods.forEach { mood ->
-            ImageButton(
-                modifier = Modifier.size(36.dp),
-                imageDrawable = mood.drawable,
-                onClick = { onChange(mood) }
-            )
+            mood.drawable?.let {
+                ImageButton(
+                    modifier = Modifier.size(36.dp),
+                    imageDrawable = it,
+                    onClick = { onChange(mood) }
+                )
+            }
         }
     }
 }

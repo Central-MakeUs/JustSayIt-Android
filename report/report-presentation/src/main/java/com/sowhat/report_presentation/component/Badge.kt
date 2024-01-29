@@ -74,23 +74,28 @@ fun OpenStatusBadge(
 @Composable
 fun DateBadge(
     modifier: Modifier = Modifier,
-    date: String
+    date: String?,
+    currentDate: String?,
 ) {
-    Box(
-        modifier = modifier
-            .clip(JustSayItTheme.Shapes.medium)
-            .background(JustSayItTheme.Colors.mainTypo.copy(alpha = 0.5f))
-    ) {
-        Text(
-            modifier = Modifier
-                .padding(
-                    horizontal = JustSayItTheme.Spacing.spaceXS,
-                    vertical = JustSayItTheme.Spacing.spaceXXS
-                ),
-            text = date,
-            style = JustSayItTheme.Typography.detail1.copy(fontSize = 10.sp, lineHeight = 16.sp),
-            color = JustSayItTheme.Colors.mainBackground
-        )
+    if (currentDate != date) {
+        Box(
+            modifier = modifier
+                .clip(JustSayItTheme.Shapes.medium)
+                .background(JustSayItTheme.Colors.mainTypo.copy(alpha = 0.5f))
+        ) {
+            date?.let {
+                Text(
+                    modifier = Modifier
+                        .padding(
+                            horizontal = JustSayItTheme.Spacing.spaceXS,
+                            vertical = JustSayItTheme.Spacing.spaceXXS
+                        ),
+                    text = it,
+                    style = JustSayItTheme.Typography.detail1.copy(fontSize = 10.sp, lineHeight = 16.sp),
+                    color = JustSayItTheme.Colors.mainBackground
+                )
+            }
+        }
     }
 }
 
@@ -107,5 +112,5 @@ fun OpenBadgePreview() {
 @Preview
 @Composable
 fun DateBadgePreview() {
-    DateBadge(date = "98.11.23")
+    DateBadge(date = "98.11.23", currentDate = "98.11.23")
 }

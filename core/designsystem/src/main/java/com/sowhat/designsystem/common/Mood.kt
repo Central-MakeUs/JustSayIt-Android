@@ -9,9 +9,10 @@ const val MOOD_ANGRY = "EMOTION004"
 
 enum class Mood(
     val title: String,
-    val postData: String,
-    val drawable: Int
+    val postData: String?,
+    val drawable: Int?
 ) {
+    ALL("전체", null, null),
     HAPPY("행복", MOOD_HAPPY, R.drawable.ic_happy_96),
     SAD("슬픔", MOOD_SAD, R.drawable.ic_sad_96),
     SURPRISED("놀람", MOOD_SURPRISED, R.drawable.ic_surprise_96),

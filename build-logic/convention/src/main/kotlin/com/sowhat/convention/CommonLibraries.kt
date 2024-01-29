@@ -38,8 +38,8 @@ internal fun Project.configureCommonLibraries() {
         implementation(libs, "compose.livedata")
 
         implementation(libs, "lifecycle.runtime.ktx")
-        implementation(libs, "androidx.lifecycle.viewModelCompose")
-        implementation(libs, "androidx.lifecycle.viewModelKtx")
+        implementation(libs, "androidx.lifecycle.viewModel.compose")
+        implementation(libs, "androidx.lifecycle.viewModel.ktx")
 
         implementation(libs, "emoji")
         implementation(libs, "emoji.views")

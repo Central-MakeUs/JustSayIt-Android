@@ -1,11 +1,13 @@
 package com.sowhat.feed_presentation.common
 
 import com.sowhat.designsystem.common.DropdownItem
+import com.sowhat.designsystem.common.Mood
+import com.sowhat.designsystem.common.TabItem
 
 
 sealed class FeedAppBarEvent {
-    data class EmotionChanged(val dropdown: DropdownItem) : FeedAppBarEvent()
-    data class SortChanged(val sortBy: String) : FeedAppBarEvent()
+    data class EmotionChanged(val mood: Mood) : FeedAppBarEvent()
+    data class SortChanged(val sortBy: TabItem) : FeedAppBarEvent()
     data class DropdownExpandChanged(val isOpen: Boolean) : FeedAppBarEvent()
 }
 

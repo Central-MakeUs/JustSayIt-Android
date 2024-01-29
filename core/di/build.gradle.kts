@@ -17,10 +17,13 @@ android {
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:datastore"))
+    implementation(project(":core:database"))
     implementation(project(":authentication:authentication-data"))
     implementation(project(":authentication:authentication-domain"))
     implementation(project(":user:user-data"))
     implementation(project(":user:user-domain"))
     implementation(project(":post:post-data"))
     implementation(project(":post:post-domain"))
+    implementation(project(":report:report-data"))
+    implementation(project(":report:report-domain"))
 }

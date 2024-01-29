@@ -86,6 +86,43 @@ fun AlertDialog(
 }
 
 @Composable
+fun AlertDialog(
+    modifier: Modifier = Modifier,
+    targetId: Long,
+    title: String,
+    subTitle: String,
+    buttonContent: Pair<String, String>,
+    onAccept: (Long) -> Unit,
+    onDismiss: () -> Unit,
+) {
+
+    DialogCard(
+        onDismiss = onDismiss
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(JustSayItTheme.Spacing.spaceMd),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(28.dp)
+        ) {
+            DialogText(
+                title = title,
+                subTitle = subTitle
+            )
+
+            DialogButtons(
+                buttonContent = buttonContent,
+                onDismiss = onDismiss,
+                onAccept = {
+                    onAccept(targetId)
+                }
+            )
+        }
+    }
+}
+
+@Composable
 fun AlertDialogReverse(
     modifier: Modifier = Modifier,
     title: String,
@@ -113,6 +150,45 @@ fun AlertDialogReverse(
                 buttonContent = buttonContent,
                 onDismiss = onDismiss,
                 onAccept = onAccept,
+                dismissButtonColor = JustSayItTheme.Colors.subBackground,
+                dismissTextColor = Gray500,
+                acceptButtonColor = JustSayItTheme.Colors.mainTypo,
+                acceptTextColor = White
+            )
+        }
+
+    }
+}
+
+@Composable
+fun AlertDialogReverse(
+    modifier: Modifier = Modifier,
+    title: String,
+    targetId: Long,
+    subTitle: String,
+    buttonContent: Pair<String, String>,
+    onAccept: (Long) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    DialogCard(
+        onDismiss = onDismiss
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(JustSayItTheme.Spacing.spaceMd),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(28.dp)
+        ) {
+            DialogText(
+                title = title,
+                subTitle = subTitle
+            )
+
+            DialogButtons(
+                buttonContent = buttonContent,
+                onDismiss = onDismiss,
+                onAccept = { onAccept(targetId) },
                 dismissButtonColor = JustSayItTheme.Colors.subBackground,
                 dismissTextColor = Gray500,
                 acceptButtonColor = JustSayItTheme.Colors.mainTypo,

@@ -72,7 +72,7 @@ fun FeedScreen(
                 AppBarFeed(
                     lazyListState = lazyListState,
                     currentDropdownItem = appBarState.currentEmotion,
-                    dropdownItems = appBarState.emotionDropdownItems,
+                    dropdownItems = appBarState.emotionItems,
                     isDropdownExpanded = appBarState.isDropdownExpanded,
                     onDropdownHeaderClick = { isOpen ->
                         onAppBarEvent(FeedAppBarEvent.DropdownExpandChanged(isOpen))
@@ -216,7 +216,7 @@ fun FeedScreenPreview() {
             when (it) {
                 is FeedAppBarEvent.EmotionChanged -> {
                     appBarState = appBarState.copy(
-                        currentEmotion = it.dropdown
+                        currentEmotion = it.mood
                     )
                 }
                 is FeedAppBarEvent.SortChanged -> {

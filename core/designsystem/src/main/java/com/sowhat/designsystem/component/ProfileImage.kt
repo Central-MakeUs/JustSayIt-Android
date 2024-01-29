@@ -20,7 +20,6 @@ import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
 import com.sowhat.designsystem.theme.JustSayItTheme
-import com.sowhat.designsystem.theme.ProfileBackground
 
 @Composable
 fun ProfileImage(
@@ -77,9 +76,9 @@ fun ProfileImage(
     badgeIconTint: Color,
     onClick: () -> Unit,
     dropdownVisible: Boolean,
-    dropdownMenuItems: List<DropdownItem>,
+    dropdownMenuItems: List<PopupMenuItem>,
     onDropdownDismiss: () -> Unit,
-    onItemClick: (DropdownItem) -> Unit
+    onItemClick: (PopupMenuItem) -> Unit
 ) {
     ConstraintLayout(
         modifier = modifier
@@ -120,7 +119,7 @@ fun ProfileImage(
                 drawable = badgeDrawable
             )
 
-            DropdownContents(
+            PopupMenuContents(
                 modifier = Modifier.width(136.dp),
                 isVisible = dropdownVisible,
                 items = dropdownMenuItems,

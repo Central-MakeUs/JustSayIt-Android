@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Justsayit" parent="android:Theme.Material.Light.NoActionBar">
+        <!--Status Bar 배경색-->
+        <item name="android:statusBarColor">@color/black</item>
+        <!--        statusbar 글자색-->
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

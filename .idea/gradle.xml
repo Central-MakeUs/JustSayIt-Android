@@ -32,6 +32,7 @@
             <option value="$PROJECT_DIR$/build-logic/convention" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/common" />
+            <option value="$PROJECT_DIR$/core/database" />
             <option value="$PROJECT_DIR$/core/datastore" />
             <option value="$PROJECT_DIR$/core/designsystem" />
             <option value="$PROJECT_DIR$/core/di" />
@@ -50,6 +51,8 @@
             <option value="$PROJECT_DIR$/post/post-domain" />
             <option value="$PROJECT_DIR$/post/post-presentation" />
             <option value="$PROJECT_DIR$/report" />
+            <option value="$PROJECT_DIR$/report/report-data" />
+            <option value="$PROJECT_DIR$/report/report-domain" />
             <option value="$PROJECT_DIR$/report/report-presentation" />
             <option value="$PROJECT_DIR$/user" />
             <option value="$PROJECT_DIR$/user/user-data" />

@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sowhat.designsystem.common.TabItem
 import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -26,11 +27,11 @@ import com.sowhat.designsystem.theme.JustSayItTheme
 @Composable
 fun Tab(
     modifier: Modifier = Modifier,
-    selectedItem: String,
-    items: List<String>,
+    selectedItem: TabItem,
+    items: List<TabItem>,
     selectedColor: Color,
     unselectedColor: Color,
-    onSelectedItemChange: (String) -> Unit
+    onSelectedItemChange: (TabItem) -> Unit
 ) {
     // https://tourspace.tistory.com/416
     Row(
@@ -68,8 +69,8 @@ fun RowScope.TabDivider() {
 
 @Composable
 fun RowScope.TabTextButton(
-    onSelectedItemChange: (String) -> Unit,
-    tabItem: String,
+    onSelectedItemChange: (TabItem) -> Unit,
+    tabItem: TabItem,
     isSelected: Boolean,
     selectedColor: Color,
     unselectedColor: Color
@@ -86,7 +87,7 @@ fun RowScope.TabTextButton(
                     horizontal = JustSayItTheme.Spacing.spaceBase,
                     vertical = JustSayItTheme.Spacing.spaceXS
                 ),
-            text = tabItem,
+            text = tabItem.title,
             style = JustSayItTheme.Typography.detail2
                 .copy(color = if (isSelected) selectedColor else unselectedColor)
         )
@@ -105,11 +106,11 @@ fun TabPreview() {
         mutableStateOf(items[0])
     }
 
-    Tab(
-        selectedItem = selectedItem,
-        items = items,
-        selectedColor = Color.Black,
-        unselectedColor = Color.Gray,
-        onSelectedItemChange = { newItem -> selectedItem = newItem }
-    )
+//    Tab(
+//        selectedItem = selectedItem,
+//        items = items,
+//        selectedColor = Color.Black,
+//        unselectedColor = Color.Gray,
+//        onSelectedItemChange = { newItem -> selectedItem = newItem }
+//    )
 }
