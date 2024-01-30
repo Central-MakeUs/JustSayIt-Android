@@ -64,7 +64,7 @@ class ReportRepositoryImpl(
                 nickname = feed.profileInfo.nickname,
                 profileImg = feed.profileInfo.profileImg,
                 bodyText = feed.storyMainContent.bodyText,
-                photo = feed.storyMainContent.photo,
+                photo = feed.storyMainContent.photo.map { it.photoUrl },
                 writerEmotion = feed.storyMainContent.writerEmotion,
                 isAnonymous = feed.storyMetaInfo.isAnonymous,
                 isModified = feed.storyMetaInfo.isModified,

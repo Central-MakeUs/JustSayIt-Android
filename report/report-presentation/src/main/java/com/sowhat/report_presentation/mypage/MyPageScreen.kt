@@ -94,7 +94,15 @@ fun MyPageScreen(
                 .background(JustSayItTheme.Colors.mainBackground),
             state = nestedScrollViewState,
             header = {
-                Report(Modifier,"케이엠", true)
+                Report(
+                    Modifier,
+                    "케이엠",
+                    true,
+                    selectedMood = Mood.HAPPY,
+                    onSelectedMoodChange = {},
+                    onMoodSubmit = {},
+                    todayMoodItems = listOf()
+                )
             }
         ) {
             MyFeedItemsScreen(
@@ -160,12 +168,10 @@ private fun MyFeedItemsScreen(
         }
 
         LaunchedEffect(key1 = isScrollInProgress) {
-            if (!isScrollInProgress) {
+            isCurrentFeedInfoVisible = if (!isScrollInProgress) {
                 delay(5000)
-                isCurrentFeedInfoVisible = false
-            } else {
-                isCurrentFeedInfoVisible = true
-            }
+                false
+            } else true
         }
 
         AppBarMyPage(
