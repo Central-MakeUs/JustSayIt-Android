@@ -65,15 +65,15 @@ fun MyFeed(
             .background(color = Color.Transparent)
     ) {
 
-        if (isMoodVisible && isScrollInProgress) {
-            DateBadge(
-                modifier = Modifier
-                    .padding(top = 48.dp)
-                    .zIndex(2f),
-                date = date,
-                currentDate = currentDate
-            )
-        }
+//        if (isMoodVisible && isScrollInProgress) {
+//            DateBadge(
+//                modifier = Modifier
+//                    .padding(top = 48.dp)
+//                    .zIndex(2f),
+//                date = date,
+//                currentDate = currentDate
+//            )
+//        }
 
 //        Row(
 //            modifier = modifier
