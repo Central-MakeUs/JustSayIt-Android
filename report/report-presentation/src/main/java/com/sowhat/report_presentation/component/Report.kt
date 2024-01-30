@@ -1,6 +1,7 @@
 package com.sowhat.report_presentation.component
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
@@ -23,9 +24,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -234,7 +237,9 @@ fun MoodTracker(
 @Composable
 private fun TodayMoodList(moodList: List<TodayMoodItem>) {
     LazyRow(
-        modifier = Modifier.fillMaxWidth().height(48.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
         horizontalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceMd)
     ) {
         itemsIndexed(moodList) { _, moodItem ->
@@ -279,8 +284,16 @@ fun MoodSelectionButtons(
     ) {
         moodItems.forEach { mood ->
             mood.drawable?.let { image ->
+                val isSelected = selectedItem == mood
+                val alpha by animateFloatAsState(
+                    targetValue = if (selectedItem == null || isSelected) 1f else 0.3f,
+                    label = ""
+                )
+
                 MoodButton(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .alpha(alpha),
                     selectedItem = selectedItem,
                     mood = mood,
                     drawable = image,
