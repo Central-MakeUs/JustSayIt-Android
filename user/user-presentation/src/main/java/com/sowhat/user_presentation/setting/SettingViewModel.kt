@@ -20,6 +20,10 @@ class SettingViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiState<UserInfoDomain>>(UiState())
     val uiState: StateFlow<UiState<UserInfoDomain>> = _uiState
 
+    init {
+        getUserInfo()
+    }
+
     fun getUserInfo() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)

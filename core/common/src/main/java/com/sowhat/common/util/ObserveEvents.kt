@@ -20,6 +20,16 @@ inline fun <reified T> ObserveEvents(flow: Flow<T>, noinline onEvent: (T) -> Uni
 }
 
 @Composable
+inline fun LaunchWhenCreated(crossinline action: () -> Unit) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycleOwner.lifecycle) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+            action()
+        }
+    }
+}
+
+@Composable
 inline fun LaunchWhenStarted(crossinline action: () -> Unit) {
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(lifecycleOwner.lifecycle) {

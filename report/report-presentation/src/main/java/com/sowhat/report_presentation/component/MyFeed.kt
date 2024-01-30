@@ -312,7 +312,7 @@ fun MoodStatus(
             .padding(top = JustSayItTheme.Spacing.spaceBase),
         contentAlignment = Alignment.Center
     ) {
-        if (isStatusVisible && mood != null) {
+        if (isStatusVisible && mood != null && mood.drawable != null) {
             Image(
                 modifier = Modifier
                     .size(24.dp)

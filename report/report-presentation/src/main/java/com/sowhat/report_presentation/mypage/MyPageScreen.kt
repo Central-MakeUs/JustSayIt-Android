@@ -3,6 +3,11 @@ package com.sowhat.report_presentation.mypage
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Column
@@ -15,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +32,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -46,7 +53,10 @@ import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.VerticalNestedScrollView
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.designsystem.R
+import com.sowhat.designsystem.common.isScrollingUp
 import com.sowhat.designsystem.component.AlertDialogReverse
+import com.sowhat.designsystem.component.AppendingCircularProgress
+import com.sowhat.designsystem.component.CenteredCircularProgress
 import com.sowhat.report_presentation.common.MyFeedEvent
 import com.sowhat.report_presentation.common.MyFeedUiState
 import com.sowhat.report_presentation.common.ReportEvent
@@ -191,27 +201,35 @@ private fun MyFeedItemsScreen(
             } else true
         }
 
-        AppBarMyPage(
-            currentDropdownItem = myFeedUiState.emotion,
-            dropdownItems = moodItems,
-            isDropdownExpanded = myFeedUiState.isDropdownOpen,
-            onDropdownHeaderClick = { isOpen ->
-                onMyFeedEvent(MyFeedEvent.DropdownOpenChanged(isOpen))
-            },
-            onDropdownMenuChange = { mood ->
-                onMyFeedEvent(MyFeedEvent.EmotionChanged(mood))
-            },
-            tabItems = myFeedUiState.sortByItems,
-            selectedTabItem = myFeedUiState.sortBy,
-            selectedTabItemColor = JustSayItTheme.Colors.mainTypo,
-            unselectedTabItemColor = JustSayItTheme.Colors.inactiveTypo,
-            onSelectedTabItemChange = { tabItem ->
-                onMyFeedEvent(MyFeedEvent.SortChanged(tabItem))
-            }
-        )
+        AnimatedVisibility(
+            visible = lazyListState.isScrollingUp(),
+            enter = expandVertically(),
+            exit = shrinkVertically(),
+        ) {
+            AppBarMyPage(
+                currentDropdownItem = myFeedUiState.emotion,
+                dropdownItems = moodItems,
+                isDropdownExpanded = myFeedUiState.isDropdownOpen,
+                onDropdownHeaderClick = { isOpen ->
+                    onMyFeedEvent(MyFeedEvent.DropdownOpenChanged(isOpen))
+                },
+                onDropdownMenuChange = { mood ->
+                    onMyFeedEvent(MyFeedEvent.EmotionChanged(mood))
+                },
+                tabItems = myFeedUiState.sortByItems,
+                selectedTabItem = myFeedUiState.sortBy,
+                selectedTabItemColor = JustSayItTheme.Colors.mainTypo,
+                unselectedTabItemColor = JustSayItTheme.Colors.inactiveTypo,
+                onSelectedTabItemChange = { tabItem ->
+                    onMyFeedEvent(MyFeedEvent.SortChanged(tabItem))
+                }
+            )
+        }
 
         AnimatedVisibility(
-            visible = pagingData.loadState.refresh !is LoadState.Loading
+            visible = (pagingData.loadState.refresh !is LoadState.Loading),
+            enter = fadeIn(),
+            exit = fadeOut()
         ) {
             MyFeedList(
                 lazyListState = lazyListState,
@@ -229,7 +247,6 @@ private fun MyFeedItemsScreen(
                 onMyFeedEvent = onMyFeedEvent
             )
         }
-
     }
 }
 
@@ -248,6 +265,7 @@ private fun MyFeedList(
 ) {
     RailBackground(
         lazyListState = lazyListState,
+        selectedEmotion = myFeedUiState.emotion,
         currentMood = currentState,
         currentDate = currentDate,
         isScrollInProgress = isScrollInProgress
@@ -315,6 +333,15 @@ private fun MyFeedListContent(
             }
 
             Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))
+        }
+
+        if (pagingData.loadState.append == LoadState.Loading) {
+            item {
+                AppendingCircularProgress(
+                    modifier = Modifier
+                        .padding(vertical = JustSayItTheme.Spacing.spaceLg)
+                )
+            }
         }
     }
 }
