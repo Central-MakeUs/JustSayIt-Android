@@ -43,10 +43,11 @@ import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.VerticalNestedScrollView
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.designsystem.R
-import com.sowhat.designsystem.component.AlertDialog
 import com.sowhat.designsystem.component.AlertDialogReverse
 import com.sowhat.report_presentation.common.MyFeedEvent
 import com.sowhat.report_presentation.common.MyFeedUiState
+import com.sowhat.report_presentation.common.ReportEvent
+import com.sowhat.report_presentation.common.ReportUiState
 import com.sowhat.report_presentation.common.toDate
 import com.sowhat.report_presentation.component.MyFeed
 import com.sowhat.report_presentation.component.RailBackground
@@ -60,9 +61,10 @@ fun MyPageRoute(
 ) {
 
     val context = LocalContext.current
-    val myFeedPagingData = viewModel.myFeedPagingData.collectAsLazyPagingItems()
     val myFeedUiState = viewModel.myFeedUiState.collectAsState().value
-    
+    val myFeedPagingData = viewModel.myFeedPagingData.collectAsLazyPagingItems()
+    val reportUiState = viewModel.reportUiState.collectAsState().value
+
     LaunchedEffect(key1 = myFeedPagingData.loadState) {
         if (myFeedPagingData.loadState.refresh is LoadState.Error) {
             Toast.makeText(context, "error : ${(myFeedPagingData.loadState.refresh as LoadState.Error).error.message}", Toast.LENGTH_SHORT).show()
@@ -71,8 +73,10 @@ fun MyPageRoute(
 
     MyPageScreen(
         pagingData = myFeedPagingData,
-        onEvent = viewModel::onEvent,
-        myFeedUiState = myFeedUiState
+        myFeedUiState = myFeedUiState,
+        onMyFeedEvent = viewModel::onMyFeedEvent,
+        reportUiState = reportUiState,
+        onReportEvent = viewModel::onReportEvent
     )
 }
 
@@ -80,8 +84,10 @@ fun MyPageRoute(
 fun MyPageScreen(
     modifier: Modifier = Modifier,
     pagingData: LazyPagingItems<MyFeedEntity>,
-    onEvent: (MyFeedEvent) -> Unit,
-    myFeedUiState: MyFeedUiState
+    myFeedUiState: MyFeedUiState,
+    reportUiState: ReportUiState,
+    onMyFeedEvent: (MyFeedEvent) -> Unit,
+    onReportEvent: (ReportEvent) -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize()
@@ -95,20 +101,27 @@ fun MyPageScreen(
             state = nestedScrollViewState,
             header = {
                 Report(
-                    Modifier,
-                    "케이엠",
-                    true,
-                    selectedMood = Mood.HAPPY,
-                    onSelectedMoodChange = {},
-                    onMoodSubmit = {},
-                    todayMoodItems = listOf()
+                    nickname = reportUiState.nickname,
+                    isActive = reportUiState.isSubmitEnabled,
+                    selectedMood = reportUiState.selectedMood,
+                    onSelectedMoodChange = { mood ->
+                        onReportEvent(ReportEvent.SelectedMoodChanged(mood))
+                        mood?.let {
+                            onReportEvent(ReportEvent.SubmitActiveChanged(true))
+                        } ?: onReportEvent(ReportEvent.SubmitActiveChanged(false))
+                    },
+                    onMoodSubmit = {
+                        onReportEvent(ReportEvent.Submit)
+                        onReportEvent(ReportEvent.SubmitActiveChanged(false))
+                    },
+                    todayMoodItems = reportUiState.moodList
                 )
             }
         ) {
             MyFeedItemsScreen(
                 modifier = Modifier,
                 myFeedUiState = myFeedUiState,
-                onEvent = onEvent,
+                onMyFeedEvent = onMyFeedEvent,
                 pagingData = pagingData
             )
         }
@@ -130,12 +143,12 @@ fun MyPageScreen(
                 // TODO 뷰모델로 삭제 작업 요청
 
                 // 삭제가 끝나고 나서 진행할 일
-                onEvent(MyFeedEvent.FeedDeleteDialogChanged(false))
-                onEvent(MyFeedEvent.FeedTargetIdChanged(null))
+                onMyFeedEvent(MyFeedEvent.FeedDeleteDialogChanged(false))
+                onMyFeedEvent(MyFeedEvent.FeedTargetIdChanged(null))
             },
             onDismiss = {
-                onEvent(MyFeedEvent.FeedDeleteDialogChanged(false))
-                onEvent(MyFeedEvent.FeedTargetIdChanged(null))
+                onMyFeedEvent(MyFeedEvent.FeedDeleteDialogChanged(false))
+                onMyFeedEvent(MyFeedEvent.FeedTargetIdChanged(null))
             }
         )
     }
@@ -145,7 +158,7 @@ fun MyPageScreen(
 private fun MyFeedItemsScreen(
     modifier: Modifier = Modifier,
     myFeedUiState: MyFeedUiState,
-    onEvent: (MyFeedEvent) -> Unit,
+    onMyFeedEvent: (MyFeedEvent) -> Unit,
     pagingData: LazyPagingItems<MyFeedEntity>
 ) {
     Column(
@@ -179,17 +192,17 @@ private fun MyFeedItemsScreen(
             dropdownItems = moodItems,
             isDropdownExpanded = myFeedUiState.isDropdownOpen,
             onDropdownHeaderClick = { isOpen ->
-                onEvent(MyFeedEvent.DropdownOpenChanged(isOpen))
+                onMyFeedEvent(MyFeedEvent.DropdownOpenChanged(isOpen))
             },
             onDropdownMenuChange = { mood ->
-                onEvent(MyFeedEvent.EmotionChanged(mood))
+                onMyFeedEvent(MyFeedEvent.EmotionChanged(mood))
             },
             tabItems = myFeedUiState.sortByItems,
             selectedTabItem = myFeedUiState.sortBy,
             selectedTabItemColor = JustSayItTheme.Colors.mainTypo,
             unselectedTabItemColor = JustSayItTheme.Colors.inactiveTypo,
             onSelectedTabItemChange = { tabItem ->
-                onEvent(MyFeedEvent.SortChanged(tabItem))
+                onMyFeedEvent(MyFeedEvent.SortChanged(tabItem))
             }
         )
 
@@ -206,7 +219,7 @@ private fun MyFeedItemsScreen(
                 currentDate = myFeed.createdAt.toDate()
             },
             myFeedUiState = myFeedUiState,
-            onEvent = onEvent
+            onMyFeedEvent = onMyFeedEvent
         )
     }
 }
@@ -222,7 +235,7 @@ private fun MyFeedList(
     isItemIconVisible: State<Boolean>,
     onFirstItemIndexChange: (MyFeedEntity) -> Unit,
     myFeedUiState: MyFeedUiState,
-    onEvent: (MyFeedEvent) -> Unit
+    onMyFeedEvent: (MyFeedEvent) -> Unit
 ) {
     RailBackground(
         lazyListState = lazyListState,
@@ -235,7 +248,7 @@ private fun MyFeedList(
             pagingData,
             onFirstItemIndexChange,
             isItemIconVisible,
-            onEvent,
+            onMyFeedEvent,
             currentDate,
             moodItems,
             isScrollInProgress
@@ -249,7 +262,7 @@ private fun MyFeedListContent(
     pagingData: LazyPagingItems<MyFeedEntity>,
     onFirstItemIndexChange: (MyFeedEntity) -> Unit,
     isItemIconVisible: State<Boolean>,
-    onEvent: (MyFeedEvent) -> Unit,
+    onMyFeedEvent: (MyFeedEvent) -> Unit,
     currentDate: String?,
     moodItems: List<Mood>,
     isScrollInProgress: Boolean
@@ -278,7 +291,7 @@ private fun MyFeedListContent(
                     myFeed,
                     isItemIconVisible,
                     item,
-                    onEvent,
+                    onMyFeedEvent,
                     currentDate,
                     moodItems,
                     isScrollInProgress
@@ -298,7 +311,7 @@ private fun FeedItem(
     myFeed: MyFeedEntity,
     isItemIconVisible: State<Boolean>,
     item: MyFeedEntity?,
-    onEvent: (MyFeedEvent) -> Unit,
+    onMyFeedEvent: (MyFeedEvent) -> Unit,
     currentDate: String?,
     moodItems: List<Mood>,
     isScrollInProgress: Boolean
@@ -334,8 +347,8 @@ private fun FeedItem(
             postData = myFeed.storyId,
             contentColor = JustSayItTheme.Colors.error,
             onItemClick = {
-                onEvent(MyFeedEvent.FeedTargetIdChanged(myFeed.storyId))
-                onEvent(MyFeedEvent.FeedDeleteDialogChanged(true))
+                onMyFeedEvent(MyFeedEvent.FeedTargetIdChanged(myFeed.storyId))
+                onMyFeedEvent(MyFeedEvent.FeedDeleteDialogChanged(true))
             }
         )
     )
@@ -363,7 +376,9 @@ private fun FeedItem(
 }
 
 @Composable
-private fun getSympathyMoodItems(item: MyFeedEntity?): List<@Composable () -> Unit> {
+private fun getSympathyMoodItems(
+    item: MyFeedEntity?
+): List<@Composable () -> Unit> {
     val sympathyMoodItems = mutableListOf<@Composable () -> Unit>()
     val drawableSize = JustSayItTheme.Spacing.spaceLg
     val textStyle = JustSayItTheme.Typography.detail1

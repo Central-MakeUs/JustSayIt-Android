@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,6 +24,7 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -35,6 +37,7 @@ import com.sowhat.designsystem.R
 import com.sowhat.designsystem.R.drawable.ic_next_16
 import com.sowhat.designsystem.common.Mood
 import com.sowhat.designsystem.common.noRippleClickable
+import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.component.DefaultButtonFull
 import com.sowhat.designsystem.component.ImageButton
 import com.sowhat.designsystem.component.TextDrawableEnd
@@ -46,9 +49,9 @@ fun Report(
     modifier: Modifier = Modifier,
     nickname: String,
     isActive: Boolean,
-    selectedMood: Mood,
-    onSelectedMoodChange: (Mood) -> Unit,
-    onMoodSubmit: (Mood) -> Unit,
+    selectedMood: Mood?,
+    onSelectedMoodChange: (Mood?) -> Unit,
+    onMoodSubmit: () -> Unit,
     todayMoodItems: List<TodayMoodItem>
 ) {
     Column(
@@ -123,9 +126,9 @@ private fun ReportTitle(
 private fun ReportCard(
     modifier: Modifier = Modifier,
     isActive: Boolean,
-    selectedMood: Mood,
-    onSelectedMoodChange: (Mood) -> Unit,
-    onMoodSubmit: (Mood) -> Unit,
+    selectedMood: Mood?,
+    onSelectedMoodChange: (Mood?) -> Unit,
+    onMoodSubmit: () -> Unit,
     todayMoodItems: List<TodayMoodItem>
 ) {
     Card(
@@ -150,10 +153,10 @@ private fun ReportCard(
 
 @Composable
 private fun ReportContent(
-    selectedMood: Mood,
-    onSelectedMoodChange: (Mood) -> Unit,
+    selectedMood: Mood?,
+    onSelectedMoodChange: (Mood?) -> Unit,
     isActive: Boolean,
-    onMoodSubmit: (Mood) -> Unit,
+    onMoodSubmit: () -> Unit,
     todayMoodItems: List<TodayMoodItem>
 ) {
     Column(
@@ -180,10 +183,10 @@ private fun ReportContent(
 
 @Composable
 private fun CurrentMoodSelection(
-    selectedMood: Mood,
-    onSelectedMoodChange: (Mood) -> Unit,
+    selectedMood: Mood?,
+    onSelectedMoodChange: (Mood?) -> Unit,
     isActive: Boolean,
-    onMoodSubmit: (Mood) -> Unit
+    onMoodSubmit: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -202,9 +205,7 @@ private fun CurrentMoodSelection(
         DefaultButtonFull(
             text = stringResource(id = R.string.button_feeling_submit),
             isActive = isActive,
-            onClick = {
-                onMoodSubmit(selectedMood)
-            }
+            onClick = onMoodSubmit
         )
     }
 }
@@ -268,21 +269,18 @@ private fun TodayMoodItem(moodItem: TodayMoodItem) {
 @Composable
 fun MoodSelectionButtons(
     modifier: Modifier = Modifier,
-    selectedItem: Mood,
+    selectedItem: Mood?,
     moodItems: List<Mood>,
-    onChange: (Mood) -> Unit
+    onChange: (Mood?) -> Unit
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement
-            .spacedBy(
-                space = JustSayItTheme.Spacing.spaceMd,
-                alignment = Alignment.CenterHorizontally
-            )
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         moodItems.forEach { mood ->
             mood.drawable?.let { image ->
                 MoodButton(
+                    modifier = Modifier.weight(1f),
                     selectedItem = selectedItem,
                     mood = mood,
                     drawable = image,
@@ -295,49 +293,37 @@ fun MoodSelectionButtons(
 
 @Composable
 private fun MoodButton(
-    selectedItem: Mood,
+    modifier: Modifier = Modifier,
+    selectedItem: Mood?,
     mood: Mood,
     drawable: Int,
-    onChange: (Mood) -> Unit
+    onChange: (Mood?) -> Unit
 ) {
     Box(
-        modifier = Modifier
-            .size(72.dp)
-            .clip(JustSayItTheme.Shapes.medium),
+        modifier = modifier
+            .aspectRatio(1f)
+            .clip(JustSayItTheme.Shapes.medium)
+            .composed {
+                if (selectedItem == mood) {
+                    border(
+                        width = 1.dp,
+                        color = JustSayItTheme.Colors.mainTypo,
+                        shape = JustSayItTheme.Shapes.medium
+                    )
+                } else this
+            },
         contentAlignment = Alignment.Center
     ) {
-        SelectionIndicator(
-            selectedItem = selectedItem,
-            mood = mood
-        )
-
         ImageButton(
             modifier = Modifier.size(48.dp),
             imageDrawable = drawable,
-            onClick = { onChange(mood) }
-        )
-    }
-}
-
-@Composable
-private fun SelectionIndicator(
-    selectedItem: Mood,
-    mood: Mood
-) {
-    AnimatedVisibility(
-        visible = selectedItem == mood,
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Transparent)
-                .border(
-                    width = 1.dp,
-                    color = JustSayItTheme.Colors.mainTypo,
-                    shape = JustSayItTheme.Shapes.medium
-                )
+            onClick = {
+                if (selectedItem == mood) {
+                    onChange(null)
+                } else {
+                    onChange(mood)
+                }
+            }
         )
     }
 }

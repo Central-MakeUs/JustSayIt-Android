@@ -33,11 +33,13 @@ fun DefaultIconButton(
 fun ImageButton(
     modifier: Modifier = Modifier,
     imageDrawable: Int,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    enabled: Boolean = true,
 ) {
     IconButton(
         modifier = modifier,
-        onClick = onClick
+        onClick = onClick,
+        enabled = enabled
     ) {
         Image(
             painter = painterResource(id = imageDrawable),
