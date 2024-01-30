@@ -63,9 +63,17 @@ data class StoryMainContent(
     @SerialName("bodyText")
     val bodyText: String,
     @SerialName("photo")
-    val photo: List<String>,
+    val photo: List<Photo>,
     @SerialName("writerEmotion")
     val writerEmotion: String
+)
+
+@Serializable
+data class Photo(
+    @SerialName("photoId")
+    val photoId: Long,
+    @SerialName("photoUrl")
+    val photoUrl: String
 )
 
 @Serializable

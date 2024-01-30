@@ -22,3 +22,11 @@ data class MyFeedUiState(
     val isDeleteDialogVisible: Boolean = false,
     val targetId: Long? = null
 ) : Parcelable // id("kotlin-parcelize")를 gradle에 선언해야 활용 가능
+
+@Parcelize
+data class ReportUiState(
+    val nickname: String = "",
+    val selectedMood: Mood? = null,
+    val isSubmitEnabled: Boolean = false,
+    val moodList: List<TodayMoodItem> = emptyList()
+) : Parcelable

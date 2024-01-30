@@ -37,6 +37,7 @@ import com.sowhat.designsystem.theme.JustSayItTheme
 fun RailBackground(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState,
+    selectedEmotion: Mood?,
     currentMood: Mood?,
     currentDate: String?,
     isScrollInProgress: Boolean,
@@ -59,7 +60,7 @@ fun RailBackground(
                     .padding(
                         start = JustSayItTheme.Spacing.spaceSm,
                     ),
-                mood = currentMood,
+                mood = if (selectedEmotion != Mood.ALL) selectedEmotion else currentMood,
                 isStatusVisible = true
             )
         }
@@ -131,7 +132,8 @@ fun RailBackgroundPreview() {
         lazyListState = lazyListState,
         currentMood = currentState,
         currentDate = currentDate,
-        isScrollInProgress = lazyListState.isScrollInProgress
+        isScrollInProgress = lazyListState.isScrollInProgress,
+        selectedEmotion = null
     ) {
         LazyColumn(
             modifier = Modifier

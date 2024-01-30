@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.sowhat.common.model.UiState
+import com.sowhat.common.util.LaunchWhenCreated
 import com.sowhat.common.util.LaunchWhenStarted
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.BUTTON_EDIT_PROFILE
@@ -43,9 +44,9 @@ fun SettingRoute(
     viewModel: SettingViewModel = hiltViewModel(),
     appNavController: NavHostController
 ) {
-    LaunchWhenStarted {
-        viewModel.getUserInfo()
-    }
+//    LaunchWhenCreated {
+//        viewModel.getUserInfo()
+//    }
 
     SettingScreen(
         uiState = viewModel.uiState.collectAsState().value,
@@ -73,7 +74,7 @@ fun SettingScreen(
     ) { paddingValues ->
         if (uiState.isLoading) {
             CenteredCircularProgress(
-                modifier = Modifier.background(JustSayItTheme.Colors.mainBackground)
+                modifier = Modifier
             )
         } else {
             SettingScreenContent(

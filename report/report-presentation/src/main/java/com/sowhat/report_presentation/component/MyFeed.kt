@@ -65,15 +65,15 @@ fun MyFeed(
             .background(color = Color.Transparent)
     ) {
 
-        if (isMoodVisible && isScrollInProgress) {
-            DateBadge(
-                modifier = Modifier
-                    .padding(top = 48.dp)
-                    .zIndex(2f),
-                date = date,
-                currentDate = currentDate
-            )
-        }
+//        if (isMoodVisible && isScrollInProgress) {
+//            DateBadge(
+//                modifier = Modifier
+//                    .padding(top = 48.dp)
+//                    .zIndex(2f),
+//                date = date,
+//                currentDate = currentDate
+//            )
+//        }
 
 //        Row(
 //            modifier = modifier
@@ -312,7 +312,7 @@ fun MoodStatus(
             .padding(top = JustSayItTheme.Spacing.spaceBase),
         contentAlignment = Alignment.Center
     ) {
-        if (isStatusVisible && mood != null) {
+        if (isStatusVisible && mood != null && mood.drawable != null) {
             Image(
                 modifier = Modifier
                     .size(24.dp)

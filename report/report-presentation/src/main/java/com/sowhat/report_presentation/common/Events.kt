@@ -13,3 +13,10 @@ sealed class MyFeedEvent {
     data class FeedDeleteDialogChanged(val isVisible: Boolean) : MyFeedEvent()
     data class FeedTargetIdChanged(val targetId: Long?) : MyFeedEvent()
 }
+
+sealed class ReportEvent {
+    data class SelectedMoodChanged(val mood: Mood?) : ReportEvent()
+    object Submit : ReportEvent()
+    data class TodayMoodAdded(val mood: Mood, val time: String) : ReportEvent()
+    data class SubmitActiveChanged(val isValid: Boolean) : ReportEvent()
+}
