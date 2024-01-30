@@ -164,7 +164,6 @@ private fun ReportContent(
         modifier = Modifier
             .padding(
                 horizontal = JustSayItTheme.Spacing.spaceBase,
-                vertical = JustSayItTheme.Spacing.spaceXL
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceLg)

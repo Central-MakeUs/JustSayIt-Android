@@ -1,7 +1,10 @@
 package com.sowhat.report_presentation.mypage
 
+import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -94,6 +97,7 @@ fun MyPageScreen(
     ) { paddingValues ->
         val scope = rememberCoroutineScope()
         val nestedScrollViewState = rememberNestedScrollViewState()
+
         VerticalNestedScrollView(
             modifier = Modifier
                 .padding(paddingValues)
@@ -206,21 +210,26 @@ private fun MyFeedItemsScreen(
             }
         )
 
-        MyFeedList(
-            lazyListState = lazyListState,
-            currentState = currentState,
-            currentDate = currentDate,
-            isScrollInProgress = isCurrentFeedInfoVisible,
-            pagingData = pagingData,
-            moodItems = moodItems,
-            isItemIconVisible = isItemIconVisible,
-            onFirstItemIndexChange = { myFeed ->
-                currentState = moodItems.find { it.postData == myFeed.writerEmotion }
-                currentDate = myFeed.createdAt.toDate()
-            },
-            myFeedUiState = myFeedUiState,
-            onMyFeedEvent = onMyFeedEvent
-        )
+        AnimatedVisibility(
+            visible = pagingData.loadState.refresh !is LoadState.Loading
+        ) {
+            MyFeedList(
+                lazyListState = lazyListState,
+                currentState = currentState,
+                currentDate = currentDate,
+                isScrollInProgress = isCurrentFeedInfoVisible,
+                pagingData = pagingData,
+                moodItems = moodItems,
+                isItemIconVisible = isItemIconVisible,
+                onFirstItemIndexChange = { myFeed ->
+                    currentState = moodItems.find { it.postData == myFeed.writerEmotion }
+                    currentDate = myFeed.createdAt.toDate()
+                },
+                myFeedUiState = myFeedUiState,
+                onMyFeedEvent = onMyFeedEvent
+            )
+        }
+
     }
 }
 
@@ -251,7 +260,8 @@ private fun MyFeedList(
             onMyFeedEvent,
             currentDate,
             moodItems,
-            isScrollInProgress
+            isScrollInProgress,
+            myFeedUiState
         )
     }
 }
@@ -265,8 +275,14 @@ private fun MyFeedListContent(
     onMyFeedEvent: (MyFeedEvent) -> Unit,
     currentDate: String?,
     moodItems: List<Mood>,
-    isScrollInProgress: Boolean
+    isScrollInProgress: Boolean,
+    myFeedUiState: MyFeedUiState
 ) {
+//    LaunchedEffect(key1 = myFeedUiState.emotion, key2 = myFeedUiState.sortBy) {
+//        Log.i("MyPage", "paging data changed")
+//        lazyListState.scrollBy(0f)
+//    }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
