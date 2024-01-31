@@ -1,5 +1,7 @@
 package com.sowhat.user_presentation.setting
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,15 +18,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.sowhat.common.model.UiState
-import com.sowhat.common.util.LaunchWhenCreated
-import com.sowhat.common.util.LaunchWhenStarted
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.BUTTON_EDIT_PROFILE
 import com.sowhat.designsystem.common.APPBAR_SETTING
@@ -94,6 +94,16 @@ private fun SettingScreenContent(
 ) {
     val scrollState = rememberScrollState()
 
+    val context = LocalContext.current
+    val contactIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_EMAIL, arrayOf(stringResource(id = R.string.service_email)))
+        putExtra(Intent.EXTRA_SUBJECT, stringResource(id = R.string.contact_subject))
+    }
+
+    val termPageIntent = getWebPageIntent(url = stringResource(id = R.string.service_term_url))
+    val privacyPageIntent = getWebPageIntent(url = stringResource(id = R.string.service_privacy_url))
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -113,21 +123,35 @@ private fun SettingScreenContent(
             color = JustSayItTheme.Colors.subBackground
         )
 
-        // TODO 메뉴 확정 시 하드코딩된 문자열들 리소스화하여 수정하기
         Menu(
             title = stringResource(id = R.string.setting_title_normal),
             menus = listOf(
                 MenuItem(
                     title = stringResource(id = R.string.setting_item_contact),
-                    trailingIcon = R.drawable.ic_next_24
+                    trailingIcon = R.drawable.ic_next_24,
+                    onClick = {
+                        if (contactIntent.resolveActivity(context.packageManager) != null) {
+                            context.startActivity(contactIntent)
+                        }
+                    }
                 ),
                 MenuItem(
                     title = stringResource(id = R.string.setting_item_terms),
-                    trailingIcon = R.drawable.ic_next_24
+                    trailingIcon = R.drawable.ic_next_24,
+                    onClick = {
+                        if (contactIntent.resolveActivity(context.packageManager) != null) {
+                            context.startActivity(termPageIntent)
+                        }
+                    }
                 ),
                 MenuItem(
                     title = stringResource(id = R.string.setting_item_privacy),
-                    trailingIcon = R.drawable.ic_next_24
+                    trailingIcon = R.drawable.ic_next_24,
+                    onClick = {
+                        if (contactIntent.resolveActivity(context.packageManager) != null) {
+                            context.startActivity(privacyPageIntent)
+                        }
+                    }
                 ),
                 MenuItem(
                     title = stringResource(id = R.string.setting_item_version),
@@ -149,6 +173,9 @@ private fun SettingScreenContent(
         )
     }
 }
+
+@Composable
+private fun getWebPageIntent(url: String) = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 
 @Composable
 private fun ProfileSection(

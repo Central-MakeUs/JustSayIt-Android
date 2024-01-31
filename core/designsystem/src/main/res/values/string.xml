@@ -94,4 +94,9 @@
 
     <string name="setting_item_sign_out">로그아웃</string>
     <string name="setting_item_withdraw">회원탈퇴</string>
+
+    <string name="service_email">justtsayit2024@gmail.com</string>
+    <string name="contact_subject">그냥, 그렇다고 서비스 문의</string>
+    <string name="service_term_url">https://www.notion.so/56e7a2cd2c2746078c11dacf984c941b</string>
+    <string name="service_privacy_url">https://www.notion.so/803c054f70bb44398d677780da66f982</string>
 </resources>
