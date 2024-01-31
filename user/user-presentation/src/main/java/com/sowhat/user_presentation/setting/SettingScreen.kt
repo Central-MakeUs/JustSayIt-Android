@@ -95,14 +95,14 @@ private fun SettingScreenContent(
     val scrollState = rememberScrollState()
 
     val context = LocalContext.current
-    val contactIntent = Intent(Intent.ACTION_SEND).apply {
+    val emailIntent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
         putExtra(Intent.EXTRA_EMAIL, arrayOf(stringResource(id = R.string.service_email)))
         putExtra(Intent.EXTRA_SUBJECT, stringResource(id = R.string.contact_subject))
     }
-
     val termPageIntent = getWebPageIntent(url = stringResource(id = R.string.service_term_url))
     val privacyPageIntent = getWebPageIntent(url = stringResource(id = R.string.service_privacy_url))
+    val emailSelectorText = stringResource(id = R.string.contact_select_email_app)
 
     Column(
         modifier = modifier
@@ -130,16 +130,14 @@ private fun SettingScreenContent(
                     title = stringResource(id = R.string.setting_item_contact),
                     trailingIcon = R.drawable.ic_next_24,
                     onClick = {
-                        if (contactIntent.resolveActivity(context.packageManager) != null) {
-                            context.startActivity(contactIntent)
-                        }
+                        context.startActivity(Intent.createChooser(emailIntent, emailSelectorText))
                     }
                 ),
                 MenuItem(
                     title = stringResource(id = R.string.setting_item_terms),
                     trailingIcon = R.drawable.ic_next_24,
                     onClick = {
-                        if (contactIntent.resolveActivity(context.packageManager) != null) {
+                        if (termPageIntent.resolveActivity(context.packageManager) != null) {
                             context.startActivity(termPageIntent)
                         }
                     }
@@ -148,7 +146,7 @@ private fun SettingScreenContent(
                     title = stringResource(id = R.string.setting_item_privacy),
                     trailingIcon = R.drawable.ic_next_24,
                     onClick = {
-                        if (contactIntent.resolveActivity(context.packageManager) != null) {
+                        if (privacyPageIntent.resolveActivity(context.packageManager) != null) {
                             context.startActivity(privacyPageIntent)
                         }
                     }
