@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
@@ -14,6 +15,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.sowhat.designsystem.R
 import com.sowhat.designsystem.theme.JustSayItTheme
 
 @Composable
@@ -53,14 +55,14 @@ fun TermText(
 
         addStringAnnotation(
             tag = "URL",
-            annotation = "https://www.notion.so/56e7a2cd2c2746078c11dacf984c941b",
+            annotation = stringResource(id = R.string.service_term_url),
             start = 9,
             end = 13
         )
 
         addStringAnnotation(
             tag = "URL",
-            annotation = "https://www.notion.so/803c054f70bb44398d677780da66f982",
+            annotation = stringResource(id = R.string.service_privacy_url),
             start = 15,
             end = 27
         )
