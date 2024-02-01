@@ -1,5 +1,6 @@
 package com.sowhat.designsystem.component
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -70,6 +71,7 @@ fun ProfileImage(
                     .clip(shape = JustSayItTheme.Shapes.circle)
                     .fillMaxSize()
                     .rippleClickable {
+                        Log.i("ProfileImage", "ProfileImageUri: ${profileUri}")
                         if (profileUri == null) onChooseClick() else onMenuShowChange(!isMenuVisible)
                     },
                 backgroundColor = badgeBackgroundColor,

@@ -26,7 +26,7 @@ interface UserApi {
         @Header("Authorization") accessToken: String?,
         @Path("member-id") memberId: Long,
         @Part("updateProfile") profile: RequestBody,
-        @Part("profileImg") profileImage: MultipartBody.Part?,
+        @Part profileImage: MultipartBody.Part?,
     ): ResponseBody<Unit?>
 
     @POST("/members/quit/{member-id}")
