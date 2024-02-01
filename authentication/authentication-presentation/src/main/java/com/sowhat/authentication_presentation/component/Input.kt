@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import com.sowhat.designsystem.component.DefaultHeader
 import com.sowhat.designsystem.component.OutlinedDefaultTextField
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -19,7 +20,7 @@ import com.sowhat.authentication_presentation.common.TextFieldInfo
 fun DobTextField(
     modifier: Modifier = Modifier,
     title: String,
-    items: List<TextFieldInfo>
+    items: List<TextFieldInfo>,
 ) {
     Column(
         modifier = modifier
@@ -39,10 +40,15 @@ fun DobTextField(
                 if (index != 0) Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceXXS))
 
                 OutlinedDefaultTextField(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).composed {
+                        item.focusRequester?.let {
+                            it
+                        } ?: this
+                    },
                     placeholder = item.placeholder,
                     value = item.value,
-                    onValueChange = item.onValueChange
+                    onValueChange = item.onValueChange,
+                    onNext = item.onNext
                 )
             }
         }
