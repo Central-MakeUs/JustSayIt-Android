@@ -146,6 +146,12 @@ fun UserConfigRoute(
         )
     )
 
+    val onReset = {
+        viewModel.imageUri = null
+        viewModel.onEvent(RegistrationFormEvent.ProfileChanged(null))
+    }
+
+
     UserConfigScreen(
         modifier = Modifier,
         isLoading = uiState.isLoading,
@@ -158,6 +164,7 @@ fun UserConfigRoute(
         formState = formState,
         onEvent = viewModel::onEvent,
         onSubmitClick = viewModel::signUp,
+        onReset = onReset
     )
 }
 
@@ -172,7 +179,8 @@ fun UserConfigScreen(
     dobItems: List<TextFieldInfo>,
     onProfileClick: () -> Unit,
     onSubmitClick: () -> Unit,
-    onEvent: (RegistrationFormEvent) -> Unit
+    onEvent: (RegistrationFormEvent) -> Unit,
+    onReset: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -201,6 +209,10 @@ fun UserConfigScreen(
         val imeState = rememberImeState()
         val scrollState = rememberScrollState()
 
+        var isMenuVisible by remember {
+            mutableStateOf(false)
+        }
+
         LaunchedEffect(key1 = imeState.value) {
             if (imeState.value) {
                 scrollState.animateScrollTo(scrollState.maxValue, tween(300))
@@ -219,7 +231,13 @@ fun UserConfigScreen(
                 badgeDrawable = R.drawable.ic_camera_24,
                 badgeBackgroundColor = Gray200,
                 badgeIconTint = Gray400,
-                onClick = onProfileClick
+                onChooseClick = onProfileClick,
+                isMenuVisible = isMenuVisible,
+                onMenuShowChange = { isVisible ->
+                    isMenuVisible = isVisible
+                },
+                onResetClick = onReset,
+                onMenuDismiss = { isMenuVisible = false }
             )
 
             DefaultTextField(
@@ -295,7 +313,8 @@ fun UserConfigScreenPreview() {
         ),
         onSubmitClick = {},
         formState = RegistrationFormState(),
-        onEvent = {}
+        onEvent = {},
+        onReset = {}
     )
 }
 

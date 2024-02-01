@@ -44,7 +44,6 @@ class UserConfigViewModel @Inject constructor(
     private val validateMonthUseCase: ValidateMonthUseCase,
     private val validateDayUseCase: ValidateDayUseCase
 ) : ViewModel() {
-
     // 각 항목에 대한 유효성 검사를 use case를 활용해 진행
     var formState by mutableStateOf(RegistrationFormState())
         private set

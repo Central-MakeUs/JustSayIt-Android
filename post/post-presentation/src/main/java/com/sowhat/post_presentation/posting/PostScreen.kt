@@ -48,6 +48,7 @@ import com.sowhat.post_presentation.component.PostText
 import com.sowhat.post_presentation.component.PostToggle
 import com.sowhat.post_presentation.component.SympathySelection
 import com.sowhat.post_presentation.navigation.navigateBack
+import com.sowhat.designsystem.R
 
 @Composable
 fun PostRoute(
@@ -132,8 +133,8 @@ fun PostScreen(
             .noRippleClickable { keyboardController?.hide() },
         topBar = {
             AppBar(
-                title = stringResource(id = com.sowhat.designsystem.R.string.appbar_post),
-                navigationIcon = com.sowhat.designsystem.R.drawable.ic_back_24,
+                title = stringResource(id = R.string.appbar_post),
+                navigationIcon = R.drawable.ic_close_24,
                 actionIcon = null,
                 onNavigationIconClick = {
                     onEvent(PostFormEvent.DialogVisibilityChanged(true))
@@ -269,6 +270,7 @@ fun PostScreen(
                     id = com.sowhat.designsystem.R.string.dialog_button_stop
                 ),
                 onAccept = {
+                    onEvent(PostFormEvent.DialogVisibilityChanged(false))
                     navController.navigateBack()
                 },
                 onDismiss = { onEvent(PostFormEvent.DialogVisibilityChanged(false)) }

@@ -95,7 +95,7 @@ private fun SettingScreenContent(
     val scrollState = rememberScrollState()
 
     val context = LocalContext.current
-    val emailIntent = Intent(Intent.ACTION_SEND).apply {
+    val emailIntent = Intent(Intent.ACTION_SEND, Uri.parse("mailto:")).apply {
         type = "text/plain"
         putExtra(Intent.EXTRA_EMAIL, arrayOf(stringResource(id = R.string.service_email)))
         putExtra(Intent.EXTRA_SUBJECT, stringResource(id = R.string.contact_subject))
@@ -130,7 +130,8 @@ private fun SettingScreenContent(
                     title = stringResource(id = R.string.setting_item_contact),
                     trailingIcon = R.drawable.ic_next_24,
                     onClick = {
-                        context.startActivity(Intent.createChooser(emailIntent, emailSelectorText))
+                        if (emailIntent.resolveActivity(context.packageManager) != null)
+                            context.startActivity(Intent.createChooser(emailIntent, emailSelectorText))
                     }
                 ),
                 MenuItem(

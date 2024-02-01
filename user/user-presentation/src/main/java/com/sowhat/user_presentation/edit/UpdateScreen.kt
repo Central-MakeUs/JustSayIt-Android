@@ -36,14 +36,12 @@ import com.sowhat.common.util.getImageMultipartBody
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.COMPLETE
 import com.sowhat.designsystem.common.CONFIG_NICKNAME_TITLE
-import com.sowhat.designsystem.common.DropdownItem
 import com.sowhat.designsystem.common.PROFILE_SETTING
 import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.component.AppBar
 import com.sowhat.designsystem.component.Cell
 import com.sowhat.designsystem.component.CenteredCircularProgress
 import com.sowhat.designsystem.component.DefaultTextField
-import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.ProfileImage
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray400
@@ -65,14 +63,18 @@ fun UpdateRoute(
 
     val uiState = settingViewModel.uiState.collectAsState().value
 
-    LaunchWhenStarted {
-        settingViewModel.getUserInfo()
-    }
-
     LaunchedEffect(key1 = true) {
-        updateViewModel.onEvent(
-            UpdateFormEvent.ProfileChanged(null)
-        )
+        updateViewModel.onEvent(UpdateFormEvent.ProfileChanged(null))
+    }
+    
+    LaunchedEffect(key1 = uiState.data?.profileInfo) {
+        updateViewModel.onEvent(UpdateFormEvent.ProfileUriChanged(
+            Uri.parse(uiState.data?.profileInfo?.profileImg ?: return@LaunchedEffect)
+                ?: null
+        ))
+        updateViewModel.onEvent(UpdateFormEvent.NicknamePostDataChanged(
+            uiState.data?.profileInfo?.nickname ?: return@LaunchedEffect
+        ))
     }
 
     ObserveEvents(flow = updateViewModel.updateEvent) { uiEvent ->
@@ -93,26 +95,12 @@ fun UpdateRoute(
             // the returned result from the file picker : Uri
             // to display -> read the uri and convert it into a bitmap -> Coil Image Library
             uri?.let {
+                updateViewModel.onEvent(UpdateFormEvent.IsProfileChanged(true))
+                updateViewModel.onEvent(UpdateFormEvent.IsProfileDefault(false))
+                updateViewModel.onEvent(UpdateFormEvent.ProfileUriChanged(it))
                 updateViewModel.onEvent(UpdateFormEvent.ProfileChanged(getImageMultipartBody(context, uri, "profileImg", "profile_image")))
             }
-            updateViewModel.newImageUri = uri
         }
-    )
-
-    val popupMenuItems = listOf(
-        PopupMenuItem(
-            title =  stringResource(id = R.string.dropdown_upload_image),
-            onItemClick = {
-                imagePicker.launch("image/*")
-            }
-        ),
-        PopupMenuItem(
-            title =  stringResource(id = R.string.dropdown_default_image),
-            onItemClick = {
-                updateViewModel.onEvent(UpdateFormEvent.ProfileChanged(null))
-                updateViewModel.newImageUri = null
-            }
-        )
     )
 
     UpdateScreen(
@@ -121,16 +109,10 @@ fun UpdateRoute(
         isLoading = isLoading,
         isValid = updateViewModel.isValid,
         formState = updateViewModel.formState,
-        newProfileUri = updateViewModel.newImageUri,
-        dropdownVisible = updateViewModel.dropdown,
-        dropdownMenuItems = popupMenuItems,
         onSubmit = updateViewModel::updateUserInfo,
         onEvent = updateViewModel::onEvent,
         onProfileClick = {
-            updateViewModel.dropdown = true
-        },
-        onDropdownDismiss = {
-            updateViewModel.dropdown = false
+            imagePicker.launch("image/*")
         }
     )
 }
@@ -144,10 +126,6 @@ fun UpdateScreen(
     formState: UpdateFormState,
     isValid: Boolean,
     onProfileClick: () -> Unit,
-    newProfileUri: Uri?,
-    dropdownVisible: Boolean,
-    dropdownMenuItems: List<PopupMenuItem>,
-    onDropdownDismiss: () -> Unit,
     onSubmit: () -> Unit,
     onEvent: (UpdateFormEvent) -> Unit
 ) {
@@ -170,10 +148,6 @@ fun UpdateScreen(
         EditScreenContent(
             modifier = Modifier.padding(paddingValues),
             onProfileClick = onProfileClick,
-            newProfileUri = newProfileUri,
-            dropdownVisible = dropdownVisible,
-            dropdownMenuItems = dropdownMenuItems,
-            onDropdownDismiss = onDropdownDismiss,
             formState = formState,
             uiState = uiState,
             onEvent = onEvent
@@ -188,10 +162,6 @@ fun UpdateScreen(
 fun EditScreenContent(
     modifier: Modifier = Modifier,
     onProfileClick: () -> Unit,
-    newProfileUri: Uri?,
-    dropdownVisible: Boolean,
-    dropdownMenuItems: List<PopupMenuItem>,
-    onDropdownDismiss: () -> Unit,
     formState: UpdateFormState,
     uiState: UiState<UserInfoDomain>,
     onEvent: (UpdateFormEvent) -> Unit
@@ -207,16 +177,24 @@ fun EditScreenContent(
 
         ProfileImage(
             modifier = Modifier,
-            profileUri = newProfileUri ?: uiState.data?.profileInfo?.profileImg,
+            profileUri = formState.newImageUri,
             badgeDrawable = R.drawable.ic_camera_24,
             badgeBackgroundColor = Gray200,
             badgeIconTint = Gray400,
-            onClick = onProfileClick,
-            dropdownVisible = dropdownVisible,
-            dropdownMenuItems = dropdownMenuItems,
-            onDropdownDismiss = onDropdownDismiss,
-            onItemClick = { popMenuItem: PopupMenuItem ->
-                popMenuItem.onItemClick?.let { it() }
+            onChooseClick = onProfileClick,
+            isMenuVisible = formState.isPopupMenuVisible,
+            onMenuDismiss = {
+                onEvent(UpdateFormEvent.DropdownVisibilityChanged(false))
+            },
+            onResetClick = {
+                onEvent(UpdateFormEvent.DropdownVisibilityChanged(false))
+                onEvent(UpdateFormEvent.ProfileChanged(null))
+                onEvent(UpdateFormEvent.ProfileUriChanged(null))
+                onEvent(UpdateFormEvent.IsProfileDefault(true))
+                onEvent(UpdateFormEvent.IsProfileChanged(true))
+            },
+            onMenuShowChange = { isVisible ->
+                onEvent(UpdateFormEvent.DropdownVisibilityChanged(isVisible))
             }
         )
 
@@ -225,8 +203,14 @@ fun EditScreenContent(
             title = CONFIG_NICKNAME_TITLE,
             placeholder = uiState.data?.profileInfo?.nickname ?: stringResource(id = R.string.error_server),
             onValueChange = { updatedValue ->
-                if (updatedValue.length <= 12) {
+                if (updatedValue.length <= 12 && updatedValue != uiState.data?.profileInfo?.nickname) {
                     onEvent(UpdateFormEvent.NicknameChanged(updatedValue))
+                    onEvent(UpdateFormEvent.NicknamePostDataChanged(updatedValue))
+                    onEvent(UpdateFormEvent.IsNameChanged(true))
+                } else if (updatedValue.length <= 12 && updatedValue == uiState.data?.profileInfo?.nickname) {
+                    onEvent(UpdateFormEvent.NicknameChanged(updatedValue))
+                    onEvent(UpdateFormEvent.NicknamePostDataChanged(updatedValue))
+                    onEvent(UpdateFormEvent.IsNameChanged(false))
                 }
             },
             value = formState.nickname
@@ -268,12 +252,6 @@ fun EditScreenPreview() {
     UpdateScreen(
         isValid = isValid,
         onProfileClick = {},
-        newProfileUri = null,
-        dropdownVisible = true,
-        onDropdownDismiss = {},
-        dropdownMenuItems = listOf(
-
-        ),
         onSubmit = {},
         uiState = UiState(),
         formState = UpdateFormState(),

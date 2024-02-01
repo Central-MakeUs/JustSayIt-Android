@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -33,7 +34,13 @@ fun DefaultTextButton(
     TextButton(
         enabled = enabled,
         contentPadding = PaddingValues(0.dp),
-        onClick = onClick
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            contentColor = textColor,
+            containerColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
+            disabledContentColor = textColor
+        )
     ) {
         Box(
             modifier = Modifier
