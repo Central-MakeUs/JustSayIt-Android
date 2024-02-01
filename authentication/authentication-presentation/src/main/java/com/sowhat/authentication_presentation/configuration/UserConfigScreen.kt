@@ -33,6 +33,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -71,6 +72,7 @@ import com.sowhat.authentication_presentation.component.DobTextField
 import com.sowhat.authentication_presentation.component.Selection
 import com.sowhat.authentication_presentation.navigation.navigateToMain
 import com.sowhat.common.navigation.CONFIG_EDIT
+import com.sowhat.designsystem.common.addFocusCleaner
 
 @Composable
 fun UserConfigRoute(
@@ -150,6 +152,7 @@ fun UserConfigScreen(
     onReset: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     val nameFocusRequester = remember { FocusRequester() }
     val yearFocusRequester = remember { FocusRequester() }
@@ -203,15 +206,16 @@ fun UserConfigScreen(
                 if (updatedValue.length <= MAX_DAY_LENGTH) {
                     onEvent(RegistrationFormEvent.DayChanged(updatedValue))
                 }
-                if (updatedValue.length == MAX_YEAR_LENGTH) {
+                if (updatedValue.length == MAX_DAY_LENGTH) {
                     dayFocusRequester.freeFocus()
+                    focusManager.clearFocus()
                 }
             },
             onNext = { day ->
                 if (day.length == 1) {
                     onEvent(RegistrationFormEvent.DayChanged("0$day"))
                 }
-                keyboardController?.hide()
+                focusManager.clearFocus()
             }
         )
     )
@@ -219,7 +223,7 @@ fun UserConfigScreen(
     Scaffold(
         modifier = modifier
             .fillMaxSize()
-            .noRippleClickable { keyboardController?.hide() }
+            .addFocusCleaner(focusManager = focusManager)
             .background(JustSayItTheme.Colors.mainBackground),
         topBar = {
             AppBar(

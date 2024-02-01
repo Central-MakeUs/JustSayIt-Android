@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,6 +20,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,6 +33,7 @@ import com.sowhat.designsystem.theme.JustSayItTheme
 @Composable
 fun PostTextField(
     modifier: Modifier = Modifier,
+    focusRequester: FocusRequester,
     text: String,
     placeholder: String,
     onTextChange: (String) -> Unit,
@@ -52,7 +58,7 @@ fun PostTextField(
            verticalArrangement = Arrangement.SpaceBetween
        ) {
            BasicTextField(
-               modifier = Modifier.height(132.dp).fillMaxWidth(),
+               modifier = Modifier.height(132.dp).fillMaxWidth().focusRequester(focusRequester),
                value = text,
                onValueChange = { changedValue ->
                    if (changedValue.length <= maxLength) onTextChange(changedValue)
@@ -94,5 +100,11 @@ fun PostTextFieldPreview() {
 
     val maxLength = 300
 
-    PostTextField(text = text, onTextChange = { text = it }, maxLength = maxLength, placeholder = "내용 입력")
+    PostTextField(
+        text = text,
+        onTextChange = { text = it },
+        maxLength = maxLength,
+        placeholder = "내용 입력",
+        focusRequester = FocusRequester()
+    )
 }

@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -19,6 +20,7 @@ import com.sowhat.post_presentation.common.SubjectItem
 @Composable
 fun PostText(
     modifier: Modifier = Modifier,
+    focusRequester: FocusRequester,
     subject: SubjectItem,
     text: String,
     placeholder: String,
@@ -40,6 +42,7 @@ fun PostText(
 
         PostTextField(
             text = text,
+            focusRequester = focusRequester,
             placeholder = placeholder,
             onTextChange = onTextChange,
             maxLength = maxLength
@@ -60,6 +63,7 @@ fun PostTextPreview() {
         text = text,
         onTextChange = { text = it },
         maxLength = 300,
-        placeholder = "내용을 작성해주세요."
+        placeholder = "내용을 작성해주세요.",
+        focusRequester = FocusRequester()
     )
 }
