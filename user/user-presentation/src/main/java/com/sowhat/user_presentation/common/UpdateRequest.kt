@@ -7,4 +7,8 @@ import kotlinx.serialization.Serializable
 data class UpdateRequest(
     @SerialName("nickname")
     val nickname: String,
+    @SerialName("profileImg")
+    val initialImageUrl: String,
+    @SerialName("defaultProfileImg")
+    val defaultProfileImg: Boolean
 )

@@ -2,6 +2,7 @@ package com.sowhat.user_presentation.setting
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,15 +40,24 @@ import com.sowhat.user_presentation.component.Menu
 import com.sowhat.user_presentation.component.UserProfile
 import com.sowhat.user_presentation.navigation.navigateToSignOut
 import com.sowhat.user_presentation.navigation.navigateToUpdate
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun SettingRoute(
     viewModel: SettingViewModel = hiltViewModel(),
-    appNavController: NavHostController
+    appNavController: NavHostController,
+    isUpdated: StateFlow<Boolean>?
 ) {
-//    LaunchWhenCreated {
-//        viewModel.getUserInfo()
-//    }
+    LaunchedEffect(key1 = isUpdated) {
+        Log.i("SettingScreen", "isUpdated : ${isUpdated?.value}")
+        if (isUpdated?.value == true) {
+            viewModel.getUserInfo()
+            // 사용한 변수 제거
+            appNavController.currentBackStackEntry
+                ?.savedStateHandle
+                ?.remove<Boolean>("isUpdated")
+        }
+    }
 
     SettingScreen(
         uiState = viewModel.uiState.collectAsState().value,

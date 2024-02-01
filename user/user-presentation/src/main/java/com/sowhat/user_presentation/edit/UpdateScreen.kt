@@ -68,6 +68,9 @@ fun UpdateRoute(
     }
     
     LaunchedEffect(key1 = uiState.data?.profileInfo) {
+        updateViewModel.onEvent(UpdateFormEvent.InitialProfileUpdated(
+            uiState.data?.profileInfo?.profileImg
+        ))
         updateViewModel.onEvent(UpdateFormEvent.ProfileUriChanged(
             Uri.parse(uiState.data?.profileInfo?.profileImg ?: return@LaunchedEffect)
                 ?: null

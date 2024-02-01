@@ -72,13 +72,16 @@ class UpdateViewModel @Inject constructor(
             is UpdateFormEvent.IsNameChanged -> {
                 formState = formState.copy(isNameChanged = event.isNameChanged)
             }
-
             is UpdateFormEvent.IsProfileChanged -> {
                 formState = formState.copy(isProfileChanged = event.isChanged)
             }
-
             is UpdateFormEvent.NicknamePostDataChanged -> {
                 formState = formState.copy(nicknamePostData = event.postData)
+            }
+            is UpdateFormEvent.InitialProfileUpdated -> {
+                event.imageUrl?.let {
+                    formState = formState.copy(initialImageUrl = it)
+                }
             }
         }
 
@@ -88,7 +91,7 @@ class UpdateViewModel @Inject constructor(
     fun updateUserInfo() {
         viewModelScope.launch {
             _updateInfoUiState.value = _updateInfoUiState.value.copy(isLoading = true)
-            if (!isFormValid) {
+            if (!isValid) {
                 _updateInfoUiState.value = _updateInfoUiState.value.copy(
                     isLoading = false,
                     data = null
@@ -98,7 +101,9 @@ class UpdateViewModel @Inject constructor(
             }
 
             val requestBody = UpdateRequest(
-                nickname = formState.nickname,
+                nickname = formState.nicknamePostData,
+                initialImageUrl = formState.initialImageUrl,
+                defaultProfileImg = formState.isDefault
             )
 
             Log.i("UserConfigScreen", requestBody.toString())

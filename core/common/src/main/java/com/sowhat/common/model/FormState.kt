@@ -21,6 +21,7 @@ data class UpdateFormState(
     val isProfileChanged: Boolean = false,
     val isNameChanged: Boolean = false,
     val isDefault: Boolean = false,
+    val initialImageUrl: String = "",
     val newImageUri: Uri? = null,
     val isPopupMenuVisible: Boolean = false,
     val profileImage: MultipartBody.Part? = null,

@@ -41,6 +41,7 @@ sealed class SignOutEvent {
 }
 
 sealed class UpdateFormEvent {
+    data class InitialProfileUpdated(val imageUrl: String?) : UpdateFormEvent()
     data class ProfileChanged(val image: MultipartBody.Part?) : UpdateFormEvent()
     data class ProfileUriChanged(val uri: Uri?) : UpdateFormEvent()
     data class IsProfileChanged(val isChanged: Boolean) : UpdateFormEvent()
