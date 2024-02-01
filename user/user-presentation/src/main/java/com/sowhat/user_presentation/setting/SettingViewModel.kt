@@ -24,7 +24,7 @@ class SettingViewModel @Inject constructor(
         getUserInfo()
     }
 
-    private fun getUserInfo() {
+    fun getUserInfo() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
 

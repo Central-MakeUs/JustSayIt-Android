@@ -29,7 +29,13 @@ fun NavGraphBuilder.settingScreen(
         popEnterTransition = null,
         popExitTransition = null
     ) {
-        SettingRoute(appNavController = appNavController)
+        SettingRoute(
+            appNavController = appNavController,
+            isUpdated = appNavController
+                .currentBackStackEntry
+                ?.savedStateHandle
+                ?.getStateFlow("isUpdated", false)
+        )
     }
 }
 
@@ -48,6 +54,11 @@ fun NavGraphBuilder.userInfoUpdateScreen(
 }
 
 fun NavController.navigateUpToSetting() {
+    // 백스택에서 현재 화면 이전, 즉 여기서는 설정 화면을 의미함. 이전 화면에 값을 저장하고자 하므로,
+    // current가 아닌 previousBackStackEntry의 savedStateHandle 사용
+    this.previousBackStackEntry
+        ?.savedStateHandle
+        ?.set("isUpdated", true)
     this.popBackStack()
 }
 
