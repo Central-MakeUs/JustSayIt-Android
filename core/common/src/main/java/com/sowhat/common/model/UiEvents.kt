@@ -42,7 +42,13 @@ sealed class SignOutEvent {
 
 sealed class UpdateFormEvent {
     data class ProfileChanged(val image: MultipartBody.Part?) : UpdateFormEvent()
+    data class ProfileUriChanged(val uri: Uri?) : UpdateFormEvent()
+    data class IsProfileChanged(val isChanged: Boolean) : UpdateFormEvent()
+    data class IsProfileDefault(val isDefault: Boolean) : UpdateFormEvent()
+    data class IsNameChanged(val isNameChanged: Boolean) : UpdateFormEvent()
     data class NicknameChanged(val nickname: String) : UpdateFormEvent()
+    data class NicknamePostDataChanged(val postData: String) : UpdateFormEvent()
+    data class DropdownVisibilityChanged(val isVisible: Boolean) : UpdateFormEvent()
     object Submit: UpdateFormEvent()
 
 }

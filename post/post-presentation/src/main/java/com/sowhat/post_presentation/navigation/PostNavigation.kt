@@ -1,5 +1,6 @@
 package com.sowhat.post_presentation.navigation
 
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -16,5 +17,7 @@ fun NavGraphBuilder.postScreen(
 }
 
 fun NavController.navigateBack() {
-    this.popBackStack()
+    if (this.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+        this.popBackStack()
+    }
 }

@@ -29,8 +29,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -69,6 +72,7 @@ import com.sowhat.authentication_presentation.component.DobTextField
 import com.sowhat.authentication_presentation.component.Selection
 import com.sowhat.authentication_presentation.navigation.navigateToMain
 import com.sowhat.common.navigation.CONFIG_EDIT
+import com.sowhat.designsystem.common.addFocusCleaner
 
 @Composable
 fun UserConfigRoute(
@@ -113,38 +117,11 @@ fun UserConfigRoute(
         }
     )
 
-    val dob = listOf(
-        TextFieldInfo(
-            title = stringResource(id = R.string.placeholder_dob_year),
-            value = viewModel.formState.year,
-            placeholder = stringResource(id = R.string.placeholder_dob_year),
-            onValueChange = { updatedValue ->
-                if (updatedValue.length <= MAX_YEAR_LENGTH) {
-                    viewModel.onEvent(RegistrationFormEvent.YearChanged(updatedValue))
-                }
-            }
-        ),
-        TextFieldInfo(
-            title = stringResource(id = R.string.placeholder_dob_month),
-            value = viewModel.formState.month,
-            placeholder = stringResource(id = R.string.placeholder_dob_month),
-            onValueChange = { updatedValue ->
-                if (updatedValue.length <= MAX_MONTH_LENGTH) {
-                    viewModel.onEvent(RegistrationFormEvent.MonthChanged(updatedValue))
-                }
-            }
-        ),
-        TextFieldInfo(
-            title = stringResource(id = R.string.placeholder_dob_day),
-            value = viewModel.formState.day,
-            placeholder = stringResource(id = R.string.placeholder_dob_day),
-            onValueChange = { updatedValue ->
-                if (updatedValue.length <= MAX_DAY_LENGTH) {
-                    viewModel.onEvent(RegistrationFormEvent.DayChanged(updatedValue))
-                }
-            }
-        )
-    )
+    val onReset = {
+        viewModel.imageUri = null
+        viewModel.onEvent(RegistrationFormEvent.ProfileChanged(null))
+    }
+
 
     UserConfigScreen(
         modifier = Modifier,
@@ -154,10 +131,10 @@ fun UserConfigRoute(
             imagePicker.launch(MIMETYPE_IMAGE)
         },
         profileUri = viewModel.imageUri,
-        dobItems = dob,
         formState = formState,
         onEvent = viewModel::onEvent,
         onSubmitClick = viewModel::signUp,
+        onReset = onReset
     )
 }
 
@@ -169,17 +146,84 @@ fun UserConfigScreen(
     isValid: Boolean,
     formState: RegistrationFormState,
     profileUri: Uri?,
-    dobItems: List<TextFieldInfo>,
     onProfileClick: () -> Unit,
     onSubmitClick: () -> Unit,
-    onEvent: (RegistrationFormEvent) -> Unit
+    onEvent: (RegistrationFormEvent) -> Unit,
+    onReset: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+
+    val nameFocusRequester = remember { FocusRequester() }
+    val yearFocusRequester = remember { FocusRequester() }
+    val monthFocusRequester = remember { FocusRequester() }
+    val dayFocusRequester = remember { FocusRequester() }
+
+    val dob = listOf(
+        TextFieldInfo(
+            focusRequester = Modifier.focusRequester(yearFocusRequester),
+            title = stringResource(id = R.string.placeholder_dob_year),
+            value = formState.year,
+            placeholder = stringResource(id = R.string.placeholder_dob_year),
+            onValueChange = { updatedValue ->
+                if (updatedValue.length <= MAX_YEAR_LENGTH) {
+                    onEvent(RegistrationFormEvent.YearChanged(updatedValue))
+                }
+                if (updatedValue.length == MAX_YEAR_LENGTH) {
+                    monthFocusRequester.requestFocus()
+                }
+            },
+            onNext = {
+                monthFocusRequester.requestFocus()
+            }
+        ),
+        TextFieldInfo(
+            focusRequester = Modifier.focusRequester(monthFocusRequester),
+            title = stringResource(id = R.string.placeholder_dob_month),
+            value = formState.month,
+            placeholder = stringResource(id = R.string.placeholder_dob_month),
+            onValueChange = { updatedValue ->
+                if (updatedValue.length <= MAX_MONTH_LENGTH) {
+                    onEvent(RegistrationFormEvent.MonthChanged(updatedValue))
+                }
+                if (updatedValue.length == MAX_MONTH_LENGTH) {
+                    dayFocusRequester.requestFocus()
+                }
+            },
+            onNext = { month ->
+                if (month.length == 1) {
+                    onEvent(RegistrationFormEvent.MonthChanged("0$month"))
+                }
+                dayFocusRequester.requestFocus()
+            }
+        ),
+        TextFieldInfo(
+            focusRequester = Modifier.focusRequester(dayFocusRequester),
+            title = stringResource(id = R.string.placeholder_dob_day),
+            value = formState.day,
+            placeholder = stringResource(id = R.string.placeholder_dob_day),
+            onValueChange = { updatedValue ->
+                if (updatedValue.length <= MAX_DAY_LENGTH) {
+                    onEvent(RegistrationFormEvent.DayChanged(updatedValue))
+                }
+                if (updatedValue.length == MAX_DAY_LENGTH) {
+                    dayFocusRequester.freeFocus()
+                    focusManager.clearFocus()
+                }
+            },
+            onNext = { day ->
+                if (day.length == 1) {
+                    onEvent(RegistrationFormEvent.DayChanged("0$day"))
+                }
+                focusManager.clearFocus()
+            }
+        )
+    )
 
     Scaffold(
         modifier = modifier
             .fillMaxSize()
-            .noRippleClickable { keyboardController?.hide() }
+            .addFocusCleaner(focusManager = focusManager)
             .background(JustSayItTheme.Colors.mainBackground),
         topBar = {
             AppBar(
@@ -201,6 +245,10 @@ fun UserConfigScreen(
         val imeState = rememberImeState()
         val scrollState = rememberScrollState()
 
+        var isMenuVisible by remember {
+            mutableStateOf(false)
+        }
+
         LaunchedEffect(key1 = imeState.value) {
             if (imeState.value) {
                 scrollState.animateScrollTo(scrollState.maxValue, tween(300))
@@ -219,7 +267,13 @@ fun UserConfigScreen(
                 badgeDrawable = R.drawable.ic_camera_24,
                 badgeBackgroundColor = Gray200,
                 badgeIconTint = Gray400,
-                onClick = onProfileClick
+                onChooseClick = onProfileClick,
+                isMenuVisible = isMenuVisible,
+                onMenuShowChange = { isVisible ->
+                    isMenuVisible = isVisible
+                },
+                onResetClick = onReset,
+                onMenuDismiss = { isMenuVisible = false }
             )
 
             DefaultTextField(
@@ -230,6 +284,12 @@ fun UserConfigScreen(
                     if (updatedValue.length <= MAX_NICKNAME_LENGTH) {
                         onEvent(RegistrationFormEvent.NicknameChanged(updatedValue))
                     }
+                    if (updatedValue.length == MAX_NICKNAME_LENGTH) {
+                        yearFocusRequester.requestFocus()
+                    }
+                },
+                onNext = {
+                    yearFocusRequester.requestFocus()
                 }
             )
 
@@ -248,7 +308,7 @@ fun UserConfigScreen(
                 modifier = Modifier
                     .fillMaxWidth(),
                 title = stringResource(id = R.string.title_dob),
-                items = dobItems,
+                items = dob,
             )
         }
 
@@ -273,29 +333,10 @@ fun UserConfigScreenPreview() {
         onProfileClick = {},
         profileUri = null,
         isLoading = false,
-        dobItems = listOf(
-            TextFieldInfo(
-                title = stringResource(id = R.string.placeholder_dob_year),
-                value = "year",
-                placeholder = stringResource(id = R.string.placeholder_dob_year),
-                onValueChange = {  }
-            ),
-            TextFieldInfo(
-                title = stringResource(id = R.string.placeholder_dob_month),
-                value = "month",
-                placeholder = stringResource(id = R.string.placeholder_dob_month),
-                onValueChange = {  }
-            ),
-            TextFieldInfo(
-                title = stringResource(id = R.string.placeholder_dob_day),
-                value = "day",
-                placeholder = stringResource(id = R.string.placeholder_dob_day),
-                onValueChange = {  }
-            )
-        ),
         onSubmitClick = {},
         formState = RegistrationFormState(),
-        onEvent = {}
+        onEvent = {},
+        onReset = {}
     )
 }
 

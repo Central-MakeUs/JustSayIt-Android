@@ -3,6 +3,8 @@ package com.sowhat.report_presentation.mypage
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FiniteAnimationSpec
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -226,27 +228,21 @@ private fun MyFeedItemsScreen(
             )
         }
 
-        AnimatedVisibility(
-            visible = (pagingData.loadState.refresh !is LoadState.Loading),
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            MyFeedList(
-                lazyListState = lazyListState,
-                currentState = currentState,
-                currentDate = currentDate,
-                isScrollInProgress = isCurrentFeedInfoVisible,
-                pagingData = pagingData,
-                moodItems = moodItems,
-                isItemIconVisible = isItemIconVisible,
-                onFirstItemIndexChange = { myFeed ->
-                    currentState = moodItems.find { it.postData == myFeed.writerEmotion }
-                    currentDate = myFeed.createdAt.toDate()
-                },
-                myFeedUiState = myFeedUiState,
-                onMyFeedEvent = onMyFeedEvent
-            )
-        }
+        MyFeedList(
+            lazyListState = lazyListState,
+            currentState = currentState,
+            currentDate = currentDate,
+            isScrollInProgress = isCurrentFeedInfoVisible,
+            pagingData = pagingData,
+            moodItems = moodItems,
+            isItemIconVisible = isItemIconVisible,
+            onFirstItemIndexChange = { myFeed ->
+                currentState = moodItems.find { it.postData == myFeed.writerEmotion }
+                currentDate = myFeed.createdAt.toDate()
+            },
+            myFeedUiState = myFeedUiState,
+            onMyFeedEvent = onMyFeedEvent
+        )
     }
 }
 
@@ -270,17 +266,26 @@ private fun MyFeedList(
         currentDate = currentDate,
         isScrollInProgress = isScrollInProgress
     ) {
-        MyFeedListContent(
-            lazyListState,
-            pagingData,
-            onFirstItemIndexChange,
-            isItemIconVisible,
-            onMyFeedEvent,
-            currentDate,
-            moodItems,
-            isScrollInProgress,
-            myFeedUiState
-        )
+        AnimatedVisibility(
+            visible = (
+                    pagingData.loadState.refresh !is LoadState.Loading
+                            && pagingData.loadState.append !is LoadState.Loading
+                    ),
+            enter = fadeIn(animationSpec = TweenSpec(durationMillis = 1000)),
+            exit = fadeOut(animationSpec = TweenSpec(durationMillis = 1000))
+        ) {
+            MyFeedListContent(
+                lazyListState,
+                pagingData,
+                onFirstItemIndexChange,
+                isItemIconVisible,
+                onMyFeedEvent,
+                currentDate,
+                moodItems,
+                isScrollInProgress,
+                myFeedUiState
+            )
+        }
     }
 }
 

@@ -18,7 +18,13 @@ data class RegistrationFormState(
 )
 
 data class UpdateFormState(
+    val isProfileChanged: Boolean = false,
+    val isNameChanged: Boolean = false,
+    val isDefault: Boolean = false,
+    val newImageUri: Uri? = null,
+    val isPopupMenuVisible: Boolean = false,
     val profileImage: MultipartBody.Part? = null,
     val nickname: String = "",
+    val nicknamePostData: String = "",
     val isNicknameValid: Boolean = false,
 )

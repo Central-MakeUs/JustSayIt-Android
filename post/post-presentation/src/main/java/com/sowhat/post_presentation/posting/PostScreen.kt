@@ -20,8 +20,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,6 +50,8 @@ import com.sowhat.post_presentation.component.PostText
 import com.sowhat.post_presentation.component.PostToggle
 import com.sowhat.post_presentation.component.SympathySelection
 import com.sowhat.post_presentation.navigation.navigateBack
+import com.sowhat.designsystem.R
+import com.sowhat.designsystem.common.addFocusCleaner
 
 @Composable
 fun PostRoute(
@@ -114,7 +118,8 @@ fun PostScreen(
     onEvent: (PostFormEvent) -> Unit,
     onSubmit: () -> Unit
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
+    val textFocusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
 
     BackHandler(
         enabled = true
@@ -129,11 +134,11 @@ fun PostScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .noRippleClickable { keyboardController?.hide() },
+            .addFocusCleaner(focusManager),
         topBar = {
             AppBar(
-                title = stringResource(id = com.sowhat.designsystem.R.string.appbar_post),
-                navigationIcon = com.sowhat.designsystem.R.drawable.ic_back_24,
+                title = stringResource(id = R.string.appbar_post),
+                navigationIcon = R.drawable.ic_close_24,
                 actionIcon = null,
                 onNavigationIconClick = {
                     onEvent(PostFormEvent.DialogVisibilityChanged(true))
@@ -178,6 +183,8 @@ fun PostScreen(
 
             item {
                 PostText(
+                    modifier = Modifier,
+                    focusRequester = textFocusRequester,
                     subject = SubjectItem(
                         title = stringResource(id = com.sowhat.designsystem.R.string.title_write),
                         subTitle = stringResource(id = com.sowhat.designsystem.R.string.subtitle_write)
@@ -269,6 +276,7 @@ fun PostScreen(
                     id = com.sowhat.designsystem.R.string.dialog_button_stop
                 ),
                 onAccept = {
+                    onEvent(PostFormEvent.DialogVisibilityChanged(false))
                     navController.navigateBack()
                 },
                 onDismiss = { onEvent(PostFormEvent.DialogVisibilityChanged(false)) }

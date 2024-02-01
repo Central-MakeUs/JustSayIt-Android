@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -19,7 +20,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +39,7 @@ fun DefaultTextField(
     placeholder: String,
     value: String,
     onValueChange: (String) -> Unit,
+    onNext: (() -> Unit)? = null
 ) {
     Column(
         modifier = modifier
@@ -46,7 +51,7 @@ fun DefaultTextField(
         verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceXXS)
     ) {
         DefaultHeader(title)
-        DefaultTextFieldContent(value, onValueChange, placeholder)
+        DefaultTextFieldContent(value, onValueChange, placeholder, onNext)
     }
 }
 
@@ -73,6 +78,7 @@ fun OutlinedDefaultTextField(
     placeholder: String,
     value: String,
     onValueChange: (String) -> Unit,
+    onNext: ((String) -> Unit)? = null
 ) {
     OutlinedTextField(
         modifier = modifier
@@ -92,7 +98,7 @@ fun OutlinedDefaultTextField(
         },
         textStyle = JustSayItTheme.Typography.body1.copy(textAlign = TextAlign.Center),
         maxLines = 1,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next),
         shape = JustSayItTheme.Shapes.medium,
         colors = OutlinedTextFieldDefaults.colors(
             focusedTextColor = JustSayItTheme.Colors.mainTypo,
@@ -106,6 +112,11 @@ fun OutlinedDefaultTextField(
             focusedBorderColor = JustSayItTheme.Colors.mainTypo,
             unfocusedBorderColor = Gray500
         ),
+        keyboardActions = KeyboardActions(
+            onNext = {
+                onNext?.let { it(value) }
+            }
+        ),
     )
 }
 
@@ -113,7 +124,8 @@ fun OutlinedDefaultTextField(
 private fun DefaultTextFieldContent(
     value: String,
     onValueChange: (String) -> Unit,
-    placeholder: String
+    placeholder: String,
+    onNext: (() -> Unit)? = null
 ) {
     BasicTextField(
         modifier = Modifier
@@ -122,7 +134,10 @@ private fun DefaultTextFieldContent(
                 strokeWidth = 1.dp,
                 color = Gray500
             ),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text,
+            imeAction = if (onNext != null) ImeAction.Next else ImeAction.Default
+        ),
         maxLines = 1,
         value = value,
         singleLine = true,
@@ -139,7 +154,13 @@ private fun DefaultTextFieldContent(
                 PlaceholderText(value, placeholder)
                 innerTextField()
             }
-        }
+        },
+        keyboardActions = KeyboardActions(
+            onNext = {
+                onNext?.let { it() }
+            }
+        ),
+        cursorBrush = SolidColor(JustSayItTheme.Colors.mainTypo)
     )
 }
 

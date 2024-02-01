@@ -70,6 +70,8 @@
 
     <string name="popup_edit">수정하기</string>
     <string name="popup_delete">삭제하기</string>
+    <string name="popup_choose_picture">앨범에서 사진 선택</string>
+    <string name="popup_delete_picture">현재 프로필 사진 삭제</string>
 
     <string name="sort_latest">최신순</string>
     <string name="sort_oldest">오래된순</string>

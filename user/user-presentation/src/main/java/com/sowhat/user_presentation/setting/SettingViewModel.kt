@@ -24,7 +24,7 @@ class SettingViewModel @Inject constructor(
         getUserInfo()
     }
 
-    fun getUserInfo() {
+    private fun getUserInfo() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
 
@@ -38,7 +38,7 @@ class SettingViewModel @Inject constructor(
             is Resource.Success -> {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    data = userInfo.data
+                    data = getRefinedData(userInfo)
                 )
             }
 
@@ -49,5 +49,27 @@ class SettingViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun getRefinedData(userInfo: Resource<UserInfoDomain>) =
+        userInfo.data?.personalInfo?.birth?.replace("-", ". ")?.let {
+            userInfo.data?.personalInfo?.copy(
+                gender = when (userInfo.data?.personalInfo?.gender) {
+                    MALE -> "남"
+                    FEMALE -> "여"
+                    else -> ""
+                },
+                birth = it
+            )?.let { personalInfo ->
+                userInfo.data?.copy(
+                    personalInfo = personalInfo,
+                )
+            }
+        }
+
+
+    companion object {
+        private const val MALE = "MALE"
+        private const val FEMALE = "FEMALE"
     }
 }
