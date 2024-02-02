@@ -4,6 +4,7 @@ import com.practice.feed_data.model.FeedResponse
 import com.sowhat.network.model.ResponseBody
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -30,5 +31,18 @@ interface FeedApi {
     suspend fun blockUser(
         @Header("Authorization") accessToken: String,
         @Query("blocked-id") blockedId: Long
+    ): ResponseBody<Unit?>
+
+    @POST("/stories/empathy")
+    suspend fun postFeedEmpathy(
+        @Header("Authorization") accessToken: String,
+        @Query("story-id") feedId: Long,
+        @Query("emotion-code") emotionCode: String
+    ): ResponseBody<Unit?>
+
+    @PATCH("/stories/empathy")
+    suspend fun cancelFeedEmpathy(
+        @Header("Authorization") accessToken: String,
+        @Query("story-id") feedId: Long,
     ): ResponseBody<Unit?>
 }

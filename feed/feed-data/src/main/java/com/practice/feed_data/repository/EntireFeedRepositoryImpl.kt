@@ -1,5 +1,6 @@
 package com.practice.feed_data.repository
 
+import androidx.room.withTransaction
 import com.practice.database.FeedDatabase
 import com.practice.database.entity.EntireFeedEntity
 import com.practice.feed_data.model.FeedResponse
@@ -96,6 +97,72 @@ class EntireFeedRepositoryImpl(
         } else Resource.Error(
             code = blockResult.code,
             message = blockResult.message
+        )
+    } catch (e: HttpException) {
+        getHttpErrorResource(e)
+    } catch (e: IOException) {
+        getIOErrorResource(e)
+    }
+
+    override suspend fun postFeedEmpathy(
+        accessToken: String,
+        feedId: Long,
+        emotionCode: String
+    ): Resource<Unit?> = try {
+        val dao = feedDatabase.entireFeedDao
+
+        val postResult = feedApi.postFeedEmpathy(
+            accessToken = accessToken,
+            feedId = feedId,
+            emotionCode = emotionCode
+        )
+
+        if (postResult.isSuccess) {
+            feedDatabase.withTransaction {
+                val feedItem = dao.getFeedItemByFeedId(feedId)
+                dao.updateFeedItem(feedItem.copy(selectedEmotionCode = emotionCode))
+            }
+
+            Resource.Success(
+                data = postResult.data,
+                code = postResult.code,
+                message = postResult.message
+            )
+        } else Resource.Error(
+            code = postResult.code,
+            message = postResult.message
+        )
+    } catch (e: HttpException) {
+        getHttpErrorResource(e)
+    } catch (e: IOException) {
+        getIOErrorResource(e)
+    }
+
+    override suspend fun cancelFeedEmpathy(
+        accessToken: String,
+        feedId: Long
+    ): Resource<Unit?> = try {
+        val dao = feedDatabase.entireFeedDao
+
+        val postResult = feedApi.cancelFeedEmpathy(
+            accessToken = accessToken,
+            feedId = feedId,
+        )
+
+        if (postResult.isSuccess) {
+            feedDatabase.withTransaction {
+                val feedItem = dao.getFeedItemByFeedId(feedId)
+                dao.updateFeedItem(feedItem.copy(selectedEmotionCode = null))
+            }
+
+            Resource.Success(
+                data = postResult.data,
+                code = postResult.code,
+                message = postResult.message
+            )
+        } else Resource.Error(
+            code = postResult.code,
+            message = postResult.message
         )
     } catch (e: HttpException) {
         getHttpErrorResource(e)
