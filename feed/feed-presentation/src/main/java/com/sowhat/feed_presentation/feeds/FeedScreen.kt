@@ -137,7 +137,24 @@ fun FeedRoute(
     }
 
     if (feedListState.isDeleteDialogVisible) {
-
+        AlertDialogReverse(
+            title = stringResource(id = R.string.dialog_title_delete_feed),
+            subTitle = stringResource(id = R.string.dialog_subtitle_delete_feed),
+            buttonContent = stringResource(
+                id = R.string.dialog_button_cancel_delete
+            ) to stringResource(id = R.string.dialog_button_delete_feed),
+            onAccept = {
+                viewModel.onFeedEvent(FeedEvent.DeleteDialogVisibilityChanged(false))
+                feedListState.targetId?.let {
+                    viewModel.deleteFeed(feedListState.targetId)
+                    viewModel.onFeedEvent(FeedEvent.TargetIdChanged(null))
+                }
+            },
+            onDismiss = {
+                viewModel.onFeedEvent(FeedEvent.DeleteDialogVisibilityChanged(false))
+                viewModel.onFeedEvent(FeedEvent.TargetIdChanged(null))
+            }
+        )
     }
 }
 
