@@ -6,6 +6,10 @@ import com.practice.feed_data.remote.FeedApi
 import com.sowhat.common.model.Resource
 import com.sowhat.feed_domain.model.EntireFeed
 import com.sowhat.feed_domain.repository.EntireFeedRepository
+import com.sowhat.network.util.getHttpErrorResource
+import com.sowhat.network.util.getIOErrorResource
+import retrofit2.HttpException
+import java.io.IOException
 
 class EntireFeedRepositoryImpl(
     private val feedApi: FeedApi
@@ -41,6 +45,59 @@ class EntireFeedRepositoryImpl(
             message = entireFeedDto.message,
             data = null
         )
+    }
+
+    override suspend fun reportFeed(
+        accessToken: String,
+        feedId: Long,
+        reportCode: String
+    ): Resource<Unit?> = try {
+
+        val reportResult = feedApi.reportFeed(
+            accessToken = accessToken,
+            feedId = feedId,
+            reportCode = reportCode
+        )
+
+        reportResult.data?.let {
+            Resource.Success(
+                data = it,
+                code = reportResult.code,
+                message = reportResult.message
+            )
+        } ?: Resource.Error(
+            code = reportResult.code,
+            message = reportResult.message
+        )
+    } catch (e: HttpException) {
+        getHttpErrorResource(e)
+    } catch (e: IOException) {
+        getIOErrorResource(e)
+    }
+
+    override suspend fun blockUser(
+        accessToken: String,
+        blockedId: Long
+    ): Resource<Unit?> = try {
+        val blockResult = feedApi.blockUser(
+            accessToken = accessToken,
+            blockedId = blockedId
+        )
+
+        blockResult.data?.let {
+            Resource.Success(
+                data = it,
+                code = blockResult.code,
+                message = blockResult.message
+            )
+        } ?: Resource.Error(
+            code = blockResult.code,
+            message = blockResult.message
+        )
+    } catch (e: HttpException) {
+        getHttpErrorResource(e)
+    } catch (e: IOException) {
+        getIOErrorResource(e)
     }
 
     private fun getFeedList(feedResponse: FeedResponse) =
