@@ -17,4 +17,5 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":feed:feed-domain"))
     implementation(project(":core:common"))
+    implementation(project(":core:database"))
 }
