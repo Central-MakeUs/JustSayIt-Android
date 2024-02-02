@@ -20,20 +20,15 @@ class GetEntireFeedUseCase @Inject constructor(
     @OptIn(ExperimentalPagingApi::class)
     operator fun invoke(
         sortBy: String,
-//        lastId: Long?,
-//        hasNext: Boolean,
         emotion: String?
     ): Pager<Int, EntireFeedEntity> {
         return Pager(
             config = PagingConfig(pageSize = ITEMS_PER_PAGE),
-//            initialKey = ,
             remoteMediator = EntireFeedRemoteMediator(
                 entireFeedRepository = entireFeedRepository,
                 authDataRepository = authDataRepository,
                 feedDatabase = feedDatabase,
                 sortBy = sortBy,
-//                lastId = lastId,
-//                hasNext = hasNext,
                 emotion = emotion
             ),
             pagingSourceFactory = {

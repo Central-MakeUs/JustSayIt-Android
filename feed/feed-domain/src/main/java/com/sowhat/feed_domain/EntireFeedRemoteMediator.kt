@@ -24,8 +24,6 @@ class EntireFeedRemoteMediator(
     private val authDataRepository: AuthDataRepository,
     private val feedDatabase: FeedDatabase,
     private val sortBy: String,
-//    private val lastId: Long?,
-//    private val hasNext: Boolean,
     private val emotion: String?
 ) : RemoteMediator<Int, EntireFeedEntity>() {
 

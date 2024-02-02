@@ -18,7 +18,7 @@ class EntireFeedRepositoryImpl(
         lastId: Long?,
         size: Int
     ): Resource<EntireFeed> {
-        val myFeedDto = feedApi.getFeedData(
+        val entireFeedDto = feedApi.getFeedData(
             accessToken = accessToken,
             sortBy = sortBy,
             memberId = memberId,
@@ -27,18 +27,18 @@ class EntireFeedRepositoryImpl(
             size = size
         )
 
-        return myFeedDto.data?.let {
+        return entireFeedDto.data?.let {
             Resource.Success(
-                code = myFeedDto.code,
-                message = myFeedDto.message,
+                code = entireFeedDto.code,
+                message = entireFeedDto.message,
                 data = EntireFeed(
                     hasNext = it.hasNext,
                     feedItems = getFeedList(it)
                 )
             )
         } ?: Resource.Error(
-            code = myFeedDto.code,
-            message = myFeedDto.message,
+            code = entireFeedDto.code,
+            message = entireFeedDto.message,
             data = null
         )
     }
@@ -68,7 +68,8 @@ class EntireFeedRepositoryImpl(
                 isAnonymous = feed.storyMetaInfo.isAnonymous,
                 isModified = feed.storyMetaInfo.isModified,
                 isOpened = feed.storyMetaInfo.isOpened,
-                selectedEmotionCode = feed.resultOfEmpathize.emotionCode
+                selectedEmotionCode = feed.resultOfEmpathize.emotionCode,
+                isOwner = feed.isMine
             )
         }
 }

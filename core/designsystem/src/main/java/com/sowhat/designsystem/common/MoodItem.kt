@@ -62,15 +62,15 @@ fun rememberMoodItems(): List<MoodItem> {
 
 @Composable
 fun rememberMoodItemsForFeed(
-    happyCount: Long,
-    sadCount: Long,
-    surprisedCount: Long,
-    angryCount: Long
+    happyCount: Long?,
+    sadCount: Long?,
+    surprisedCount: Long?,
+    angryCount: Long?
 ): List<MoodItem> {
     val moodItems = listOf(
         MoodItem(
             drawable = R.drawable.ic_happy_96,
-            title = happyCount.toString(),
+            title = (happyCount ?: 0).toString(),
             postData = MOOD_HAPPY,
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
             unselectedTextColor = JustSayItTheme.Colors.mainTypo,
@@ -79,7 +79,7 @@ fun rememberMoodItemsForFeed(
         ),
         MoodItem(
             drawable = R.drawable.ic_sad_96,
-            title = sadCount.toString(),
+            title = (sadCount ?: 0).toString(),
             postData = MOOD_SAD,
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
             unselectedTextColor = JustSayItTheme.Colors.mainTypo,
@@ -88,7 +88,7 @@ fun rememberMoodItemsForFeed(
         ),
         MoodItem(
             drawable = R.drawable.ic_surprise_96,
-            title = surprisedCount.toString(),
+            title = (surprisedCount ?: 0).toString(),
             postData = MOOD_SURPRISED,
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
             unselectedTextColor = JustSayItTheme.Colors.mainTypo,
@@ -97,7 +97,7 @@ fun rememberMoodItemsForFeed(
         ),
         MoodItem(
             drawable = R.drawable.ic_angry_96,
-            title = angryCount.toString(),
+            title = (angryCount ?: 0).toString(),
             postData = MOOD_ANGRY,
             selectedTextColor = JustSayItTheme.Colors.mainBackground,
             unselectedTextColor = JustSayItTheme.Colors.mainTypo,

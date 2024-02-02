@@ -1,10 +1,12 @@
 package com.sowhat.feed_presentation.common
 
-import com.sowhat.designsystem.common.DropdownItem
+import android.os.Parcelable
 import com.sowhat.designsystem.common.Mood
 import com.sowhat.designsystem.common.TabItem
+import kotlinx.parcelize.Parcelize
 
-data class FeedAppBarState(
+@Parcelize
+data class FeedListState(
     var emotionItems: List<Mood> = Mood.values().toList(),
     var currentEmotion: Mood = Mood.values().first(),
     var isDropdownExpanded: Boolean = false,
@@ -13,4 +15,4 @@ data class FeedAppBarState(
         TabItem("인기글", "") // TODO api 나오면 정하기
     ),
     var selectedTabItem: TabItem = tabItems.first()
-)
+) : Parcelable

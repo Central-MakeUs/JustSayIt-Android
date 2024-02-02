@@ -8,7 +8,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface FeedApi {
-    @GET("/stories/all/{sortBy}/{member-id}")
+    @GET("/stories/all/{sort}/{member-id}")
     suspend fun getFeedData(
         @Header("Authorization") accessToken: String,
         @Path("sort") sortBy: String,

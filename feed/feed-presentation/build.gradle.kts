@@ -5,6 +5,7 @@ plugins {
     id("com.sowhat.justsayit.application.common")
     id("com.sowhat.justsayit.application.oauth")
     id("com.sowhat.justsayit.application.hilt")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -18,6 +19,8 @@ android {
 dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:common"))
+    implementation(project(":core:database"))
     implementation(project(":core:di"))
     implementation(project(":core:network"))
+    implementation(project(":feed:feed-domain"))
 }

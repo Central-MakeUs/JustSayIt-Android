@@ -30,5 +30,6 @@ data class EntireFeedEntity(
     val isAnonymous: Boolean,
     val isModified: Boolean,
     val isOpened: Boolean,
-    val selectedEmotionCode: String?
+    val selectedEmotionCode: String?,
+    val isOwner: Boolean?
 )

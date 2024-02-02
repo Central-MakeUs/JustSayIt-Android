@@ -19,9 +19,10 @@ import com.practice.database.entity.MyFeedEntity
         MyFeedEntity::class,
         EntireFeedEntity::class
     ],
-    version = 2,
+    version = 3,
     autoMigrations = [
-        AutoMigration(from = 1, to = 2) // 1 to 2 : 단순 테이블 추가이므로 Migration 클래스 만들지 않음
+        AutoMigration(from = 1, to = 2), // 1 to 2 : 단순 테이블 추가이므로 Migration 클래스 만들지 않음,
+        AutoMigration(from = 2, to = 3), // 2 to 3 : 전체 피드 테이블 칼럼추가(isOwner)
     ]
 )
 @TypeConverters(ListConverter::class)
