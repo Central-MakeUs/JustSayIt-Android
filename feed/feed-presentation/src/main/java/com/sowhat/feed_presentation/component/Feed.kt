@@ -54,6 +54,7 @@ fun Feed(
     onSympathyItemClick: (MoodItem?) -> Unit,
     onMenuClick: () -> Unit,
     onFeedClick: () -> Unit,
+    isOwner: Boolean,
 ) {
 
     Column(
@@ -95,7 +96,8 @@ fun Feed(
             SympathyChips(
                 currentMood = selectedSympathy,
                 onChange = onSympathyItemClick,
-                availableItems = sympathyItems
+                availableItems = sympathyItems,
+                isOwner = isOwner
             )
         }
     }
@@ -181,7 +183,8 @@ fun SympathyChips(
     modifier: Modifier = Modifier,
     currentMood: MoodItem?,
     onChange: (MoodItem?) -> Unit,
-    availableItems: List<MoodItem>?
+    availableItems: List<MoodItem>?,
+    isOwner: Boolean
 ) {
     val collapse = currentMood != null
     
@@ -194,7 +197,8 @@ fun SympathyChips(
                 availableItems,
                 currentMood,
                 collapse,
-                onChange
+                onChange,
+                isOwner
             )
 
             UnselectedList(
@@ -202,7 +206,8 @@ fun SympathyChips(
                 availableItems,
                 currentMood,
                 collapse,
-                onChange
+                onChange,
+                isOwner
             )
         }
     }
@@ -214,7 +219,8 @@ private fun UnselectedList(
     availableItems: List<MoodItem>,
     currentMood: MoodItem?,
     collapse: Boolean,
-    onChange: (MoodItem?) -> Unit
+    onChange: (MoodItem?) -> Unit,
+    isOwner: Boolean
 ) {
     LazyRow(
         modifier = modifier
@@ -246,7 +252,8 @@ private fun UnselectedList(
                     isSelected = isSelected,
                     onClick = { item: MoodItem ->
                         if (!isSelected) onChange(item) else onChange(null)
-                    }
+                    },
+                    isActive = isOwner
                 )
             }
         }
@@ -262,7 +269,8 @@ private fun SelectedSympathy(
     availableItems: List<MoodItem>,
     currentMood: MoodItem?,
     collapse: Boolean,
-    onChange: (MoodItem?) -> Unit
+    onChange: (MoodItem?) -> Unit,
+    isOwner: Boolean
 ) {
     availableItems.forEachIndexed { index, item ->
         val isSelected = currentMood == item
@@ -281,7 +289,8 @@ private fun SelectedSympathy(
                 isSelected = isSelected,
                 onClick = { item: MoodItem ->
                     if (!isSelected) onChange(item) else onChange(null)
-                }
+                },
+                isActive = isOwner
             )
         }
     }
@@ -312,6 +321,7 @@ fun FeedItemPreview() {
             selectedMood = it
         },
         onMenuClick = {},
-        onFeedClick = {}
+        onFeedClick = {},
+        isOwner = false
     )
 }

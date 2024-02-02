@@ -15,22 +15,28 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.sowhat.designsystem.R
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
+import com.practice.database.entity.EntireFeedEntity
+import com.sowhat.designsystem.common.MOOD_ANGRY
+import com.sowhat.designsystem.common.MOOD_HAPPY
+import com.sowhat.designsystem.common.MOOD_SAD
+import com.sowhat.designsystem.common.MOOD_SURPRISED
 import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.component.AppBarFeed
 import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.feed_presentation.common.FeedAppBarEvent
-import com.sowhat.feed_presentation.common.FeedAppBarState
+import com.sowhat.feed_presentation.common.FeedListState
 import com.sowhat.designsystem.common.isScrollingUp
 import com.sowhat.designsystem.common.rememberMoodItemsForFeed
 import com.sowhat.feed_presentation.component.Feed
@@ -40,12 +46,14 @@ fun FeedRoute(
     navController: NavController,
     viewModel: FeedViewModel = hiltViewModel()
 ) {
-    val appBarState = viewModel.appBarState
+    val feedListState = viewModel.feedListState.collectAsState().value
+    val feedPagingData = viewModel.entireFeedData.collectAsLazyPagingItems()
 
     FeedScreen(
         navController = navController,
-        appBarState = appBarState,
-        onAppBarEvent = viewModel::onAppBarEvent
+        feedListState = feedListState,
+        onAppBarEvent = viewModel::onAppBarEvent,
+        feedPagingData = feedPagingData
     )
 }
 
@@ -54,8 +62,9 @@ fun FeedRoute(
 fun FeedScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    appBarState: FeedAppBarState,
+    feedListState: FeedListState,
     onAppBarEvent: (FeedAppBarEvent) -> Unit,
+    feedPagingData: LazyPagingItems<EntireFeedEntity>
 ) {
     TopAppBarDefaults.enterAlwaysScrollBehavior()
     val lazyListState = rememberLazyListState()
@@ -72,17 +81,17 @@ fun FeedScreen(
             ) {
                 AppBarFeed(
                     lazyListState = lazyListState,
-                    currentDropdownItem = appBarState.currentEmotion,
-                    dropdownItems = appBarState.emotionItems,
-                    isDropdownExpanded = appBarState.isDropdownExpanded,
+                    currentDropdownItem = feedListState.currentEmotion,
+                    dropdownItems = feedListState.emotionItems,
+                    isDropdownExpanded = feedListState.isDropdownExpanded,
                     onDropdownHeaderClick = { isOpen ->
                         onAppBarEvent(FeedAppBarEvent.DropdownExpandChanged(isOpen))
                     },
                     onDropdownMenuChange = { updatedMenuItem ->
                         onAppBarEvent(FeedAppBarEvent.EmotionChanged(updatedMenuItem))
                     },
-                    tabItems = appBarState.tabItems,
-                    selectedTabItem = appBarState.selectedTabItem,
+                    tabItems = feedListState.tabItems,
+                    selectedTabItem = feedListState.selectedTabItem,
                     selectedTabItemColor = JustSayItTheme.Colors.mainTypo,
                     unselectedTabItemColor = Gray500,
                     onSelectedTabItemChange = { updatedTabItem ->
@@ -102,13 +111,46 @@ fun FeedScreen(
                 .padding(paddingValues),
             state = lazyListState
         ){
-            // TODO 하드코딩된 것 지우기
-            item {
-                DummyData(0)
-                DummyData(1)
-                DummyData(2)
-                DummyData(3)
-                DummyData(4)
+            items(
+                count = feedPagingData.itemCount,
+                key = feedPagingData.itemKey { item -> item.storyId },
+                contentType = { "Feed" }
+            ) { index ->
+                val feed = feedPagingData[index]
+
+                val sympathyItems = getValidatedSympathyItems(feed)
+                var selectedSympathy = remember {
+                    sympathyItems.find { moodItem ->
+                        moodItem.postData == feed?.selectedEmotionCode
+                    }
+                }
+
+                feed?.let {
+                    Feed(
+                        profileUrl = it.profileImg,
+                        nickname = it.nickname,
+                        date = it.createdAt,
+                        text = it.bodyText,
+                        images = it.photo,
+                        selectedSympathy = selectedSympathy,
+                        sympathyItems = sympathyItems,
+                        onSympathyItemClick = { moodItem ->
+                            // TODO 데이터베이스 변경 쿼리 - usecase 필요(changeSelectedMoodUseCase)
+                            selectedSympathy = moodItem
+                        },
+                        onMenuClick = {
+                            if (it.isOwner == true) {
+                                // TODO 작성자일 때, 띄워줄 팝업메뉴 분기처리
+                            } else {
+
+                            }
+                        },
+                        onFeedClick = {
+                            // 현재로서는 추가적인 depth 없음
+                        },
+                        isOwner = it.isOwner ?: return@let
+                    )
+                }
             }
 
             // 플로팅 버튼이 피드를 가리지 않도록 하기 위함
@@ -125,77 +167,80 @@ fun FeedScreen(
 }
 
 @Composable
-private fun DummyData(count: Int) {
-    val moodItems = rememberMoodItemsForFeed(111, 2, 3, 5)
+fun getValidatedSympathyItems(feed: EntireFeedEntity?): List<MoodItem> {
+    val allItems = rememberMoodItemsForFeed(
+        happyCount = feed?.happinessCount,
+        sadCount = feed?.sadnessCount,
+        surprisedCount = feed?.surprisedCount,
+        angryCount = feed?.angryCount
+    ).toMutableList()
 
-    var selectedMood by remember {
-        mutableStateOf<MoodItem?>(null)
+    if (feed?.isHappinessSelected == false) {
+        allItems.remove(
+            allItems.find { it.postData == MOOD_HAPPY }
+        )
     }
 
-    Feed(
-        profileUrl = "https://github.com/kmkim2689/Android-Wiki/assets/101035437/e310b0cf-f931-4afe-98b1-8d7b88900a0f",
-        nickname = "케이엠",
-        date = "2024-01-18",
-        text = "안녕하세요 피드 미리보기 테스트입니다. 안녕하세요 피드 미리보기 테ㅅ트입니다. 안녕하세요 피드 미리보기 테스트입니다.",
-        images = when(count) {
-            0 -> emptyList()
-            1 -> listOf(
-                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/0572b856-8439-43a1-b9f0-79897a29ae60",
-            )
-            2 -> listOf(
-                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/0572b856-8439-43a1-b9f0-79897a29ae60",
-                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/6fbf0375-5299-4d1c-a95e-6a04bad00eac",
-            )
-            3 -> listOf(
-                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/0572b856-8439-43a1-b9f0-79897a29ae60",
-                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/6fbf0375-5299-4d1c-a95e-6a04bad00eac",
-                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/15d4c57c-67d9-4c31-aad0-883d769025ca"
-            )
-            else -> listOf(
-                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/0572b856-8439-43a1-b9f0-79897a29ae60",
-                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/6fbf0375-5299-4d1c-a95e-6a04bad00eac",
-                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/15d4c57c-67d9-4c31-aad0-883d769025ca",
-                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/15d4c57c-67d9-4c31-aad0-883d769025ca"
-            )
-        },
-        selectedSympathy = selectedMood,
-        sympathyItems = moodItems,
-        onSympathyItemClick = { selectedMood = it },
-        onMenuClick = {},
-        onFeedClick = {}
-    )
-
-}
-
-@Preview
-@Composable
-fun FeedScreenPreview() {
-    val navController = rememberNavController()
-    var appBarState by remember {
-        mutableStateOf(FeedAppBarState())
+    if (feed?.isSadnessSelected == false) {
+        allItems.remove(
+            allItems.find { it.postData == MOOD_SAD }
+        )
     }
-    FeedScreen(
-        navController = navController,
-        appBarState = appBarState,
-        onAppBarEvent = {
-            when (it) {
-                is FeedAppBarEvent.EmotionChanged -> {
-                    appBarState = appBarState.copy(
-                        currentEmotion = it.mood
-                    )
-                }
-                is FeedAppBarEvent.SortChanged -> {
-                    appBarState = appBarState.copy(
-                        selectedTabItem = it.sortBy
-                    )
-                }
-                is FeedAppBarEvent.DropdownExpandChanged -> {
-                    appBarState = appBarState.copy(
-                        isDropdownExpanded = it.isOpen
-                    )
-                }
-            }
-        }
-    )
 
+    if (feed?.isSurprisedSelected == false) {
+        allItems.remove(
+            allItems.find { it.postData == MOOD_SURPRISED }
+        )
+    }
+
+    if (feed?.isAngrySelected == false) {
+        allItems.remove(
+            allItems.find { it.postData == MOOD_ANGRY }
+        )
+    }
+
+    return allItems
 }
+//
+//@Composable
+//private fun DummyData(count: Int) {
+//    val moodItems = rememberMoodItemsForFeed(111, 2, 3, 5)
+//
+//    var selectedMood by remember {
+//        mutableStateOf<MoodItem?>(null)
+//    }
+//
+//    Feed(
+//        profileUrl = "https://github.com/kmkim2689/Android-Wiki/assets/101035437/e310b0cf-f931-4afe-98b1-8d7b88900a0f",
+//        nickname = "케이엠",
+//        date = "2024-01-18",
+//        text = "안녕하세요 피드 미리보기 테스트입니다. 안녕하세요 피드 미리보기 테ㅅ트입니다. 안녕하세요 피드 미리보기 테스트입니다.",
+//        images = when(count) {
+//            0 -> emptyList()
+//            1 -> listOf(
+//                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/0572b856-8439-43a1-b9f0-79897a29ae60",
+//            )
+//            2 -> listOf(
+//                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/0572b856-8439-43a1-b9f0-79897a29ae60",
+//                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/6fbf0375-5299-4d1c-a95e-6a04bad00eac",
+//            )
+//            3 -> listOf(
+//                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/0572b856-8439-43a1-b9f0-79897a29ae60",
+//                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/6fbf0375-5299-4d1c-a95e-6a04bad00eac",
+//                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/15d4c57c-67d9-4c31-aad0-883d769025ca"
+//            )
+//            else -> listOf(
+//                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/0572b856-8439-43a1-b9f0-79897a29ae60",
+//                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/6fbf0375-5299-4d1c-a95e-6a04bad00eac",
+//                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/15d4c57c-67d9-4c31-aad0-883d769025ca",
+//                "https://github.com/kmkim2689/Android-Wiki/assets/101035437/15d4c57c-67d9-4c31-aad0-883d769025ca"
+//            )
+//        },
+//        selectedSympathy = selectedMood,
+//        sympathyItems = moodItems,
+//        onSympathyItemClick = { selectedMood = it },
+//        onMenuClick = {},
+//        onFeedClick = {}
+//    )
+//
+//}

@@ -1,17 +1,20 @@
 package com.sowhat.designsystem.common
 
+import android.os.Parcelable
 import com.sowhat.designsystem.R
+import kotlinx.parcelize.Parcelize
 
 const val MOOD_HAPPY = "EMOTION001"
 const val MOOD_SAD = "EMOTION002"
 const val MOOD_SURPRISED = "EMOTION003"
 const val MOOD_ANGRY = "EMOTION004"
 
+@Parcelize
 enum class Mood(
     val title: String,
     val postData: String?,
-    val drawable: Int?
-) {
+    val drawable: Int?,
+) : Parcelable {
     ALL("전체", null, null),
     HAPPY("행복", MOOD_HAPPY, R.drawable.ic_happy_96),
     SAD("슬픔", MOOD_SAD, R.drawable.ic_sad_96),
