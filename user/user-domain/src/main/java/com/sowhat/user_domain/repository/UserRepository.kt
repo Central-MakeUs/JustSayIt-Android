@@ -9,18 +9,18 @@ interface UserRepository {
 
     suspend fun getUserInfo(
         accessToken: String?,
-        memberId: Long
+//        memberId: Long
     ): Resource<UserInfoDomain>
 
     suspend fun updateUserInfo(
         accessToken: String?,
-        memberId: Long,
+//        memberId: Long,
         editInfo: RequestBody,
         profileImage: MultipartBody.Part?
     ): Resource<Unit?>
 
     suspend fun withdrawUser(
         accessToken: String?,
-        memberId: Long
+//        memberId: Long
     ): Resource<Unit?>
 }

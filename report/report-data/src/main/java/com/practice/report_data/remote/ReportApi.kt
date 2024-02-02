@@ -8,11 +8,11 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ReportApi {
-    @GET("/stories/me/{sort}/{member-id}")
+    @GET("/stories/me/{sort}")
     suspend fun getMyFeedList(
         @Header("Authorization") accessToken: String,
         @Path("sort") sortBy: String,
-        @Path("member-id") memberId: Long,
+//        @Path("member-id") memberId: Long,
         @Query("emotion-code") emotionCode: String?,
         @Query("story-id") lastId: Long?,
         @Query("size") size: Int

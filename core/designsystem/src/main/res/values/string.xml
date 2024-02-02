@@ -67,9 +67,33 @@
     <string name="dialog_subtitle_edit_post">삭제하기 버튼을 누르면 글이 영구 삭제돼요</string>
     <string name="dialog_button_stop_edit">그만 수정하기</string>
     <string name="dialog_button_continue_edit">계속 수정하기</string>
+    <string name="dialog_title_block">유저 차단하기</string>
+    <string name="dialog_subtitle_block">유저를 차단하시겠습니까?\n차단 시 해당 유저의 게시글은 더 이상 보이지 않게 됩니다.</string>
+    <string name="dialog_button_block">차단하기</string>
+    <string name="dialog_title_report">게시글 신고하기</string>
+    <string name="dialog_subtitle_report">게시글을 신고하는 이유가 무엇인가요?</string>
+    <string name="dialog_button_report">신고하기</string>
+    <string-array name="report_reason">
+        <item>광고/도배글이에요.</item>
+        <item>음란물이에요.</item>
+        <item>불법 정보를 포함하고 있어요.</item>
+        <item>욕설/혐오/차별적 표현이에요.</item>
+        <item>개인정보 노출 게시물이에요.</item>
+        <item>불쾌한 표현이 있어요.</item>
+    </string-array>
+    <string-array name="report_reason_post">
+        <item>REPORT001</item>
+        <item>REPORT002</item>
+        <item>REPORT003</item>
+        <item>REPORT004</item>
+        <item>REPORT005</item>
+        <item>REPORT006</item>
+    </string-array>
 
     <string name="popup_edit">수정하기</string>
     <string name="popup_delete">삭제하기</string>
+    <string name="popup_report">게시글 신고하기</string>
+    <string name="popup_block">유저 차단하기</string>
     <string name="popup_choose_picture">앨범에서 사진 선택</string>
     <string name="popup_delete_picture">현재 프로필 사진 삭제</string>
 
@@ -96,6 +120,11 @@
 
     <string name="setting_item_sign_out">로그아웃</string>
     <string name="setting_item_withdraw">회원탈퇴</string>
+
+    <string name="snackbar_block_successful">유저 차단이 완료되었습니다.</string>
+    <string name="snackbar_report_successful">게시글 신고가 완료되었습니다.</string>
+    <string name="snackbar_block_failure">유저 차단 중 에러가 발생하였습니다.</string>
+    <string name="snackbar_report_failure">게시글 신고 중 에러가 발생하였습니다.</string>
 
     <string name="service_email">justtsayit2024@gmail.com</string>
     <string name="contact_subject">그냥, 그렇다고 서비스 문의</string>

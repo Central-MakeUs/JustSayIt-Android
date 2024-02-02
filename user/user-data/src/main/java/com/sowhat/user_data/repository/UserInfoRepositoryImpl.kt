@@ -18,11 +18,11 @@ class UserRepositoryImpl(
 ) : UserRepository {
     override suspend fun getUserInfo(
         accessToken: String?,
-        memberId: Long
+//        memberId: Long
     ): Resource<UserInfoDomain> = try {
         getUserResources(
             accessToken = accessToken,
-            memberId = memberId
+//            memberId = memberId
         )
     } catch (e: HttpException) {
         getHttpErrorResource(e)
@@ -32,14 +32,14 @@ class UserRepositoryImpl(
 
     override suspend fun updateUserInfo(
         accessToken: String?,
-        memberId: Long,
+//        memberId: Long,
         editInfo: RequestBody,
         profileImage: MultipartBody.Part?
     ): Resource<Unit?> {
         return try {
             getEditResultResource(
                 accessToken = accessToken,
-                memberId = memberId,
+//                memberId = memberId,
                 profileImage = profileImage,
                 editInfo = editInfo
             )
@@ -52,12 +52,12 @@ class UserRepositoryImpl(
 
     override suspend fun withdrawUser(
         accessToken: String?,
-        memberId: Long
+//        memberId: Long
     ): Resource<Unit?> {
         return try {
             getWithdrawResultResource(
                 accessToken = accessToken,
-                memberId = memberId
+//                memberId = memberId
             )
         } catch (e: HttpException) {
             getHttpErrorResource(e)
@@ -68,11 +68,11 @@ class UserRepositoryImpl(
 
     private suspend fun getWithdrawResultResource(
         accessToken: String?,
-        memberId: Long
+//        memberId: Long
     ): Resource<Unit?> {
         val withdrawResult = userApi.withdrawUser(
             accessToken = accessToken,
-            memberId = memberId,
+//            memberId = memberId,
         )
 
         val isSuccessful = withdrawResult.isSuccess
@@ -96,13 +96,13 @@ class UserRepositoryImpl(
 
     private suspend fun getEditResultResource(
         accessToken: String?,
-        memberId: Long,
+//        memberId: Long,
         profileImage: MultipartBody.Part?,
         editInfo: RequestBody
     ): Resource<Unit?> {
         val editUserResult = userApi.updateUserInfo(
             accessToken = accessToken,
-            memberId = memberId,
+//            memberId = memberId,
             profileImage = profileImage,
             profile = editInfo
         )
@@ -128,11 +128,11 @@ class UserRepositoryImpl(
 
     private suspend fun getUserResources(
         accessToken: String?,
-        memberId: Long
+//        memberId: Long
     ): Resource<UserInfoDomain> {
         val userInfo = userApi.getUserInfo(
             accessToken = accessToken,
-            memberId = memberId
+//            memberId = memberId
         )
 
         return userInfo.data?.let {

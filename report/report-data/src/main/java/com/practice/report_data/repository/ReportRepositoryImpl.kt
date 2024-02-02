@@ -14,7 +14,7 @@ class ReportRepositoryImpl(
     override suspend fun getMyFeedList(
         accessToken: String,
         sortBy: String,
-        memberId: Long,
+//        memberId: Long,
         emotionCode: String?,
         lastId: Long?,
         size: Int
@@ -22,7 +22,7 @@ class ReportRepositoryImpl(
         val myFeedDto = reportApi.getMyFeedList(
             accessToken = accessToken,
             sortBy = sortBy,
-            memberId = memberId,
+//            memberId = memberId,
             emotionCode = emotionCode,
             lastId = lastId,
             size = size

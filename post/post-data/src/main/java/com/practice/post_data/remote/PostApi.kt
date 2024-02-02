@@ -11,10 +11,10 @@ import retrofit2.http.Path
 
 interface PostApi {
     @Multipart
-    @POST("/stories/new/{member-id}")
+    @POST("/stories/new")
     suspend fun submitPost(
         @Header("Authorization") accessToken: String,
-        @Path("member-id") memberId: Long,
+//        @Path("member-id") memberId: Long,
         @Part("storyInfo") storyInfo: RequestBody,
         @Part storyImg: List<MultipartBody.Part?>?
     ): ResponseBody<Unit?>

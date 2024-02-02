@@ -18,12 +18,12 @@ class SubmitPostUseCase @Inject constructor(
     ): Resource<Unit?> {
         val authData = authRepository.authData.first()
         val accessToken = authData.accessToken
-        val memberId = authData.memberId
+//        val memberId = authData.memberId
 
-        if (accessToken == null || memberId == null) {
+        if (accessToken == null) {
             return Resource.Error(message = "로그인을 진행해야 게시글을 작성할 수 있습니다.")
         }
 
-        return postRepository.submitPost(accessToken, memberId, storyInfo, storyImg)
+        return postRepository.submitPost(accessToken, storyInfo, storyImg)
     }
 }

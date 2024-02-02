@@ -15,14 +15,14 @@ class PostRepositoryImpl(
 ) : PostRepository {
     override suspend fun submitPost(
         accessToken: String,
-        memberId: Long,
+//        memberId: Long,
         storyInfo: RequestBody,
         storyImg: List<MultipartBody.Part?>?
     ): Resource<Unit?> {
         return try {
             getSubmitPostResource(
                 accessToken = accessToken,
-                memberId = memberId,
+//                memberId = memberId,
                 storyInfo = storyInfo,
                 storyImg = storyImg
             )
@@ -35,13 +35,13 @@ class PostRepositoryImpl(
 
     private suspend fun getSubmitPostResource(
         accessToken: String,
-        memberId: Long,
+//        memberId: Long,
         storyInfo: RequestBody,
         storyImg: List<MultipartBody.Part?>?
     ): Resource<Unit?> {
         val postResult = postApi.submitPost(
             accessToken = accessToken,
-            memberId = memberId,
+//            memberId = memberId,
             storyInfo = storyInfo,
             storyImg = storyImg
         )
