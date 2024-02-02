@@ -11,6 +11,7 @@ const val SORT_LATEST = "latest"
 
 @Parcelize
 data class MyFeedUiState(
+    val isLoading: Boolean = false,
     val lastId: Long? = null,
 //    val sortBy: String = myPageSortTabItems.first().title,
 //    val sortPostData: String = myPageSortTabItems.first().postData,

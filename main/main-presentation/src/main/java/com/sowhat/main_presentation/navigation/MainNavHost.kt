@@ -29,7 +29,10 @@ fun MainNavGraph(
             appNavController = appNavController,
             snackbarHostState = snackbarHostState
         )
-        myScreen(appNavController = appNavController)
+        myScreen(
+            appNavController = appNavController,
+            snackbarHostState = snackbarHostState
+        )
         notificationScreen(appNavController = appNavController)
         settingScreen(appNavController = appNavController)
     }

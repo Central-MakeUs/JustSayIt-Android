@@ -24,6 +24,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -47,6 +49,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.practice.database.entity.MyFeedEntity
+import com.sowhat.common.util.ObserveEvents
 import com.sowhat.designsystem.common.Mood
 import com.sowhat.designsystem.common.rememberNestedScrollViewState
 import com.sowhat.designsystem.component.AppBarMyPage
@@ -68,17 +71,23 @@ import com.sowhat.report_presentation.component.MyFeed
 import com.sowhat.report_presentation.component.RailBackground
 import com.sowhat.report_presentation.component.Report
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun MyPageRoute(
     navController: NavController,
-    viewModel: MyPageViewModel = hiltViewModel()
+    viewModel: MyPageViewModel = hiltViewModel(),
+    snackbarHostState: SnackbarHostState
 ) {
-
     val context = LocalContext.current
     val myFeedUiState = viewModel.myFeedUiState.collectAsState().value
     val myFeedPagingData = viewModel.myFeedPagingData.collectAsLazyPagingItems()
     val reportUiState = viewModel.reportUiState.collectAsState().value
+
+    val scope = rememberCoroutineScope()
+
+    val deleteSuccessMessage = stringResource(id = R.string.snackbar_delete_successful)
+    val deleteFailureMessage = stringResource(id = R.string.snackbar_delete_failure)
 
     LaunchedEffect(key1 = myFeedPagingData.loadState) {
         if (myFeedPagingData.loadState.refresh is LoadState.Error) {
@@ -91,8 +100,30 @@ fun MyPageRoute(
         myFeedUiState = myFeedUiState,
         onMyFeedEvent = viewModel::onMyFeedEvent,
         reportUiState = reportUiState,
-        onReportEvent = viewModel::onReportEvent
+        onReportEvent = viewModel::onReportEvent,
+        onDelete = viewModel::deleteFeed
     )
+
+    ObserveEvents(flow = viewModel.deleteEvent) { isSuccessful ->
+        scope.launch {
+            viewModel.onMyFeedEvent(MyFeedEvent.LoadingChanged(false))
+            if (isSuccessful) {
+                snackbarHostState.showSnackbar(
+                    message = deleteSuccessMessage,
+                    duration = SnackbarDuration.Short
+                )
+            } else {
+                snackbarHostState.showSnackbar(
+                    message = deleteFailureMessage,
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
+    }
+    
+    if (myFeedUiState.isLoading) {
+        CenteredCircularProgress()
+    }
 }
 
 @Composable
@@ -102,7 +133,8 @@ fun MyPageScreen(
     myFeedUiState: MyFeedUiState,
     reportUiState: ReportUiState,
     onMyFeedEvent: (MyFeedEvent) -> Unit,
-    onReportEvent: (ReportEvent) -> Unit
+    onReportEvent: (ReportEvent) -> Unit,
+    onDelete: (Long) -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize()
@@ -156,7 +188,8 @@ fun MyPageScreen(
                 id = R.string.dialog_button_delete_feed
             ),
             onAccept = {
-                // TODO 뷰모델로 삭제 작업 요청
+                onMyFeedEvent(MyFeedEvent.LoadingChanged(true))
+                onDelete(myFeedUiState.targetId)
 
                 // 삭제가 끝나고 나서 진행할 일
                 onMyFeedEvent(MyFeedEvent.FeedDeleteDialogChanged(false))

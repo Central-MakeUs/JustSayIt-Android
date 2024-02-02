@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:database"))
     implementation(project(":core:common"))
+    implementation(project(":core:domain"))
     implementation(project(":core:di"))
     implementation(project(":core:network"))
     implementation(project(":report:report-domain"))

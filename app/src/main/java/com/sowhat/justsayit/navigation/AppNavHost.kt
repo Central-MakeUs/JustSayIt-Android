@@ -21,7 +21,7 @@ fun AppNavHost(
         onBoardingScreen(navController = navController)
         userConfigScreen(navController = navController)
         userInfoUpdateScreen(appNavController = navController)
-        mainScreen(appNavController = navController)
+        mainScreen(appNavController = navController, snackbarHostState = snackbarHostState)
         postScreen(appNavController = navController)
         userInfoUpdateScreen(appNavController = navController)
         signOutScreen(appNavController = navController)

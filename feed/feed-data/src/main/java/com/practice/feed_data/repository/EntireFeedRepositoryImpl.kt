@@ -59,13 +59,13 @@ class EntireFeedRepositoryImpl(
             reportCode = reportCode
         )
 
-        reportResult.data?.let {
+        if (reportResult.isSuccess) {
             Resource.Success(
-                data = it,
+                data = reportResult.data,
                 code = reportResult.code,
                 message = reportResult.message
             )
-        } ?: Resource.Error(
+        } else Resource.Error(
             code = reportResult.code,
             message = reportResult.message
         )
@@ -85,15 +85,15 @@ class EntireFeedRepositoryImpl(
         )
         val dao = feedDatabase.entireFeedDao
 
-        blockResult.data?.let {
+        if (blockResult.isSuccess) {
             dao.deleteFeedItemByUserId(blockedId)
 
             Resource.Success(
-                data = it,
+                data = blockResult.data,
                 code = blockResult.code,
                 message = blockResult.message
             )
-        } ?: Resource.Error(
+        } else Resource.Error(
             code = blockResult.code,
             message = blockResult.message
         )

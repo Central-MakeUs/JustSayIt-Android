@@ -1,6 +1,9 @@
 package com.sowhat.di.repository
 
+import com.practice.data.remote.CommonApi
+import com.practice.data.repository.CommonRepositoryImpl
 import com.practice.database.FeedDatabase
+import com.practice.domain.repository.CommonRepository
 import com.practice.feed_data.remote.FeedApi
 import com.practice.feed_data.repository.EntireFeedRepositoryImpl
 import com.practice.post_data.remote.PostApi
@@ -52,4 +55,11 @@ object ProvidesModule {
         feedDatabase: FeedDatabase
     ): EntireFeedRepository =
         EntireFeedRepositoryImpl(feedApi, feedDatabase)
+
+    @Provides
+    @Singleton
+    fun provideCommonRepository(
+        commonApi: CommonApi,
+        feedDatabase: FeedDatabase
+    ): CommonRepository = CommonRepositoryImpl(feedDatabase, commonApi)
 }

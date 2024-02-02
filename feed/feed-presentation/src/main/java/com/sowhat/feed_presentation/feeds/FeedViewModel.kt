@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.practice.domain.use_case.DeleteFeedUseCase
 import com.sowhat.common.model.Resource
 import com.sowhat.common.model.UiState
 import com.sowhat.feed_domain.use_case.BlockUserUseCase
@@ -30,6 +31,7 @@ class FeedViewModel @Inject constructor(
     private val getEntireFeedUseCase: GetEntireFeedUseCase,
     private val reportFeedUseCase: ReportFeedUseCase,
     private val blockUserUseCase: BlockUserUseCase,
+    private val deleteFeedUseCase: DeleteFeedUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -47,6 +49,9 @@ class FeedViewModel @Inject constructor(
 
     private val blockEventChannel = Channel<Boolean>()
     val blockEvent = blockEventChannel.receiveAsFlow()
+
+    private val deleteEventChannel = Channel<Boolean>()
+    val deleteEvent = deleteEventChannel.receiveAsFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val entireFeedData = combine(sortBy, emotion) { s, e ->
@@ -72,12 +77,13 @@ class FeedViewModel @Inject constructor(
             when (reportFeedUseCase(feedId = feedId, reportCode = reportCode)) {
                 is Resource.Success -> {
                     reportEventChannel.send(true)
+                    uiState.update { it.copy(isLoading = false) }
                 }
                 is Resource.Error -> {
                     reportEventChannel.send(false)
+                    uiState.update { it.copy(isLoading = false) }
                 }
             }
-            uiState.update { it.copy(isLoading = false) }
         }
     }
 
@@ -87,9 +93,28 @@ class FeedViewModel @Inject constructor(
             when (blockUserUseCase(userId = userId)) {
                 is Resource.Success -> {
                     blockEventChannel.send(true)
+                    uiState.update { it.copy(isLoading = false) }
                 }
                 is Resource.Error -> {
                     blockEventChannel.send(false)
+                    uiState.update { it.copy(isLoading = false) }
+                }
+            }
+        }
+
+    }
+
+    fun deleteFeed(feedId: Long) {
+        uiState.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            when (deleteFeedUseCase(feedId = feedId)) {
+                is Resource.Success -> {
+                    deleteEventChannel.send(true)
+                    uiState.update { it.copy(isLoading = false) }
+                }
+                is Resource.Error -> {
+                    deleteEventChannel.send(false)
+                    uiState.update { it.copy(isLoading = false) }
                 }
             }
         }
