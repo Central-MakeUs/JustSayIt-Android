@@ -14,24 +14,24 @@ import retrofit2.http.Path
 
 interface UserApi {
 
-    @GET("/members/profile/me/{member-id}")
+    @GET("/members/profile/me")
     suspend fun getUserInfo(
         @Header("Authorization") accessToken: String?,
-        @Path("member-id") memberId: Long,
+//        @Path("member-id") memberId: Long,
     ): ResponseBody<UserInfo>
 
     @Multipart
-    @PATCH("/members/profile/me/{member-id}")
+    @PATCH("/members/profile/me")
     suspend fun updateUserInfo(
         @Header("Authorization") accessToken: String?,
-        @Path("member-id") memberId: Long,
+//        @Path("member-id") memberId: Long,
         @Part("updateProfile") profile: RequestBody,
         @Part profileImage: MultipartBody.Part?,
     ): ResponseBody<Unit?>
 
-    @POST("/members/quit/{member-id}")
+    @POST("/members/quit")
     suspend fun withdrawUser(
         @Header("Authorization") accessToken: String?,
-        @Path("member-id") memberId: Long,
+//        @Path("member-id") memberId: Long,
     ): ResponseBody<Unit?>
 }

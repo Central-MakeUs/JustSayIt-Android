@@ -9,7 +9,7 @@ interface EntireFeedRepository {
     suspend fun getEntireFeedList(
         accessToken: String,
         sortBy: String,
-        memberId: Long,
+//        memberId: Long,
         emotionCode: String?,
         lastId: Long?,
         size: Int

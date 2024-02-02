@@ -1,5 +1,6 @@
 package com.practice.feed_data.repository
 
+import com.practice.database.FeedDatabase
 import com.practice.database.entity.EntireFeedEntity
 import com.practice.feed_data.model.FeedResponse
 import com.practice.feed_data.remote.FeedApi
@@ -12,12 +13,12 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class EntireFeedRepositoryImpl(
-    private val feedApi: FeedApi
+    private val feedApi: FeedApi,
+    private val feedDatabase: FeedDatabase
 ) : EntireFeedRepository {
     override suspend fun getEntireFeedList(
         accessToken: String,
         sortBy: String,
-        memberId: Long,
         emotionCode: String?,
         lastId: Long?,
         size: Int
@@ -25,7 +26,6 @@ class EntireFeedRepositoryImpl(
         val entireFeedDto = feedApi.getFeedData(
             accessToken = accessToken,
             sortBy = sortBy,
-            memberId = memberId,
             emotionCode = emotionCode,
             lastId = lastId,
             size = size
@@ -83,8 +83,11 @@ class EntireFeedRepositoryImpl(
             accessToken = accessToken,
             blockedId = blockedId
         )
+        val dao = feedDatabase.entireFeedDao
 
         blockResult.data?.let {
+            dao.deleteFeedItemByUserId(blockedId)
+
             Resource.Success(
                 data = it,
                 code = blockResult.code,

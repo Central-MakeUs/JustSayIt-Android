@@ -2,6 +2,7 @@ package com.sowhat.common.util
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -36,3 +37,13 @@ fun getImageMultipartBody(
 
 }
 
+fun String.toDate(): String = try {
+    this.split("T")
+        .first()
+        .split("-")
+        .mapIndexed { index, date -> if (index == 0) date.slice(IntRange(2, 3)) else date }
+        .joinToString(".")
+} catch (e: Exception) {
+    Log.e("toDate", "error : ${e.message}")
+    "server error"
+}

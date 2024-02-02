@@ -1,5 +1,6 @@
 package com.sowhat.main_presentation.navigation
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -17,13 +18,17 @@ import com.sowhat.user_presentation.navigation.userInfoUpdateScreen
 fun MainNavGraph(
     appNavController: NavHostController,
     mainNavController: NavHostController,
+    snackbarHostState: SnackbarHostState
 ) {
     NavHost(
         navController = mainNavController,
         startDestination = HOME,
         route = MAIN
     ) {
-        homeScreen(appNavController = appNavController)
+        homeScreen(
+            appNavController = appNavController,
+            snackbarHostState = snackbarHostState
+        )
         myScreen(appNavController = appNavController)
         notificationScreen(appNavController = appNavController)
         settingScreen(appNavController = appNavController)

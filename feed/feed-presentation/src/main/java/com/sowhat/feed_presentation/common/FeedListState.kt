@@ -14,5 +14,10 @@ data class FeedListState(
         TabItem("최근글", "latest"),
         TabItem("인기글", "") // TODO api 나오면 정하기
     ),
-    var selectedTabItem: TabItem = tabItems.first()
+    var selectedTabItem: TabItem = tabItems.first(),
+    val isDeleteDialogVisible: Boolean = false,
+    val isReportDialogVisible: Boolean = false,
+    val isBlockDialogVisible: Boolean = false,
+    val targetId: Long? = null,
+    val reportPostData: String? = null
 ) : Parcelable

@@ -1,5 +1,6 @@
 package com.sowhat.feed_domain
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -36,7 +37,6 @@ class EntireFeedRemoteMediator(
         return try {
             val authData = authDataRepository.authData.first()
             val accessToken = authData.accessToken
-            val memberId = authData.memberId
 
             val loadKey = when (loadType) {
                 LoadType.REFRESH -> {
@@ -53,28 +53,31 @@ class EntireFeedRemoteMediator(
                 }
             }
 
-            if (accessToken != null && memberId != null) {
+            if (accessToken != null) {
                 getPagingData(
                     accessToken = accessToken,
-                    memberId = memberId,
+//                    memberId = memberId,
                     loadKey = loadKey,
                     state = state,
                     loadType = loadType,
                 )
             } else MediatorResult.Error(NullPointerException())
         } catch (e: HttpException) {
+            e.printStackTrace()
             MediatorResult.Error(e)
         } catch (e: IOException) {
+            e.printStackTrace()
             MediatorResult.Error(e)
         } catch (e: Exception) {
             if (e is CancellationException) throw e
+            e.printStackTrace()
             MediatorResult.Error(e)
         }
     }
 
     private suspend fun getPagingData(
         accessToken: String,
-        memberId: Long,
+//        memberId: Long,
         loadKey: Long?,
         state: PagingState<Int, EntireFeedEntity>,
         loadType: LoadType,
@@ -82,11 +85,13 @@ class EntireFeedRemoteMediator(
         val feedItems = entireFeedRepository.getEntireFeedList(
             accessToken = accessToken,
             sortBy = sortBy,
-            memberId = memberId,
+//            memberId = memberId,
             emotionCode = emotion,
             lastId = loadKey,
             size = state.config.pageSize
         )
+
+        Log.i("EntireFeedMediator", "getPagingData: success")
 
         return getPagingDataTransactionResult(feedItems, loadType)
     }
@@ -97,6 +102,7 @@ class EntireFeedRemoteMediator(
     ): MediatorResult {
         return when (feedItems) {
             is Resource.Success -> {
+                Log.i("EntireFeedMediator", "getPagingDataTransactionResult: success")
                 addFeedItemsToDatabase(loadType, feedItems)
 
                 MediatorResult.Success(
@@ -105,6 +111,7 @@ class EntireFeedRemoteMediator(
             }
 
             is Resource.Error -> {
+                Log.i("EntireFeedMediator", "getPagingDataTransactionResult: error")
                 MediatorResult.Error(NullPointerException())
             }
         }
@@ -115,13 +122,16 @@ class EntireFeedRemoteMediator(
         feedItems: Resource<EntireFeed>
     ) {
         feedDatabase.withTransaction {
+            Log.i("EntireFeedMediator", "addFeedItemsToDatabase: start adding")
             if (loadType == LoadType.REFRESH) {
                 dao.deleteAllFeedItems()
             }
 
             val myFeedEntities = feedItems.data?.feedItems
             myFeedEntities?.let {
+                Log.i("EntireFeedMediator", "addFeedItemsToDatabase: adding $myFeedEntities")
                 dao.addFeedItems(myFeedEntities)
+                Log.i("EntireFeedMediator", "addFeedItemsToDatabase: added")
             }
         }
     }

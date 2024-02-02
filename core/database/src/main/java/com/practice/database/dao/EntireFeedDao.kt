@@ -33,6 +33,9 @@ interface EntireFeedDao {
     @Query("DELETE FROM entire_feed WHERE storyUUID=:storyUUID")
     suspend fun deleteFeedItemByUUID(storyUUID: String)
 
+    @Query("DELETE FROM entire_feed WHERE writerId=:userId")
+    suspend fun deleteFeedItemByUserId(userId: Long)
+
     @Update
     suspend fun updateFeedItem(myFeedEntity: EntireFeedEntity)
 }

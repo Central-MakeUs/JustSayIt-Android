@@ -18,15 +18,15 @@ class UpdateUserInfoUseCase @Inject constructor(
     ): Resource<Unit?> {
         val authData = authDatastore.authData.first()
         val accessToken = authData.accessToken
-        val memberId = authData.memberId
+//        val memberId = authData.memberId
 
-        if (accessToken == null || memberId == null) {
+        if (accessToken == null) {
             return Resource.Error(data = null, code = null, message = "기기에 사용자 정보가 없습니다.")
         }
 
         return userRepository.updateUserInfo(
             accessToken = accessToken,
-            memberId = memberId,
+//            memberId = memberId,
             editInfo = editInfo,
             profileImage = profileImage
         )

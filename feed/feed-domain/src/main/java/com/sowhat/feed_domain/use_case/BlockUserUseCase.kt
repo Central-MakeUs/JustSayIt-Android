@@ -1,5 +1,6 @@
 package com.sowhat.feed_domain.use_case
 
+import com.practice.database.FeedDatabase
 import com.sowhat.common.model.Resource
 import com.sowhat.datastore.AuthDataRepository
 import com.sowhat.feed_domain.repository.EntireFeedRepository
@@ -9,6 +10,7 @@ import javax.inject.Inject
 class BlockUserUseCase @Inject constructor(
     private val entireFeedRepository: EntireFeedRepository,
     private val authDataRepository: AuthDataRepository,
+    private val feedDatabase: FeedDatabase
 ) {
     suspend operator fun invoke(
         userId: Long

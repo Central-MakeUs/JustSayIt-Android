@@ -8,7 +8,7 @@ import okhttp3.RequestBody
 interface PostRepository {
     suspend fun submitPost(
         accessToken: String,
-        memberId: Long,
+//        memberId: Long,
         storyInfo: RequestBody,
         storyImg: List<MultipartBody.Part?>?
     ): Resource<Unit?>

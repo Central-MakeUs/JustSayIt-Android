@@ -29,12 +29,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.practice.database.entity.EntireFeedEntity
+import com.sowhat.common.util.toDate
 import com.sowhat.designsystem.common.MoodItem
 import com.sowhat.designsystem.common.bottomBorder
 import com.sowhat.designsystem.common.rememberMoodItemsForFeed
 import com.sowhat.designsystem.component.ChipSm
 import com.sowhat.designsystem.component.DefaultIconButton
 import com.sowhat.designsystem.component.ImageContainer
+import com.sowhat.designsystem.component.PopupMenuContents
+import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.TimelineFeedImages
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.Gray400
@@ -43,18 +47,19 @@ import com.sowhat.designsystem.theme.JustSayItTheme
 @Composable
 fun Feed(
     modifier: Modifier = Modifier,
-    profileUrl: Any?,
-    nickname: String,
-    date: String,
-    text: String,
-    images: List<String>?,
+    feedItem: EntireFeedEntity,
     selectedSympathy: MoodItem?,
     sympathyItems: List<MoodItem>,
     // 취소 시 null을 보내고, 선택 시 아이템을 보내서 외부의 selectedSympathy의 값 변경
     onSympathyItemClick: (MoodItem?) -> Unit,
     onMenuClick: () -> Unit,
     onFeedClick: () -> Unit,
-    isOwner: Boolean,
+    isMenuForOwnerVisible: Boolean,
+    isMenuForNotOwnerVisible: Boolean,
+    popupMenuForOwner: List<PopupMenuItem>,
+    popupMenuForNotOwner: List<PopupMenuItem>,
+    onMenuDismiss: () -> Unit,
+    onMenuItemClick: (PopupMenuItem) -> Unit
 ) {
 
     Column(
@@ -69,10 +74,14 @@ fun Feed(
     ) {
         FeedProfile(
             modifier = Modifier.padding(start = JustSayItTheme.Spacing.spaceBase),
-            profileUrl = profileUrl,
-            nickname = nickname,
-            date = date,
-            onMenuClick = onMenuClick
+            feedItem = feedItem,
+            onMenuClick = onMenuClick,
+            isMenuForOwnerVisible = isMenuForOwnerVisible,
+            isMenuForNotOwnerVisible = isMenuForNotOwnerVisible,
+            popupMenuForOwner = popupMenuForOwner,
+            popupMenuForNotOwner = popupMenuForNotOwner,
+            onDismiss = onMenuDismiss,
+            onMenuItemClick = onMenuItemClick
         )
 
         Column(
@@ -84,12 +93,14 @@ fun Feed(
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = text,
+                text = feedItem.bodyText,
                 style = JustSayItTheme.Typography.body1,
                 color = JustSayItTheme.Colors.mainTypo
             )
 
-            if (!images.isNullOrEmpty()) TimelineFeedImages(models = images)
+            if (feedItem.photo.isNotEmpty()) {
+                TimelineFeedImages(models = feedItem.photo)
+            }
         }
 
         Column {
@@ -97,7 +108,7 @@ fun Feed(
                 currentMood = selectedSympathy,
                 onChange = onSympathyItemClick,
                 availableItems = sympathyItems,
-                isOwner = isOwner
+                isOwner = feedItem.isOwner ?: return
             )
         }
     }
@@ -106,10 +117,14 @@ fun Feed(
 @Composable
 fun FeedProfile(
     modifier: Modifier = Modifier,
-    profileUrl: Any?,
-    nickname: String,
-    date: String,
-    onMenuClick: () -> Unit
+    feedItem: EntireFeedEntity,
+    onMenuClick: () -> Unit,
+    isMenuForOwnerVisible: Boolean,
+    isMenuForNotOwnerVisible: Boolean,
+    popupMenuForOwner: List<PopupMenuItem>,
+    popupMenuForNotOwner: List<PopupMenuItem>,
+    onDismiss: () -> Unit,
+    onMenuItemClick: (PopupMenuItem) -> Unit
 ) {
     Row(
         modifier = modifier
@@ -119,16 +134,37 @@ fun FeedProfile(
         verticalAlignment = Alignment.CenterVertically
     ) {
         FeedProfileInfo(
-            profileUrl = profileUrl,
-            nickname = nickname,
-            date = date
+            profileUrl = feedItem.profileImg,
+            nickname = feedItem.nickname,
+            date = feedItem.createdAt.toDate()
         )
 
-        DefaultIconButton(
-            modifier = Modifier,
-            iconDrawable = com.sowhat.designsystem.R.drawable.ic_more_20,
-            onClick = onMenuClick
-        )
+        Box(
+            modifier = Modifier.height(24.dp),
+            contentAlignment = Alignment.BottomEnd
+        ) {
+            DefaultIconButton(
+                modifier = Modifier,
+                iconDrawable = com.sowhat.designsystem.R.drawable.ic_more_20,
+                onClick = onMenuClick
+            )
+
+            PopupMenuContents(
+                modifier = Modifier,
+                isVisible = isMenuForOwnerVisible,
+                items = popupMenuForOwner,
+                onDismiss = onDismiss,
+                onItemClick = onMenuItemClick
+            )
+
+            PopupMenuContents(
+                modifier = Modifier,
+                isVisible = isMenuForNotOwnerVisible,
+                items = popupMenuForNotOwner,
+                onDismiss = onDismiss,
+                onItemClick = onMenuItemClick
+            )
+        }
     }
 }
 
@@ -296,32 +332,32 @@ private fun SelectedSympathy(
     }
 }
 
-@Preview
-@Composable
-fun FeedItemPreview() {
-    val moodItems = rememberMoodItemsForFeed(1, 2, 3, 5)
-
-    var selectedMood by remember {
-        mutableStateOf<MoodItem?>(null)
-    }
-
-    Feed(
-        profileUrl = "https://github.com/kmkim2689/Android-Wiki/assets/101035437/e310b0cf-f931-4afe-98b1-8d7b88900a0f",
-        nickname = "케이엠",
-        date = "2024-01-18",
-        text = "안녕하세요 피드 미리보기 테스트입니다. 안녕하세요 피드 미리보기 테ㅅ트입니다. 안녕하세요 피드 미리보기 테스트입니다.",
-        images = listOf(
-            "https://github.com/kmkim2689/Android-Wiki/assets/101035437/0572b856-8439-43a1-b9f0-79897a29ae60",
-            "https://github.com/kmkim2689/Android-Wiki/assets/101035437/6fbf0375-5299-4d1c-a95e-6a04bad00eac",
-            "https://github.com/kmkim2689/Android-Wiki/assets/101035437/15d4c57c-67d9-4c31-aad0-883d769025ca"
-        ),
-        selectedSympathy = selectedMood,
-        sympathyItems = moodItems,
-        onSympathyItemClick = {
-            selectedMood = it
-        },
-        onMenuClick = {},
-        onFeedClick = {},
-        isOwner = false
-    )
-}
+//@Preview
+//@Composable
+//fun FeedItemPreview() {
+//    val moodItems = rememberMoodItemsForFeed(1, 2, 3, 5)
+//
+//    var selectedMood by remember {
+//        mutableStateOf<MoodItem?>(null)
+//    }
+//
+//    Feed(
+//        profileUrl = "https://github.com/kmkim2689/Android-Wiki/assets/101035437/e310b0cf-f931-4afe-98b1-8d7b88900a0f",
+//        nickname = "케이엠",
+//        date = "2024-01-18",
+//        text = "안녕하세요 피드 미리보기 테스트입니다. 안녕하세요 피드 미리보기 테ㅅ트입니다. 안녕하세요 피드 미리보기 테스트입니다.",
+//        images = listOf(
+//            "https://github.com/kmkim2689/Android-Wiki/assets/101035437/0572b856-8439-43a1-b9f0-79897a29ae60",
+//            "https://github.com/kmkim2689/Android-Wiki/assets/101035437/6fbf0375-5299-4d1c-a95e-6a04bad00eac",
+//            "https://github.com/kmkim2689/Android-Wiki/assets/101035437/15d4c57c-67d9-4c31-aad0-883d769025ca"
+//        ),
+//        selectedSympathy = selectedMood,
+//        sympathyItems = moodItems,
+//        onSympathyItemClick = {
+//            selectedMood = it
+//        },
+//        onMenuClick = {},
+//        onFeedClick = {},
+//        isOwner = false
+//    )
+//}

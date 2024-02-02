@@ -36,7 +36,7 @@ class FeedRemoteMediator(
         return try {
             val authData = authDataRepository.authData.first()
             val accessToken = authData.accessToken
-            val memberId = authData.memberId
+//            val memberId = authData.memberId
 
             val loadKey = when (loadType) {
                 LoadType.REFRESH -> {
@@ -53,10 +53,10 @@ class FeedRemoteMediator(
                 }
             }
 
-            if (accessToken != null && memberId != null) {
+            if (accessToken != null) {
                 getPagingData(
                     accessToken = accessToken,
-                    memberId = memberId,
+//                    memberId = memberId,
                     loadKey = loadKey,
                     state = state,
                     loadType = loadType,
@@ -74,7 +74,7 @@ class FeedRemoteMediator(
 
     private suspend fun getPagingData(
         accessToken: String,
-        memberId: Long,
+//        memberId: Long,
         loadKey: Long?,
         state: PagingState<Int, MyFeedEntity>,
         loadType: LoadType,
@@ -82,7 +82,7 @@ class FeedRemoteMediator(
         val feedItems = reportRepository.getMyFeedList(
             accessToken = accessToken,
             sortBy = sortBy,
-            memberId = memberId,
+//            memberId = memberId,
             emotionCode = emotion,
             lastId = loadKey,
             size = state.config.pageSize

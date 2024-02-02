@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,6 +41,7 @@ fun MainScreen(
 ) {
     val mainNavController = rememberNavController()
     val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     val menus = listOf(MenuContent.Home, MenuContent.My, MenuContent.Notification, MenuContent.Setting)
 
@@ -64,7 +68,8 @@ fun MainScreen(
                     appNavController.navigateToPost()
                 }
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -78,6 +83,7 @@ fun MainScreen(
             MainNavGraph(
                 appNavController = appNavController,
                 mainNavController = mainNavController,
+                snackbarHostState = snackbarHostState
             )
         }
     }
