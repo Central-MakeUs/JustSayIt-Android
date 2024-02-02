@@ -13,7 +13,7 @@ import com.practice.database.entity.MyFeedEntity
 @Dao
 interface EntireFeedDao {
     @Query("SELECT * FROM entire_feed")
-    suspend fun getAllFeedItems(): PagingSource<Long, EntireFeedEntity>
+    fun getAllFeedItems(): PagingSource<Int, EntireFeedEntity>
 
     @Query("SELECT * FROM entire_feed WHERE storyId=:storyId")
     suspend fun getFeedItemByFeedId(storyId: Long): EntireFeedEntity

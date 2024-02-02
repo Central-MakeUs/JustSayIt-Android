@@ -9,6 +9,7 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.google.gson.Gson
 import com.practice.database.common.DATABASE_FEED
+import com.practice.database.dao.EntireFeedDao
 import com.practice.database.dao.MyFeedDao
 import com.practice.database.entity.EntireFeedEntity
 import com.practice.database.entity.MyFeedEntity
@@ -26,6 +27,7 @@ import com.practice.database.entity.MyFeedEntity
 @TypeConverters(ListConverter::class)
 abstract class FeedDatabase : RoomDatabase() {
     abstract val myFeedDao: MyFeedDao
+    abstract val entireFeedDao: EntireFeedDao
 
     companion object {
         @Volatile // makes the field immediately made visible to other threads
