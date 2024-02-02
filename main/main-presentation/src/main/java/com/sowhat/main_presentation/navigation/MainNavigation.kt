@@ -1,5 +1,6 @@
 package com.sowhat.main_presentation.navigation
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
@@ -11,10 +12,14 @@ import com.sowhat.main_presentation.common.MenuContent
 import com.sowhat.main_presentation.ui.MainRoute
 
 fun NavGraphBuilder.mainScreen(
-    appNavController: NavHostController
+    appNavController: NavHostController,
+    snackbarHostState: SnackbarHostState
 ) {
     composable(route = MAIN) {
-        MainRoute(appNavController = appNavController)
+        MainRoute(
+            appNavController = appNavController,
+            snackbarHostState = snackbarHostState
+        )
     }
 }
 

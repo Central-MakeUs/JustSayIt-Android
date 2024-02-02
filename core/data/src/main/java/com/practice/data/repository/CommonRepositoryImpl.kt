@@ -1,5 +1,6 @@
 package com.practice.data.repository
 
+import android.util.Log
 import androidx.room.withTransaction
 import com.practice.data.remote.CommonApi
 import com.practice.database.FeedDatabase
@@ -26,12 +27,16 @@ class CommonRepositoryImpl(
                 entireFeedDao.deleteFeedItemByFeedId(feedId)
             }
 
+            Log.i("Delete", "deleteFeed: database transaction successful")
+
             Resource.Success(
                 data = result.data,
                 code = result.code,
                 message = result.message
             )
         } else {
+            Log.i("Delete", "deleteFeed: transaction error")
+
             Resource.Error(
                 code = result.code,
                 message = result.message

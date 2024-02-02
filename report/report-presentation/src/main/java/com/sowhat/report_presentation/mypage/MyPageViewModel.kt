@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.practice.database.entity.MyFeedEntity
+import com.practice.domain.use_case.DeleteFeedUseCase
 import com.practice.report_domain.use_case.GetMyFeedUseCase
+import com.sowhat.common.model.Resource
 import com.sowhat.report_presentation.common.MyFeedEvent
 import com.sowhat.report_presentation.common.MyFeedUiState
 import com.sowhat.report_presentation.common.ReportEvent
@@ -15,15 +17,19 @@ import com.sowhat.report_presentation.common.ReportUiState
 import com.sowhat.report_presentation.common.TodayMoodItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val getMyFeedUseCase: GetMyFeedUseCase,
+    private val deleteFeedUseCase: DeleteFeedUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val myFeedUiState = savedStateHandle.getStateFlow(FEED_STATE, MyFeedUiState())
@@ -31,6 +37,9 @@ class MyPageViewModel @Inject constructor(
 
     private val sortBy = MutableStateFlow(myFeedUiState.value.sortBy.postData)
     private val emotion = MutableStateFlow(myFeedUiState.value.emotion.postData)
+
+    private val deleteEventChannel = Channel<Boolean>()
+    val deleteEvent = deleteEventChannel.receiveAsFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     var myFeedPagingData: Flow<PagingData<MyFeedEntity>> = combine(sortBy, emotion) { s, e ->
@@ -41,6 +50,19 @@ class MyPageViewModel @Inject constructor(
             sortBy = pair.first,
             emotion = pair.second
         ).flow.cachedIn(viewModelScope)
+    }
+
+    fun deleteFeed(feedId: Long) {
+        viewModelScope.launch {
+            when (deleteFeedUseCase(feedId = feedId)) {
+                is Resource.Success -> {
+                    deleteEventChannel.send(true)
+                }
+                is Resource.Error -> {
+                    deleteEventChannel.send(false)
+                }
+            }
+        }
     }
 
     fun onMyFeedEvent(event: MyFeedEvent) {
@@ -81,6 +103,11 @@ class MyPageViewModel @Inject constructor(
             is MyFeedEvent.FeedTargetIdChanged -> {
                 savedStateHandle[FEED_STATE] = getMyFeedUiState()?.copy(
                     targetId = event.targetId
+                )
+            }
+            is MyFeedEvent.LoadingChanged -> {
+                savedStateHandle[FEED_STATE] = getMyFeedUiState()?.copy(
+                    isLoading = event.isLoading
                 )
             }
         }

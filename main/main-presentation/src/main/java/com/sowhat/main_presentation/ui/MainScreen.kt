@@ -28,9 +28,11 @@ import com.sowhat.main_presentation.navigation.navigateToPost
 @Composable
 fun MainRoute(
     appNavController: NavHostController,
+    snackbarHostState: SnackbarHostState
 ) {
     MainScreen(
-        appNavController = appNavController
+        appNavController = appNavController,
+        snackbarHostState = snackbarHostState
     )
 }
 
@@ -38,10 +40,10 @@ fun MainRoute(
 fun MainScreen(
     modifier: Modifier = Modifier,
     appNavController: NavHostController,
+    snackbarHostState: SnackbarHostState
 ) {
     val mainNavController = rememberNavController()
     val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
 
     val menus = listOf(MenuContent.Home, MenuContent.My, MenuContent.Notification, MenuContent.Setting)
 
@@ -69,7 +71,7 @@ fun MainScreen(
                 }
             )
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -93,5 +95,5 @@ fun MainScreen(
 @Composable
 fun MainScreenPreview() {
     val navController = rememberNavController()
-    MainScreen(appNavController = navController)
+    MainScreen(appNavController = navController, snackbarHostState = SnackbarHostState())
 }

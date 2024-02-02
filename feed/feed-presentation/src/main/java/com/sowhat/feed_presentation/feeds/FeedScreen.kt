@@ -1,7 +1,10 @@
 package com.sowhat.feed_presentation.feeds
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +32,7 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
@@ -156,6 +160,10 @@ fun FeedRoute(
             }
         )
     }
+
+    if (uiState.isLoading) {
+        CenteredCircularProgress()
+    }
 }
 
 @Composable
@@ -169,6 +177,8 @@ private fun PostEventObserver(
     val blockFailureMessage = stringResource(id = R.string.snackbar_block_failure)
     val reportSuccessMessage = stringResource(id = R.string.snackbar_report_successful)
     val reportFailureMessage = stringResource(id = R.string.snackbar_report_failure)
+    val deleteSuccessMessage = stringResource(id = R.string.snackbar_delete_successful)
+    val deleteFailureMessage = stringResource(id = R.string.snackbar_delete_failure)
 
     ObserveEvents(flow = viewModel.reportEvent) { isSuccessful ->
         scope.launch {
@@ -202,6 +212,23 @@ private fun PostEventObserver(
             }
         }
     }
+
+    ObserveEvents(flow = viewModel.deleteEvent) { isSuccessful ->
+        scope.launch {
+            if (isSuccessful) {
+                snackbarHostState.showSnackbar(
+                    message = deleteSuccessMessage,
+                    duration = SnackbarDuration.Short
+                )
+                feedPagingData.refresh()
+            } else {
+                snackbarHostState.showSnackbar(
+                    message = deleteFailureMessage,
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -226,13 +253,14 @@ fun FeedScreen(
         },
         bottomBar = {},
     ) { paddingValues ->
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(JustSayItTheme.Colors.mainBackground)
                 .padding(paddingValues),
             state = lazyListState
-        ){
+        ) {
             items(
                 count = feedPagingData.itemCount,
                 key = feedPagingData.itemKey { item -> item.storyId },
@@ -248,18 +276,27 @@ fun FeedScreen(
                 }
 
                 feed?.let {
-                    Feed(
-                        feedItem = it,
-                        onFeedEvent = onFeedEvent,
-                        selectedSympathy = selectedSympathy,
-                        sympathyItems = sympathyItems,
-                        onSympathyChange = { selectedSympathy = it }
-                    )
+                    AnimatedVisibility(
+                        visible = (
+                            feedPagingData.loadState.refresh !is LoadState.Loading
+                                && feedPagingData.loadState.append !is LoadState.Loading
+                        ),
+                        enter = fadeIn(animationSpec = TweenSpec(durationMillis = 1000)),
+                        exit = fadeOut(animationSpec = TweenSpec(durationMillis = 1000))
+                    ) {
+                        Feed(
+                            feedItem = it,
+                            onFeedEvent = onFeedEvent,
+                            selectedSympathy = selectedSympathy,
+                            sympathyItems = sympathyItems,
+                            onSympathyChange = { selectedSympathy = it }
+                        )
+                    }
                 }
             }
 
             // 플로팅 버튼이 피드를 가리지 않도록 하기 위함
-            item { 
+            item {
                 Spacer(
                     modifier = Modifier
                         .height(JustSayItTheme.Spacing.spaceExtraExtraLarge)
@@ -268,10 +305,6 @@ fun FeedScreen(
                 )
             }
         }
-    }
-
-    if (uiState.isLoading) {
-        CenteredCircularProgress()
     }
 }
 

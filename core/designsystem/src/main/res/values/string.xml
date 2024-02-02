@@ -125,6 +125,8 @@
     <string name="snackbar_report_successful">게시글 신고가 완료되었습니다.</string>
     <string name="snackbar_block_failure">유저 차단 중 에러가 발생하였습니다.</string>
     <string name="snackbar_report_failure">게시글 신고 중 에러가 발생하였습니다.</string>
+    <string name="snackbar_delete_successful">피드 삭제가 완료되었습니다.</string>
+    <string name="snackbar_delete_failure">피드 삭제 중 에러가 발생하였습니다.</string>
 
     <string name="service_email">justtsayit2024@gmail.com</string>
     <string name="contact_subject">그냥, 그렇다고 서비스 문의</string>

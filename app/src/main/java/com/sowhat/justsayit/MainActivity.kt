@@ -7,6 +7,8 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.remember
@@ -29,12 +31,13 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val snackbarHostState = remember { SnackbarHostState() }
                 // A surface container using the 'background' color from the theme
-                Surface(
+                Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(JustSayItTheme.Colors.mainBackground),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+                    snackbarHost = { SnackbarHost(snackbarHostState) }
+                ) { paddingValues ->
+                    val padding = paddingValues
                     AppNavHost(
                         navController = navController,
                         snackbarHostState = snackbarHostState
