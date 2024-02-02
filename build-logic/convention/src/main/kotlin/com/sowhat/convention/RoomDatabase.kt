@@ -8,6 +8,12 @@ internal fun Project.configureRoom() {
         apply("kotlin-kapt")
     }
 
+    kapt {
+        arguments {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
+    }
+
     val libs = extensions.libs
     dependencies {
         implementation(libs, "room.core")
