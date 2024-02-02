@@ -28,4 +28,6 @@ dependencies {
     implementation(project(":report:report-domain"))
     implementation(project(":feed:feed-data"))
     implementation(project(":feed:feed-domain"))
+    implementation(project(":core:data"))
+    implementation(project(":core:domain"))
 }
