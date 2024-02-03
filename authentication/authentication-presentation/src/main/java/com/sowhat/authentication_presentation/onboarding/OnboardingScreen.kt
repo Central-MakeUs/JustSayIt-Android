@@ -109,16 +109,16 @@ private fun OnboardingScreen(
     )
 
     val signInPlatforms = listOf(
-        SignInPlatform(
-            iconDrawable = R.drawable.ic_kakao_54,
-            onClick = {
-                scope.launch {
-                    val accessToken = KakaoOAuthClient.signIn(context)
-                    Log.i(TAG, "kakao access token : $accessToken")
-                    if (accessToken != null) onLoginStart(Platform.KAKAO, accessToken)
-                }
-            }
-        ),
+//        SignInPlatform(
+//            iconDrawable = R.drawable.ic_kakao_54,
+//            onClick = {
+//                scope.launch {
+//                    val accessToken = KakaoOAuthClient.signIn(context)
+//                    Log.i(TAG, "kakao access token : $accessToken")
+//                    if (accessToken != null) onLoginStart(Platform.KAKAO, accessToken)
+//                }
+//            }
+//        ),
         SignInPlatform(
             iconDrawable = R.drawable.ic_naver_54,
             onClick = {
@@ -128,20 +128,20 @@ private fun OnboardingScreen(
                 }
             }
         ),
-        SignInPlatform(
-            iconDrawable = R.drawable.ic_google_54,
-            onClick = {
-                scope.launch {
-                    val signInIntentSender = googleOAuthClient.signIn()
-                    Log.d(TAG, "Google Sign In entering")
-                    launcher.launch(
-                        IntentSenderRequest.Builder(
-                            signInIntentSender ?: return@launch
-                        ).build()
-                    )
-                }
-            }
-        )
+//        SignInPlatform(
+//            iconDrawable = R.drawable.ic_google_54,
+//            onClick = {
+//                scope.launch {
+//                    val signInIntentSender = googleOAuthClient.signIn()
+//                    Log.d(TAG, "Google Sign In entering")
+//                    launcher.launch(
+//                        IntentSenderRequest.Builder(
+//                            signInIntentSender ?: return@launch
+//                        ).build()
+//                    )
+//                }
+//            }
+//        )
     )
 
     OnboardingScreenContent(

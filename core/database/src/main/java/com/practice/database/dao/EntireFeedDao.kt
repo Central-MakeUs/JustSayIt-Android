@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.practice.database.entity.EntireFeedEntity
 import com.practice.database.entity.MyFeedEntity
 
@@ -21,7 +22,7 @@ interface EntireFeedDao {
     @Query("SELECT * FROM entire_feed WHERE storyUUID=:storyUUID")
     suspend fun getFeedItemByUUID(storyUUID: String): EntireFeedEntity
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun addFeedItems(feedEntities: List<EntireFeedEntity>)
 
     @Query("DELETE FROM entire_feed")

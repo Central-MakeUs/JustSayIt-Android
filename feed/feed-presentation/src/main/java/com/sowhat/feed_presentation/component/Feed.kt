@@ -266,7 +266,6 @@ private fun UnselectedList(
             alignment = Alignment.End,
             space = JustSayItTheme.Spacing.spaceXS
         ),
-        reverseLayout = true
     ) {
         item {
             Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceXS))
@@ -289,7 +288,6 @@ private fun UnselectedList(
                     onClick = { item: MoodItem ->
                         if (!isSelected) onChange(item) else onChange(null)
                     },
-                    isActive = isOwner
                 )
             }
         }
@@ -326,7 +324,7 @@ private fun SelectedSympathy(
                 onClick = { item: MoodItem ->
                     if (!isSelected) onChange(item) else onChange(null)
                 },
-                isActive = isOwner
+                isActive = !isOwner
             )
         }
     }
