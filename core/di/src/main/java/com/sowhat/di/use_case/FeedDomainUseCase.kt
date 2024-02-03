@@ -4,7 +4,9 @@ import com.practice.database.FeedDatabase
 import com.sowhat.datastore.AuthDataRepository
 import com.sowhat.feed_domain.repository.EntireFeedRepository
 import com.sowhat.feed_domain.use_case.BlockUserUseCase
+import com.sowhat.feed_domain.use_case.CancelEmpathyUseCase
 import com.sowhat.feed_domain.use_case.GetEntireFeedUseCase
+import com.sowhat.feed_domain.use_case.PostEmpathyUseCase
 import com.sowhat.feed_domain.use_case.ReportFeedUseCase
 import dagger.Module
 import dagger.Provides
@@ -47,5 +49,25 @@ object FeedDomainUseCase {
         entireFeedRepository = entireFeedRepository,
         authDataRepository = authDataRepository,
         feedDatabase = feedDatabase
+    )
+
+    @Provides
+    @Singleton
+    fun providePostEmpathyUseCase(
+        entireFeedRepository: EntireFeedRepository,
+        authDataRepository: AuthDataRepository,
+    ): PostEmpathyUseCase = PostEmpathyUseCase(
+        entireFeedRepository = entireFeedRepository,
+        authDataRepository = authDataRepository
+    )
+
+    @Provides
+    @Singleton
+    fun provideCancelEmpathyUseCase(
+        entireFeedRepository: EntireFeedRepository,
+        authDataRepository: AuthDataRepository,
+    ): CancelEmpathyUseCase = CancelEmpathyUseCase(
+        entireFeedRepository = entireFeedRepository,
+        authDataRepository = authDataRepository
     )
 }

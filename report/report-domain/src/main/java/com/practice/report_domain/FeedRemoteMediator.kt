@@ -41,9 +41,9 @@ class FeedRemoteMediator(
             val loadKey = when (loadType) {
                 LoadType.REFRESH -> {
                     // ***중요 : refresh될 때 스크롤 위치 이슈 해결 : 데이터 로드를 위해 로드키를 불러오는 과정에서 모든 데이터를 지워준다
-                    feedDatabase.withTransaction {
-                        dao.deleteAllMyFeedItems()
-                    }
+//                    feedDatabase.withTransaction {
+//                        dao.deleteAllMyFeedItems()
+//                    }
                     null
                 }
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)

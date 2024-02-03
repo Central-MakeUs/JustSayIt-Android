@@ -1,5 +1,6 @@
 package com.sowhat.feed_presentation.feeds
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.expandVertically
@@ -38,6 +39,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.practice.database.entity.EntireFeedEntity
 import com.sowhat.common.model.UiState
+import com.sowhat.common.util.LaunchWhenStarted
 import com.sowhat.common.util.ObserveEvents
 import com.sowhat.designsystem.common.MOOD_ANGRY
 import com.sowhat.designsystem.common.MOOD_HAPPY
@@ -71,12 +73,66 @@ fun FeedRoute(
     val uiState = viewModel.uiState.collectAsState().value
     val scope = rememberCoroutineScope()
 
-    PostEventObserver(
-        viewModel,
-        scope,
-        snackbarHostState,
-        feedPagingData
-    )
+    val blockSuccessMessage = stringResource(id = R.string.snackbar_block_successful)
+    val blockFailureMessage = stringResource(id = R.string.snackbar_block_failure)
+    val reportSuccessMessage = stringResource(id = R.string.snackbar_report_successful)
+    val reportFailureMessage = stringResource(id = R.string.snackbar_report_failure)
+    val deleteSuccessMessage = stringResource(id = R.string.snackbar_delete_successful)
+    val deleteFailureMessage = stringResource(id = R.string.snackbar_delete_failure)
+
+    LaunchWhenStarted {
+        feedPagingData.refresh()
+    }
+
+    ObserveEvents(flow = viewModel.reportEvent) { isSuccessful ->
+        scope.launch {
+            if (isSuccessful) {
+                snackbarHostState.showSnackbar(
+                    message = reportSuccessMessage,
+                    duration = SnackbarDuration.Short
+                )
+            } else {
+                snackbarHostState.showSnackbar(
+                    message = reportFailureMessage,
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
+    }
+
+    ObserveEvents(flow = viewModel.blockEvent) { isSuccessful ->
+        scope.launch {
+            if (isSuccessful) {
+                snackbarHostState.showSnackbar(
+                    message = blockSuccessMessage,
+                    duration = SnackbarDuration.Short
+                )
+                feedPagingData.refresh()
+            } else {
+                snackbarHostState.showSnackbar(
+                    message = blockFailureMessage,
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
+    }
+
+    ObserveEvents(flow = viewModel.deleteEvent) { isSuccessful ->
+        scope.launch {
+            if (isSuccessful) {
+                snackbarHostState.showSnackbar(
+                    message = deleteSuccessMessage,
+                    duration = SnackbarDuration.Short
+                )
+                feedPagingData.refresh()
+            } else {
+                snackbarHostState.showSnackbar(
+                    message = deleteFailureMessage,
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
+    }
 
     FeedScreen(
         navController = navController,
@@ -84,6 +140,13 @@ fun FeedRoute(
         onFeedEvent = viewModel::onFeedEvent,
         feedPagingData = feedPagingData,
         uiState = uiState,
+        postEmpathy = viewModel::postEmpathy,
+        cancelEmpathy = viewModel::cancelEmpathy,
+        showSnackbar = { text ->
+            scope.launch {
+                snackbarHostState.showSnackbar(message = text, duration = SnackbarDuration.Short)
+            }
+        }
     )
 
     if (feedListState.isReportDialogVisible) {
@@ -166,71 +229,6 @@ fun FeedRoute(
     }
 }
 
-@Composable
-private fun PostEventObserver(
-    viewModel: FeedViewModel,
-    scope: CoroutineScope,
-    snackbarHostState: SnackbarHostState,
-    feedPagingData: LazyPagingItems<EntireFeedEntity>
-) {
-    val blockSuccessMessage = stringResource(id = R.string.snackbar_block_successful)
-    val blockFailureMessage = stringResource(id = R.string.snackbar_block_failure)
-    val reportSuccessMessage = stringResource(id = R.string.snackbar_report_successful)
-    val reportFailureMessage = stringResource(id = R.string.snackbar_report_failure)
-    val deleteSuccessMessage = stringResource(id = R.string.snackbar_delete_successful)
-    val deleteFailureMessage = stringResource(id = R.string.snackbar_delete_failure)
-
-    ObserveEvents(flow = viewModel.reportEvent) { isSuccessful ->
-        scope.launch {
-            if (isSuccessful) {
-                snackbarHostState.showSnackbar(
-                    message = reportSuccessMessage,
-                    duration = SnackbarDuration.Short
-                )
-            } else {
-                snackbarHostState.showSnackbar(
-                    message = reportFailureMessage,
-                    duration = SnackbarDuration.Short
-                )
-            }
-        }
-    }
-
-    ObserveEvents(flow = viewModel.blockEvent) { isSuccessful ->
-        scope.launch {
-            if (isSuccessful) {
-                snackbarHostState.showSnackbar(
-                    message = blockSuccessMessage,
-                    duration = SnackbarDuration.Short
-                )
-                feedPagingData.refresh()
-            } else {
-                snackbarHostState.showSnackbar(
-                    message = blockFailureMessage,
-                    duration = SnackbarDuration.Short
-                )
-            }
-        }
-    }
-
-    ObserveEvents(flow = viewModel.deleteEvent) { isSuccessful ->
-        scope.launch {
-            if (isSuccessful) {
-                snackbarHostState.showSnackbar(
-                    message = deleteSuccessMessage,
-                    duration = SnackbarDuration.Short
-                )
-                feedPagingData.refresh()
-            } else {
-                snackbarHostState.showSnackbar(
-                    message = deleteFailureMessage,
-                    duration = SnackbarDuration.Short
-                )
-            }
-        }
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreen(
@@ -239,7 +237,10 @@ fun FeedScreen(
     uiState: UiState<Unit>,
     feedListState: FeedListState,
     onFeedEvent: (FeedEvent) -> Unit,
-    feedPagingData: LazyPagingItems<EntireFeedEntity>
+    feedPagingData: LazyPagingItems<EntireFeedEntity>,
+    postEmpathy: (Long, String) -> Unit,
+    cancelEmpathy: (Long) -> Unit,
+    showSnackbar: (String) -> Unit
 ) {
     TopAppBarDefaults.enterAlwaysScrollBehavior()
     val lazyListState = rememberLazyListState()
@@ -248,12 +249,8 @@ fun FeedScreen(
         modifier = modifier
             .fillMaxSize()
             .background(JustSayItTheme.Colors.mainBackground),
-        topBar = {
-            AnimatedAppBar(lazyListState, feedListState, onFeedEvent)
-        },
-        bottomBar = {},
+        topBar = { AnimatedAppBar(lazyListState, feedListState, onFeedEvent) },
     ) { paddingValues ->
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -268,14 +265,16 @@ fun FeedScreen(
             ) { index ->
                 val feed = feedPagingData[index]
 
-                val sympathyItems = getValidatedSympathyItems(feed)
-                var selectedSympathy = remember {
-                    sympathyItems.find { moodItem ->
-                        moodItem.postData == feed?.selectedEmotionCode
-                    }
-                }
-
                 feed?.let {
+                    val sympathyItems = getValidatedSympathyItems(feed)
+                    var selectedSympathy by remember {
+                        mutableStateOf(
+                            sympathyItems.find { moodItem ->
+                                moodItem.postData == feed.selectedEmotionCode
+                            }
+                        )
+                    }
+
                     AnimatedVisibility(
                         visible = (
                             feedPagingData.loadState.refresh !is LoadState.Loading
@@ -289,7 +288,15 @@ fun FeedScreen(
                             onFeedEvent = onFeedEvent,
                             selectedSympathy = selectedSympathy,
                             sympathyItems = sympathyItems,
-                            onSympathyChange = { selectedSympathy = it }
+                            onSympathyChange = { changedItem ->
+                                if (changedItem != null) {
+                                    postEmpathy(it.storyId, changedItem.postData)
+                                } else {
+                                    cancelEmpathy(it.storyId)
+                                }
+                                selectedSympathy = changedItem
+                            },
+                            showSnackbar = showSnackbar
                         )
                     }
                 }
@@ -314,8 +321,11 @@ private fun Feed(
     onFeedEvent: (FeedEvent) -> Unit,
     selectedSympathy: MoodItem?,
     sympathyItems: List<MoodItem>,
-    onSympathyChange: (MoodItem?) -> Unit
+    onSympathyChange: (MoodItem?) -> Unit,
+    showSnackbar: (String) -> Unit
 ) {
+    val postMyFeedErrorMessage = stringResource(id = R.string.snackbar_my_feed_post_empathy)
+
     var isPopupForOwnerVisible by remember {
         mutableStateOf(false)
     }
@@ -379,8 +389,11 @@ private fun Feed(
         selectedSympathy = selectedSympathy,
         sympathyItems = sympathyItems,
         onSympathyItemClick = { moodItem ->
-            // TODO 데이터베이스 변경 쿼리 - usecase 필요(changeSelectedMoodUseCase)
-            onSympathyChange(moodItem)
+            if (feedItem.isOwner == true) {
+                showSnackbar(postMyFeedErrorMessage)
+            } else {
+                onSympathyChange(moodItem)
+            }
         },
         onMenuClick = {
             if (feedItem.isOwner == true) {
@@ -414,11 +427,11 @@ private fun AnimatedAppBar(
     feedListState: FeedListState,
     onFeedEvent: (FeedEvent) -> Unit
 ) {
-    AnimatedVisibility(
-        visible = lazyListState.isScrollingUp(),
-        enter = expandVertically(),
-        exit = shrinkVertically(),
-    ) {
+//    AnimatedVisibility(
+//        visible = lazyListState.isScrollingUp(),
+//        enter = expandVertically(),
+//        exit = shrinkVertically(),
+//    ) {
         AppBarFeed(
             lazyListState = lazyListState,
             currentDropdownItem = feedListState.currentEmotion,
@@ -438,7 +451,7 @@ private fun AnimatedAppBar(
                 onFeedEvent(FeedEvent.SortChanged(updatedTabItem))
             },
         )
-    }
+//    }
 }
 
 @Composable

@@ -16,7 +16,6 @@ class GetEntireFeedUseCase @Inject constructor(
     private val authDataRepository: AuthDataRepository,
     private val feedDatabase: FeedDatabase
 ) {
-
     @OptIn(ExperimentalPagingApi::class)
     operator fun invoke(
         sortBy: String,

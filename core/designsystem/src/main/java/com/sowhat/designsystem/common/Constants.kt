@@ -1,7 +1,7 @@
 package com.sowhat.designsystem.common
 
 const val APP_NAME = "그냥, 그렇다고"
-const val APP_INTRO = "(서비스 한줄 소개)"
+const val APP_INTRO = "내 감정을 공유하고 함께 공감받는 공간"
 
 const val SIGN_IN = "간편 로그인"
 const val COMPLETE = "완료"

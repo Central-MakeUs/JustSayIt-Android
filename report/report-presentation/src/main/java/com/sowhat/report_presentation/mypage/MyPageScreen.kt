@@ -236,11 +236,11 @@ private fun MyFeedItemsScreen(
             } else true
         }
 
-        AnimatedVisibility(
-            visible = lazyListState.isScrollingUp(),
-            enter = expandVertically(),
-            exit = shrinkVertically(),
-        ) {
+//        AnimatedVisibility(
+//            visible = lazyListState.isScrollingUp(),
+//            enter = expandVertically(),
+//            exit = shrinkVertically(),
+//        ) {
             AppBarMyPage(
                 currentDropdownItem = myFeedUiState.emotion,
                 dropdownItems = moodItems,
@@ -259,7 +259,7 @@ private fun MyFeedItemsScreen(
                     onMyFeedEvent(MyFeedEvent.SortChanged(tabItem))
                 }
             )
-        }
+//        }
 
         MyFeedList(
             lazyListState = lazyListState,
