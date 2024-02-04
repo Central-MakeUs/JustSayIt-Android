@@ -42,6 +42,7 @@ fun ImageButton(
         enabled = enabled
     ) {
         Image(
+            modifier = modifier,
             painter = painterResource(id = imageDrawable),
             contentDescription = "login icon"
         )

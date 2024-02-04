@@ -40,5 +40,6 @@ interface EntireFeedRepository {
     suspend fun cancelFeedEmpathy(
         accessToken: String,
         feedId: Long,
+        previousEmpathy: String?
     ): Resource<Unit?>
 }

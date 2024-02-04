@@ -22,6 +22,8 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
@@ -58,8 +61,11 @@ import com.sowhat.designsystem.R
 import com.sowhat.designsystem.component.AlertDialogReverse
 import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.SelectionAlertDialog
+import com.sowhat.feed_presentation.common.PostResult
 import com.sowhat.feed_presentation.component.Feed
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -69,7 +75,7 @@ fun FeedRoute(
     snackbarHostState: SnackbarHostState
 ) {
     val feedListState = viewModel.feedListState.collectAsState().value
-    val feedPagingData = viewModel.entireFeedData.collectAsLazyPagingItems()
+    val feedPagingData = viewModel.entireFeedData
     val uiState = viewModel.uiState.collectAsState().value
     val scope = rememberCoroutineScope()
 
@@ -79,9 +85,31 @@ fun FeedRoute(
     val reportFailureMessage = stringResource(id = R.string.snackbar_report_failure)
     val deleteSuccessMessage = stringResource(id = R.string.snackbar_delete_successful)
     val deleteFailureMessage = stringResource(id = R.string.snackbar_delete_failure)
+    val postEmpathyError = stringResource(id = R.string.snackbar_post_empathy_error)
+    val postEmpathySuccessful = stringResource(id = R.string.snackbar_post_empathy_successful)
+    val cancelEmpathySuccessful = stringResource(id = R.string.snackbar_cancel_empathy_successful)
 
-    LaunchWhenStarted {
-        feedPagingData.refresh()
+
+//    LaunchWhenStarted {
+//        feedPagingData.refresh()
+//    }
+
+    ObserveEvents(flow = viewModel.empathyEvent) { event ->
+        if (event.isSuccessful) {
+            if (event.postData == null) {
+                scope.launch {
+                    snackbarHostState.showSnackbar(cancelEmpathySuccessful)
+                }
+            } else {
+                scope.launch {
+                    snackbarHostState.showSnackbar(postEmpathySuccessful)
+                }
+            }
+        } else {
+            scope.launch {
+                snackbarHostState.showSnackbar(postEmpathyError)
+            }
+        }
     }
 
     ObserveEvents(flow = viewModel.reportEvent) { isSuccessful ->
@@ -107,7 +135,7 @@ fun FeedRoute(
                     message = blockSuccessMessage,
                     duration = SnackbarDuration.Short
                 )
-                feedPagingData.refresh()
+//                feedPagingData.refresh()
             } else {
                 snackbarHostState.showSnackbar(
                     message = blockFailureMessage,
@@ -124,7 +152,7 @@ fun FeedRoute(
                     message = deleteSuccessMessage,
                     duration = SnackbarDuration.Short
                 )
-                feedPagingData.refresh()
+//                feedPagingData.refresh()
             } else {
                 snackbarHostState.showSnackbar(
                     message = deleteFailureMessage,
@@ -146,7 +174,8 @@ fun FeedRoute(
             scope.launch {
                 snackbarHostState.showSnackbar(message = text, duration = SnackbarDuration.Short)
             }
-        }
+        },
+        empathyEvent = viewModel.empathyEvent
     )
 
     if (feedListState.isReportDialogVisible) {
@@ -237,13 +266,17 @@ fun FeedScreen(
     uiState: UiState<Unit>,
     feedListState: FeedListState,
     onFeedEvent: (FeedEvent) -> Unit,
-    feedPagingData: LazyPagingItems<EntireFeedEntity>,
-    postEmpathy: (Long, String) -> Unit,
-    cancelEmpathy: (Long) -> Unit,
-    showSnackbar: (String) -> Unit
+    feedPagingData: Flow<PagingData<EntireFeedEntity>>,
+    postEmpathy: (Long, String, Int) -> Unit,
+    cancelEmpathy: (Long, String?, Int) -> Unit,
+    showSnackbar: (String) -> Unit,
+    empathyEvent: Flow<PostResult>
 ) {
     TopAppBarDefaults.enterAlwaysScrollBehavior()
     val lazyListState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+
+    val feedLazyPagingItems = feedPagingData.collectAsLazyPagingItems()
 
     Scaffold(
         modifier = modifier
@@ -259,42 +292,95 @@ fun FeedScreen(
             state = lazyListState
         ) {
             items(
-                count = feedPagingData.itemCount,
-                key = feedPagingData.itemKey { item -> item.storyId },
+                count = feedLazyPagingItems.itemCount,
+                key = feedLazyPagingItems.itemKey { item -> item.storyId },
                 contentType = { "Feed" }
             ) { index ->
-                val feed = feedPagingData[index]
+                val feed = feedLazyPagingItems[index]
 
-                feed?.let {
-                    val sympathyItems = getValidatedSympathyItems(feed)
-                    var selectedSympathy by remember {
-                        mutableStateOf(
-                            sympathyItems.find { moodItem ->
-                                moodItem.postData == feed.selectedEmotionCode
-                            }
-                        )
-                    }
-
+                if (feed != null) {
                     AnimatedVisibility(
                         visible = (
-                            feedPagingData.loadState.refresh !is LoadState.Loading
-                                && feedPagingData.loadState.append !is LoadState.Loading
-                        ),
+                                feedLazyPagingItems.loadState.refresh !is LoadState.Loading
+                                        && feedLazyPagingItems.loadState.append !is LoadState.Loading
+                                ),
                         enter = fadeIn(animationSpec = TweenSpec(durationMillis = 1000)),
                         exit = fadeOut(animationSpec = TweenSpec(durationMillis = 1000))
                     ) {
+                        var happinessCount by remember { mutableStateOf(feed.happinessCount) }
+                        var sadnessCount by remember { mutableStateOf(feed.sadnessCount) }
+                        var surprisedCount by remember { mutableStateOf(feed.surprisedCount) }
+                        var angryCount by remember { mutableStateOf(feed.angryCount) }
+
+                        val sympathyItems = getValidatedSympathyItems(
+                            feed = feed,
+                            happinessCount = feed.happinessCount,
+                            sadnessCount = feed.sadnessCount,
+                            surprisedCount = feed.surprisedCount,
+                            angryCount = feed.angryCount
+                        )
+
+                        var selectedSympathy by remember {
+                            mutableStateOf(
+                                sympathyItems.find { moodItem ->
+                                    moodItem.postData == feed.selectedEmotionCode
+                                }
+                            )
+                        }
+
                         Feed(
-                            feedItem = it,
+                            feedItem = feed,
                             onFeedEvent = onFeedEvent,
                             selectedSympathy = selectedSympathy,
                             sympathyItems = sympathyItems,
                             onSympathyChange = { changedItem ->
                                 if (changedItem != null) {
-                                    postEmpathy(it.storyId, changedItem.postData)
+                                    selectedSympathy = changedItem
+                                    postEmpathy(feed.storyId, changedItem.postData, index)
+                                    when (changedItem.postData) {
+                                        MOOD_HAPPY -> {
+                                            happinessCount = (happinessCount ?: 0) + 1
+                                            selectedSympathy?.title = happinessCount.toString()
+                                            Log.i("FeedScreen", "happy count changed: $happinessCount")
+                                        }
+                                        MOOD_SAD -> {
+                                            sadnessCount = (sadnessCount ?: 0) + 1
+                                            selectedSympathy?.title = sadnessCount.toString()
+                                        }
+                                        MOOD_ANGRY -> {
+                                            angryCount = (angryCount ?: 0) + 1
+                                            selectedSympathy?.title = angryCount.toString()
+                                        }
+                                        MOOD_SURPRISED -> {
+                                            surprisedCount = (surprisedCount ?: 0) + 1
+                                            selectedSympathy?.title = surprisedCount.toString()
+                                        }
+                                        else -> {}
+                                    }
                                 } else {
-                                    cancelEmpathy(it.storyId)
+                                    cancelEmpathy(feed.storyId, selectedSympathy?.postData, index)
+                                    when (selectedSympathy?.postData) {
+                                        MOOD_HAPPY -> {
+                                            happinessCount = happinessCount?.minus(1)
+                                            Log.i("FeedScreen", "happy count changed: $happinessCount")
+                                            selectedSympathy?.title = happinessCount.toString()
+                                        }
+                                        MOOD_SAD -> {
+                                            sadnessCount = sadnessCount?.minus(1)
+                                            selectedSympathy?.title = sadnessCount.toString()
+                                        }
+                                        MOOD_ANGRY -> {
+                                            angryCount = angryCount?.minus(1)
+                                            selectedSympathy?.title = angryCount.toString()
+                                        }
+                                        MOOD_SURPRISED -> {
+                                            surprisedCount = surprisedCount?.minus(1)
+                                            selectedSympathy?.title = surprisedCount.toString()
+                                        }
+                                        else -> {}
+                                    }
+                                    selectedSympathy = changedItem
                                 }
-                                selectedSympathy = changedItem
                             },
                             showSnackbar = showSnackbar
                         )
@@ -302,7 +388,6 @@ fun FeedScreen(
                 }
             }
 
-            // 플로팅 버튼이 피드를 가리지 않도록 하기 위함
             item {
                 Spacer(
                     modifier = Modifier
@@ -432,35 +517,41 @@ private fun AnimatedAppBar(
 //        enter = expandVertically(),
 //        exit = shrinkVertically(),
 //    ) {
-        AppBarFeed(
-            lazyListState = lazyListState,
-            currentDropdownItem = feedListState.currentEmotion,
-            dropdownItems = feedListState.emotionItems,
-            isDropdownExpanded = feedListState.isDropdownExpanded,
-            onDropdownHeaderClick = { isOpen ->
-                onFeedEvent(FeedEvent.DropdownExpandChanged(isOpen))
-            },
-            onDropdownMenuChange = { updatedMenuItem ->
-                onFeedEvent(FeedEvent.EmotionChanged(updatedMenuItem))
-            },
-            tabItems = feedListState.tabItems,
-            selectedTabItem = feedListState.selectedTabItem,
-            selectedTabItemColor = JustSayItTheme.Colors.mainTypo,
-            unselectedTabItemColor = Gray500,
-            onSelectedTabItemChange = { updatedTabItem ->
-                onFeedEvent(FeedEvent.SortChanged(updatedTabItem))
-            },
-        )
+    AppBarFeed(
+        lazyListState = lazyListState,
+        currentDropdownItem = feedListState.currentEmotion,
+        dropdownItems = feedListState.emotionItems,
+        isDropdownExpanded = feedListState.isDropdownExpanded,
+        onDropdownHeaderClick = { isOpen ->
+            onFeedEvent(FeedEvent.DropdownExpandChanged(isOpen))
+        },
+        onDropdownMenuChange = { updatedMenuItem ->
+            onFeedEvent(FeedEvent.EmotionChanged(updatedMenuItem))
+        },
+        tabItems = feedListState.tabItems,
+        selectedTabItem = feedListState.selectedTabItem,
+        selectedTabItemColor = JustSayItTheme.Colors.mainTypo,
+        unselectedTabItemColor = Gray500,
+        onSelectedTabItemChange = { updatedTabItem ->
+            onFeedEvent(FeedEvent.SortChanged(updatedTabItem))
+        },
+    )
 //    }
 }
 
 @Composable
-fun getValidatedSympathyItems(feed: EntireFeedEntity?): List<MoodItem> {
+fun getValidatedSympathyItems(
+    feed: EntireFeedEntity?,
+    happinessCount: Long?,
+    sadnessCount: Long?,
+    surprisedCount: Long?,
+    angryCount: Long?
+): List<MoodItem> {
     val allItems = rememberMoodItemsForFeed(
-        happyCount = feed?.happinessCount,
-        sadCount = feed?.sadnessCount,
-        surprisedCount = feed?.surprisedCount,
-        angryCount = feed?.angryCount
+        happyCount = happinessCount,
+        sadCount = sadnessCount,
+        surprisedCount = surprisedCount,
+        angryCount = angryCount
     ).toMutableList()
 
     if (feed?.isHappinessSelected == false) {
@@ -487,5 +578,5 @@ fun getValidatedSympathyItems(feed: EntireFeedEntity?): List<MoodItem> {
         )
     }
 
-    return allItems
+    return remember { allItems }
 }

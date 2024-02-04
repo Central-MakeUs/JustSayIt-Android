@@ -12,12 +12,14 @@ class CancelEmpathyUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         feedId: Long,
+        previousEmpathy: String?
     ): Resource<Unit?> {
         val accessToken = authDataRepository.authData.first().accessToken
         return accessToken?.let {
             entireFeedRepository.cancelFeedEmpathy(
                 accessToken = accessToken,
                 feedId = feedId,
+                previousEmpathy = previousEmpathy
             )
         } ?: Resource.Error(
             data = null,

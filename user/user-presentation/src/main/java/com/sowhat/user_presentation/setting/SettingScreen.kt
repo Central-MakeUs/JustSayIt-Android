@@ -149,18 +149,14 @@ private fun SettingScreenContent(
                     title = stringResource(id = R.string.setting_item_terms),
                     trailingIcon = R.drawable.ic_next_24,
                     onClick = {
-                        if (termPageIntent.resolveActivity(context.packageManager) != null) {
-                            context.startActivity(termPageIntent)
-                        }
+                        context.startActivity(termPageIntent)
                     }
                 ),
                 MenuItem(
                     title = stringResource(id = R.string.setting_item_privacy),
                     trailingIcon = R.drawable.ic_next_24,
                     onClick = {
-                        if (privacyPageIntent.resolveActivity(context.packageManager) != null) {
-                            context.startActivity(privacyPageIntent)
-                        }
+                        context.startActivity(privacyPageIntent)
                     }
                 ),
                 MenuItem(
