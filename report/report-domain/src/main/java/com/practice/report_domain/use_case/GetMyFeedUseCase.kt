@@ -24,7 +24,7 @@ class GetMyFeedUseCase @Inject constructor(
         emotion: String?
     ): Pager<Int, MyFeedEntity> {
         return Pager(
-            config = PagingConfig(pageSize = ITEMS_PER_PAGE, initialLoadSize = ITEMS_PER_PAGE),
+            config = PagingConfig(pageSize = ITEMS_PER_PAGE),
 //            initialKey = ,
             remoteMediator = FeedRemoteMediator(
                 reportRepository = reportRepository,
