@@ -39,4 +39,7 @@ interface EntireFeedDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateFeedItem(myFeedEntity: EntireFeedEntity)
+
+    @Query("SELECT * FROM entire_feed LIMIT 1 OFFSET :offset")
+    suspend fun getNthRecord(offset: Int): EntireFeedEntity?
 }
