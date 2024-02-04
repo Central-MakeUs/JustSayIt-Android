@@ -1,4 +1,4 @@
-package com.practice.report_data.model
+package com.practice.report_domain.model
 
 
 import kotlinx.serialization.SerialName
@@ -9,11 +9,11 @@ data class TodayMood(
     @SerialName("memberName")
     val memberName: String,
     @SerialName("myMoodRecord")
-    val myMoodRecord: List<MyMoodRecord>
+    val myMoodRecord: List<MyMood>
 )
 
 @Serializable
-data class MyMoodRecord(
+data class MyMood(
     @SerialName("createdAt")
     val createdAt: String,
     @SerialName("moodCode")

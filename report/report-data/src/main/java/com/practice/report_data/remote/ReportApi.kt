@@ -2,7 +2,7 @@ package com.practice.report_data.remote
 
 import com.practice.report_data.model.MyFeedResponse
 import com.practice.report_data.model.PostMood
-import com.practice.report_data.model.TodayMood
+import com.practice.report_data.model.TodayMoodDto
 import com.sowhat.network.model.ResponseBody
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -25,7 +25,7 @@ interface ReportApi {
     @GET("/mood/today")
     suspend fun getTodayMoodData(
         @Header("Authorization") accessToken: String
-    ): ResponseBody<TodayMood>
+    ): ResponseBody<TodayMoodDto>
 
     @POST("/mood/new")
     suspend fun postNewMood(

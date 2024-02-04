@@ -1,12 +1,19 @@
 package com.practice.report_data.repository
 
-import androidx.paging.Pager
 import com.practice.database.entity.MyFeedEntity
 import com.practice.report_data.model.MyFeedResponse
+import com.practice.report_data.model.PostMood
+import com.practice.report_data.model.TodayMoodDto
 import com.practice.report_data.remote.ReportApi
 import com.practice.report_domain.model.MyFeed
+import com.practice.report_domain.model.MyMood
+import com.practice.report_domain.model.TodayMood
 import com.practice.report_domain.repository.ReportRepository
 import com.sowhat.common.model.Resource
+import com.sowhat.network.util.getHttpErrorResource
+import com.sowhat.network.util.getIOErrorResource
+import retrofit2.HttpException
+import java.io.IOException
 
 class ReportRepositoryImpl(
     private val reportApi: ReportApi
@@ -71,4 +78,60 @@ class ReportRepositoryImpl(
                 isOpened = feed.storyMetaInfo.isOpened
             )
         }
+
+    override suspend fun getTodayMoodData(accessToken: String): Resource<TodayMood> = try {
+        val todayMoodDto = reportApi.getTodayMoodData(accessToken)
+
+        todayMoodDto.data?.let {
+            Resource.Success(
+                data = getTodayMood(it),
+                code = todayMoodDto.code,
+                message = todayMoodDto.message
+            )
+        } ?: Resource.Error(
+            code = todayMoodDto.code,
+            message = todayMoodDto.message,
+        )
+    } catch (e: HttpException) {
+        getHttpErrorResource(e)
+    } catch (e: IOException) {
+        getIOErrorResource(e)
+    }
+
+
+    private fun getTodayMood(todayMoodDto: TodayMoodDto) = TodayMood(
+        memberName = todayMoodDto.memberName,
+        myMoodRecord = todayMoodDto.myMoodRecord.map { moodRecord ->
+            MyMood(
+                createdAt = moodRecord.createdAt,
+                moodCode = moodRecord.moodCode,
+                moodId = moodRecord.moodId
+            )
+        }
+    )
+
+    override suspend fun postNewMood(accessToken: String, mood: String): Resource<Unit?> = try {
+        val newMood = PostMood(moodCode = mood)
+        val result = reportApi.postNewMood(
+            accessToken = accessToken,
+            mood = newMood
+        )
+
+        if (result.isSuccess) {
+            Resource.Success(
+                data = result.data,
+                code = result.code,
+                message = result.message
+            )
+        } else {
+            Resource.Error(
+                code = result.code,
+                message = result.message
+            )
+        }
+    } catch (e: HttpException) {
+        getHttpErrorResource(e)
+    } catch (e: IOException) {
+        getIOErrorResource(e)
+    }
 }
