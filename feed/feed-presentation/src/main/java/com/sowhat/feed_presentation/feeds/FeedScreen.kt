@@ -59,6 +59,7 @@ import com.sowhat.designsystem.common.rememberMoodItemsForFeed
 import com.sowhat.designsystem.component.CenteredCircularProgress
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.component.AlertDialogReverse
+import com.sowhat.designsystem.component.AppendingCircularProgress
 import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.SelectionAlertDialog
 import com.sowhat.feed_presentation.common.PostResult
@@ -88,11 +89,6 @@ fun FeedRoute(
     val postEmpathyError = stringResource(id = R.string.snackbar_post_empathy_error)
     val postEmpathySuccessful = stringResource(id = R.string.snackbar_post_empathy_successful)
     val cancelEmpathySuccessful = stringResource(id = R.string.snackbar_cancel_empathy_successful)
-
-
-//    LaunchWhenStarted {
-//        feedPagingData.refresh()
-//    }
 
     ObserveEvents(flow = viewModel.empathyEvent) { event ->
         if (event.isSuccessful) {
@@ -252,10 +248,6 @@ fun FeedRoute(
             }
         )
     }
-
-    if (uiState.isLoading) {
-        CenteredCircularProgress()
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -293,109 +285,111 @@ fun FeedScreen(
         ) {
             items(
                 count = feedLazyPagingItems.itemCount,
-                key = feedLazyPagingItems.itemKey { item -> item.storyId },
+                key = feedLazyPagingItems.itemKey { item -> item.storyUUID },
                 contentType = { "Feed" }
             ) { index ->
                 val feed = feedLazyPagingItems[index]
 
                 if (feed != null) {
-                    AnimatedVisibility(
-                        visible = (
-                                feedLazyPagingItems.loadState.refresh !is LoadState.Loading
-                                        && feedLazyPagingItems.loadState.append !is LoadState.Loading
-                                ),
-                        enter = fadeIn(animationSpec = TweenSpec(durationMillis = 1000)),
-                        exit = fadeOut(animationSpec = TweenSpec(durationMillis = 1000))
-                    ) {
-                        var happinessCount by remember { mutableStateOf(feed.happinessCount) }
-                        var sadnessCount by remember { mutableStateOf(feed.sadnessCount) }
-                        var surprisedCount by remember { mutableStateOf(feed.surprisedCount) }
-                        var angryCount by remember { mutableStateOf(feed.angryCount) }
+                    var happinessCount by remember { mutableStateOf(feed.happinessCount) }
+                    var sadnessCount by remember { mutableStateOf(feed.sadnessCount) }
+                    var surprisedCount by remember { mutableStateOf(feed.surprisedCount) }
+                    var angryCount by remember { mutableStateOf(feed.angryCount) }
 
-                        val sympathyItems = getValidatedSympathyItems(
-                            feed = feed,
-                            happinessCount = feed.happinessCount,
-                            sadnessCount = feed.sadnessCount,
-                            surprisedCount = feed.surprisedCount,
-                            angryCount = feed.angryCount
-                        )
+                    val sympathyItems = getValidatedSympathyItems(
+                        feed = feed,
+                        happinessCount = feed.happinessCount,
+                        sadnessCount = feed.sadnessCount,
+                        surprisedCount = feed.surprisedCount,
+                        angryCount = feed.angryCount
+                    )
 
-                        var selectedSympathy by remember {
-                            mutableStateOf(
-                                sympathyItems.find { moodItem ->
-                                    moodItem.postData == feed.selectedEmotionCode
-                                }
-                            )
-                        }
-
-                        Feed(
-                            feedItem = feed,
-                            onFeedEvent = onFeedEvent,
-                            selectedSympathy = selectedSympathy,
-                            sympathyItems = sympathyItems,
-                            onSympathyChange = { changedItem ->
-                                if (changedItem != null) {
-                                    selectedSympathy = changedItem
-                                    postEmpathy(feed.storyId, changedItem.postData, index)
-                                    when (changedItem.postData) {
-                                        MOOD_HAPPY -> {
-                                            happinessCount = (happinessCount ?: 0) + 1
-                                            selectedSympathy?.title = happinessCount.toString()
-                                            Log.i("FeedScreen", "happy count changed: $happinessCount")
-                                        }
-                                        MOOD_SAD -> {
-                                            sadnessCount = (sadnessCount ?: 0) + 1
-                                            selectedSympathy?.title = sadnessCount.toString()
-                                        }
-                                        MOOD_ANGRY -> {
-                                            angryCount = (angryCount ?: 0) + 1
-                                            selectedSympathy?.title = angryCount.toString()
-                                        }
-                                        MOOD_SURPRISED -> {
-                                            surprisedCount = (surprisedCount ?: 0) + 1
-                                            selectedSympathy?.title = surprisedCount.toString()
-                                        }
-                                        else -> {}
-                                    }
-                                } else {
-                                    cancelEmpathy(feed.storyId, selectedSympathy?.postData, index)
-                                    when (selectedSympathy?.postData) {
-                                        MOOD_HAPPY -> {
-                                            happinessCount = happinessCount?.minus(1)
-                                            Log.i("FeedScreen", "happy count changed: $happinessCount")
-                                            selectedSympathy?.title = happinessCount.toString()
-                                        }
-                                        MOOD_SAD -> {
-                                            sadnessCount = sadnessCount?.minus(1)
-                                            selectedSympathy?.title = sadnessCount.toString()
-                                        }
-                                        MOOD_ANGRY -> {
-                                            angryCount = angryCount?.minus(1)
-                                            selectedSympathy?.title = angryCount.toString()
-                                        }
-                                        MOOD_SURPRISED -> {
-                                            surprisedCount = surprisedCount?.minus(1)
-                                            selectedSympathy?.title = surprisedCount.toString()
-                                        }
-                                        else -> {}
-                                    }
-                                    selectedSympathy = changedItem
-                                }
-                            },
-                            showSnackbar = showSnackbar
+                    var selectedSympathy by remember {
+                        mutableStateOf(
+                            sympathyItems.find { moodItem ->
+                                moodItem.postData == feed.selectedEmotionCode
+                            }
                         )
                     }
+
+                    Feed(
+                        feedItem = feed,
+                        onFeedEvent = onFeedEvent,
+                        selectedSympathy = selectedSympathy,
+                        sympathyItems = sympathyItems,
+                        onSympathyChange = { changedItem ->
+                            if (changedItem != null) {
+                                selectedSympathy = changedItem
+                                postEmpathy(feed.storyId, changedItem.postData, index)
+                                when (changedItem.postData) {
+                                    MOOD_HAPPY -> {
+                                        happinessCount = (happinessCount ?: 0) + 1
+                                        selectedSympathy?.title = happinessCount.toString()
+                                        Log.i("FeedScreen", "happy count changed: $happinessCount")
+                                    }
+                                    MOOD_SAD -> {
+                                        sadnessCount = (sadnessCount ?: 0) + 1
+                                        selectedSympathy?.title = sadnessCount.toString()
+                                    }
+                                    MOOD_ANGRY -> {
+                                        angryCount = (angryCount ?: 0) + 1
+                                        selectedSympathy?.title = angryCount.toString()
+                                    }
+                                    MOOD_SURPRISED -> {
+                                        surprisedCount = (surprisedCount ?: 0) + 1
+                                        selectedSympathy?.title = surprisedCount.toString()
+                                    }
+                                    else -> {}
+                                }
+                            } else {
+                                cancelEmpathy(feed.storyId, selectedSympathy?.postData, index)
+                                when (selectedSympathy?.postData) {
+                                    MOOD_HAPPY -> {
+                                        happinessCount = happinessCount?.minus(1)
+                                        Log.i("FeedScreen", "happy count changed: $happinessCount")
+                                        selectedSympathy?.title = happinessCount.toString()
+                                    }
+                                    MOOD_SAD -> {
+                                        sadnessCount = sadnessCount?.minus(1)
+                                        selectedSympathy?.title = sadnessCount.toString()
+                                    }
+                                    MOOD_ANGRY -> {
+                                        angryCount = angryCount?.minus(1)
+                                        selectedSympathy?.title = angryCount.toString()
+                                    }
+                                    MOOD_SURPRISED -> {
+                                        surprisedCount = surprisedCount?.minus(1)
+                                        selectedSympathy?.title = surprisedCount.toString()
+                                    }
+                                    else -> {}
+                                }
+                                selectedSympathy = changedItem
+                            }
+                        },
+                        showSnackbar = showSnackbar
+                    )
                 }
             }
 
             item {
-                Spacer(
-                    modifier = Modifier
-                        .height(JustSayItTheme.Spacing.spaceExtraExtraLarge)
-                        .fillMaxWidth()
-                        .background(JustSayItTheme.Colors.mainBackground)
-                )
+                if (feedLazyPagingItems.loadState.append is LoadState.Loading) {
+                    AppendingCircularProgress(
+                        modifier = Modifier
+                            .padding(vertical = JustSayItTheme.Spacing.spaceBase)
+                    )
+                } else {
+                    Spacer(
+                        modifier = Modifier
+                            .height(JustSayItTheme.Spacing.spaceExtraExtraLarge)
+                            .fillMaxWidth()
+                            .background(JustSayItTheme.Colors.mainBackground)
+                    )
+                }
             }
+        }
+
+        if (uiState.isLoading) {
+            CenteredCircularProgress()
         }
     }
 }

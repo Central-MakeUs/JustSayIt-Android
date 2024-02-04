@@ -125,44 +125,44 @@ class EntireFeedRepositoryImpl(
         )
 
         if (postResult.isSuccess) {
-            feedDatabase.withTransaction {
-                val feedItem = dao.getFeedItemByFeedId(feedId)
-                when (emotionCode) {
-                    MOOD_HAPPY -> {
-                        Log.i("FeedRepository", "postFeedEmpathy: happy")
-                        val count = (feedItem.happinessCount ?: 0) + 1
-                        Log.i("FeedRepository", "feedEmpathyCount: happy : $count")
-                        dao.updateFeedItem(feedItem.copy(
-                            selectedEmotionCode = emotionCode,
-                            happinessCount = count
-                        ))
-                    }
-                    MOOD_SAD -> {
-                        val count = (feedItem.sadnessCount ?: 0) + 1
-                        dao.updateFeedItem(feedItem.copy(
-                            selectedEmotionCode = emotionCode,
-                            sadnessCount = count
-                        ))
-                    }
-                    MOOD_ANGRY -> {
-                        val count = (feedItem.angryCount ?: 0) + 1
-                        dao.updateFeedItem(feedItem.copy(
-                            selectedEmotionCode = emotionCode,
-                            angryCount = count
-                        ))
-                    }
-                    MOOD_SURPRISED -> {
-                        val count = (feedItem.surprisedCount ?: 0) + 1
-                        dao.updateFeedItem(feedItem.copy(
-                            selectedEmotionCode = emotionCode,
-                            surprisedCount = count
-                        ))
-                    }
-                    else -> return@withTransaction
-                }
-
-                Log.i("FeedRepository", "postFeedEmpathy: ${dao.getFeedItemByFeedId(feedId)}")
-            }
+//            feedDatabase.withTransaction {
+//                val feedItem = dao.getFeedItemByFeedId(feedId)
+//                when (emotionCode) {
+//                    MOOD_HAPPY -> {
+//                        Log.i("FeedRepository", "postFeedEmpathy: happy")
+//                        val count = (feedItem.happinessCount ?: 0) + 1
+//                        Log.i("FeedRepository", "feedEmpathyCount: happy : $count")
+//                        dao.updateFeedItem(feedItem.copy(
+//                            selectedEmotionCode = emotionCode,
+//                            happinessCount = count
+//                        ))
+//                    }
+//                    MOOD_SAD -> {
+//                        val count = (feedItem.sadnessCount ?: 0) + 1
+//                        dao.updateFeedItem(feedItem.copy(
+//                            selectedEmotionCode = emotionCode,
+//                            sadnessCount = count
+//                        ))
+//                    }
+//                    MOOD_ANGRY -> {
+//                        val count = (feedItem.angryCount ?: 0) + 1
+//                        dao.updateFeedItem(feedItem.copy(
+//                            selectedEmotionCode = emotionCode,
+//                            angryCount = count
+//                        ))
+//                    }
+//                    MOOD_SURPRISED -> {
+//                        val count = (feedItem.surprisedCount ?: 0) + 1
+//                        dao.updateFeedItem(feedItem.copy(
+//                            selectedEmotionCode = emotionCode,
+//                            surprisedCount = count
+//                        ))
+//                    }
+//                    else -> return@withTransaction
+//                }
+//
+//                Log.i("FeedRepository", "postFeedEmpathy: ${dao.getFeedItemByFeedId(feedId)}")
+//            }
 
             Resource.Success(
                 data = postResult.data,
@@ -191,46 +191,46 @@ class EntireFeedRepositoryImpl(
         )
 
         if (postResult.isSuccess) {
-            feedDatabase.withTransaction {
-                val feedItem = dao.getFeedItemByFeedId(feedId)
-                previousEmpathy?.let {
-                    when (it) {
-                        MOOD_HAPPY -> {
-                            Log.i("FeedRepository", "postFeedEmpathy: happy")
-                            val count = (feedItem.happinessCount ?: 0) - 1
-                            Log.i("FeedRepository", "feedEmpathyCount: happy : $count")
-                            dao.updateFeedItem(feedItem.copy(
-                                selectedEmotionCode = null,
-                                happinessCount = count
-                            ))
-                        }
-                        MOOD_SAD -> {
-                            val count = (feedItem.sadnessCount ?: 0) - 1
-                            dao.updateFeedItem(feedItem.copy(
-                                selectedEmotionCode = null,
-                                sadnessCount = count
-                            ))
-                        }
-                        MOOD_ANGRY -> {
-                            val count = (feedItem.angryCount ?: 0) - 1
-                            dao.updateFeedItem(feedItem.copy(
-                                selectedEmotionCode = null,
-                                angryCount = count
-                            ))
-                        }
-                        MOOD_SURPRISED -> {
-                            val count = (feedItem.surprisedCount ?: 0) - 1
-                            dao.updateFeedItem(feedItem.copy(
-                                selectedEmotionCode = null,
-                                surprisedCount = count
-                            ))
-                        }
-                        else -> return@withTransaction
-                    }
-                }
-
-                Log.i("FeedRepository", "cancelFeedEmpathy: ${dao.getFeedItemByFeedId(feedId)}")
-            }
+//            feedDatabase.withTransaction {
+//                val feedItem = dao.getFeedItemByFeedId(feedId)
+//                previousEmpathy?.let {
+//                    when (it) {
+//                        MOOD_HAPPY -> {
+//                            Log.i("FeedRepository", "postFeedEmpathy: happy")
+//                            val count = (feedItem.happinessCount ?: 0) - 1
+//                            Log.i("FeedRepository", "feedEmpathyCount: happy : $count")
+//                            dao.updateFeedItem(feedItem.copy(
+//                                selectedEmotionCode = null,
+//                                happinessCount = count
+//                            ))
+//                        }
+//                        MOOD_SAD -> {
+//                            val count = (feedItem.sadnessCount ?: 0) - 1
+//                            dao.updateFeedItem(feedItem.copy(
+//                                selectedEmotionCode = null,
+//                                sadnessCount = count
+//                            ))
+//                        }
+//                        MOOD_ANGRY -> {
+//                            val count = (feedItem.angryCount ?: 0) - 1
+//                            dao.updateFeedItem(feedItem.copy(
+//                                selectedEmotionCode = null,
+//                                angryCount = count
+//                            ))
+//                        }
+//                        MOOD_SURPRISED -> {
+//                            val count = (feedItem.surprisedCount ?: 0) - 1
+//                            dao.updateFeedItem(feedItem.copy(
+//                                selectedEmotionCode = null,
+//                                surprisedCount = count
+//                            ))
+//                        }
+//                        else -> return@withTransaction
+//                    }
+//                }
+//
+//                Log.i("FeedRepository", "cancelFeedEmpathy: ${dao.getFeedItemByFeedId(feedId)}")
+//            }
 
             Resource.Success(
                 data = postResult.data,

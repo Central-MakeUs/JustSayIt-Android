@@ -37,6 +37,6 @@ interface EntireFeedDao {
     @Query("DELETE FROM entire_feed WHERE writerId=:userId")
     suspend fun deleteFeedItemByUserId(userId: Long)
 
-    @Update
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateFeedItem(myFeedEntity: EntireFeedEntity)
 }
