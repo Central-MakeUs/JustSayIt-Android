@@ -26,6 +26,7 @@ data class MyFeedUiState(
 
 @Parcelize
 data class ReportUiState(
+    val isLoading: Boolean = false,
     val nickname: String = "",
     val selectedMood: Mood? = null,
     val isSubmitEnabled: Boolean = false,

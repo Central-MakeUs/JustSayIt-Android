@@ -16,8 +16,10 @@ sealed class MyFeedEvent {
 }
 
 sealed class ReportEvent {
+    data class LoadingChanged(val isLoading: Boolean) : ReportEvent()
     data class SelectedMoodChanged(val mood: Mood?) : ReportEvent()
     object Submit : ReportEvent()
     data class TodayMoodAdded(val mood: Mood, val time: String) : ReportEvent()
+
     data class SubmitActiveChanged(val isValid: Boolean) : ReportEvent()
 }

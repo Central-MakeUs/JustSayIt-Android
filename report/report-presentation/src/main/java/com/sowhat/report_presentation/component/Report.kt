@@ -255,7 +255,7 @@ private fun TodayMoodItem(moodItem: TodayMoodItem) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceXXS)
     ) {
-        moodItem.mood.drawable?.let { drawable ->
+        moodItem.mood?.drawable?.let { drawable ->
             Image(
                 modifier = Modifier.size(JustSayItTheme.Spacing.spaceLg),
                 painter = painterResource(id = drawable),
