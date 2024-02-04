@@ -14,6 +14,8 @@ import com.practice.report_domain.use_case.GetTodayMoodDataUseCase
 import com.practice.report_domain.use_case.PostNewMoodUseCase
 import com.sowhat.common.model.Resource
 import com.sowhat.common.util.toTime
+import com.sowhat.designsystem.common.MOOD_SAD
+import com.sowhat.designsystem.common.MOOD_SURPRISED
 import com.sowhat.designsystem.common.Mood
 import com.sowhat.report_presentation.common.MyFeedEvent
 import com.sowhat.report_presentation.common.MyFeedUiState
@@ -53,6 +55,10 @@ class MyPageViewModel @Inject constructor(
     private val postNewMoodEventChannel = Channel<Boolean>()
     val postNewMoodEvent = postNewMoodEventChannel.receiveAsFlow()
 
+    init {
+        getTodayMood()
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     var myFeedPagingData: Flow<PagingData<MyFeedEntity>> = combine(sortBy, emotion) { s, e ->
         Pair(s, e)
@@ -90,6 +96,7 @@ class MyPageViewModel @Inject constructor(
                     savedStateHandle[REPORT_STATE] = getReportUiState()?.copy(
                         moodList = todayMoodItemList(result)
                     )
+                    onReportEvent(ReportEvent.NicknameChanged(result.data?.memberName ?: ""))
                     onReportEvent(ReportEvent.LoadingChanged(false))
                 }
                 is Resource.Error -> {
@@ -99,15 +106,15 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun postNewMood() {
+    fun postNewMood(mood: Mood?) {
         viewModelScope.launch {
             onReportEvent(ReportEvent.LoadingChanged(true))
-            val postData = getReportUiState()?.selectedMood?.postData
+            val postData = mood?.toPostData()
+            Log.i(TAG, "postNewMood: $postData")
             postData?.let {
                 when (postNewMoodUseCase(postData)) {
                     is Resource.Success -> {
                         postNewMoodEventChannel.send(true)
-                        getTodayMood()
                     }
                     is Resource.Error -> {
                         postNewMoodEventChannel.send(false)
@@ -117,10 +124,18 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
+    private fun Mood.toPostData() = when (this) {
+        Mood.ALL -> null
+        Mood.HAPPY -> POST_HAPPY
+        Mood.SAD -> POST_SAD
+        Mood.SURPRISED -> POST_SURPRISED
+        Mood.ANGRY -> POST_ANGRY
+    }
+
     private fun todayMoodItemList(result: Resource<TodayMood>) =
         result.data?.myMoodRecord?.map { moodData ->
             TodayMoodItem(
-                mood = Mood.values().find { it.postData == moodData.moodCode },
+                mood = Mood.values().find { it.moodCode == moodData.moodCode },
                 time = moodData.createdAt.toTime()
             )
         } ?: emptyList()
@@ -180,11 +195,11 @@ class MyPageViewModel @Inject constructor(
                     selectedMood = event.mood,
                 )
             }
-            is ReportEvent.Submit -> {
-                savedStateHandle[REPORT_STATE] = getReportUiState()?.copy(
-                    selectedMood = null,
-                )
-            }
+//            is ReportEvent.Submit -> {
+//                savedStateHandle[REPORT_STATE] = getReportUiState()?.copy(
+//                    selectedMood = null,
+//                )
+//            }
             is ReportEvent.TodayMoodAdded -> {
                 val currentList = getReportUiState()?.moodList?.toMutableList()
                 if (currentList != null) {
@@ -204,6 +219,12 @@ class MyPageViewModel @Inject constructor(
                     isLoading = event.isLoading
                 )
             }
+
+            is ReportEvent.NicknameChanged -> {
+                savedStateHandle[REPORT_STATE] = getReportUiState()?.copy(
+                    nickname = event.nickname
+                )
+            }
         }
     }
 
@@ -214,6 +235,10 @@ class MyPageViewModel @Inject constructor(
         const val FEED_STATE = "feedState"
         const val REPORT_STATE = "reportState"
         const val TAG = "MyPage"
+        const val POST_HAPPY = "MOOD001"
+        const val POST_SAD = "MOOD002"
+        const val POST_SURPRISED = "MOOD003"
+        const val POST_ANGRY = "MOOD004"
     }
 }
 

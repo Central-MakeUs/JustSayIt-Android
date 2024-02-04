@@ -165,11 +165,9 @@ private fun ReportContent(
 ) {
     Column(
         modifier = Modifier
-            .padding(
-                horizontal = JustSayItTheme.Spacing.spaceBase,
-            ),
+            .padding(JustSayItTheme.Spacing.spaceBase),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceLg)
+        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceBase)
     ) {
         CurrentMoodSelection(
             selectedMood = selectedMood,
@@ -193,10 +191,9 @@ private fun CurrentMoodSelection(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = JustSayItTheme.Spacing.spaceLg),
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceLg)
+        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceSm)
     ) {
         // 감정 선택 버튼
         MoodSelectionButtons(
