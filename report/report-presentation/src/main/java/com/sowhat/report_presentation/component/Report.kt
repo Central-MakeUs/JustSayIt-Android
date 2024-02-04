@@ -11,12 +11,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Card
@@ -165,11 +167,9 @@ private fun ReportContent(
 ) {
     Column(
         modifier = Modifier
-            .padding(
-                horizontal = JustSayItTheme.Spacing.spaceBase,
-            ),
+            .padding(JustSayItTheme.Spacing.spaceBase),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceLg)
+        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceBase)
     ) {
         CurrentMoodSelection(
             selectedMood = selectedMood,
@@ -193,10 +193,9 @@ private fun CurrentMoodSelection(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = JustSayItTheme.Spacing.spaceLg),
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceLg)
+        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceSm)
     ) {
         // 감정 선택 버튼
         MoodSelectionButtons(
@@ -255,7 +254,7 @@ private fun TodayMoodItem(moodItem: TodayMoodItem) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceXXS)
     ) {
-        moodItem.mood.drawable?.let { drawable ->
+        moodItem.mood?.drawable?.let { drawable ->
             Image(
                 modifier = Modifier.size(JustSayItTheme.Spacing.spaceLg),
                 painter = painterResource(id = drawable),
@@ -264,6 +263,7 @@ private fun TodayMoodItem(moodItem: TodayMoodItem) {
         }
 
         Text(
+            modifier = Modifier.padding(end = JustSayItTheme.Spacing.border),
             text = moodItem.time,
             style = JustSayItTheme.Typography.detail1,
             color = JustSayItTheme.Colors.mainTypo

@@ -47,3 +47,14 @@ fun String.toDate(): String = try {
     Log.e("toDate", "error : ${e.message}")
     "server error"
 }
+
+fun String.toTime(): String = try {
+    this.split("T")
+        .last()
+        .split(".")
+        .first()
+        .slice(0..4)
+} catch (e: Exception) {
+    Log.e("toDate", "error : ${e.message}")
+    "server error"
+}

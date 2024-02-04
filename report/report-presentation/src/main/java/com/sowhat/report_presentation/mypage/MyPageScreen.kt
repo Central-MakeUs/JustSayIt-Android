@@ -88,6 +88,7 @@ fun MyPageRoute(
 
     val deleteSuccessMessage = stringResource(id = R.string.snackbar_delete_successful)
     val deleteFailureMessage = stringResource(id = R.string.snackbar_delete_failure)
+    val postMoodFailureMessage = stringResource(id = R.string.snackbar_post_mood_error)
 
     LaunchedEffect(key1 = myFeedPagingData.loadState) {
         if (myFeedPagingData.loadState.refresh is LoadState.Error) {
@@ -101,8 +102,20 @@ fun MyPageRoute(
         onMyFeedEvent = viewModel::onMyFeedEvent,
         reportUiState = reportUiState,
         onReportEvent = viewModel::onReportEvent,
-        onDelete = viewModel::deleteFeed
+        onDelete = viewModel::deleteFeed,
+        onMoodSubmit = viewModel::postNewMood
     )
+
+    ObserveEvents(flow = viewModel.postNewMoodEvent) { isSuccessful ->
+        scope.launch {
+            if (isSuccessful) {
+                viewModel.getTodayMood()
+                return@launch
+            } else {
+                snackbarHostState.showSnackbar(message = postMoodFailureMessage)
+            }
+        }
+    }
 
     ObserveEvents(flow = viewModel.deleteEvent) { isSuccessful ->
         scope.launch {
@@ -134,7 +147,8 @@ fun MyPageScreen(
     reportUiState: ReportUiState,
     onMyFeedEvent: (MyFeedEvent) -> Unit,
     onReportEvent: (ReportEvent) -> Unit,
-    onDelete: (Long) -> Unit
+    onDelete: (Long) -> Unit,
+    onMoodSubmit: (Mood?) -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize()
@@ -153,14 +167,16 @@ fun MyPageScreen(
                     isActive = reportUiState.isSubmitEnabled,
                     selectedMood = reportUiState.selectedMood,
                     onSelectedMoodChange = { mood ->
+                        Log.i("MyPageScreen", "mood changed: $mood")
                         onReportEvent(ReportEvent.SelectedMoodChanged(mood))
                         mood?.let {
                             onReportEvent(ReportEvent.SubmitActiveChanged(true))
                         } ?: onReportEvent(ReportEvent.SubmitActiveChanged(false))
                     },
                     onMoodSubmit = {
-                        onReportEvent(ReportEvent.Submit)
+                        onMoodSubmit(reportUiState.selectedMood)
                         onReportEvent(ReportEvent.SubmitActiveChanged(false))
+                        onReportEvent(ReportEvent.SelectedMoodChanged(null))
                     },
                     todayMoodItems = reportUiState.moodList
                 )
@@ -515,12 +531,4 @@ private fun getSympathyMoodItems(
     }
 
     return sympathyMoodItems
-}
-
-@Preview
-@Composable
-fun MyPageScreenPreview() {
-//    MyPageScreen(
-//
-//    )
 }
