@@ -15,6 +15,7 @@ import com.sowhat.feed_domain.use_case.PostEmpathyUseCase
 import com.sowhat.feed_domain.use_case.ReportFeedUseCase
 import com.sowhat.feed_presentation.common.FeedEvent
 import com.sowhat.feed_presentation.common.FeedListState
+import com.sowhat.feed_presentation.common.PostResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
@@ -58,7 +59,7 @@ class FeedViewModel @Inject constructor(
     private val deleteEventChannel = Channel<Boolean>()
     val deleteEvent = deleteEventChannel.receiveAsFlow()
 
-    private val empathyEventChannel = Channel<Boolean>()
+    private val empathyEventChannel = Channel<PostResult>()
     val empathyEvent = empathyEventChannel.receiveAsFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -109,7 +110,6 @@ class FeedViewModel @Inject constructor(
                 }
             }
         }
-
     }
 
     fun deleteFeed(feedId: Long) {
@@ -130,33 +130,40 @@ class FeedViewModel @Inject constructor(
 
     fun postEmpathy(
         feedId: Long,
-        emotionCode: String
+        emotionCode: String,
+        index: Int
     ) {
+        Log.i("FeedScreen", "post emotionCode : $emotionCode")
 //        uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             when (postEmpathyUseCase(feedId, emotionCode)) {
                 is Resource.Success -> {
-                    empathyEventChannel.send(true)
+                    empathyEventChannel.send(PostResult(true, emotionCode, index))
 //                    uiState.update { it.copy(isLoading = false) }
                 }
                 is Resource.Error -> {
-                    empathyEventChannel.send(false)
+                    empathyEventChannel.send(PostResult(false, null, index))
 //                    uiState.update { it.copy(isLoading = false) }
                 }
             }
         }
     }
 
-    fun cancelEmpathy(feedId: Long) {
+    fun cancelEmpathy(
+        feedId: Long,
+        previousEmpathy: String?,
+        index: Int
+    ) {
 //        uiState.update { it.copy(isLoading = true) }
+        Log.i("FeedScreen", "cancel emotionCode : $previousEmpathy")
         viewModelScope.launch {
-            when (cancelEmpathyUseCase(feedId)) {
+            when (cancelEmpathyUseCase(feedId, previousEmpathy)) {
                 is Resource.Success -> {
-                    empathyEventChannel.send(true)
+                    empathyEventChannel.send(PostResult(true, null, index))
 //                    uiState.update { it.copy(isLoading = false) }
                 }
                 is Resource.Error -> {
-                    empathyEventChannel.send(false)
+                    empathyEventChannel.send(PostResult(false, null, index))
 //                    uiState.update { it.copy(isLoading = false) }
                 }
             }

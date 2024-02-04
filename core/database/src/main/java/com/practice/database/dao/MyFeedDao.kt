@@ -34,4 +34,7 @@ interface MyFeedDao {
     @Update
     suspend fun updateMyFeedItem(myFeedEntity: MyFeedEntity)
 
+    @Query("SELECT * FROM my_feed LIMIT 1 OFFSET :offset")
+    suspend fun getNthRecord(offset: Int): MyFeedEntity?
+
 }

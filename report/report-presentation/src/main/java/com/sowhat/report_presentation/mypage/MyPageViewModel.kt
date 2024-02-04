@@ -17,12 +17,17 @@ import com.sowhat.report_presentation.common.ReportUiState
 import com.sowhat.report_presentation.common.TodayMoodItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,15 +46,19 @@ class MyPageViewModel @Inject constructor(
     private val deleteEventChannel = Channel<Boolean>()
     val deleteEvent = deleteEventChannel.receiveAsFlow()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     var myFeedPagingData: Flow<PagingData<MyFeedEntity>> = combine(sortBy, emotion) { s, e ->
         Pair(s, e)
     }.distinctUntilChanged().flatMapLatest { pair ->
+        onMyFeedEvent(MyFeedEvent.LoadingChanged(true))
         Log.i(TAG, "browse data ${pair.first} ${pair.second}")
         getMyFeedUseCase(
             sortBy = pair.first,
             emotion = pair.second
-        ).flow.cachedIn(viewModelScope)
+        ).flow.map {
+            onMyFeedEvent(MyFeedEvent.LoadingChanged(false))
+            it
+        }.cachedIn(viewModelScope)
     }
 
     fun deleteFeed(feedId: Long) {

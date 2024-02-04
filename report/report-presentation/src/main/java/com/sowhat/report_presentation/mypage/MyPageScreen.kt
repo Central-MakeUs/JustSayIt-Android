@@ -301,9 +301,8 @@ private fun MyFeedList(
     ) {
         AnimatedVisibility(
             visible = (
-                    pagingData.loadState.refresh !is LoadState.Loading
-                            && pagingData.loadState.append !is LoadState.Loading
-                    ),
+                pagingData.loadState.refresh !is LoadState.Loading
+            ),
             enter = fadeIn(animationSpec = TweenSpec(durationMillis = 1000)),
             exit = fadeOut(animationSpec = TweenSpec(durationMillis = 1000))
         ) {

@@ -128,6 +128,9 @@
     <string name="snackbar_delete_successful">피드 삭제가 완료되었습니다.</string>
     <string name="snackbar_delete_failure">피드 삭제 중 에러가 발생하였습니다.</string>
     <string name="snackbar_my_feed_post_empathy">내가 작성한 글에 공감을 남길 수 없습니다.</string>
+    <string name="snackbar_post_empathy_error">공감 중 오류가 발생하였습니다.</string>
+    <string name="snackbar_post_empathy_successful">공감을 성공적으로 남겼습니다.</string>
+    <string name="snackbar_cancel_empathy_successful">공감을 취소하였습니다.</string>
 
     <string name="service_email">justtsayit2024@gmail.com</string>
     <string name="contact_subject">그냥, 그렇다고 서비스 문의</string>

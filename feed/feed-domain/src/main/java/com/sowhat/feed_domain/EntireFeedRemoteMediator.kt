@@ -29,6 +29,7 @@ class EntireFeedRemoteMediator(
 ) : RemoteMediator<Int, EntireFeedEntity>() {
 
     private val dao = feedDatabase.entireFeedDao
+    private var page = 1
 
     override suspend fun load(
         loadType: LoadType,
@@ -42,6 +43,7 @@ class EntireFeedRemoteMediator(
                 LoadType.REFRESH -> {
                     Log.i("EntireFeedMediator", "load: refresh")
                     // ***중요 : refresh될 때 스크롤 위치 이슈 해결 : 데이터 로드를 위해 로드키를 불러오는 과정에서 모든 데이터를 지워준다
+                    // 이슈 : 주석처리 시, 새로고침 시 다음 페이지가 호출되지 않음
 //                    feedDatabase.withTransaction {
 //                        dao.deleteAllFeedItems()
 //                    }
@@ -49,9 +51,9 @@ class EntireFeedRemoteMediator(
                 }
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> {
-                    val lastItem = state.lastItemOrNull()
-                    Log.i("EntireFeedMediator", "load: append ${lastItem?.storyId}")
-                    lastItem?.storyId
+                    val lastItem = dao.getNthRecord(page * state.config.pageSize - 1)
+                    page++
+                    lastItem?.storyId ?: return MediatorResult.Success(endOfPaginationReached = true)
                 }
             }
 
@@ -138,3 +140,9 @@ class EntireFeedRemoteMediator(
         }
     }
 }
+//삭제한 배열 : []
+//[1, 2, 3, 4]
+// a  b  c  d
+//만약에 a를 지웠어 -> 삭제한 배열에 삭제한 사진의 아이디를 삽입
+//새로운 사진 -> 멀티파트
+//[1], [멀티파트~~~]

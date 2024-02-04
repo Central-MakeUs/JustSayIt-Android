@@ -14,10 +14,10 @@ data class EntireFeedEntity(
     val updatedAt: String,
     val writerId: Long,
     val totalCount: Long,
-    val happinessCount: Long?,
-    val sadnessCount: Long?,
-    val surprisedCount: Long?,
-    val angryCount: Long?,
+    var happinessCount: Long?,
+    var sadnessCount: Long?,
+    var surprisedCount: Long?,
+    var angryCount: Long?,
     val isHappinessSelected: Boolean,
     val isSadnessSelected: Boolean,
     val isSurprisedSelected: Boolean,
@@ -30,6 +30,6 @@ data class EntireFeedEntity(
     val isAnonymous: Boolean,
     val isModified: Boolean,
     val isOpened: Boolean,
-    val selectedEmotionCode: String?,
+    var selectedEmotionCode: String?,
     val isOwner: Boolean?
 )

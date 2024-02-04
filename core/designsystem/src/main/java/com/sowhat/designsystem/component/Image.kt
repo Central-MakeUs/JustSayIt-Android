@@ -2,6 +2,7 @@ package com.sowhat.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CornerBasedShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -29,6 +31,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sowhat.designsystem.theme.Gray300
+import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.designsystem.theme.ProfileBackground
 
@@ -108,9 +111,9 @@ fun TimelineFeedImageContainer(
 ) {
     ImageContainer(
         modifier = modifier,
-        borderWidth = JustSayItTheme.Spacing.border,
-        borderColor = JustSayItTheme.Colors.subSurface,
-        shape = JustSayItTheme.Shapes.medium,
+        borderWidth = 0.dp,
+        borderColor = Color.Transparent,
+        shape = JustSayItTheme.Shapes.medium.copy(all = CornerSize(0.dp)),
         model = model,
         contentDescription = contentDescription
     )
@@ -126,6 +129,8 @@ fun TimelineFeedImages(
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .clip(JustSayItTheme.Shapes.medium)
+//            .border(width = 0.5.dp, color = Gray300, shape = JustSayItTheme.Shapes.medium)
             .aspectRatio(1f)
     ) {
         when (models.size) {
@@ -147,11 +152,12 @@ fun TimelineFeedImages(
                     models.forEach {
                         TimelineFeedImageContainer(
                             modifier = Modifier
-                                .padding(JustSayItTheme.Spacing.spaceTiny)
                                 // 간격이 동일하게 주어지도록 하기 위함... 이 조치를 취해주지 않으면 사진들이 화면을 벗어나서 차지
                                 .weight(2f),
                             model = it
                         )
+
+                        Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceTiny))
                     }
                 }
             }
@@ -159,7 +165,9 @@ fun TimelineFeedImages(
                 LazyVerticalGrid(
                     modifier = Modifier,
                     columns = GridCells.Fixed(2),
-                    userScrollEnabled = false
+                    userScrollEnabled = false,
+                    horizontalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceTiny),
+                    verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceTiny),
                 ) {
                     itemsIndexed(
                         items = models,
@@ -172,7 +180,7 @@ fun TimelineFeedImages(
                         
                         TimelineFeedImageContainer(
                             modifier = Modifier
-                                .padding(JustSayItTheme.Spacing.spaceTiny)
+//                                .padding(JustSayItTheme.Spacing.spaceTiny)
                                 .aspectRatio(ratio),
                             model = item
                         )
@@ -183,12 +191,16 @@ fun TimelineFeedImages(
                 LazyVerticalGrid(
                     modifier = Modifier,
                     columns = GridCells.Fixed(2),
-                    userScrollEnabled = false
+                    userScrollEnabled = false,
+                    horizontalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceTiny),
+                    verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceTiny),
                 ) {
-                    items(items = models) {
+                    items(
+                        items = models
+                    ) {
                         TimelineFeedImageContainer(
                             modifier = Modifier
-                                .padding(JustSayItTheme.Spacing.spaceTiny)
+//                                .padding(JustSayItTheme.Spacing.spaceTiny)
                                 .aspectRatio(1f),
                             model = it
                         )

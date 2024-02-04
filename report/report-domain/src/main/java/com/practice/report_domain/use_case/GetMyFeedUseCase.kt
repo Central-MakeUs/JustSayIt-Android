@@ -43,5 +43,6 @@ class GetMyFeedUseCase @Inject constructor(
 
     companion object {
         private const val ITEMS_PER_PAGE = 10
+        private const val INITIAL_LOAD_SIZE = 30
     }
 }

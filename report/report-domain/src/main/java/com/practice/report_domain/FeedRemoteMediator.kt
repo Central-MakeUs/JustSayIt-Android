@@ -1,5 +1,6 @@
 package com.practice.report_domain
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -28,6 +29,8 @@ class FeedRemoteMediator(
 ) : RemoteMediator<Int, MyFeedEntity>() {
 
     private val dao = feedDatabase.myFeedDao
+    private var isFirst = true
+    private var page = 1
 
     override suspend fun load(
         loadType: LoadType,
@@ -36,22 +39,24 @@ class FeedRemoteMediator(
         return try {
             val authData = authDataRepository.authData.first()
             val accessToken = authData.accessToken
-//            val memberId = authData.memberId
 
             val loadKey = when (loadType) {
                 LoadType.REFRESH -> {
+                    Log.i("FeedMediator", "load refresh: true")
                     // ***중요 : refresh될 때 스크롤 위치 이슈 해결 : 데이터 로드를 위해 로드키를 불러오는 과정에서 모든 데이터를 지워준다
-//                    feedDatabase.withTransaction {
-//                        dao.deleteAllMyFeedItems()
-//                    }
                     null
                 }
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> {
-                    val lastItem = state.lastItemOrNull()
-                    lastItem?.storyId
+//                    val lastItem = state.lastItemOrNull()
+//                    lastItem?.storyId
+                    val lastItem = dao.getNthRecord(page * state.config.pageSize - 1)
+                    page++
+                    lastItem?.storyId ?: return MediatorResult.Success(endOfPaginationReached = true)
                 }
             }
+
+            Log.i("FeedMediator", "load key : ${loadKey}")
 
             if (accessToken != null) {
                 getPagingData(

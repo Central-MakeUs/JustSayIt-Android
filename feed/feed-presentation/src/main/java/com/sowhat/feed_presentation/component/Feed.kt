@@ -213,7 +213,6 @@ fun FeedProfileImage(
         contentDescription = "profile_image"
     )
 }
-
 @Composable
 fun SympathyChips(
     modifier: Modifier = Modifier,
@@ -223,7 +222,7 @@ fun SympathyChips(
     isOwner: Boolean
 ) {
     val collapse = currentMood != null
-    
+
     if (!availableItems.isNullOrEmpty()) {
         Box(
             modifier = modifier.fillMaxWidth(),
@@ -249,6 +248,7 @@ fun SympathyChips(
     }
 }
 
+
 @Composable
 private fun UnselectedList(
     modifier: Modifier,
@@ -271,7 +271,7 @@ private fun UnselectedList(
             Spacer(modifier = Modifier.width(JustSayItTheme.Spacing.spaceXS))
         }
 
-        itemsIndexed(availableItems) {index, item ->
+        itemsIndexed(availableItems) { index, item ->
             val isSelected = currentMood == item
             AnimatedVisibility(
                 visible = !collapse,
@@ -322,7 +322,7 @@ private fun SelectedSympathy(
                 moodItem = item,
                 isSelected = isSelected,
                 onClick = { item: MoodItem ->
-                    if (!isSelected) onChange(item) else onChange(null)
+                    if (isSelected) onChange(null)
                 },
                 isActive = !isOwner
             )
