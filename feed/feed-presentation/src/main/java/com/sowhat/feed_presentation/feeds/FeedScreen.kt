@@ -1,6 +1,9 @@
 package com.sowhat.feed_presentation.feeds
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,6 +50,7 @@ import com.sowhat.feed_presentation.common.FeedListState
 import com.sowhat.designsystem.common.rememberMoodItemsForFeed
 import com.sowhat.designsystem.component.CenteredCircularProgress
 import com.sowhat.designsystem.R
+import com.sowhat.designsystem.common.isScrollingUp
 import com.sowhat.designsystem.component.AlertDialogReverse
 import com.sowhat.designsystem.component.AppendingCircularProgress
 import com.sowhat.designsystem.component.PopupMenuItem
@@ -359,7 +363,8 @@ fun FeedScreen(
             }
 
             item {
-                if (feedLazyPagingItems.loadState.append is LoadState.Loading) {
+                if (feedLazyPagingItems.loadState.refresh is LoadState.Loading
+                    || feedLazyPagingItems.loadState.append is LoadState.Loading) {
                     AppendingCircularProgress(
                         modifier = Modifier
                             .padding(vertical = JustSayItTheme.Spacing.spaceBase)
@@ -409,8 +414,8 @@ private fun Feed(
                 onFeedEvent(FeedEvent.TargetIdChanged(reportId))
                 onFeedEvent(FeedEvent.ReportDialogVisibilityChanged(true))
             },
-            postData = null,
-            contentColor = null
+            contentColor = JustSayItTheme.Colors.mainTypo,
+            drawableTint = JustSayItTheme.Colors.error
         ),
         PopupMenuItem(
             title = stringResource(id = R.string.popup_block),
@@ -420,33 +425,34 @@ private fun Feed(
                 onFeedEvent(FeedEvent.TargetIdChanged(userId))
                 onFeedEvent(FeedEvent.BlockDialogVisibilityChanged(true))
             },
-            postData = null,
-            contentColor = null
+            contentColor = JustSayItTheme.Colors.mainTypo,
+            drawableTint = JustSayItTheme.Colors.error
         ),
     )
 
     val popupMenuForOwner = listOf(
         PopupMenuItem(
             title = stringResource(id = R.string.popup_edit),
-            drawable = R.drawable.ic_d_20,
+            drawable = R.drawable.ic_edit_20,
             onItemClick = {
                 val feedId = feedItem.storyId
                 onFeedEvent(FeedEvent.TargetIdChanged(feedId))
                 // TODO 수정 화면으로 이동
             },
             postData = null,
-            contentColor = null
+            contentColor = JustSayItTheme.Colors.mainTypo,
+            drawableTint = JustSayItTheme.Colors.mainTypo
         ),
         PopupMenuItem(
             title = stringResource(id = R.string.popup_delete),
-            drawable = R.drawable.ic_block_20,
+            drawable = R.drawable.ic_delete_20,
             onItemClick = {
                 val feedId = feedItem.storyId
                 onFeedEvent(FeedEvent.TargetIdChanged(feedId))
                 onFeedEvent(FeedEvent.DeleteDialogVisibilityChanged(true))
             },
-            postData = null,
-            contentColor = null
+            contentColor = JustSayItTheme.Colors.error,
+            drawableTint = JustSayItTheme.Colors.error
         ),
     )
 
@@ -493,31 +499,31 @@ private fun AnimatedAppBar(
     feedListState: FeedListState,
     onFeedEvent: (FeedEvent) -> Unit
 ) {
-//    AnimatedVisibility(
-//        visible = lazyListState.isScrollingUp(),
-//        enter = expandVertically(),
-//        exit = shrinkVertically(),
-//    ) {
-    AppBarFeed(
-        lazyListState = lazyListState,
-        currentDropdownItem = feedListState.currentEmotion,
-        dropdownItems = feedListState.emotionItems,
-        isDropdownExpanded = feedListState.isDropdownExpanded,
-        onDropdownHeaderClick = { isOpen ->
-            onFeedEvent(FeedEvent.DropdownExpandChanged(isOpen))
-        },
-        onDropdownMenuChange = { updatedMenuItem ->
-            onFeedEvent(FeedEvent.EmotionChanged(updatedMenuItem))
-        },
-        tabItems = emptyList(),
-        selectedTabItem = feedListState.selectedTabItem,
-        selectedTabItemColor = JustSayItTheme.Colors.mainTypo,
-        unselectedTabItemColor = Gray500,
-        onSelectedTabItemChange = { updatedTabItem ->
-            onFeedEvent(FeedEvent.SortChanged(updatedTabItem))
-        },
-    )
-//    }
+    AnimatedVisibility(
+        visible = lazyListState.isScrollingUp(),
+        enter = expandVertically(),
+        exit = shrinkVertically(),
+    ) {
+        AppBarFeed(
+            lazyListState = lazyListState,
+            currentDropdownItem = feedListState.currentEmotion,
+            dropdownItems = feedListState.emotionItems,
+            isDropdownExpanded = feedListState.isDropdownExpanded,
+            onDropdownHeaderClick = { isOpen ->
+                onFeedEvent(FeedEvent.DropdownExpandChanged(isOpen))
+            },
+            onDropdownMenuChange = { updatedMenuItem ->
+                onFeedEvent(FeedEvent.EmotionChanged(updatedMenuItem))
+            },
+            tabItems = emptyList(),
+            selectedTabItem = feedListState.selectedTabItem,
+            selectedTabItemColor = JustSayItTheme.Colors.mainTypo,
+            unselectedTabItemColor = Gray500,
+            onSelectedTabItemChange = { updatedTabItem ->
+                onFeedEvent(FeedEvent.SortChanged(updatedTabItem))
+            },
+        )
+    }
 }
 
 @Composable

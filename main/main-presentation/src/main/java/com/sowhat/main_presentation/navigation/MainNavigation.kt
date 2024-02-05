@@ -1,5 +1,7 @@
 package com.sowhat.main_presentation.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.material3.SnackbarHostState
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -15,7 +17,17 @@ fun NavGraphBuilder.mainScreen(
     appNavController: NavHostController,
     snackbarHostState: SnackbarHostState
 ) {
-    composable(route = MAIN) {
+    composable(
+        route = MAIN,
+        enterTransition = {
+            EnterTransition.None
+        },
+        exitTransition = {
+            ExitTransition.None
+        },
+        popEnterTransition = null,
+        popExitTransition = null
+    ) {
         MainRoute(
             appNavController = appNavController,
             snackbarHostState = snackbarHostState
