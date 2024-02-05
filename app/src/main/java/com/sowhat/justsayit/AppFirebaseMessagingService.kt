@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.sowhat.common.model.FCMData
+import com.sowhat.common.util.getDate
 import com.sowhat.datastore.use_case.UpdateFcmTokenUseCase
 import com.sowhat.notification.use_case.InsertNotificationDataUseCase
 import dagger.hilt.android.AndroidEntryPoint
@@ -131,12 +132,7 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
         job.cancel()
     }
 
-    private fun getDate(timeMillis: Long): String {
-        val formatter = SimpleDateFormat("yyyy. MM. dd", Locale.KOREA)
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = timeMillis
-        return formatter.format(calendar.time)
-    }
+
 
     companion object {
         private const val TAG = "AppFirebaseMessagingService"

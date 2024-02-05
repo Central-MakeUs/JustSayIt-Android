@@ -27,7 +27,7 @@ fun Notification(
     content: String,
     time: String,
     drawable: Int,
-    statusText: String,
+    statusText: String?,
 ) {
     Row(
         modifier = modifier
@@ -35,7 +35,7 @@ fun Notification(
             .padding(JustSayItTheme.Spacing.spaceBase)
             .background(JustSayItTheme.Colors.mainBackground),
         horizontalArrangement = Arrangement
-            .spacedBy(JustSayItTheme.Spacing.spaceXS)
+            .spacedBy(JustSayItTheme.Spacing.spaceSm)
     ) {
         // 감정 상태
         MoodStatus(
@@ -55,9 +55,8 @@ fun Notification(
 @Composable
 private fun NotificationContent(title: String, content: String, time: String) {
     Column(
-        modifier = Modifier
-            .padding(top = JustSayItTheme.Spacing.spaceXXS),
-        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceXXS)
+        modifier = Modifier,
+        verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceXXS, Alignment.CenterVertically)
     ) {
         Text(
             text = title,
@@ -86,7 +85,7 @@ private fun NotificationContent(title: String, content: String, time: String) {
 }
 
 @Composable
-private fun MoodStatus(drawable: Int, statusText: String) {
+private fun MoodStatus(drawable: Int, statusText: String?) {
     Column(
         verticalArrangement = Arrangement.spacedBy(JustSayItTheme.Spacing.spaceXXS),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -97,11 +96,13 @@ private fun MoodStatus(drawable: Int, statusText: String) {
             contentDescription = "status"
         )
 
-        Text(
-            text = statusText,
-            style = JustSayItTheme.Typography.detail1,
-            color = JustSayItTheme.Colors.mainTypo,
-            textAlign = TextAlign.Center
-        )
+        statusText?.let {
+            Text(
+                text = it,
+                style = JustSayItTheme.Typography.detail1,
+                color = JustSayItTheme.Colors.mainTypo,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }

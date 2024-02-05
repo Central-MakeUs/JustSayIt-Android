@@ -26,11 +26,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.sowhat.common.model.FCMData
+import com.sowhat.common.util.getDate
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.justsayit.navigation.AppNavHost
 import com.sowhat.notification.use_case.InsertNotificationDataUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -47,37 +49,18 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val fcmData = intent.extras?.let {
-                title = it.getString("title", "")
-                body = it.getString("body", "")
-                targetCategory = it.getString("targetCategory", "")
-                targetData = it.getString("targetData", "")
-                date = it.getString("date", "")
-                Log.d("MainActivity", "title: $title, body: $body, targetCategory: $targetCategory, " +
-                        "targetPK: $targetCategory, targetNotificationPK: $targetData, date: $date")
-
-                FCMData(
-                    title = title,
-                    body = body,
-                    targetCategory = targetCategory,
-                    targetData = targetData,
-                    date = date
-                )
-            }
+            val fcmData = intent.extras?.let { getFcmData(it) }
 
             LaunchedEffect(key1 = fcmData) {
                 if (fcmData != null) insertNotificationDataUseCase(fcmData)
             }
 
             JustSayItTheme {
-                val context = LocalContext.current
-                val scope = rememberCoroutineScope()
                 val navController = rememberNavController()
                 val snackbarHostState = remember { SnackbarHostState() }
 
                 RequestPermissions()
 
-                // A surface container using the 'background' color from the theme
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
@@ -93,6 +76,26 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun getFcmData(it: Bundle): FCMData {
+        title = it.getString("title", "")
+        body = it.getString("body", "")
+        targetCategory = it.getString("targetCategory", "")
+        targetData = it.getString("targetData", "")
+        date = it.getString("date", getDate(System.currentTimeMillis()))
+        Log.d(
+            "MainActivity", "title: $title, body: $body, targetCategory: $targetCategory, " +
+                    "targetPK: $targetCategory, targetNotificationPK: $targetData, date: $date"
+        )
+
+        return FCMData(
+            title = title,
+            body = body,
+            targetCategory = targetCategory,
+            targetData = targetData,
+            date = date
+        )
     }
 
     @Composable

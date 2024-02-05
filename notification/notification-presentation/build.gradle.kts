@@ -18,6 +18,8 @@ android {
 dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:common"))
+    implementation(project(":core:notification"))
+    implementation(project(":core:database"))
     implementation(project(":core:di"))
     implementation(project(":core:network"))
 }
