@@ -509,7 +509,7 @@ private fun AnimatedAppBar(
         onDropdownMenuChange = { updatedMenuItem ->
             onFeedEvent(FeedEvent.EmotionChanged(updatedMenuItem))
         },
-        tabItems = feedListState.tabItems,
+        tabItems = emptyList(),
         selectedTabItem = feedListState.selectedTabItem,
         selectedTabItemColor = JustSayItTheme.Colors.mainTypo,
         unselectedTabItemColor = Gray500,
