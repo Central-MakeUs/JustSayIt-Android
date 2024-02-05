@@ -1,6 +1,6 @@
 package com.sowhat.feed_domain.model
 
-import com.practice.database.entity.EntireFeedEntity
+import com.sowhat.database.entity.EntireFeedEntity
 
 data class EntireFeed(
     val feedItems: List<EntireFeedEntity>?,

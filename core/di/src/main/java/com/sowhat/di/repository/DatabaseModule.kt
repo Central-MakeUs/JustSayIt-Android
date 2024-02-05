@@ -1,10 +1,7 @@
 package com.sowhat.di.repository
 
 import android.content.Context
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import com.practice.database.FeedDatabase
-import com.practice.database.common.DATABASE_FEED
+import com.sowhat.database.FeedDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

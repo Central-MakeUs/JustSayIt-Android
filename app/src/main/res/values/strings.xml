@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">그냥, 그렇다고</string>
     <string name="dropdown_upload_image">사진 업로드하기</string>
     <string name="dropdown_default_image">기본 이미지로 변경</string>

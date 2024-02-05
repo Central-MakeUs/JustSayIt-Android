@@ -60,6 +60,4 @@ dependencies {
     implementation(project(":main:main-presentation"))
     implementation(project(":core:common"))
     implementation(project(":post:post-presentation"))
-
-
 }

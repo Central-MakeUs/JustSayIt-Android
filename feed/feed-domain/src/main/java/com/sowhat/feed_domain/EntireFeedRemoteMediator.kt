@@ -6,9 +6,8 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.practice.database.FeedDatabase
-import com.practice.database.entity.EntireFeedEntity
-import com.practice.database.entity.MyFeedEntity
+import com.sowhat.database.FeedDatabase
+import com.sowhat.database.entity.EntireFeedEntity
 import com.sowhat.common.model.Resource
 import com.sowhat.datastore.AuthDataRepository
 import com.sowhat.feed_domain.model.EntireFeed

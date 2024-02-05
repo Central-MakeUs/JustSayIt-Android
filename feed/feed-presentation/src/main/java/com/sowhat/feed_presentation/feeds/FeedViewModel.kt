@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.practice.domain.use_case.DeleteFeedUseCase
+import com.sowhat.domain.use_case.DeleteFeedUseCase
 import com.sowhat.common.model.Resource
 import com.sowhat.common.model.UiState
 import com.sowhat.feed_domain.use_case.BlockUserUseCase
@@ -18,7 +18,6 @@ import com.sowhat.feed_presentation.common.FeedListState
 import com.sowhat.feed_presentation.common.PostResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine

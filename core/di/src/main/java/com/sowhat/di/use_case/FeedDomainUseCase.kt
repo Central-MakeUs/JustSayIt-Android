@@ -1,6 +1,6 @@
 package com.sowhat.di.use_case
 
-import com.practice.database.FeedDatabase
+import com.sowhat.database.FeedDatabase
 import com.sowhat.datastore.AuthDataRepository
 import com.sowhat.feed_domain.repository.EntireFeedRepository
 import com.sowhat.feed_domain.use_case.BlockUserUseCase

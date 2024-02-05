@@ -39,6 +39,7 @@
             <option value="$PROJECT_DIR$/core/di" />
             <option value="$PROJECT_DIR$/core/domain" />
             <option value="$PROJECT_DIR$/core/network" />
+            <option value="$PROJECT_DIR$/core/notification" />
             <option value="$PROJECT_DIR$/feed" />
             <option value="$PROJECT_DIR$/feed/feed-data" />
             <option value="$PROJECT_DIR$/feed/feed-domain" />
