@@ -27,6 +27,7 @@ val Gray500 = Color(0xFF9E9E9E)
 val Gray600 = Color(0xFF757575)
 val Gray700 = Color(0xFF616161)
 val Gray800 = Color(0xFF424242)
+val Gray850 = Color(0xFF333333)
 val Gray900 = Color(0xFF222222)
 
 val ProfileBackground = Color(0xFFD9D9D9)

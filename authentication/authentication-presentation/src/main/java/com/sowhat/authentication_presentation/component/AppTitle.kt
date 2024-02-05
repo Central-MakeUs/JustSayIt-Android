@@ -10,10 +10,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.sowhat.designsystem.theme.Gray850
 import com.sowhat.designsystem.theme.JustSayItTheme
 
 @Composable
-fun Logo(
+fun AppTitle(
     modifier: Modifier = Modifier,
     title: String,
     subTitle: String,
@@ -21,8 +22,8 @@ fun Logo(
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
-        Subtitle(subTitle = subTitle)
         Title(title = title)
+        Subtitle(subTitle = subTitle)
     }
 }
 
@@ -63,7 +64,7 @@ private fun Subtitle(subTitle: String) {
             text = subTitle,
             style = JustSayItTheme.Typography.body4,
             textAlign = TextAlign.Center,
-            color = JustSayItTheme.Colors.mainTypo
+            color = Gray850
         )
     }
 }
@@ -71,5 +72,5 @@ private fun Subtitle(subTitle: String) {
 @Preview(showBackground = true, backgroundColor = 0xffffffff)
 @Composable
 fun LogoPreview() {
-    Logo(title = "그냥, 그렇다고", subTitle = "(서비스 한줄 소개)")
+    AppTitle(title = "그냥, 그렇다고", subTitle = "(서비스 한줄 소개)")
 }
