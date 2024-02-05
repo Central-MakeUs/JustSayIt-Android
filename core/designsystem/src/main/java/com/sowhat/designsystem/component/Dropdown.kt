@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.DropdownItem
 import com.sowhat.designsystem.common.Mood
+import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -45,7 +46,7 @@ fun DropdownHeader(
 ) {
 
     Box(modifier = modifier
-        .rippleClickable { onClick(!isDropdownExpanded) }
+        .noRippleClickable { onClick(!isDropdownExpanded) }
     ) {
         Row(
             modifier = Modifier

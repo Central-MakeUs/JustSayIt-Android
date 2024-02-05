@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.common.TabItem
+import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -77,7 +78,7 @@ fun RowScope.TabTextButton(
 ) {
     Box(
         modifier = Modifier
-            .rippleClickable {
+            .noRippleClickable {
                 onSelectedItemChange(tabItem)
             }
     ) {
