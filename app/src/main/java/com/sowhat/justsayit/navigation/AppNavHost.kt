@@ -8,6 +8,7 @@ import com.sowhat.common.navigation.ONBOARDING
 import com.sowhat.main_presentation.navigation.mainScreen
 import com.sowhat.authentication_presentation.navigation.onBoardingScreen
 import com.sowhat.authentication_presentation.navigation.userConfigScreen
+import com.sowhat.common.model.FCMData
 import com.sowhat.post_presentation.navigation.postScreen
 import com.sowhat.user_presentation.navigation.signOutScreen
 import com.sowhat.user_presentation.navigation.userInfoUpdateScreen
@@ -15,7 +16,8 @@ import com.sowhat.user_presentation.navigation.userInfoUpdateScreen
 @Composable
 fun AppNavHost(
     navController: NavHostController,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    fcmData: FCMData?
 ) {
     NavHost(navController = navController, startDestination = ONBOARDING) {
         onBoardingScreen(navController = navController)

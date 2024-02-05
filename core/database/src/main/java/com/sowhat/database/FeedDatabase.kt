@@ -11,24 +11,30 @@ import com.google.gson.Gson
 import com.sowhat.database.common.DATABASE_FEED
 import com.sowhat.database.dao.EntireFeedDao
 import com.sowhat.database.dao.MyFeedDao
+import com.sowhat.database.dao.NotificationDao
 import com.sowhat.database.entity.EntireFeedEntity
 import com.sowhat.database.entity.MyFeedEntity
+import com.sowhat.database.entity.NotificationEntity
 
 @Database(
     entities = [
         MyFeedEntity::class,
-        EntireFeedEntity::class
+        EntireFeedEntity::class,
+        NotificationEntity::class
     ],
-    version = 3,
+    version = 5,
     autoMigrations = [
         AutoMigration(from = 1, to = 2), // 1 to 2 : 단순 테이블 추가이므로 Migration 클래스 만들지 않음,
         AutoMigration(from = 2, to = 3), // 2 to 3 : 전체 피드 테이블 칼럼추가(isOwner)
+        AutoMigration(from = 3, to = 4), // 3 to 4 : Notification 테이블 추가
+        AutoMigration(from = 4, to = 5), // 3 to 4 : Notification 테이블에 date 필드 추가
     ]
 )
 @TypeConverters(ListConverter::class)
 abstract class FeedDatabase : RoomDatabase() {
     abstract val myFeedDao: MyFeedDao
     abstract val entireFeedDao: EntireFeedDao
+    abstract val notificationDao: NotificationDao
 
     companion object {
         @Volatile // makes the field immediately made visible to other threads

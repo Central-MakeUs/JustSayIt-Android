@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 3,
-    "identityHash": "5949566a4510723aadb17737d847dd16",
+    "version": 5,
+    "identityHash": "14443c9c2f85f711efcc8cba52f5c51d",
     "entities": [
       {
         "tableName": "my_feed",
@@ -310,7 +310,7 @@
       },
       {
         "tableName": "notification",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`notificationUUID` TEXT NOT NULL, `title` TEXT NOT NULL, `body` TEXT NOT NULL, `targetCategory` TEXT NOT NULL, `targetData` TEXT NOT NULL, `date` TEXT NOT NULL, PRIMARY KEY(`notificationUUID`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`notificationUUID` TEXT NOT NULL, `title` TEXT NOT NULL, `body` TEXT NOT NULL, `targetCategory` TEXT NOT NULL, `targetData` TEXT NOT NULL, `date` TEXT, PRIMARY KEY(`notificationUUID`))",
         "fields": [
           {
             "fieldPath": "notificationUUID",
@@ -346,7 +346,7 @@
             "fieldPath": "date",
             "columnName": "date",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -362,7 +362,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5949566a4510723aadb17737d847dd16')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '14443c9c2f85f711efcc8cba52f5c51d')"
     ]
   }
 }

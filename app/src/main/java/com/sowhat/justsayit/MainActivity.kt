@@ -16,22 +16,59 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
+import com.sowhat.common.model.FCMData
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.justsayit.navigation.AppNavHost
+import com.sowhat.notification.use_case.InsertNotificationDataUseCase
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private lateinit var title: String
+    private lateinit var body: String
+    private lateinit var targetCategory: String
+    private lateinit var targetData: String
+    private lateinit var date: String
+
+    @Inject
+    lateinit var insertNotificationDataUseCase: InsertNotificationDataUseCase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val fcmData = intent.extras?.let {
+                title = it.getString("title", "")
+                body = it.getString("body", "")
+                targetCategory = it.getString("targetCategory", "")
+                targetData = it.getString("targetData", "")
+                date = it.getString("date", "")
+                Log.d("MainActivity", "title: $title, body: $body, targetCategory: $targetCategory, " +
+                        "targetPK: $targetCategory, targetNotificationPK: $targetData, date: $date")
+
+                FCMData(
+                    title = title,
+                    body = body,
+                    targetCategory = targetCategory,
+                    targetData = targetData,
+                    date = date
+                )
+            }
+
+            LaunchedEffect(key1 = fcmData) {
+                if (fcmData != null) insertNotificationDataUseCase(fcmData)
+            }
+
             JustSayItTheme {
                 val context = LocalContext.current
                 val scope = rememberCoroutineScope()
@@ -50,7 +87,8 @@ class MainActivity : ComponentActivity() {
                     val padding = paddingValues
                     AppNavHost(
                         navController = navController,
-                        snackbarHostState = snackbarHostState
+                        snackbarHostState = snackbarHostState,
+                        fcmData = fcmData
                     )
                 }
             }

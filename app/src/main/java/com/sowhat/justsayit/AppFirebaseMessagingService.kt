@@ -1,27 +1,34 @@
 package com.sowhat.justsayit
 
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Color
 import android.media.RingtoneManager
-import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.sowhat.common.model.FCMData
 import com.sowhat.datastore.use_case.UpdateFcmTokenUseCase
+import com.sowhat.notification.use_case.InsertNotificationDataUseCase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class AppFirebaseMessagingService : FirebaseMessagingService() {
 
     @Inject
     lateinit var updateFcmTokenUseCase: UpdateFcmTokenUseCase
+    @Inject
+    lateinit var insertNotificationDataUseCase: InsertNotificationDataUseCase
 
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
@@ -42,14 +49,19 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
+        val time = message.sentTime
+        val date = getDate(time)
         Log.d(TAG, "Message notification payload: ${message.notification}")
         if (message.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: ${message.data}")
-            sendNotification(dataPayload = message.data)
+            scope.launch {
+                insertDataToDatabase(message.data, date)
+                sendNotification(dataPayload = message.data, date = date)
+            }
         }
     }
 
-    private fun sendNotification(dataPayload: Map<String, String>) {
+    private fun sendNotification(dataPayload: Map<String, String>, date: String) {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val requestCode = (System.currentTimeMillis() / 7).toInt()
         val notificationId: Int = (System.currentTimeMillis() / 7).toInt()
@@ -69,11 +81,24 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
             Log.i(TAG, "$key : $data")
             intent.putExtra(key, data)
         }
+        intent.putExtra("date", date)
 
         val notification = getNotificationBuilder(dataPayload, pendingIntent)
         notification?.let {
             notificationManager.notify(notificationId, it.build())
         }
+    }
+
+    private suspend fun insertDataToDatabase(dataPayload: Map<String, String>, date: String) {
+        val fcmData = FCMData(
+            title = dataPayload.getValue("title"),
+            body = dataPayload.getValue("body"),
+            targetCategory = dataPayload.getValue("targetCategory"),
+            targetData = dataPayload.getValue("targetData"),
+            date = date
+        )
+
+        insertNotificationDataUseCase(fcmData)
     }
 
     private fun getNotificationBuilder(
@@ -83,6 +108,8 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val title = dataPayload["title"].toString()
         val body = dataPayload["body"].toString()
+//        val targetCategory = dataPayload["targetCategory"].toString()
+//        val targetData = dataPayload["targetData"].toString()
         return when (title) {
             NotificationChannels.EVENT.title -> {
                 NotificationCompat.Builder(this@AppFirebaseMessagingService, NotificationChannels.EVENT.channelId)
@@ -102,6 +129,13 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
+    }
+
+    private fun getDate(timeMillis: Long): String {
+        val formatter = SimpleDateFormat("yyyy. MM. dd", Locale.KOREA)
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = timeMillis
+        return formatter.format(calendar.time)
     }
 
     companion object {

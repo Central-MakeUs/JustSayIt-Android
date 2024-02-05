@@ -15,8 +15,6 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class JustSayItApplication : Application() {
-
-
     override fun onCreate() {
         super.onCreate()
 
