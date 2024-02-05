@@ -64,6 +64,7 @@ import com.sowhat.report_presentation.common.toDate
 import com.sowhat.report_presentation.component.MyFeed
 import com.sowhat.report_presentation.component.RailBackground
 import com.sowhat.report_presentation.component.Report
+import com.sowhat.report_presentation.navigation.navigateToEditScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -97,7 +98,10 @@ fun MyPageRoute(
         reportUiState = reportUiState,
         onReportEvent = viewModel::onReportEvent,
         onDelete = viewModel::deleteFeed,
-        onMoodSubmit = viewModel::postNewMood
+        onMoodSubmit = viewModel::postNewMood,
+        onEdit = { feedId ->
+            navController.navigateToEditScreen(feedId)
+        }
     )
 
     ObserveEvents(flow = viewModel.postNewMoodEvent) { isSuccessful ->
@@ -142,7 +146,8 @@ fun MyPageScreen(
     onMyFeedEvent: (MyFeedEvent) -> Unit,
     onReportEvent: (ReportEvent) -> Unit,
     onDelete: (Long) -> Unit,
-    onMoodSubmit: (Mood?) -> Unit
+    onMoodSubmit: (Mood?) -> Unit,
+    onEdit: (Long) -> Unit
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize()
@@ -180,7 +185,8 @@ fun MyPageScreen(
                 modifier = Modifier,
                 myFeedUiState = myFeedUiState,
                 onMyFeedEvent = onMyFeedEvent,
-                pagingData = pagingData
+                pagingData = pagingData,
+                onEdit = onEdit
             )
         }
     }
@@ -218,7 +224,8 @@ private fun MyFeedItemsScreen(
     modifier: Modifier = Modifier,
     myFeedUiState: MyFeedUiState,
     onMyFeedEvent: (MyFeedEvent) -> Unit,
-    pagingData: LazyPagingItems<MyFeedEntity>
+    pagingData: LazyPagingItems<MyFeedEntity>,
+    onEdit: (Long) -> Unit,
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
@@ -284,7 +291,8 @@ private fun MyFeedItemsScreen(
                 currentDate = myFeed.createdAt.toDate()
             },
             myFeedUiState = myFeedUiState,
-            onMyFeedEvent = onMyFeedEvent
+            onMyFeedEvent = onMyFeedEvent,
+            onEdit = onEdit
         )
     }
 }
@@ -300,7 +308,8 @@ private fun MyFeedList(
     isItemIconVisible: State<Boolean>,
     onFirstItemIndexChange: (MyFeedEntity) -> Unit,
     myFeedUiState: MyFeedUiState,
-    onMyFeedEvent: (MyFeedEvent) -> Unit
+    onMyFeedEvent: (MyFeedEvent) -> Unit,
+    onEdit: (Long) -> Unit,
 ) {
     RailBackground(
         lazyListState = lazyListState,
@@ -317,15 +326,16 @@ private fun MyFeedList(
             exit = fadeOut(animationSpec = TweenSpec(durationMillis = 1000))
         ) {
             MyFeedListContent(
-                lazyListState,
-                pagingData,
-                onFirstItemIndexChange,
-                isItemIconVisible,
-                onMyFeedEvent,
-                currentDate,
-                moodItems,
-                isScrollInProgress,
-                myFeedUiState
+                lazyListState = lazyListState,
+                pagingData = pagingData,
+                onFirstItemIndexChange = onFirstItemIndexChange,
+                isItemIconVisible = isItemIconVisible,
+                onMyFeedEvent = onMyFeedEvent,
+                currentDate = currentDate,
+                moodItems = moodItems,
+                isScrollInProgress = isScrollInProgress,
+                myFeedUiState = myFeedUiState,
+                onEdit = onEdit
             )
         }
     }
@@ -341,7 +351,8 @@ private fun MyFeedListContent(
     currentDate: String?,
     moodItems: List<Mood>,
     isScrollInProgress: Boolean,
-    myFeedUiState: MyFeedUiState
+    myFeedUiState: MyFeedUiState,
+    onEdit: (Long) -> Unit
 ) {
 //    LaunchedEffect(key1 = myFeedUiState.emotion, key2 = myFeedUiState.sortBy) {
 //        Log.i("MyPage", "paging data changed")
@@ -366,16 +377,17 @@ private fun MyFeedListContent(
 
             item?.let { myFeed ->
                 FeedItem(
-                    lazyListState,
-                    index,
-                    onFirstItemIndexChange,
-                    myFeed,
-                    isItemIconVisible,
-                    item,
-                    onMyFeedEvent,
-                    currentDate,
-                    moodItems,
-                    isScrollInProgress
+                    lazyListState = lazyListState,
+                    index = index,
+                    onFirstItemIndexChange = onFirstItemIndexChange,
+                    myFeed = myFeed,
+                    isItemIconVisible = isItemIconVisible,
+                    item = item,
+                    onMyFeedEvent = onMyFeedEvent,
+                    currentDate = currentDate,
+                    moodItems = moodItems,
+                    isScrollInProgress = isScrollInProgress,
+                    onEdit = onEdit
                 )
             }
 
@@ -404,7 +416,8 @@ private fun FeedItem(
     onMyFeedEvent: (MyFeedEvent) -> Unit,
     currentDate: String?,
     moodItems: List<Mood>,
-    isScrollInProgress: Boolean
+    isScrollInProgress: Boolean,
+    onEdit: (Long) -> Unit
 ) {
     if (remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }.value == index) {
         onFirstItemIndexChange(myFeed)
@@ -428,7 +441,8 @@ private fun FeedItem(
             postData = myFeed.storyId,
             contentColor = JustSayItTheme.Colors.mainTypo,
             onItemClick = {
-                // TODO 수정 화면으로 이동
+                Log.i("MyPage", "FeedItem: ${myFeed.storyId}")
+                onEdit(myFeed.storyId)
             }
         ),
         PopupMenuItem(
@@ -461,7 +475,7 @@ private fun FeedItem(
         onMenuItemClick = {
             isPopupMenuVisible = false
             it.onItemClick?.let { it() }
-        }
+        },
     )
 }
 

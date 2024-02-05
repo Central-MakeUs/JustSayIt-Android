@@ -1,10 +1,12 @@
 package com.sowhat.designsystem.common
 
+import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.theme.JustSayItTheme
+import kotlinx.parcelize.Parcelize
 
 data class MoodItem(
     val drawable: Int,

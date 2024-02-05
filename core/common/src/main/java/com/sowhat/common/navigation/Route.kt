@@ -13,6 +13,7 @@ const val HOME = "home"
 const val MY = "my"
 
 const val POST = "post"
+const val FEED_EDIT = "feed_edit"
 
 const val NOTIFICATION = "notification"
 
