@@ -113,6 +113,7 @@ private fun ReportTitle(
             .spacedBy(JustSayItTheme.Spacing.spaceXXS)
     ) {
         Text(
+            modifier = Modifier.padding(bottom = JustSayItTheme.Spacing.spaceTiny),
             text = stringResource(id = R.string.report_title),
             style = JustSayItTheme.Typography.body2,
             color = Gray500

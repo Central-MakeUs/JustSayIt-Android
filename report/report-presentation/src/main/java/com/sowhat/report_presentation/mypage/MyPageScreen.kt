@@ -382,7 +382,7 @@ private fun MyFeedListContent(
             Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))
         }
 
-        if (pagingData.loadState.append == LoadState.Loading) {
+        if (pagingData.loadState.refresh == LoadState.Loading) {
             item {
                 AppendingCircularProgress(
                     modifier = Modifier

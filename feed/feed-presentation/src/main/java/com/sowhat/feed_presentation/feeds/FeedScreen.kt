@@ -363,24 +363,23 @@ fun FeedScreen(
             }
 
             item {
-                if (feedLazyPagingItems.loadState.refresh is LoadState.Loading
-                    || feedLazyPagingItems.loadState.append is LoadState.Loading) {
-                    AppendingCircularProgress(
-                        modifier = Modifier
-                            .padding(vertical = JustSayItTheme.Spacing.spaceBase)
-                    )
-                } else {
-                    Spacer(
-                        modifier = Modifier
-                            .height(JustSayItTheme.Spacing.spaceExtraExtraLarge)
-                            .fillMaxWidth()
-                            .background(JustSayItTheme.Colors.mainBackground)
-                    )
-                }
+//                if (feedLazyPagingItems.loadState.append is LoadState.Loading) {
+//                    AppendingCircularProgress(
+//                        modifier = Modifier
+//                            .padding(vertical = JustSayItTheme.Spacing.spaceBase)
+//                    )
+//                } else {
+                Spacer(
+                    modifier = Modifier
+                        .height(JustSayItTheme.Spacing.spaceExtraExtraLarge)
+                        .fillMaxWidth()
+                        .background(JustSayItTheme.Colors.mainBackground)
+                )
+//                }
             }
         }
 
-        if (uiState.isLoading) {
+        if (feedLazyPagingItems.loadState.refresh is LoadState.Loading) {
             CenteredCircularProgress()
         }
     }
