@@ -1,6 +1,7 @@
 package com.sowhat.designsystem.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
@@ -23,7 +24,8 @@ fun JustSayItTheme(
         LocalColors provides colorScheme,
         LocalTypography provides typography,
         LocalShapes provides shape,
-        LocalSpacing provides dimensions
+        LocalSpacing provides dimensions,
+        LocalRippleTheme provides NoRippleTheme
     ) {
         content()
     }

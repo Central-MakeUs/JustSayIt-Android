@@ -75,6 +75,7 @@ fun TextWithIconStart(
     text: String,
     textStyle: TextStyle,
     textColor: Color,
+    drawableColor: Color?,
     iconDrawable: Int?,
     drawableSize: Dp?
 ) {
@@ -88,7 +89,7 @@ fun TextWithIconStart(
                 modifier = Modifier.size(drawableSize),
                 painter = painterResource(id = iconDrawable),
                 contentDescription = "icon",
-                tint = textColor
+                tint = drawableColor ?: textColor
             )
 
             Spacer(modifier = Modifier.width(10.dp))

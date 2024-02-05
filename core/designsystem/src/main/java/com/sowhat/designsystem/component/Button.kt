@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.Emotion
+import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Gray200
 import com.sowhat.designsystem.theme.Gray500
@@ -417,7 +418,7 @@ fun SquaredIconButton(
 ) {
     Box(
         modifier = modifier
-            .rippleClickable { onClick() },
+            .noRippleClickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
         icon?.let {

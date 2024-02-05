@@ -4,8 +4,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -50,6 +52,7 @@ import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.VerticalNestedScrollView
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.designsystem.R
+import com.sowhat.designsystem.common.isScrollingUp
 import com.sowhat.designsystem.component.AlertDialogReverse
 import com.sowhat.designsystem.component.AppendingCircularProgress
 import com.sowhat.designsystem.component.CenteredCircularProgress
@@ -243,11 +246,11 @@ private fun MyFeedItemsScreen(
             } else true
         }
 
-//        AnimatedVisibility(
-//            visible = lazyListState.isScrollingUp(),
-//            enter = expandVertically(),
-//            exit = shrinkVertically(),
-//        ) {
+        AnimatedVisibility(
+            visible = lazyListState.isScrollingUp(),
+            enter = expandVertically(),
+            exit = shrinkVertically(),
+        ) {
             AppBarMyPage(
                 currentDropdownItem = myFeedUiState.emotion,
                 dropdownItems = moodItems,
@@ -266,7 +269,7 @@ private fun MyFeedItemsScreen(
                     onMyFeedEvent(MyFeedEvent.SortChanged(tabItem))
                 }
             )
-//        }
+        }
 
         MyFeedList(
             lazyListState = lazyListState,

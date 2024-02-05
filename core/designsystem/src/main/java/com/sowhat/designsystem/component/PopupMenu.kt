@@ -90,7 +90,8 @@ fun ColumnScope.PopupMenuItems(
                     textStyle = JustSayItTheme.Typography.body3,
                     textColor = textColor,
                     iconDrawable = dropdownItem.drawable,
-                    drawableSize = JustSayItTheme.Spacing.spaceLg
+                    drawableSize = JustSayItTheme.Spacing.spaceLg,
+                    drawableColor = dropdownItem.drawableTint
                 )
             },
             onClick = {
@@ -107,7 +108,8 @@ data class PopupMenuItem(
     val drawable: Int? = null,
     val postData: Long? = null,
     val onItemClick: (() -> Unit)? = null,
-    val contentColor: Color? = null
+    val contentColor: Color? = null,
+    val drawableTint: Color? = null,
 ) {
     constructor(
         title: String,
@@ -131,6 +133,21 @@ data class PopupMenuItem(
         onItemClick = onItemClick,
         postData = null,
         contentColor = contentColor
+    )
+
+    constructor(
+        title: String,
+        drawable: Int,
+        onItemClick: () -> Unit,
+        contentColor: Color,
+        drawableTint: Color
+    ): this(
+        title = title,
+        drawable = drawable,
+        onItemClick = onItemClick,
+        postData = null,
+        contentColor = contentColor,
+        drawableTint = drawableTint
     )
 
     constructor(

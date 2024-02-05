@@ -143,21 +143,27 @@ fun FeedProfile(
                 onClick = onMenuClick
             )
 
-            PopupMenuContents(
-                modifier = Modifier,
-                isVisible = isMenuForOwnerVisible,
-                items = popupMenuForOwner,
-                onDismiss = onDismiss,
-                onItemClick = onMenuItemClick
-            )
+            Box(
+                modifier = Modifier
+                    .padding(end = JustSayItTheme.Spacing.spaceSm)
+            ) {
+                PopupMenuContents(
+                    modifier = Modifier,
+                    isVisible = isMenuForOwnerVisible,
+                    items = popupMenuForOwner,
+                    onDismiss = onDismiss,
+                    onItemClick = onMenuItemClick
+                )
 
-            PopupMenuContents(
-                modifier = Modifier,
-                isVisible = isMenuForNotOwnerVisible,
-                items = popupMenuForNotOwner,
-                onDismiss = onDismiss,
-                onItemClick = onMenuItemClick
-            )
+                PopupMenuContents(
+                    modifier = Modifier,
+                    isVisible = isMenuForNotOwnerVisible,
+                    items = popupMenuForNotOwner,
+                    onDismiss = onDismiss,
+                    onItemClick = onMenuItemClick
+                )
+            }
+
         }
     }
 }

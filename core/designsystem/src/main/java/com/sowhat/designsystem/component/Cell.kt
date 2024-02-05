@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sowhat.designsystem.R
+import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.theme.Gray600
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -36,7 +37,7 @@ fun Cell(
                 vertical = 6.dp
             ).composed {
                 onClick?.let {
-                    rippleClickable { onClick() }
+                    noRippleClickable { onClick() }
                 } ?: this
             },
         verticalAlignment = Alignment.CenterVertically,
@@ -95,7 +96,7 @@ fun Cell(
             .fillMaxWidth()
             .composed {
                 onClick?.let {
-                    rippleClickable { onClick() }
+                    noRippleClickable { onClick() }
                 } ?: this
             },
         verticalAlignment = Alignment.CenterVertically,
