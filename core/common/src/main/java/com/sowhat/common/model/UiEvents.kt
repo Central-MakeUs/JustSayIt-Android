@@ -3,6 +3,12 @@ package com.sowhat.common.model
 import android.net.Uri
 import okhttp3.MultipartBody
 
+sealed class SplashEvent {
+    object NavigateToMain : SplashEvent()
+    object NavigateToSignIn : SplashEvent()
+    data class Error(val message: String) : SplashEvent()
+}
+
 sealed class SignInEvent {
     object NavigateToMain : SignInEvent()
     object NavigateToSignUp : SignInEvent()

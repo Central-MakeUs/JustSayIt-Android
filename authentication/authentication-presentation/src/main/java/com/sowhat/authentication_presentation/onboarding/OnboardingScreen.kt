@@ -4,16 +4,17 @@ import android.app.Activity
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -30,13 +31,12 @@ import com.sowhat.designsystem.component.CenteredCircularProgress
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.authentication_presentation.common.Platform
 import com.sowhat.authentication_presentation.common.SignInPlatform
-import com.sowhat.authentication_presentation.component.Logo
+import com.sowhat.authentication_presentation.component.AppTitle
 import com.sowhat.authentication_presentation.component.SignIn
 import com.sowhat.authentication_presentation.component.TermText
 import com.sowhat.authentication_presentation.navigation.navigateToMain
 import com.sowhat.authentication_presentation.navigation.navigateToUserConfig
 import com.sowhat.authentication_presentation.util.GoogleOAuthClient
-import com.sowhat.authentication_presentation.util.KakaoOAuthClient
 import com.sowhat.authentication_presentation.util.NaverOAuthClient
 import com.sowhat.common.navigation.ONBOARDING
 import kotlinx.coroutines.launch
@@ -162,15 +162,25 @@ private fun OnboardingScreenContent(
             .fillMaxSize()
             .background(JustSayItTheme.Colors.mainBackground)
     ) {
-        val (logo, signIn, terms, loading) = createRefs()
+        val (logo, appTitle, signIn, terms, loading) = createRefs()
         val topSpace = JustSayItTheme.Spacing.spaceExtraExtraLarge
         val signInTermSpace = JustSayItTheme.Spacing.spaceXXL
 
-        Logo(
+        Icon(
+            modifier = Modifier.constrainAs(logo) {
+                top.linkTo(parent.top, margin = 180.dp)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            },
+            painter = painterResource(id = R.drawable.ic_logo_black),
+            contentDescription = "logo",
+            tint = JustSayItTheme.Colors.mainTypo
+        )
+
+        AppTitle(
             modifier = Modifier
-                .constrainAs(logo) {
-                    top.linkTo(parent.top, margin = 160.dp)
-                    bottom.linkTo(signIn.top)
+                .constrainAs(appTitle) {
+                    top.linkTo(logo.bottom, margin = 60.dp)
                 },
             title = APP_NAME,
             subTitle = APP_INTRO
@@ -179,8 +189,7 @@ private fun OnboardingScreenContent(
         SignIn(
             modifier = Modifier
                 .constrainAs(signIn) {
-                    top.linkTo(logo.bottom)
-                    bottom.linkTo(parent.bottom, margin = 60.dp)
+                    top.linkTo(appTitle.bottom, margin = 100.dp)
                 },
             headerText = SIGN_IN,
             signInPlatforms = signInPlatforms,
@@ -189,7 +198,7 @@ private fun OnboardingScreenContent(
         TermText(
             modifier = Modifier
                 .constrainAs(terms) {
-                    top.linkTo(signIn.bottom, margin = signInTermSpace)
+                    top.linkTo(signIn.bottom, margin = 32.dp)
                 }
                 .fillMaxWidth()
         )
@@ -197,7 +206,7 @@ private fun OnboardingScreenContent(
         if (isLoading) CenteredCircularProgress(
             modifier = Modifier.constrainAs(loading) {
                 top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
+                bottom.linkTo(parent.bottom, margin = 60.dp)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             }

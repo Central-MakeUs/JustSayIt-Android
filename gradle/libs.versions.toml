@@ -56,6 +56,8 @@ work = "2.8.0"
 
 emojiVersion = "1.0.0-alpha03"
 
+lottie = "6.1.0"
+
 
 [libraries]
 # for gradle plugins -> for build-logic/build.gradle dependencies
@@ -144,6 +146,9 @@ compose-livedata = { group = "androidx.compose.runtime", name = "runtime-livedat
 emoji = { group = "androidx.emoji2", name = "emoji2", version.ref = "emojiVersion" }
 emoji-views = { group = "androidx.emoji2", name = "emoji2-views", version.ref = "emojiVersion" }
 emoji-views-helper = { group = "androidx.emoji2", name = "emoji2-views-helper", version.ref = "emojiVersion" }
+
+# lottie
+lottie-animation = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }

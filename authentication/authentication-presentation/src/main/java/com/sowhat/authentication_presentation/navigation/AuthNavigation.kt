@@ -10,12 +10,33 @@ import com.sowhat.common.navigation.MAIN
 import com.sowhat.common.navigation.ONBOARDING
 import com.sowhat.authentication_presentation.configuration.UserConfigRoute
 import com.sowhat.authentication_presentation.onboarding.OnboardingRoute
+import com.sowhat.authentication_presentation.splash.SplashRoute
+import com.sowhat.common.navigation.SPLASH
+
+fun NavGraphBuilder.splashScreen(
+    navController: NavHostController
+) {
+    composable(route = SPLASH) {
+        SplashRoute(navController = navController)
+    }
+}
 
 fun NavGraphBuilder.onBoardingScreen(
     navController: NavHostController
 ) {
     composable(route = ONBOARDING) {
         OnboardingRoute(navController = navController)
+    }
+}
+
+fun NavController.navigateToOnboarding(
+    popUpTo: String
+) {
+    this.navigate(ONBOARDING) {
+        popUpTo(popUpTo) {
+            inclusive = true
+        }
+        launchSingleTop = true
     }
 }
 

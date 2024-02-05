@@ -47,5 +47,7 @@ internal fun Project.configureCommonLibraries() {
 
         // for using appcompattextview
         implementation(libs, "appcompat")
+
+        implementation(libs, "lottie.animation")
     }
 }
