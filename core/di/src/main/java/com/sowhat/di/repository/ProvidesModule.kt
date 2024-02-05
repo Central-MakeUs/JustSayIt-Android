@@ -1,16 +1,16 @@
 package com.sowhat.di.repository
 
-import com.practice.data.remote.CommonApi
-import com.practice.data.repository.CommonRepositoryImpl
-import com.practice.database.FeedDatabase
-import com.practice.domain.repository.CommonRepository
-import com.practice.feed_data.remote.FeedApi
-import com.practice.feed_data.repository.EntireFeedRepositoryImpl
-import com.practice.post_data.remote.PostApi
-import com.practice.post_data.repository.PostRepositoryImpl
-import com.practice.report_data.remote.ReportApi
-import com.practice.report_data.repository.ReportRepositoryImpl
-import com.practice.report_domain.repository.ReportRepository
+import com.sowhat.data.remote.CommonApi
+import com.sowhat.data.repository.CommonRepositoryImpl
+import com.sowhat.database.FeedDatabase
+import com.sowhat.domain.repository.CommonRepository
+import com.sowhat.feed_data.remote.FeedApi
+import com.sowhat.feed_data.repository.EntireFeedRepositoryImpl
+import com.sowhat.post_data.remote.PostApi
+import com.sowhat.post_data.repository.PostRepositoryImpl
+import com.sowhat.report_data.remote.ReportApi
+import com.sowhat.report_data.repository.ReportRepositoryImpl
+import com.sowhat.report_domain.repository.ReportRepository
 import com.sowhat.authentication_data.remote.AuthApi
 import com.sowhat.authentication_data.repository.AuthRepositoryImpl
 import com.sowhat.authentication_domain.repository.AuthRepository

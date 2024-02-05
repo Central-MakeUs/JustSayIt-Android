@@ -1,11 +1,10 @@
 package com.sowhat.di.use_case
 
-import com.practice.database.FeedDatabase
-import com.practice.report_data.remote.ReportApi
-import com.practice.report_domain.repository.ReportRepository
-import com.practice.report_domain.use_case.GetMyFeedUseCase
-import com.practice.report_domain.use_case.GetTodayMoodDataUseCase
-import com.practice.report_domain.use_case.PostNewMoodUseCase
+import com.sowhat.database.FeedDatabase
+import com.sowhat.report_domain.repository.ReportRepository
+import com.sowhat.report_domain.use_case.GetMyFeedUseCase
+import com.sowhat.report_domain.use_case.GetTodayMoodDataUseCase
+import com.sowhat.report_domain.use_case.PostNewMoodUseCase
 import com.sowhat.datastore.AuthDataRepository
 import dagger.Module
 import dagger.Provides

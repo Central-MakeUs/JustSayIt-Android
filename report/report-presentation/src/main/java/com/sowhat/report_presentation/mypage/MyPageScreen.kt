@@ -3,15 +3,10 @@ package com.sowhat.report_presentation.mypage
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.TweenSpec
-import androidx.compose.animation.expandIn
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -36,11 +30,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
@@ -48,7 +40,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
-import com.practice.database.entity.MyFeedEntity
+import com.sowhat.database.entity.MyFeedEntity
 import com.sowhat.common.util.ObserveEvents
 import com.sowhat.designsystem.common.Mood
 import com.sowhat.designsystem.common.rememberNestedScrollViewState
@@ -58,7 +50,6 @@ import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.VerticalNestedScrollView
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.designsystem.R
-import com.sowhat.designsystem.common.isScrollingUp
 import com.sowhat.designsystem.component.AlertDialogReverse
 import com.sowhat.designsystem.component.AppendingCircularProgress
 import com.sowhat.designsystem.component.CenteredCircularProgress

@@ -1,6 +1,5 @@
 package com.sowhat.feed_domain.use_case
 
-import com.practice.database.FeedDatabase
 import com.sowhat.common.model.Resource
 import com.sowhat.datastore.AuthDataRepository
 import com.sowhat.feed_domain.repository.EntireFeedRepository

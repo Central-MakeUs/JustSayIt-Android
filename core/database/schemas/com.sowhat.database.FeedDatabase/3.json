@@ -1,0 +1,368 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "5949566a4510723aadb17737d847dd16",
+    "entities": [
+      {
+        "tableName": "my_feed",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`storyUUID` TEXT NOT NULL, `storyId` INTEGER NOT NULL, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `writerId` INTEGER NOT NULL, `totalCount` INTEGER NOT NULL, `happinessCount` INTEGER, `sadnessCount` INTEGER, `surprisedCount` INTEGER, `angryCount` INTEGER, `isHappinessSelected` INTEGER NOT NULL, `isSadnessSelected` INTEGER NOT NULL, `isSurprisedSelected` INTEGER NOT NULL, `isAngrySelected` INTEGER NOT NULL, `nickname` TEXT NOT NULL, `profileImg` TEXT NOT NULL, `bodyText` TEXT NOT NULL, `photo` TEXT NOT NULL, `writerEmotion` TEXT NOT NULL, `isAnonymous` INTEGER NOT NULL, `isModified` INTEGER NOT NULL, `isOpened` INTEGER NOT NULL, PRIMARY KEY(`storyUUID`))",
+        "fields": [
+          {
+            "fieldPath": "storyUUID",
+            "columnName": "storyUUID",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "storyId",
+            "columnName": "storyId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "writerId",
+            "columnName": "writerId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalCount",
+            "columnName": "totalCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "happinessCount",
+            "columnName": "happinessCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sadnessCount",
+            "columnName": "sadnessCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "surprisedCount",
+            "columnName": "surprisedCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "angryCount",
+            "columnName": "angryCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isHappinessSelected",
+            "columnName": "isHappinessSelected",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSadnessSelected",
+            "columnName": "isSadnessSelected",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSurprisedSelected",
+            "columnName": "isSurprisedSelected",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isAngrySelected",
+            "columnName": "isAngrySelected",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nickname",
+            "columnName": "nickname",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "profileImg",
+            "columnName": "profileImg",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bodyText",
+            "columnName": "bodyText",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "photo",
+            "columnName": "photo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "writerEmotion",
+            "columnName": "writerEmotion",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isAnonymous",
+            "columnName": "isAnonymous",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isModified",
+            "columnName": "isModified",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isOpened",
+            "columnName": "isOpened",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "storyUUID"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "entire_feed",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`storyUUID` TEXT NOT NULL, `storyId` INTEGER NOT NULL, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL, `writerId` INTEGER NOT NULL, `totalCount` INTEGER NOT NULL, `happinessCount` INTEGER, `sadnessCount` INTEGER, `surprisedCount` INTEGER, `angryCount` INTEGER, `isHappinessSelected` INTEGER NOT NULL, `isSadnessSelected` INTEGER NOT NULL, `isSurprisedSelected` INTEGER NOT NULL, `isAngrySelected` INTEGER NOT NULL, `nickname` TEXT NOT NULL, `profileImg` TEXT NOT NULL, `bodyText` TEXT NOT NULL, `photo` TEXT NOT NULL, `writerEmotion` TEXT NOT NULL, `isAnonymous` INTEGER NOT NULL, `isModified` INTEGER NOT NULL, `isOpened` INTEGER NOT NULL, `selectedEmotionCode` TEXT, `isOwner` INTEGER, PRIMARY KEY(`storyUUID`))",
+        "fields": [
+          {
+            "fieldPath": "storyUUID",
+            "columnName": "storyUUID",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "storyId",
+            "columnName": "storyId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "writerId",
+            "columnName": "writerId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalCount",
+            "columnName": "totalCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "happinessCount",
+            "columnName": "happinessCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sadnessCount",
+            "columnName": "sadnessCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "surprisedCount",
+            "columnName": "surprisedCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "angryCount",
+            "columnName": "angryCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isHappinessSelected",
+            "columnName": "isHappinessSelected",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSadnessSelected",
+            "columnName": "isSadnessSelected",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSurprisedSelected",
+            "columnName": "isSurprisedSelected",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isAngrySelected",
+            "columnName": "isAngrySelected",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nickname",
+            "columnName": "nickname",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "profileImg",
+            "columnName": "profileImg",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bodyText",
+            "columnName": "bodyText",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "photo",
+            "columnName": "photo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "writerEmotion",
+            "columnName": "writerEmotion",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isAnonymous",
+            "columnName": "isAnonymous",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isModified",
+            "columnName": "isModified",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isOpened",
+            "columnName": "isOpened",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "selectedEmotionCode",
+            "columnName": "selectedEmotionCode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isOwner",
+            "columnName": "isOwner",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "storyUUID"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "notification",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`notificationUUID` TEXT NOT NULL, `title` TEXT NOT NULL, `body` TEXT NOT NULL, `targetCategory` TEXT NOT NULL, `targetData` TEXT NOT NULL, `date` TEXT NOT NULL, PRIMARY KEY(`notificationUUID`))",
+        "fields": [
+          {
+            "fieldPath": "notificationUUID",
+            "columnName": "notificationUUID",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "body",
+            "columnName": "body",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetCategory",
+            "columnName": "targetCategory",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetData",
+            "columnName": "targetData",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "notificationUUID"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5949566a4510723aadb17737d847dd16')"
+    ]
+  }
+}

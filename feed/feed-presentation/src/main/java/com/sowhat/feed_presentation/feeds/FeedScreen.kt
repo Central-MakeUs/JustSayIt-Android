@@ -1,12 +1,6 @@
 package com.sowhat.feed_presentation.feeds
 
 import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.TweenSpec
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,8 +16,6 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,12 +29,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.practice.database.entity.EntireFeedEntity
+import com.sowhat.database.entity.EntireFeedEntity
 import com.sowhat.common.model.UiState
-import com.sowhat.common.util.LaunchWhenStarted
 import com.sowhat.common.util.ObserveEvents
 import com.sowhat.designsystem.common.MOOD_ANGRY
 import com.sowhat.designsystem.common.MOOD_HAPPY
@@ -54,7 +44,6 @@ import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.feed_presentation.common.FeedEvent
 import com.sowhat.feed_presentation.common.FeedListState
-import com.sowhat.designsystem.common.isScrollingUp
 import com.sowhat.designsystem.common.rememberMoodItemsForFeed
 import com.sowhat.designsystem.component.CenteredCircularProgress
 import com.sowhat.designsystem.R
@@ -64,9 +53,7 @@ import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.SelectionAlertDialog
 import com.sowhat.feed_presentation.common.PostResult
 import com.sowhat.feed_presentation.component.Feed
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @Composable

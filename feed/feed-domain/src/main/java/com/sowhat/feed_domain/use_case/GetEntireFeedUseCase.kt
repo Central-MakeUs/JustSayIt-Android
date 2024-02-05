@@ -3,9 +3,8 @@ package com.sowhat.feed_domain.use_case
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.practice.database.FeedDatabase
-import com.practice.database.entity.EntireFeedEntity
-import com.practice.database.entity.MyFeedEntity
+import com.sowhat.database.FeedDatabase
+import com.sowhat.database.entity.EntireFeedEntity
 import com.sowhat.datastore.AuthDataRepository
 import com.sowhat.feed_domain.EntireFeedRemoteMediator
 import com.sowhat.feed_domain.repository.EntireFeedRepository

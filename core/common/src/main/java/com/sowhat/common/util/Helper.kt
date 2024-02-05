@@ -9,6 +9,9 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 
 fun getImageMultipartBody(
@@ -57,4 +60,11 @@ fun String.toTime(): String = try {
 } catch (e: Exception) {
     Log.e("toDate", "error : ${e.message}")
     "server error"
+}
+
+fun getDate(timeMillis: Long): String {
+    val formatter = SimpleDateFormat("yyyy. MM. dd", Locale.KOREA)
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = timeMillis
+    return formatter.format(calendar.time)
 }

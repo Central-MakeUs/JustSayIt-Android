@@ -9,6 +9,7 @@ import com.sowhat.datastore.AuthDataSerializer
 import com.sowhat.datastore.DATASTORE_AUTH
 import com.sowhat.datastore.model.AuthData
 import com.sowhat.datastore.AuthDataRepositoryImpl
+import com.sowhat.datastore.use_case.UpdateFcmTokenUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.EntryPoint
@@ -41,4 +42,10 @@ object DatastoreModule {
     ): AuthDataRepository {
         return AuthDataRepositoryImpl(protoDataStore)
     }
+
+    @Provides
+    @Singleton
+    fun provideUpdateFcmTokenUseCase(
+        authDataRepository: AuthDataRepository
+    ): UpdateFcmTokenUseCase = UpdateFcmTokenUseCase(authDataRepository)
 }
