@@ -91,15 +91,19 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private suspend fun insertDataToDatabase(dataPayload: Map<String, String>, date: String) {
-        val fcmData = FCMData(
-            title = dataPayload.getValue("title"),
-            body = dataPayload.getValue("body"),
-            targetCategory = dataPayload.getValue("targetCategory"),
-            targetData = dataPayload.getValue("targetData"),
-            date = date
-        )
+        try {
+            val fcmData = FCMData(
+                title = dataPayload.getValue("title"),
+                body = dataPayload.getValue("body"),
+                targetCategory = dataPayload.getValue("targetCategory"),
+                targetData = dataPayload.getValue("targetData"),
+                date = date
+            )
 
-        insertNotificationDataUseCase(fcmData)
+            insertNotificationDataUseCase(fcmData)
+        } catch (e: Exception) {
+            Log.i(TAG, "insertDataToDatabase: ${e.message}")
+        }
     }
 
     private fun getNotificationBuilder(

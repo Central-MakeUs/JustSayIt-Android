@@ -52,7 +52,11 @@ class MainActivity : ComponentActivity() {
             val fcmData = intent.extras?.let { getFcmData(it) }
 
             LaunchedEffect(key1 = fcmData) {
-                if (fcmData != null) insertNotificationDataUseCase(fcmData)
+                if (fcmData != null) try {
+                    insertNotificationDataUseCase(fcmData)
+                } catch (e: Exception) {
+                    Log.e(TAG, "onCreate: ${e.message}", )
+                }
             }
 
             JustSayItTheme {
@@ -78,7 +82,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun getFcmData(it: Bundle): FCMData {
+    private fun getFcmData(it: Bundle): FCMData? = try {
         title = it.getString("title", "")
         body = it.getString("body", "")
         targetCategory = it.getString("targetCategory", "")
@@ -89,13 +93,16 @@ class MainActivity : ComponentActivity() {
                     "targetPK: $targetCategory, targetNotificationPK: $targetData, date: $date"
         )
 
-        return FCMData(
+        FCMData(
             title = title,
             body = body,
             targetCategory = targetCategory,
             targetData = targetData,
             date = date
         )
+    } catch (e: Exception) {
+        Log.e(TAG, "getFcmData: ${e.message}", )
+        null
     }
 
     @Composable
@@ -130,5 +137,9 @@ class MainActivity : ComponentActivity() {
                 launcherMultiplePermissions.launch(permissions)
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
     }
 }
