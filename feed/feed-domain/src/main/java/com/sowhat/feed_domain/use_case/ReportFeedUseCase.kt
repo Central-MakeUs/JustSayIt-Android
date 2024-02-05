@@ -2,6 +2,7 @@ package com.sowhat.feed_domain.use_case
 
 import com.sowhat.common.model.Resource
 import com.sowhat.datastore.AuthDataRepository
+import com.sowhat.feed_domain.model.ReportBody
 import com.sowhat.feed_domain.repository.EntireFeedRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -18,8 +19,10 @@ class ReportFeedUseCase @Inject constructor(
         return accessToken?.let {
             entireFeedRepository.reportFeed(
                 accessToken = accessToken,
-                feedId = feedId,
-                reportCode = reportCode
+                reportBody = ReportBody(
+                    reportCode = reportCode,
+                    storyId =  feedId
+                )
             )
         } ?: Resource.Error(
             data = null,

@@ -3,6 +3,7 @@ package com.sowhat.feed_domain.use_case
 import com.sowhat.database.FeedDatabase
 import com.sowhat.common.model.Resource
 import com.sowhat.datastore.AuthDataRepository
+import com.sowhat.feed_domain.model.BlockBody
 import com.sowhat.feed_domain.repository.EntireFeedRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -20,7 +21,7 @@ class BlockUserUseCase @Inject constructor(
         return accessToken?.let {
             entireFeedRepository.blockUser(
                 accessToken = accessToken,
-                blockedId = userId
+                blockBody = BlockBody(blockedId = userId)
             )
         } ?: Resource.Error(
             message = "로그인이 이뤄지지 않았습니다."

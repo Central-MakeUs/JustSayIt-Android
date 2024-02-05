@@ -1,7 +1,10 @@
 package com.sowhat.feed_domain.repository
 
 import com.sowhat.common.model.Resource
+import com.sowhat.feed_domain.model.BlockBody
 import com.sowhat.feed_domain.model.EntireFeed
+import com.sowhat.feed_domain.model.PostEmpathyBody
+import com.sowhat.feed_domain.model.ReportBody
 import com.sowhat.network.model.ResponseBody
 import retrofit2.http.Header
 import retrofit2.http.PATCH
@@ -20,20 +23,18 @@ interface EntireFeedRepository {
 
     suspend fun reportFeed(
         accessToken: String,
-        feedId: Long,
-        reportCode: String
+        reportBody: ReportBody
     ): Resource<Unit?>
 
     suspend fun blockUser(
         accessToken: String,
-        blockedId: Long
+        blockBody: BlockBody
     ): Resource<Unit?>
 
 
     suspend fun postFeedEmpathy(
         accessToken: String,
-        feedId: Long,
-        emotionCode: String
+        postEmpathyBody: PostEmpathyBody
     ): Resource<Unit?>
 
 

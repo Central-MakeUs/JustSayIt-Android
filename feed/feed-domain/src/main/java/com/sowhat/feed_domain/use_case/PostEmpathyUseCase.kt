@@ -2,6 +2,7 @@ package com.sowhat.feed_domain.use_case
 
 import com.sowhat.common.model.Resource
 import com.sowhat.datastore.AuthDataRepository
+import com.sowhat.feed_domain.model.PostEmpathyBody
 import com.sowhat.feed_domain.repository.EntireFeedRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -18,8 +19,10 @@ class PostEmpathyUseCase @Inject constructor(
         return accessToken?.let {
             entireFeedRepository.postFeedEmpathy(
                 accessToken = accessToken,
-                feedId = feedId,
-                emotionCode = emotionCode
+                postEmpathyBody = PostEmpathyBody(
+                    emotionCode = emotionCode,
+                    storyId = feedId
+                )
             )
         } ?: Resource.Error(
             data = null,

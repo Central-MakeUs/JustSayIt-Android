@@ -6,7 +6,10 @@ import com.sowhat.database.entity.EntireFeedEntity
 import com.sowhat.feed_data.model.FeedResponse
 import com.sowhat.feed_data.remote.FeedApi
 import com.sowhat.common.model.Resource
+import com.sowhat.feed_domain.model.BlockBody
 import com.sowhat.feed_domain.model.EntireFeed
+import com.sowhat.feed_domain.model.PostEmpathyBody
+import com.sowhat.feed_domain.model.ReportBody
 import com.sowhat.feed_domain.repository.EntireFeedRepository
 import com.sowhat.network.util.getHttpErrorResource
 import com.sowhat.network.util.getIOErrorResource
@@ -50,14 +53,12 @@ class EntireFeedRepositoryImpl(
 
     override suspend fun reportFeed(
         accessToken: String,
-        feedId: Long,
-        reportCode: String
+        reportBody: ReportBody
     ): Resource<Unit?> = try {
 
         val reportResult = feedApi.reportFeed(
             accessToken = accessToken,
-            feedId = feedId,
-            reportCode = reportCode
+            reportBody = reportBody
         )
 
         if (reportResult.isSuccess) {
@@ -78,16 +79,16 @@ class EntireFeedRepositoryImpl(
 
     override suspend fun blockUser(
         accessToken: String,
-        blockedId: Long
+        blockBody: BlockBody
     ): Resource<Unit?> = try {
         val blockResult = feedApi.blockUser(
             accessToken = accessToken,
-            blockedId = blockedId
+            blockBody = blockBody
         )
         val dao = feedDatabase.entireFeedDao
 
         if (blockResult.isSuccess) {
-            dao.deleteFeedItemByUserId(blockedId)
+            dao.deleteFeedItemByUserId(blockBody.blockedId)
 
             Resource.Success(
                 data = blockResult.data,
@@ -106,17 +107,15 @@ class EntireFeedRepositoryImpl(
 
     override suspend fun postFeedEmpathy(
         accessToken: String,
-        feedId: Long,
-        emotionCode: String
+        postEmpathyBody: PostEmpathyBody
     ): Resource<Unit?> = try {
         val dao = feedDatabase.entireFeedDao
 
-        Log.i("FeedRepository", "emotionCode: $emotionCode")
+        Log.i("FeedRepository", "emotionCode: ${postEmpathyBody.emotionCode}")
 
         val postResult = feedApi.postFeedEmpathy(
             accessToken = accessToken,
-            feedId = feedId,
-            emotionCode = emotionCode
+            postEmpathyBody = postEmpathyBody
         )
 
         if (postResult.isSuccess) {
