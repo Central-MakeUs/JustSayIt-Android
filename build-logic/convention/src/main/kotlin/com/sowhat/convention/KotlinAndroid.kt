@@ -58,6 +58,11 @@ internal fun Project.configureKotlinAndroid() {
                     getDefaultProguardFile("proguard-android-optimize.txt"),
                     "proguard-rules.pro"
                 )
+                buildConfigField("String", "NAVER_CLIENT_ID", naverClientId.toString())
+                buildConfigField("String", "NAVER_CLIENT_SECRET", naverClientSecret.toString())
+                buildConfigField("String", "KAKAO_NATIVE_APP_KEY", kakaoNativeAppKey.toString())
+                resValue("string", "kakao_oauth_host", kakaoOAuthHost.toString())
+                buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", googleWebClientId.toString())
             }
         }
     }
