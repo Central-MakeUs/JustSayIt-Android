@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -47,12 +48,15 @@ import com.sowhat.designsystem.common.rippleClickable
 import com.sowhat.designsystem.component.DefaultButtonFull
 import com.sowhat.designsystem.component.ImageButton
 import com.sowhat.designsystem.component.TextDrawableEnd
+import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.Gray500
+import com.sowhat.report_presentation.common.ReportUiState
 import com.sowhat.report_presentation.common.TodayMoodItem
 
 @Composable
 fun Report(
     modifier: Modifier = Modifier,
+    reportUiState: ReportUiState,
     nickname: String,
     isActive: Boolean,
     selectedMood: Mood?,
@@ -70,7 +74,10 @@ fun Report(
         verticalArrangement = Arrangement
             .spacedBy(JustSayItTheme.Spacing.spaceBase)
     ) {
-        ReportTitle(nickname = nickname)
+        ReportTitle(
+            nickname = nickname,
+            isLoading = reportUiState.isLoading
+        )
         ReportCard(
             isActive = isActive,
             selectedMood = selectedMood,
@@ -78,7 +85,7 @@ fun Report(
             onMoodSubmit = onMoodSubmit,
             todayMoodItems = todayMoodItems
         )
-        ReportButton(onClick = {})
+//        ReportButton(onClick = {})
     }
 }
 
@@ -106,6 +113,7 @@ fun ReportButton(
 private fun ReportTitle(
     modifier: Modifier = Modifier,
     nickname: String,
+    isLoading: Boolean
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -120,7 +128,12 @@ private fun ReportTitle(
         )
 
         Text(
-            text = stringResource(id = R.string.report_subtitle, nickname),
+            text = if (!isLoading) stringResource(
+                id = R.string.report_subtitle,
+                nickname
+            ) else stringResource(
+                id = R.string.report_subtitle_loading
+            ),
             style = JustSayItTheme.Typography.heading2,
             color = JustSayItTheme.Colors.mainTypo,
             maxLines = 2,
@@ -146,7 +159,8 @@ private fun ReportCard(
         colors = CardDefaults.cardColors(
             containerColor = JustSayItTheme.Colors.mainBackground,
             contentColor = contentColorFor(backgroundColor = JustSayItTheme.Colors.mainBackground)
-        )
+        ),
+        border = BorderStroke(width = JustSayItTheme.Spacing.border, color = Gray300)
     ) {
         ReportContent(
             selectedMood = selectedMood,
@@ -353,6 +367,7 @@ fun ReportPreview() {
         onMoodSubmit = {},
         todayMoodItems = listOf(
             TodayMoodItem(Mood.HAPPY, "12:00"), TodayMoodItem(Mood.HAPPY, "12:00")
-        )
+        ),
+        reportUiState = ReportUiState()
     )
 }

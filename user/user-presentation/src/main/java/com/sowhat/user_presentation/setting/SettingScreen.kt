@@ -83,6 +83,12 @@ fun SettingScreen(
             )
         }
     ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(JustSayItTheme.Colors.mainBackground)
+        )
+
         if (uiState.isLoading) {
             CenteredCircularProgress(
                 modifier = Modifier
@@ -161,7 +167,7 @@ private fun SettingScreenContent(
                 ),
                 MenuItem(
                     title = stringResource(id = R.string.setting_item_version),
-                    trailingText = "Ver.1.0"
+                    trailingText = stringResource(id = R.string.setting_item_version_num)
                 ),
             )
         )

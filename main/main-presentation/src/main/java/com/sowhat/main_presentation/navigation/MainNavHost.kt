@@ -1,12 +1,16 @@
 package com.sowhat.main_presentation.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.sowhat.notification_presentation.navigation.notificationScreen
 import com.sowhat.common.navigation.HOME
 import com.sowhat.common.navigation.MAIN
+import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.feed_presentation.navigation.homeScreen
 import com.sowhat.report_presentation.navigation.myScreen
 import com.sowhat.user_presentation.navigation.settingScreen

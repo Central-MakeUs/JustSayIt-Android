@@ -107,6 +107,7 @@
 
     <string name="report_title">오랜만이에요.</string>
     <string name="report_subtitle">%s님,\n지금 기분이 어떠신가요?</string>
+    <string name="report_subtitle_loading">로딩중입니다.\n지금 기분이 어떠신가요?</string>
     <string name="report_tracker">Mood Tracker</string>
 
     <string name="report_view_report">내 감정 분석 레포트 보러가기</string>
@@ -119,6 +120,8 @@
     <string name="setting_item_terms">이용약관</string>
     <string name="setting_item_privacy">개인정보 보호 정책</string>
     <string name="setting_item_version">앱 버전</string>
+    <string name="setting_item_version_num">Ver 1.0</string>
+
 
     <string name="setting_title_setting">설정</string>
     <string name="setting_item_indie_info">개인 정보 관리</string>

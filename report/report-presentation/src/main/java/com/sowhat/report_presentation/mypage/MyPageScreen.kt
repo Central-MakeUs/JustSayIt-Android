@@ -162,6 +162,7 @@ fun MyPageScreen(
             state = nestedScrollViewState,
             header = {
                 Report(
+                    reportUiState = reportUiState,
                     nickname = reportUiState.nickname,
                     isActive = reportUiState.isSubmitEnabled,
                     selectedMood = reportUiState.selectedMood,

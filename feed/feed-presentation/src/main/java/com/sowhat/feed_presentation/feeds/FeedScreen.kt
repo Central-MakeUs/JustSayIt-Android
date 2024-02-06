@@ -2,9 +2,13 @@ package com.sowhat.feed_presentation.feeds
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -268,116 +272,130 @@ fun FeedScreen(
             .background(JustSayItTheme.Colors.mainBackground),
         topBar = { AnimatedAppBar(lazyListState, feedListState, onFeedEvent) },
     ) { paddingValues ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(JustSayItTheme.Colors.mainBackground)
-                .padding(paddingValues),
-            state = lazyListState
+        )
+
+        AnimatedVisibility(
+            visible = (
+                    feedLazyPagingItems.loadState.refresh !is LoadState.Loading
+                    ),
+            enter = fadeIn(animationSpec = TweenSpec(durationMillis = 1000)),
+            exit = fadeOut(animationSpec = TweenSpec(durationMillis = 1000))
         ) {
-            items(
-                count = feedLazyPagingItems.itemCount,
-                key = feedLazyPagingItems.itemKey { item -> item.storyUUID },
-                contentType = { "Feed" }
-            ) { index ->
-                val feed = feedLazyPagingItems[index]
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(JustSayItTheme.Colors.mainBackground)
+                    .padding(paddingValues),
+                state = lazyListState
+            ) {
+                items(
+                    count = feedLazyPagingItems.itemCount,
+                    key = feedLazyPagingItems.itemKey { item -> item.storyUUID },
+                    contentType = { "Feed" }
+                ) { index ->
+                    val feed = feedLazyPagingItems[index]
 
-                if (feed != null) {
-                    var happinessCount by remember { mutableStateOf(feed.happinessCount) }
-                    var sadnessCount by remember { mutableStateOf(feed.sadnessCount) }
-                    var surprisedCount by remember { mutableStateOf(feed.surprisedCount) }
-                    var angryCount by remember { mutableStateOf(feed.angryCount) }
+                    if (feed != null) {
+                        var happinessCount by remember { mutableStateOf(feed.happinessCount) }
+                        var sadnessCount by remember { mutableStateOf(feed.sadnessCount) }
+                        var surprisedCount by remember { mutableStateOf(feed.surprisedCount) }
+                        var angryCount by remember { mutableStateOf(feed.angryCount) }
 
-                    val sympathyItems = getValidatedSympathyItems(
-                        feed = feed,
-                        happinessCount = feed.happinessCount,
-                        sadnessCount = feed.sadnessCount,
-                        surprisedCount = feed.surprisedCount,
-                        angryCount = feed.angryCount
-                    )
+                        val sympathyItems = getValidatedSympathyItems(
+                            feed = feed,
+                            happinessCount = feed.happinessCount,
+                            sadnessCount = feed.sadnessCount,
+                            surprisedCount = feed.surprisedCount,
+                            angryCount = feed.angryCount
+                        )
 
-                    var selectedSympathy by remember {
-                        mutableStateOf(
-                            sympathyItems.find { moodItem ->
-                                moodItem.postData == feed.selectedEmotionCode
-                            }
+                        var selectedSympathy by remember {
+                            mutableStateOf(
+                                sympathyItems.find { moodItem ->
+                                    moodItem.postData == feed.selectedEmotionCode
+                                }
+                            )
+                        }
+
+                        Feed(
+                            navController = navController,
+                            feedItem = feed,
+                            onFeedEvent = onFeedEvent,
+                            selectedSympathy = selectedSympathy,
+                            sympathyItems = sympathyItems,
+                            onSympathyChange = { changedItem ->
+                                if (changedItem != null) {
+                                    selectedSympathy = changedItem
+                                    postEmpathy(feed.storyId, changedItem.postData, index)
+                                    when (changedItem.postData) {
+                                        MOOD_HAPPY -> {
+                                            happinessCount = (happinessCount ?: 0) + 1
+                                            selectedSympathy?.title = happinessCount.toString()
+                                            Log.i("FeedScreen", "happy count changed: $happinessCount")
+                                        }
+                                        MOOD_SAD -> {
+                                            sadnessCount = (sadnessCount ?: 0) + 1
+                                            selectedSympathy?.title = sadnessCount.toString()
+                                        }
+                                        MOOD_ANGRY -> {
+                                            angryCount = (angryCount ?: 0) + 1
+                                            selectedSympathy?.title = angryCount.toString()
+                                        }
+                                        MOOD_SURPRISED -> {
+                                            surprisedCount = (surprisedCount ?: 0) + 1
+                                            selectedSympathy?.title = surprisedCount.toString()
+                                        }
+                                        else -> {}
+                                    }
+                                } else {
+                                    cancelEmpathy(feed.storyId, selectedSympathy?.postData, index)
+                                    when (selectedSympathy?.postData) {
+                                        MOOD_HAPPY -> {
+                                            happinessCount = happinessCount?.minus(1)
+                                            Log.i("FeedScreen", "happy count changed: $happinessCount")
+                                            selectedSympathy?.title = happinessCount.toString()
+                                        }
+                                        MOOD_SAD -> {
+                                            sadnessCount = sadnessCount?.minus(1)
+                                            selectedSympathy?.title = sadnessCount.toString()
+                                        }
+                                        MOOD_ANGRY -> {
+                                            angryCount = angryCount?.minus(1)
+                                            selectedSympathy?.title = angryCount.toString()
+                                        }
+                                        MOOD_SURPRISED -> {
+                                            surprisedCount = surprisedCount?.minus(1)
+                                            selectedSympathy?.title = surprisedCount.toString()
+                                        }
+                                        else -> {}
+                                    }
+                                    selectedSympathy = changedItem
+                                }
+                            },
+                            showSnackbar = showSnackbar
                         )
                     }
-
-                    Feed(
-                        navController = navController,
-                        feedItem = feed,
-                        onFeedEvent = onFeedEvent,
-                        selectedSympathy = selectedSympathy,
-                        sympathyItems = sympathyItems,
-                        onSympathyChange = { changedItem ->
-                            if (changedItem != null) {
-                                selectedSympathy = changedItem
-                                postEmpathy(feed.storyId, changedItem.postData, index)
-                                when (changedItem.postData) {
-                                    MOOD_HAPPY -> {
-                                        happinessCount = (happinessCount ?: 0) + 1
-                                        selectedSympathy?.title = happinessCount.toString()
-                                        Log.i("FeedScreen", "happy count changed: $happinessCount")
-                                    }
-                                    MOOD_SAD -> {
-                                        sadnessCount = (sadnessCount ?: 0) + 1
-                                        selectedSympathy?.title = sadnessCount.toString()
-                                    }
-                                    MOOD_ANGRY -> {
-                                        angryCount = (angryCount ?: 0) + 1
-                                        selectedSympathy?.title = angryCount.toString()
-                                    }
-                                    MOOD_SURPRISED -> {
-                                        surprisedCount = (surprisedCount ?: 0) + 1
-                                        selectedSympathy?.title = surprisedCount.toString()
-                                    }
-                                    else -> {}
-                                }
-                            } else {
-                                cancelEmpathy(feed.storyId, selectedSympathy?.postData, index)
-                                when (selectedSympathy?.postData) {
-                                    MOOD_HAPPY -> {
-                                        happinessCount = happinessCount?.minus(1)
-                                        Log.i("FeedScreen", "happy count changed: $happinessCount")
-                                        selectedSympathy?.title = happinessCount.toString()
-                                    }
-                                    MOOD_SAD -> {
-                                        sadnessCount = sadnessCount?.minus(1)
-                                        selectedSympathy?.title = sadnessCount.toString()
-                                    }
-                                    MOOD_ANGRY -> {
-                                        angryCount = angryCount?.minus(1)
-                                        selectedSympathy?.title = angryCount.toString()
-                                    }
-                                    MOOD_SURPRISED -> {
-                                        surprisedCount = surprisedCount?.minus(1)
-                                        selectedSympathy?.title = surprisedCount.toString()
-                                    }
-                                    else -> {}
-                                }
-                                selectedSympathy = changedItem
-                            }
-                        },
-                        showSnackbar = showSnackbar
-                    )
                 }
-            }
 
-            item {
+                item {
 //                if (feedLazyPagingItems.loadState.append is LoadState.Loading) {
 //                    AppendingCircularProgress(
 //                        modifier = Modifier
 //                            .padding(vertical = JustSayItTheme.Spacing.spaceBase)
 //                    )
 //                } else {
-                Spacer(
-                    modifier = Modifier
-                        .height(JustSayItTheme.Spacing.spaceExtraExtraLarge)
-                        .fillMaxWidth()
-                        .background(JustSayItTheme.Colors.mainBackground)
-                )
+                    Spacer(
+                        modifier = Modifier
+                            .height(JustSayItTheme.Spacing.spaceExtraExtraLarge)
+                            .fillMaxWidth()
+                            .background(JustSayItTheme.Colors.mainBackground)
+                    )
 //                }
+                }
             }
         }
 
