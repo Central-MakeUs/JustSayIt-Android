@@ -57,6 +57,7 @@ import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.isScrollingUp
 import com.sowhat.designsystem.component.AlertDialogReverse
 import com.sowhat.designsystem.component.AppendingCircularProgress
+import com.sowhat.designsystem.component.ImageDialog
 import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.SelectionAlertDialog
 import com.sowhat.feed_presentation.common.PostResult
@@ -169,6 +170,16 @@ fun FeedRoute(
         },
         empathyEvent = viewModel.empathyEvent
     )
+
+    if (feedListState.isImageDialogVisible && feedListState.imageUrl != null) {
+        ImageDialog(
+            onDismiss = {
+                viewModel.onFeedEvent(FeedEvent.ImageDialogVisibilityChanged(false))
+                viewModel.onFeedEvent(FeedEvent.ImageUrlChanged(null))
+            },
+            imageUrl = feedListState.imageUrl
+        )
+    }
 
     if (feedListState.isReportDialogVisible) {
         val items = stringArrayResource(id = R.array.report_reason).toList()
@@ -509,6 +520,10 @@ private fun Feed(
             isPopupForOwnerVisible = false
             isPopupForNotOwnerVisible = false
             popupMenu.onItemClick?.let { it() }
+        },
+        onImageClick = { imageUrl ->
+            onFeedEvent(FeedEvent.ImageUrlChanged(imageUrl))
+            onFeedEvent(FeedEvent.ImageDialogVisibilityChanged(true))
         }
     )
 }

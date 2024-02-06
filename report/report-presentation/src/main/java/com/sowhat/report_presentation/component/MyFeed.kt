@@ -57,7 +57,8 @@ fun MyFeed(
     isMenuVisible: Boolean,
     popupMenuItem: List<PopupMenuItem>,
     onPopupMenuDismiss: () -> Unit,
-    onMenuItemClick: (PopupMenuItem) -> Unit
+    onMenuItemClick: (PopupMenuItem) -> Unit,
+    onImageClick: (String) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -99,7 +100,8 @@ fun MyFeed(
             isMenuVisible = isMenuVisible,
             popupMenuItem = popupMenuItem,
             onPopupMenuDismiss = onPopupMenuDismiss,
-            onMenuItemClick = onMenuItemClick
+            onMenuItemClick = onMenuItemClick,
+            onImageClick = onImageClick
         )
     }
 }
@@ -116,7 +118,8 @@ private fun FeedCard(
     isMenuVisible: Boolean,
     popupMenuItem: List<PopupMenuItem>,
     onPopupMenuDismiss: () -> Unit,
-    onMenuItemClick: (PopupMenuItem) -> Unit
+    onMenuItemClick: (PopupMenuItem) -> Unit,
+    onImageClick: (String) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -140,7 +143,8 @@ private fun FeedCard(
             isMenuVisible = isMenuVisible,
             popupMenuItems = popupMenuItem,
             onPopupMenuDismiss = onPopupMenuDismiss,
-            onMenuItemClick = onMenuItemClick
+            onMenuItemClick = onMenuItemClick,
+            onImageClick = onImageClick
         )
     }
 }
@@ -157,7 +161,8 @@ private fun FeedContent(
     isMenuVisible: Boolean,
     popupMenuItems: List<PopupMenuItem>,
     onPopupMenuDismiss: () -> Unit,
-    onMenuItemClick: (PopupMenuItem) -> Unit
+    onMenuItemClick: (PopupMenuItem) -> Unit,
+    onImageClick: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -195,7 +200,7 @@ private fun FeedContent(
             color = JustSayItTheme.Colors.mainTypo
         )
 
-        FeedImages(images)
+        FeedImages(images, onImageClick)
 
         LazyRow(
             modifier = Modifier
@@ -219,7 +224,10 @@ private fun FeedContent(
 }
 
 @Composable
-private fun FeedImages(images: List<String>) {
+private fun FeedImages(
+    images: List<String>,
+    onImageClick: (String) -> Unit
+) {
     if (images.isNotEmpty()) {
         TimelineFeedImages(
             modifier = Modifier.padding(
@@ -227,7 +235,8 @@ private fun FeedImages(images: List<String>) {
                 end = JustSayItTheme.Spacing.spaceBase,
                 top = JustSayItTheme.Spacing.spaceBase,
             ),
-            models = images
+            models = images,
+            onImageClick = onImageClick
         )
     }
 }
@@ -344,7 +353,8 @@ fun MyFeedPreview() {
                 isMenuVisible = false,
                 popupMenuItem = emptyList(),
                 onPopupMenuDismiss = {},
-                onMenuItemClick = {}
+                onMenuItemClick = {},
+                onImageClick = {}
             )
             
             Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))
@@ -366,7 +376,8 @@ fun MyFeedPreview() {
                 isMenuVisible = false,
                 popupMenuItem = emptyList(),
                 onPopupMenuDismiss = {},
-                onMenuItemClick = {}
+                onMenuItemClick = {},
+                onImageClick = {}
             )
         }
     }

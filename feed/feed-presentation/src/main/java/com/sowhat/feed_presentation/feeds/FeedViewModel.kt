@@ -203,7 +203,6 @@ class FeedViewModel @Inject constructor(
                     isReportDialogVisible = feedEvent.isVisible
                 )
             }
-
             is FeedEvent.TargetIdChanged -> {
                 savedStateHandle[FEED_LIST_STATE] = getFeedAppBarState()?.copy(
                     targetId = feedEvent.targetId
@@ -212,6 +211,16 @@ class FeedViewModel @Inject constructor(
             is FeedEvent.ReportPostDataChange -> {
                 savedStateHandle[FEED_LIST_STATE] = getFeedAppBarState()?.copy(
                     reportPostData = feedEvent.postData
+                )
+            }
+            is FeedEvent.ImageDialogVisibilityChanged -> {
+                savedStateHandle[FEED_LIST_STATE] = getFeedAppBarState()?.copy(
+                    isImageDialogVisible = feedEvent.isVisible
+                )
+            }
+            is FeedEvent.ImageUrlChanged -> {
+                savedStateHandle[FEED_LIST_STATE] = getFeedAppBarState()?.copy(
+                    imageUrl = feedEvent.imageUrl
                 )
             }
         }

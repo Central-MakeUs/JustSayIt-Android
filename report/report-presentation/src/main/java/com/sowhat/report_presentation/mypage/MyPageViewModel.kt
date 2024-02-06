@@ -183,6 +183,17 @@ class MyPageViewModel @Inject constructor(
                     isLoading = event.isLoading
                 )
             }
+
+            is MyFeedEvent.ImageDialogVisibilityChanged -> {
+                savedStateHandle[FEED_STATE] = getMyFeedUiState()?.copy(
+                    isImageDialogVisible = event.isVisible
+                )
+            }
+            is MyFeedEvent.ImageUrlChanged -> {
+                savedStateHandle[FEED_STATE] = getMyFeedUiState()?.copy(
+                    imageUrl = event.imageUrl
+                )
+            }
         }
     }
 

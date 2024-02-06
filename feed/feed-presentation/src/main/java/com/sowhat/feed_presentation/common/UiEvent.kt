@@ -5,6 +5,8 @@ import com.sowhat.designsystem.common.TabItem
 
 
 sealed class FeedEvent {
+    data class ImageDialogVisibilityChanged(val isVisible: Boolean) : FeedEvent()
+    data class ImageUrlChanged(val imageUrl: String?) : FeedEvent()
     data class EmotionChanged(val mood: Mood) : FeedEvent()
     data class SortChanged(val sortBy: TabItem) : FeedEvent()
     data class DropdownExpandChanged(val isOpen: Boolean) : FeedEvent()

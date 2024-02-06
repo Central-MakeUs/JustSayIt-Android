@@ -7,6 +7,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class FeedListState(
+    val isImageDialogVisible: Boolean = false,
+    val imageUrl: String? = null,
     var emotionItems: List<Mood> = Mood.values().toList(),
     var currentEmotion: Mood = Mood.values().first(),
     var isDropdownExpanded: Boolean = false,
