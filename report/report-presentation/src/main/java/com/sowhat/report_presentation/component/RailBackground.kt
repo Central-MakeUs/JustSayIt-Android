@@ -171,7 +171,8 @@ fun RailBackgroundPreview() {
                     isMenuVisible = false,
                     popupMenuItem = emptyList(),
                     onPopupMenuDismiss = {},
-                    onMenuItemClick = {}
+                    onMenuItemClick = {},
+                    onImageClick = {}
                 )
 
                 Spacer(modifier = Modifier.height(JustSayItTheme.Spacing.spaceBase))

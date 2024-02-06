@@ -5,6 +5,8 @@ import com.sowhat.designsystem.common.Mood
 import com.sowhat.designsystem.common.TabItem
 
 sealed class MyFeedEvent {
+    data class ImageUrlChanged(val imageUrl: String?) : MyFeedEvent()
+    data class ImageDialogVisibilityChanged(val isVisible: Boolean) : MyFeedEvent()
     data class SortChanged(val sort: TabItem) : MyFeedEvent()
     data class LastIdChanged(val lastId: Long) : MyFeedEvent()
     data class HasNextChanged(val hasNext: Boolean) : MyFeedEvent()

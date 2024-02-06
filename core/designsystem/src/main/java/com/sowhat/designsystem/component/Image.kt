@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.theme.Gray300
 import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
@@ -122,7 +123,8 @@ fun TimelineFeedImageContainer(
 @Composable
 fun TimelineFeedImages(
     modifier: Modifier = Modifier,
-    models: List<String>
+    models: List<String>,
+    onImageClick: (String) -> Unit
 ) {
     val spacing = JustSayItTheme.Spacing.spaceTiny
 
@@ -140,7 +142,8 @@ fun TimelineFeedImages(
                     TimelineFeedImageContainer(
                         // 간격이 동일하게 주어지도록 하기 위함... 이 조치를 취해주지 않으면 사진들이 화면을 벗어나서 차지
                         modifier = Modifier
-                            .padding(JustSayItTheme.Spacing.spaceTiny),
+                            .padding(JustSayItTheme.Spacing.spaceTiny)
+                            .noRippleClickable { onImageClick(it) },
                         model = it
                     )
                 }
@@ -153,7 +156,8 @@ fun TimelineFeedImages(
                         TimelineFeedImageContainer(
                             modifier = Modifier
                                 // 간격이 동일하게 주어지도록 하기 위함... 이 조치를 취해주지 않으면 사진들이 화면을 벗어나서 차지
-                                .weight(2f),
+                                .weight(2f)
+                                .noRippleClickable { onImageClick(it) },
                             model = it
                         )
 
@@ -181,7 +185,8 @@ fun TimelineFeedImages(
                         TimelineFeedImageContainer(
                             modifier = Modifier
 //                                .padding(JustSayItTheme.Spacing.spaceTiny)
-                                .aspectRatio(ratio),
+                                .aspectRatio(ratio)
+                                .noRippleClickable { onImageClick(item) },
                             model = item
                         )
                     }
@@ -201,7 +206,8 @@ fun TimelineFeedImages(
                         TimelineFeedImageContainer(
                             modifier = Modifier
 //                                .padding(JustSayItTheme.Spacing.spaceTiny)
-                                .aspectRatio(1f),
+                                .aspectRatio(1f)
+                                .noRippleClickable { onImageClick(it) },
                             model = it
                         )
                     }
@@ -225,26 +231,26 @@ fun ProfileImageContainerPreview() {
 
             TimelineFeedImages(models = listOf(
                 "https://i.stack.imgur.com/6C9Qv.png",
-            ))
+            ), onImageClick = {})
 
 
             TimelineFeedImages(models = listOf(
                 "https://i.stack.imgur.com/6C9Qv.png",
                 "https://i.stack.imgur.com/6C9Qv.png",
-            ))
+            ), onImageClick = {})
 
             TimelineFeedImages(models = listOf(
                 "https://i.stack.imgur.com/6C9Qv.png",
                 "https://i.stack.imgur.com/6C9Qv.png",
                 "https://i.stack.imgur.com/6C9Qv.png",
-            ))
+            ), onImageClick = {})
 
             TimelineFeedImages(models = listOf(
                 "https://i.stack.imgur.com/6C9Qv.png",
                 "https://i.stack.imgur.com/6C9Qv.png",
                 "https://i.stack.imgur.com/6C9Qv.png",
                 "https://i.stack.imgur.com/6C9Qv.png",
-            ))
+            ), onImageClick = {})
         }
 
     }

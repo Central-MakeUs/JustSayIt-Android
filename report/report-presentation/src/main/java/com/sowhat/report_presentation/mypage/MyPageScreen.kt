@@ -56,6 +56,7 @@ import com.sowhat.designsystem.common.isScrollingUp
 import com.sowhat.designsystem.component.AlertDialogReverse
 import com.sowhat.designsystem.component.AppendingCircularProgress
 import com.sowhat.designsystem.component.CenteredCircularProgress
+import com.sowhat.designsystem.component.ImageDialog
 import com.sowhat.report_presentation.common.MyFeedEvent
 import com.sowhat.report_presentation.common.MyFeedUiState
 import com.sowhat.report_presentation.common.ReportEvent
@@ -130,6 +131,16 @@ fun MyPageRoute(
                 )
             }
         }
+    }
+
+    if (myFeedUiState.isImageDialogVisible) {
+        ImageDialog(
+            onDismiss = {
+                viewModel.onMyFeedEvent(MyFeedEvent.ImageDialogVisibilityChanged(false))
+                viewModel.onMyFeedEvent(MyFeedEvent.ImageUrlChanged(null))
+            },
+            imageUrl = myFeedUiState.imageUrl
+        )
     }
     
     if (myFeedUiState.isLoading) {
@@ -293,7 +304,7 @@ private fun MyFeedItemsScreen(
             },
             myFeedUiState = myFeedUiState,
             onMyFeedEvent = onMyFeedEvent,
-            onEdit = onEdit
+            onEdit = onEdit,
         )
     }
 }
@@ -336,7 +347,7 @@ private fun MyFeedList(
                 moodItems = moodItems,
                 isScrollInProgress = isScrollInProgress,
                 myFeedUiState = myFeedUiState,
-                onEdit = onEdit
+                onEdit = onEdit,
             )
         }
     }
@@ -353,7 +364,7 @@ private fun MyFeedListContent(
     moodItems: List<Mood>,
     isScrollInProgress: Boolean,
     myFeedUiState: MyFeedUiState,
-    onEdit: (Long) -> Unit
+    onEdit: (Long) -> Unit,
 ) {
 //    LaunchedEffect(key1 = myFeedUiState.emotion, key2 = myFeedUiState.sortBy) {
 //        Log.i("MyPage", "paging data changed")
@@ -388,7 +399,7 @@ private fun MyFeedListContent(
                     currentDate = currentDate,
                     moodItems = moodItems,
                     isScrollInProgress = isScrollInProgress,
-                    onEdit = onEdit
+                    onEdit = onEdit,
                 )
             }
 
@@ -418,7 +429,7 @@ private fun FeedItem(
     currentDate: String?,
     moodItems: List<Mood>,
     isScrollInProgress: Boolean,
-    onEdit: (Long) -> Unit
+    onEdit: (Long) -> Unit,
 ) {
     if (remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }.value == index) {
         onFirstItemIndexChange(myFeed)
@@ -477,6 +488,10 @@ private fun FeedItem(
             isPopupMenuVisible = false
             it.onItemClick?.let { it() }
         },
+        onImageClick = { imageUrl ->
+            onMyFeedEvent(MyFeedEvent.ImageUrlChanged(imageUrl))
+            onMyFeedEvent(MyFeedEvent.ImageDialogVisibilityChanged(true))
+        }
     )
 }
 

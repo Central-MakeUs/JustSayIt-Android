@@ -1,14 +1,23 @@
 package com.sowhat.designsystem.component
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,14 +26,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import coil.compose.AsyncImage
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.rippleClickable
+import com.sowhat.designsystem.theme.Black
 import com.sowhat.designsystem.theme.Gray500
 import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.designsystem.theme.White
@@ -47,6 +62,90 @@ fun DialogCard(
             )
         ) {
             content()
+        }
+    }
+}
+
+@Composable
+fun ImageDialog(
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit,
+    imageUrl: Any?
+) {
+    Dialog(
+        properties = DialogProperties(
+            dismissOnBackPress = true,
+            dismissOnClickOutside = false,
+            usePlatformDefaultWidth = false,
+            decorFitsSystemWindows = false
+        ),
+        onDismissRequest = onDismiss
+    ) {
+
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Black),
+            contentAlignment = Alignment.Center
+        ) {
+            // 1을 빼는 이유는 1이 초기값이기 때문 -> 초기에는 extraWidth/Height가 0이어야 할 것
+            // 즉 줌이 다 빠진 시점에는 panning을 해도 사진이 경계 안으로 들어가지 않도록 하기 위함
+            var scale by remember { mutableStateOf(1f) }
+            var offset by remember { mutableStateOf(Offset.Zero) }
+            val minScale = 1f
+            val maxScale = 3f
+
+            val state = rememberTransformableState { zoomChange, panChange, rotationChange ->
+                scale = (scale * zoomChange).coerceIn(minScale, maxScale)
+                val extraWidth = (scale - 1) * constraints.maxWidth
+                val extraHeight = (scale - 1) * constraints.maxHeight
+                val maxX = extraWidth / 2
+                val maxY = extraHeight / 2
+                offset = Offset(
+                    x = (offset.x + panChange.x).coerceIn(-maxX, maxX),
+                    y = (offset.y + panChange.y).coerceIn(-maxY, maxY)
+                )
+            }
+
+            AsyncImage(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .graphicsLayer(
+                        scaleX = scale,
+                        scaleY = scale,
+                        translationX = offset.x,
+                        translationY = offset.y,
+                    )
+                    .transformable(state)
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onDoubleTap = {
+                                scale = when {
+                                    scale > 2f -> 1f
+                                    else -> 3f
+                                }
+                            }
+                        )
+                    },
+                model = imageUrl,
+                contentDescription = "image"
+            )
+        }
+
+        Box(
+            modifier = Modifier.padding(JustSayItTheme.Spacing.spaceXS),
+            contentAlignment = Alignment.TopStart
+        ) {
+            IconButton(
+                onClick = onDismiss
+            ) {
+                Icon(
+                    modifier = Modifier.size(JustSayItTheme.Spacing.spaceXL),
+                    painter = painterResource(id = R.drawable.ic_close_default_20),
+                    contentDescription = "close",
+                    tint = White
+                )
+            }
         }
     }
 }

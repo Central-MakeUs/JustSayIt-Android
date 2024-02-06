@@ -53,7 +53,8 @@ fun Feed(
     popupMenuForOwner: List<PopupMenuItem>,
     popupMenuForNotOwner: List<PopupMenuItem>,
     onMenuDismiss: () -> Unit,
-    onMenuItemClick: (PopupMenuItem) -> Unit
+    onMenuItemClick: (PopupMenuItem) -> Unit,
+    onImageClick: (String) -> Unit
 ) {
 
     Column(
@@ -93,7 +94,10 @@ fun Feed(
             )
 
             if (feedItem.photo.isNotEmpty()) {
-                TimelineFeedImages(models = feedItem.photo)
+                TimelineFeedImages(
+                    models = feedItem.photo,
+                    onImageClick = onImageClick
+                )
             }
         }
 
