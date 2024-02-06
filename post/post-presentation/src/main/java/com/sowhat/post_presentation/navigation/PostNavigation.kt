@@ -31,15 +31,20 @@ fun NavGraphBuilder.editFeedScreen(
     appNavController: NavHostController
 ) {
     composable(
-        route = "$FEED_EDIT/{feedId}",
-        arguments = listOf(navArgument("feedId") { type = NavType.LongType })
+        route = "$FEED_EDIT/{from}/{feedId}",
+        arguments = listOf(
+            navArgument("from") { type = NavType.StringType },
+            navArgument("feedId") { type = NavType.LongType }
+        )
     ) { backStackEntry ->
         val feedId = backStackEntry.arguments?.getLong("feedId")
+        val from = backStackEntry.arguments?.getString("from")
         Log.i("FeedEdit", "editFeedScreen: feed id : $feedId")
-        feedId?.let {
+        if (feedId != null && from != null) {
             EditRoute(
                 navController = appNavController,
-                feedId = feedId
+                feedId = feedId,
+                from = from
             )
         }
     }

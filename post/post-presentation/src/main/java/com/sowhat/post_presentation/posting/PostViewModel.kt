@@ -57,7 +57,7 @@ class PostViewModel @Inject constructor(
             uiState = uiState.copy(isLoading = true)
             if (isFormValid) {
                 val multipartList = multipartConverter.convertUriIntoMultipart(formState.images)
-                val requestBody = multipartConverter.getRequestBodyData(formState)
+                val requestBody = multipartConverter.getPostRequestBodyData(formState)
 
                 requestSubmit(requestBody, multipartList)
             }

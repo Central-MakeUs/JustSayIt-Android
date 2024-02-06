@@ -7,6 +7,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
 import com.sowhat.database.common.DATABASE_FEED
 import com.sowhat.database.dao.EntireFeedDao
@@ -22,7 +24,7 @@ import com.sowhat.database.entity.NotificationEntity
         EntireFeedEntity::class,
         NotificationEntity::class
     ],
-    version = 5,
+    version = 6,
     autoMigrations = [
         AutoMigration(from = 1, to = 2), // 1 to 2 : 단순 테이블 추가이므로 Migration 클래스 만들지 않음,
         AutoMigration(from = 2, to = 3), // 2 to 3 : 전체 피드 테이블 칼럼추가(isOwner)
@@ -30,7 +32,7 @@ import com.sowhat.database.entity.NotificationEntity
         AutoMigration(from = 4, to = 5), // 3 to 4 : Notification 테이블에 date 필드 추가
     ]
 )
-@TypeConverters(ListConverter::class)
+@TypeConverters(ListConverter::class, LongListConverter::class)
 abstract class FeedDatabase : RoomDatabase() {
     abstract val myFeedDao: MyFeedDao
     abstract val entireFeedDao: EntireFeedDao
@@ -54,6 +56,13 @@ abstract class FeedDatabase : RoomDatabase() {
 //        )
 //        class Migration2To3: AutoMigrationSpec
 
+        class Migration5to6 : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE my_feed ADD COLUMN photoId TEXT")
+                db.execSQL("ALTER TABLE entire_feed ADD COLUMN photoId TEXT")
+            }
+        }
+
         fun getInstance(context: Context): FeedDatabase {
             synchronized(this) {
                 var instance = INSTANCE
@@ -62,7 +71,7 @@ abstract class FeedDatabase : RoomDatabase() {
                         context,
                         FeedDatabase::class.java,
                         DATABASE_FEED
-                    ).build()
+                    ).addMigrations(Migration5to6()).build()
                     INSTANCE = instance
                 }
                 return instance
@@ -80,5 +89,17 @@ class ListConverter {
     @TypeConverter
     fun jsonToList(value: String): List<String>? {
         return Gson().fromJson(value,Array<String>::class.java)?.toList()
+    }
+}
+
+class LongListConverter {
+    @TypeConverter
+    fun listToJson(value: List<Long>?): String? {
+        return Gson().toJson(value)
+    }
+
+    @TypeConverter
+    fun jsonToList(value: String): List<Long>? {
+        return Gson().fromJson(value,Array<Long>::class.java)?.toList()
     }
 }

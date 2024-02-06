@@ -57,6 +57,7 @@ import com.sowhat.designsystem.component.PopupMenuItem
 import com.sowhat.designsystem.component.SelectionAlertDialog
 import com.sowhat.feed_presentation.common.PostResult
 import com.sowhat.feed_presentation.component.Feed
+import com.sowhat.feed_presentation.navigation.navigateToEditScreen
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -304,6 +305,7 @@ fun FeedScreen(
                     }
 
                     Feed(
+                        navController = navController,
                         feedItem = feed,
                         onFeedEvent = onFeedEvent,
                         selectedSympathy = selectedSympathy,
@@ -387,6 +389,7 @@ fun FeedScreen(
 
 @Composable
 private fun Feed(
+    navController: NavController,
     feedItem: EntireFeedEntity,
     onFeedEvent: (FeedEvent) -> Unit,
     selectedSympathy: MoodItem?,
@@ -436,7 +439,7 @@ private fun Feed(
             onItemClick = {
                 val feedId = feedItem.storyId
                 onFeedEvent(FeedEvent.TargetIdChanged(feedId))
-                // TODO 수정 화면으로 이동
+                navController.navigateToEditScreen(feedId)
             },
             postData = null,
             contentColor = JustSayItTheme.Colors.mainTypo,

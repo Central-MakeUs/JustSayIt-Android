@@ -20,9 +20,10 @@ data class PostFormState(
 )
 
 data class EditFormState(
-    val isChanged: Boolean = false,
+    val storyId: Long? = null,
     val existingUrl: List<String> = emptyList(),
-    val deletedUrl: MutableList<String> = emptyList<String>().toMutableList(),
+    val existingUrlId: List<Long> = emptyList(),
+    val deletedUrlId: List<Long> = emptyList(),
     val currentMood: MoodItem? = null,
     val isCurrentMoodValid: Boolean = false,
     val postText: String = "",

@@ -32,7 +32,7 @@ fun NavGraphBuilder.myScreen(
 }
 
 fun NavController.navigateToEditScreen(feedId: Long) {
-    this.navigate("$FEED_EDIT/$feedId") {
+    this.navigate("$FEED_EDIT/$MY/$feedId") {
         launchSingleTop = true
     }
 }

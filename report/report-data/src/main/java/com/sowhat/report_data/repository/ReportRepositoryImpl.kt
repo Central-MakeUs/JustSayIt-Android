@@ -72,10 +72,11 @@ class ReportRepositoryImpl(
                 profileImg = feed.profileInfo.profileImg,
                 bodyText = feed.storyMainContent.bodyText,
                 photo = feed.storyMainContent.photo.map { it.photoUrl },
+                photoId = feed.storyMainContent.photo.map { it.photoId },
                 writerEmotion = feed.storyMainContent.writerEmotion,
                 isAnonymous = feed.storyMetaInfo.isAnonymous,
                 isModified = feed.storyMetaInfo.isModified,
-                isOpened = feed.storyMetaInfo.isOpened
+                isOpened = feed.storyMetaInfo.isOpened,
             )
         }
 

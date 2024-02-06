@@ -17,4 +17,12 @@ interface PostApi {
         @Part("storyInfo") storyInfo: RequestBody,
         @Part storyImg: List<MultipartBody.Part?>?
     ): ResponseBody<Unit?>
+
+    @Multipart
+    @POST("/stories/edit")
+    suspend fun editPost(
+        @Header("Authorization") accessToken: String,
+        @Part("storyInfo") storyInfo: RequestBody,
+        @Part newImg: List<MultipartBody.Part?>?
+    ): ResponseBody<Unit?>
 }
