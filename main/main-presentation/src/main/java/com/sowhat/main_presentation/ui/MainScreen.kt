@@ -71,7 +71,6 @@ fun MainScreen(
                 }
             )
         },
-
     ) { paddingValues ->
         Box(
             modifier = Modifier

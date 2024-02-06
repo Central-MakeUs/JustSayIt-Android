@@ -116,7 +116,8 @@ fun DefaultButtonFull(
     Button(
         modifier = modifier.fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isActive) Gray900 else Gray200
+            containerColor = JustSayItTheme.Colors.mainTypo,
+            disabledContainerColor = JustSayItTheme.Colors.subBackground
         ),
         contentPadding = PaddingValues(0.dp),
         shape = JustSayItTheme.Shapes.medium,
@@ -131,7 +132,7 @@ fun DefaultButtonFull(
             TextDrawableEnd(
                 text = text,
                 textStyle = textStyle,
-                textColor = if (isActive) White else Gray500,
+                textColor = if (isActive) JustSayItTheme.Colors.mainBackground else Gray500,
                 drawable = drawable
             )
         }
@@ -188,8 +189,8 @@ fun DefaultButtonDual(
                 modifier = Modifier.weight(1f),
                 text = buttonItem,
                 textStyle = textStyle,
-                backgroundColor = if (activeButton == buttonItem) Gray900 else Gray200,
-                textColor = if (activeButton == buttonItem) White else Gray500,
+                backgroundColor = if (activeButton == buttonItem) JustSayItTheme.Colors.mainTypo else JustSayItTheme.Colors.subBackground,
+                textColor = if (activeButton == buttonItem) JustSayItTheme.Colors.mainBackground else Gray500,
                 onClick = { onClick(buttonItem) }
             )
         }
@@ -224,9 +225,9 @@ fun DefaultButtonExtraLarge(
 ) {
     DefaultButton(
         text = text,
-        textColor = if (isActive) White else Gray500,
+        textColor = if (isActive) JustSayItTheme.Colors.mainBackground else Gray500,
         drawable = drawable,
-        backgroundColor = if (isActive) Gray900 else Gray200,
+        backgroundColor = if (isActive) JustSayItTheme.Colors.mainTypo else JustSayItTheme.Colors.subBackground,
         horizontalPadding = 16.dp,
         verticalPadding = 13.dp,
         onClick = onClick

@@ -153,7 +153,7 @@ fun AlertDialogReverse(
                 dismissButtonColor = JustSayItTheme.Colors.subBackground,
                 dismissTextColor = Gray500,
                 acceptButtonColor = JustSayItTheme.Colors.mainTypo,
-                acceptTextColor = White
+                acceptTextColor = JustSayItTheme.Colors.mainBackground
             )
         }
 
@@ -315,7 +315,7 @@ private fun DialogButtons(
     onDismiss: () -> Unit,
     onAccept: () -> Unit,
     dismissButtonColor: Color = JustSayItTheme.Colors.mainTypo,
-    dismissTextColor: Color = White,
+    dismissTextColor: Color = JustSayItTheme.Colors.mainBackground,
     acceptButtonColor: Color = JustSayItTheme.Colors.subBackground,
     acceptTextColor: Color = Gray500
 ) {
