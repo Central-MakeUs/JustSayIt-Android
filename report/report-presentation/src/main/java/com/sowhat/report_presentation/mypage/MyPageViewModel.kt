@@ -106,16 +106,18 @@ class MyPageViewModel @Inject constructor(
 
     fun postNewMood(mood: Mood?) {
         viewModelScope.launch {
-            onReportEvent(ReportEvent.LoadingChanged(true))
+//            onReportEvent(ReportEvent.LoadingChanged(true))
             val postData = mood?.toPostData()
             Log.i(TAG, "postNewMood: $postData")
             postData?.let {
                 when (postNewMoodUseCase(postData)) {
                     is Resource.Success -> {
                         postNewMoodEventChannel.send(true)
+//                        onReportEvent(ReportEvent.LoadingChanged(false))
                     }
                     is Resource.Error -> {
                         postNewMoodEventChannel.send(false)
+//                        onReportEvent(ReportEvent.LoadingChanged(false))
                     }
                 }
             }
