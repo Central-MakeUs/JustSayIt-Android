@@ -21,3 +21,5 @@ gradle.properties
 
 # Google Services (e.g. APIs or Firebase)
 app/google-services.json
+app/private_key.pepk
+app/release
