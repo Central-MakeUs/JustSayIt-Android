@@ -58,4 +58,44 @@ class PostRepositoryImpl(
             message = postResult.message
         )
     }
+
+    override suspend fun editPost(
+        accessToken: String,
+        storyInfo: RequestBody,
+        newImg: List<MultipartBody.Part?>?
+    ): Resource<Unit?> = try {
+        getEditPostResource(
+            accessToken = accessToken,
+            storyInfo = storyInfo,
+            newImg = newImg
+        )
+    } catch (e: HttpException) {
+        getHttpErrorResource(e)
+    } catch (e: IOException) {
+        getIOErrorResource(e)
+    }
+
+    private suspend fun getEditPostResource(
+        accessToken: String,
+        storyInfo: RequestBody,
+        newImg: List<MultipartBody.Part?>?
+    ): Resource<Unit?> {
+        val postResult = postApi.editPost(
+            accessToken = accessToken,
+            storyInfo = storyInfo,
+            newImg = newImg
+        )
+
+        return if (postResult.isSuccess) {
+            Resource.Success(
+                data = null,
+                code = postResult.code,
+                message = postResult.message
+            )
+        } else Resource.Error(
+            data = null,
+            code = postResult.code,
+            message = postResult.message
+        )
+    }
 }

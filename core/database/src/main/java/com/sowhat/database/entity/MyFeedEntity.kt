@@ -25,6 +25,7 @@ data class MyFeedEntity(
     val profileImg: String,
     val bodyText: String,
     val photo: List<String>,
+    val photoId: List<Long>?,
     val writerEmotion: String,
     val isAnonymous: Boolean,
     val isModified: Boolean,

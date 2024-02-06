@@ -12,4 +12,11 @@ interface PostRepository {
         storyInfo: RequestBody,
         storyImg: List<MultipartBody.Part?>?
     ): Resource<Unit?>
+
+    suspend fun editPost(
+        accessToken: String,
+//        memberId: Long,
+        storyInfo: RequestBody,
+        newImg: List<MultipartBody.Part?>?
+    ): Resource<Unit?>
 }

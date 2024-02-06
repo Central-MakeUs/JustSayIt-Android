@@ -56,8 +56,8 @@ class PostViewModel @Inject constructor(
         viewModelScope.launch {
             uiState = uiState.copy(isLoading = true)
             if (isFormValid) {
-                val multipartList = multipartConverter.convertUriIntoMultipart(formState.images)
-                val requestBody = multipartConverter.getRequestBodyData(formState)
+                val multipartList = multipartConverter.convertUriIntoMultipart(formState.images, PARTNAME_IMG)
+                val requestBody = multipartConverter.getPostRequestBodyData(formState)
 
                 requestSubmit(requestBody, multipartList)
             }
@@ -172,5 +172,9 @@ class PostViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    companion object {
+        private const val PARTNAME_IMG = "storyImg"
     }
 }

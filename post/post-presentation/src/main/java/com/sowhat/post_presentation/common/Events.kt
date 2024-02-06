@@ -13,3 +13,14 @@ sealed class PostFormEvent {
     data class SympathyItemsChanged(val sympathyItems: List<MoodItem>) : PostFormEvent()
     data class DialogVisibilityChanged(val isVisible: Boolean) : PostFormEvent()
 }
+
+sealed class EditFormEvent {
+    data class DeletedUrlIdAdded(val urlIds: List<Long>) : EditFormEvent()
+    data class CurrentMoodChanged(val mood: MoodItem) : EditFormEvent()
+    data class ImageListUpdated(val images: List<Uri>?) : EditFormEvent()
+    data class PostTextChanged(val text: String) : EditFormEvent()
+    data class OpenChanged(val open: Boolean) : EditFormEvent()
+    data class AnonymousChanged(val anonymous: Boolean) : EditFormEvent()
+    data class SympathyItemsChanged(val sympathyItems: List<MoodItem>) : EditFormEvent()
+    data class DialogVisibilityChanged(val isVisible: Boolean) : EditFormEvent()
+}
