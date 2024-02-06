@@ -29,6 +29,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -58,8 +60,6 @@ class EditViewModel @Inject constructor(
     )
     val formState = _formState.asStateFlow()
 
-    private var isChanged = MutableStateFlow(false)
-
     var uiState by mutableStateOf(UiState<Unit?>())
         private set
 
@@ -71,7 +71,7 @@ class EditViewModel @Inject constructor(
             && formState.value.isCurrentMoodValid
             && formState.value.isPostTextValid
             && formState.value.isSympathyMoodItemsValid
-            && isChanged.value
+//            && formState.value.isChanged
     }
 
     private lateinit var initialFormStatus: EditFormState
@@ -92,12 +92,13 @@ class EditViewModel @Inject constructor(
         moodItems: List<MoodItem>,
         feedEntity: MyFeedEntity
     ) {
-        _formState.update { currentForm ->
-            editFormState(currentForm, moodItems, feedEntity)
+        viewModelScope.launch {
+            _formState.update { currentForm ->
+                editFormState(currentForm, moodItems, feedEntity)
+            }
+            initialFormStatus = formState.first()
+            Log.i(TAG, "updateInitialFormState: form state : ${formState.value}")
         }
-
-        initialFormStatus = formState.value
-        Log.i(TAG, "updateInitialFormState: form state : ${formState.value}")
     }
 
     private fun editFormState(
@@ -163,9 +164,11 @@ class EditViewModel @Inject constructor(
             uiState = uiState.copy(isLoading = true)
             if (isFormValid) {
                 val postImages = formState.value.images.filter {
-                    it.toString() !in formState.value.existingUrl
+                    val uriString = it.toString()
+                    Log.i(TAG, "uri string : $uriString")
+                    uriString !in formState.value.existingUrl
                 }
-                val multipartList = multipartConverter.convertUriIntoMultipart(postImages)
+                val multipartList = multipartConverter.convertUriIntoMultipart(postImages, PARTNAME_NEW_IMG)
                 val requestBody = multipartConverter.getEditRequestBodyData(formState.value)
 
                 requestSubmit(requestBody, multipartList)
@@ -220,8 +223,6 @@ class EditViewModel @Inject constructor(
                     sympathyMoodItems = currentSympathyItems,
                     isSympathyMoodItemsValid = validateSympathyUseCase(isOpen, currentSympathyItems).isValid
                 )
-
-                isChanged()
             }
             is EditFormEvent.ImageListUpdated -> {
                 val uris = event.images
@@ -230,8 +231,6 @@ class EditViewModel @Inject constructor(
                     images = uris ?: emptyList(),
                     isImageListValid = isValid
                 )
-
-                isChanged()
             }
             is EditFormEvent.PostTextChanged -> {
                 val postText = event.text
@@ -240,8 +239,6 @@ class EditViewModel @Inject constructor(
                     postText = postText,
                     isPostTextValid = isValid
                 )
-
-                isChanged()
             }
             is EditFormEvent.OpenChanged -> {
                 _formState.value = formState.value.copy(
@@ -260,15 +257,11 @@ class EditViewModel @Inject constructor(
                         )
                     }
                 }
-
-                isChanged()
             }
             is EditFormEvent.AnonymousChanged -> {
                 _formState.value = formState.value.copy(
                     isAnonymous = event.anonymous
                 )
-
-                isChanged()
             }
             is EditFormEvent.SympathyItemsChanged -> {
                 val sympathyItems = event.sympathyItems
@@ -283,8 +276,6 @@ class EditViewModel @Inject constructor(
                     sympathyMoodItems = sympathyItems,
                     isSympathyMoodItemsValid = isValid
                 )
-
-                isChanged()
             }
             is EditFormEvent.DialogVisibilityChanged -> {
                 _formState.value = formState.value.copy(
@@ -296,18 +287,14 @@ class EditViewModel @Inject constructor(
                     deletedUrlId = (formState.value.deletedUrlId + event.urlIds).toSet().toList()
                 )
                 Log.i(TAG, "onEvent: image deleted: ${formState.value.deletedUrlId}")
-
-                isChanged()
             }
         }
-    }
-
-    private fun isChanged() {
-        isChanged.value = initialFormStatus != formState.value
+        Log.i(TAG, "onEvent: form changed : ${formState.value}")
     }
 
     companion object {
         private const val TAG = "EditViewModel"
         private const val EDIT_STATE = "edit_state"
+        private const val PARTNAME_NEW_IMG = "newImg"
     }
 }

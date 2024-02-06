@@ -46,7 +46,7 @@
 
     <string name="error_server">서버 에러</string>
 
-    <string name="appbar_post">게시글 쓰기</string>
+    <string name="appbar_post">글 쓰기</string>
     <string name="appbar_notification">알림</string>
 
     <string name="notification_event_channel">event_channel</string>

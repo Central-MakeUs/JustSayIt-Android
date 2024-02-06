@@ -20,6 +20,7 @@ data class PostFormState(
 )
 
 data class EditFormState(
+    val isChanged: Boolean = false,
     val storyId: Long? = null,
     val existingUrl: List<String> = emptyList(),
     val existingUrlId: List<Long> = emptyList(),

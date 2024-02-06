@@ -5,6 +5,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Header
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 
@@ -19,7 +20,7 @@ interface PostApi {
     ): ResponseBody<Unit?>
 
     @Multipart
-    @POST("/stories/edit")
+    @PATCH("/stories/edit")
     suspend fun editPost(
         @Header("Authorization") accessToken: String,
         @Part("storyInfo") storyInfo: RequestBody,

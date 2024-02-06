@@ -18,15 +18,16 @@ import javax.inject.Inject
 class MultipartConverter @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    fun convertUriIntoMultipart(uris: List<Uri>): List<MultipartBody.Part>? {
+    fun convertUriIntoMultipart(uris: List<Uri>, multipartName: String): List<MultipartBody.Part>? {
         try {
+            Log.i(TAG, "convertUriIntoMultipart: uri list : $uris")
             if (uris.isEmpty()) return null
 
             val multipartBodyList = mutableListOf<MultipartBody.Part>()
 
             uris.forEach {
                 val currentTime = System.currentTimeMillis().toString()
-                val file = getImageMultipartBody(context, it, STORY_IMG, "${currentTime}.jpg")
+                val file = getImageMultipartBody(context, it, multipartName, "${currentTime}.jpg")
                 multipartBodyList.add(file)
             }
 
