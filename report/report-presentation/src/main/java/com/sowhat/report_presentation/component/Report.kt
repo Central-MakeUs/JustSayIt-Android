@@ -128,11 +128,9 @@ private fun ReportTitle(
         )
 
         Text(
-            text = if (!isLoading) stringResource(
+            text = stringResource(
                 id = R.string.report_subtitle,
                 nickname
-            ) else stringResource(
-                id = R.string.report_subtitle_loading
             ),
             style = JustSayItTheme.Typography.heading2,
             color = JustSayItTheme.Colors.mainTypo,

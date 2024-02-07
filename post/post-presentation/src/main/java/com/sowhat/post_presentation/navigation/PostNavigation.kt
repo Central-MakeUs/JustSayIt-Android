@@ -23,6 +23,9 @@ fun NavGraphBuilder.postScreen(
 
 fun NavController.navigateBack() {
     if (this.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+        this.previousBackStackEntry
+            ?.savedStateHandle
+            ?.set("isPosted", true)
         this.popBackStack()
     }
 }

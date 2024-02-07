@@ -50,9 +50,11 @@ class EntireFeedRemoteMediator(
                 }
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> {
-                    val lastItem = dao.getNthRecord(page * state.config.pageSize - 1)
-                    page++
-                    lastItem?.storyId ?: return MediatorResult.Success(endOfPaginationReached = true)
+//                    val lastItem = dao.getNthRecord(page * state.config.pageSize - 1)
+//                    page++
+//                    lastItem?.storyId ?: return MediatorResult.Success(endOfPaginationReached = true)
+                    val lastItem = state.lastItemOrNull()
+                    lastItem?.storyId
                 }
             }
 
@@ -126,9 +128,9 @@ class EntireFeedRemoteMediator(
     ) {
         feedDatabase.withTransaction {
             Log.i("EntireFeedMediator", "addFeedItemsToDatabase: start adding")
-            if (loadType == LoadType.REFRESH) {
-                dao.deleteAllFeedItems()
-            }
+//            if (loadType == LoadType.REFRESH) {
+//                dao.deleteAllFeedItems()
+//            }
 
             val myFeedEntities = feedItems.data?.feedItems
             myFeedEntities?.let {

@@ -58,6 +58,7 @@ emojiVersion = "1.0.0-alpha03"
 
 lottie = "6.1.0"
 
+swipe-refresh = "0.27.0"
 
 [libraries]
 # for gradle plugins -> for build-logic/build.gradle dependencies
@@ -149,6 +150,9 @@ emoji-views-helper = { group = "androidx.emoji2", name = "emoji2-views-helper", 
 
 # lottie
 lottie-animation = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+
+# swipe refresh
+accompanist-swipe-refresh = { group = "com.google.accompanist", name = "accompanist-swiperefresh", version.ref = "swipe-refresh" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }

@@ -28,7 +28,11 @@ fun NavGraphBuilder.homeScreen(
     ) {
         FeedRoute(
             navController = appNavController,
-            snackbarHostState = snackbarHostState
+            snackbarHostState = snackbarHostState,
+            isPosted = appNavController
+                .currentBackStackEntry
+                ?.savedStateHandle
+                ?.getStateFlow("isPosted", false)
         )
     }
 }

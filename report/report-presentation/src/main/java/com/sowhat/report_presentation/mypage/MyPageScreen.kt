@@ -42,6 +42,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.sowhat.database.entity.MyFeedEntity
 import com.sowhat.common.util.ObserveEvents
 import com.sowhat.designsystem.common.Mood
@@ -67,13 +69,15 @@ import com.sowhat.report_presentation.component.RailBackground
 import com.sowhat.report_presentation.component.Report
 import com.sowhat.report_presentation.navigation.navigateToEditScreen
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @Composable
 fun MyPageRoute(
     navController: NavController,
     viewModel: MyPageViewModel = hiltViewModel(),
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    isPosted: StateFlow<Boolean>?
 ) {
     val context = LocalContext.current
     val myFeedUiState = viewModel.myFeedUiState.collectAsState().value
@@ -86,24 +90,39 @@ fun MyPageRoute(
     val deleteFailureMessage = stringResource(id = R.string.snackbar_delete_failure)
     val postMoodFailureMessage = stringResource(id = R.string.snackbar_post_mood_error)
 
-    LaunchedEffect(key1 = myFeedPagingData.loadState) {
-        if (myFeedPagingData.loadState.refresh is LoadState.Error) {
-            Toast.makeText(context, "error : ${(myFeedPagingData.loadState.refresh as LoadState.Error).error.message}", Toast.LENGTH_SHORT).show()
+    LaunchedEffect(key1 = isPosted) {
+        if (isPosted?.value == true) {
+            Log.i("MyPageRoute", "MyPageRoute: posted")
+            myFeedPagingData.refresh()
+            navController.currentBackStackEntry
+                ?.savedStateHandle
+                ?.remove<Boolean>("isPosted")
         }
     }
 
-    MyPageScreen(
-        pagingData = myFeedPagingData,
-        myFeedUiState = myFeedUiState,
-        onMyFeedEvent = viewModel::onMyFeedEvent,
-        reportUiState = reportUiState,
-        onReportEvent = viewModel::onReportEvent,
-        onDelete = viewModel::deleteFeed,
-        onMoodSubmit = viewModel::postNewMood,
-        onEdit = { feedId ->
-            navController.navigateToEditScreen(feedId)
-        }
+    val swipeRefreshState = rememberSwipeRefreshState(
+        isRefreshing = myFeedPagingData.loadState.refresh is LoadState.Loading
     )
+
+    SwipeRefresh(
+        state = swipeRefreshState,
+        onRefresh = {
+            myFeedPagingData.refresh()
+        }
+    ) {
+        MyPageScreen(
+            pagingData = myFeedPagingData,
+            myFeedUiState = myFeedUiState,
+            onMyFeedEvent = viewModel::onMyFeedEvent,
+            reportUiState = reportUiState,
+            onReportEvent = viewModel::onReportEvent,
+            onDelete = viewModel::deleteFeed,
+            onMoodSubmit = viewModel::postNewMood,
+            onEdit = { feedId ->
+                navController.navigateToEditScreen(feedId)
+            }
+        )
+    }
 
     ObserveEvents(flow = viewModel.postNewMoodEvent) { isSuccessful ->
         scope.launch {

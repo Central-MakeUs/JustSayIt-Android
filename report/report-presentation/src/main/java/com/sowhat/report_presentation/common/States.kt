@@ -29,7 +29,7 @@ data class MyFeedUiState(
 @Parcelize
 data class ReportUiState(
     val isLoading: Boolean = false,
-    val nickname: String = "",
+    val nickname: String = "로딩중",
     val selectedMood: Mood? = null,
     val isSubmitEnabled: Boolean = false,
     val moodList: List<TodayMoodItem> = emptyList()

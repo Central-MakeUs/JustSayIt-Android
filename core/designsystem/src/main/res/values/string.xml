@@ -143,8 +143,8 @@
 
     <string name="service_email">justtsayit2024@gmail.com</string>
     <string name="contact_subject">그냥, 그렇다고 서비스 문의</string>
-    <string name="service_term_url">https://www.notion.so/56e7a2cd2c2746078c11dacf984c941b</string>
-    <string name="service_privacy_url">https://www.notion.so/803c054f70bb44398d677780da66f982</string>
+    <string name="service_term_url">https://juniper-drawer-723.notion.site/56e7a2cd2c2746078c11dacf984c941b</string>
+    <string name="service_privacy_url">https://juniper-drawer-723.notion.site/803c054f70bb44398d677780da66f982?pvs=74</string>
 
     <string name="contact_select_email_app">문의사항을 보낼 애플리케이션을 선택해주세요.</string>
 </resources>

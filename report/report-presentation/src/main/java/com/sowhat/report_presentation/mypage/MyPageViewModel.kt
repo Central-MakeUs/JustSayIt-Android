@@ -14,6 +14,7 @@ import com.sowhat.report_domain.use_case.GetTodayMoodDataUseCase
 import com.sowhat.report_domain.use_case.PostNewMoodUseCase
 import com.sowhat.common.model.Resource
 import com.sowhat.common.util.toTime
+import com.sowhat.database.FeedDatabase
 import com.sowhat.designsystem.common.Mood
 import com.sowhat.report_presentation.common.MyFeedEvent
 import com.sowhat.report_presentation.common.MyFeedUiState
@@ -39,7 +40,8 @@ class MyPageViewModel @Inject constructor(
     private val deleteFeedUseCase: DeleteFeedUseCase,
     private val getTodayMoodDataUseCase: GetTodayMoodDataUseCase,
     private val postNewMoodUseCase: PostNewMoodUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val database: FeedDatabase
 ) : ViewModel() {
     val myFeedUiState = savedStateHandle.getStateFlow(FEED_STATE, MyFeedUiState())
     val reportUiState = savedStateHandle.getStateFlow(REPORT_STATE, ReportUiState())
@@ -236,6 +238,13 @@ class MyPageViewModel @Inject constructor(
                     nickname = event.nickname
                 )
             }
+        }
+    }
+
+    suspend fun refreshFeeds() {
+        viewModelScope.launch {
+            val dao = database.myFeedDao
+            dao.deleteAllMyFeedItems()
         }
     }
 

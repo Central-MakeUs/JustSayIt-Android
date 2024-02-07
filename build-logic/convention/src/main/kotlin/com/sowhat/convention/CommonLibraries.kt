@@ -49,5 +49,7 @@ internal fun Project.configureCommonLibraries() {
         implementation(libs, "appcompat")
 
         implementation(libs, "lottie.animation")
+
+        implementation(libs, "accompanist.swipe.refresh")
     }
 }
