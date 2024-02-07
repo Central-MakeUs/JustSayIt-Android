@@ -486,6 +486,17 @@ private fun Feed(
             drawableTint = JustSayItTheme.Colors.error
         ),
         PopupMenuItem(
+            title = stringResource(id = R.string.popup_report_user),
+            drawable = R.drawable.ic_d_20,
+            onItemClick = {
+                val reportId = feedItem.storyId
+                onFeedEvent(FeedEvent.TargetIdChanged(reportId))
+                onFeedEvent(FeedEvent.ReportDialogVisibilityChanged(true))
+            },
+            contentColor = JustSayItTheme.Colors.mainTypo,
+            drawableTint = JustSayItTheme.Colors.error
+        ),
+        PopupMenuItem(
             title = stringResource(id = R.string.popup_block),
             drawable = R.drawable.ic_block_20,
             onItemClick = {
