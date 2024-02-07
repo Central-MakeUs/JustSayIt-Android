@@ -9,6 +9,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +24,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,8 +38,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.sowhat.database.entity.EntireFeedEntity
 import com.sowhat.common.model.UiState
 import com.sowhat.common.util.ObserveEvents
@@ -64,16 +69,18 @@ import com.sowhat.feed_presentation.common.PostResult
 import com.sowhat.feed_presentation.component.Feed
 import com.sowhat.feed_presentation.navigation.navigateToEditScreen
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @Composable
 fun FeedRoute(
     navController: NavController,
     viewModel: FeedViewModel = hiltViewModel(),
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    isPosted: StateFlow<Boolean>?
 ) {
     val feedListState = viewModel.feedListState.collectAsState().value
-    val feedPagingData = viewModel.entireFeedData
+    val feedPagingData = viewModel.entireFeedData.collectAsLazyPagingItems()
     val uiState = viewModel.uiState.collectAsState().value
     val scope = rememberCoroutineScope()
 
@@ -86,6 +93,16 @@ fun FeedRoute(
     val postEmpathyError = stringResource(id = R.string.snackbar_post_empathy_error)
     val postEmpathySuccessful = stringResource(id = R.string.snackbar_post_empathy_successful)
     val cancelEmpathySuccessful = stringResource(id = R.string.snackbar_cancel_empathy_successful)
+
+    LaunchedEffect(key1 = isPosted) {
+        if (isPosted?.value == true) {
+            Log.i("MyPageRoute", "MyPageRoute: posted")
+            feedPagingData.refresh()
+            navController.currentBackStackEntry
+                ?.savedStateHandle
+                ?.remove<Boolean>("isPosted")
+        }
+    }
 
     ObserveEvents(flow = viewModel.empathyEvent) { event ->
         if (event.isSuccessful) {
@@ -168,7 +185,7 @@ fun FeedRoute(
                 snackbarHostState.showSnackbar(message = text, duration = SnackbarDuration.Short)
             }
         },
-        empathyEvent = viewModel.empathyEvent
+        empathyEvent = viewModel.empathyEvent,
     )
 
     if (feedListState.isImageDialogVisible && feedListState.imageUrl != null) {
@@ -265,17 +282,20 @@ fun FeedScreen(
     uiState: UiState<Unit>,
     feedListState: FeedListState,
     onFeedEvent: (FeedEvent) -> Unit,
-    feedPagingData: Flow<PagingData<EntireFeedEntity>>,
+    feedPagingData: LazyPagingItems<EntireFeedEntity>,
     postEmpathy: (Long, String, Int) -> Unit,
     cancelEmpathy: (Long, String?, Int) -> Unit,
     showSnackbar: (String) -> Unit,
-    empathyEvent: Flow<PostResult>
+    empathyEvent: Flow<PostResult>,
 ) {
     TopAppBarDefaults.enterAlwaysScrollBehavior()
     val lazyListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
 
-    val feedLazyPagingItems = feedPagingData.collectAsLazyPagingItems()
+    val swipeRefreshState = rememberSwipeRefreshState(
+        isRefreshing = false
+
+    )
 
     Scaffold(
         modifier = modifier
@@ -288,13 +308,13 @@ fun FeedScreen(
                 .fillMaxSize()
                 .background(JustSayItTheme.Colors.mainBackground)
         )
-
-        AnimatedVisibility(
-            visible = (
-                    feedLazyPagingItems.loadState.refresh !is LoadState.Loading
-                    ),
-            enter = fadeIn(animationSpec = TweenSpec(durationMillis = 1000)),
-            exit = fadeOut(animationSpec = TweenSpec(durationMillis = 1000))
+        SwipeRefresh(
+            state = swipeRefreshState,
+            onRefresh = {
+                feedPagingData.refresh()
+            },
+//            enter = fadeIn(animationSpec = TweenSpec(durationMillis = 1000)),
+//            exit = fadeOut(animationSpec = TweenSpec(durationMillis = 1000))
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -304,11 +324,11 @@ fun FeedScreen(
                 state = lazyListState
             ) {
                 items(
-                    count = feedLazyPagingItems.itemCount,
-                    key = feedLazyPagingItems.itemKey { item -> item.storyUUID },
+                    count = feedPagingData.itemCount,
+                    key = feedPagingData.itemKey { item -> item.storyUUID },
                     contentType = { "Feed" }
                 ) { index ->
-                    val feed = feedLazyPagingItems[index]
+                    val feed = feedPagingData[index]
 
                     if (feed != null) {
                         var happinessCount by remember { mutableStateOf(feed.happinessCount) }
@@ -346,20 +366,27 @@ fun FeedScreen(
                                         MOOD_HAPPY -> {
                                             happinessCount = (happinessCount ?: 0) + 1
                                             selectedSympathy?.title = happinessCount.toString()
-                                            Log.i("FeedScreen", "happy count changed: $happinessCount")
+                                            Log.i(
+                                                "FeedScreen",
+                                                "happy count changed: $happinessCount"
+                                            )
                                         }
+
                                         MOOD_SAD -> {
                                             sadnessCount = (sadnessCount ?: 0) + 1
                                             selectedSympathy?.title = sadnessCount.toString()
                                         }
+
                                         MOOD_ANGRY -> {
                                             angryCount = (angryCount ?: 0) + 1
                                             selectedSympathy?.title = angryCount.toString()
                                         }
+
                                         MOOD_SURPRISED -> {
                                             surprisedCount = (surprisedCount ?: 0) + 1
                                             selectedSympathy?.title = surprisedCount.toString()
                                         }
+
                                         else -> {}
                                     }
                                 } else {
@@ -367,21 +394,28 @@ fun FeedScreen(
                                     when (selectedSympathy?.postData) {
                                         MOOD_HAPPY -> {
                                             happinessCount = happinessCount?.minus(1)
-                                            Log.i("FeedScreen", "happy count changed: $happinessCount")
+                                            Log.i(
+                                                "FeedScreen",
+                                                "happy count changed: $happinessCount"
+                                            )
                                             selectedSympathy?.title = happinessCount.toString()
                                         }
+
                                         MOOD_SAD -> {
                                             sadnessCount = sadnessCount?.minus(1)
                                             selectedSympathy?.title = sadnessCount.toString()
                                         }
+
                                         MOOD_ANGRY -> {
                                             angryCount = angryCount?.minus(1)
                                             selectedSympathy?.title = angryCount.toString()
                                         }
+
                                         MOOD_SURPRISED -> {
                                             surprisedCount = surprisedCount?.minus(1)
                                             selectedSympathy?.title = surprisedCount.toString()
                                         }
+
                                         else -> {}
                                     }
                                     selectedSympathy = changedItem
@@ -410,7 +444,7 @@ fun FeedScreen(
             }
         }
 
-        if (feedLazyPagingItems.loadState.refresh is LoadState.Loading) {
+        if (feedPagingData.loadState.refresh is LoadState.Loading) {
             CenteredCircularProgress()
         }
     }

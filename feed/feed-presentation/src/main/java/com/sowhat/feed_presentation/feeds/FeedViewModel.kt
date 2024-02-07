@@ -8,6 +8,7 @@ import androidx.paging.cachedIn
 import com.sowhat.domain.use_case.DeleteFeedUseCase
 import com.sowhat.common.model.Resource
 import com.sowhat.common.model.UiState
+import com.sowhat.database.FeedDatabase
 import com.sowhat.feed_domain.use_case.BlockUserUseCase
 import com.sowhat.feed_domain.use_case.CancelEmpathyUseCase
 import com.sowhat.feed_domain.use_case.GetEntireFeedUseCase
@@ -37,7 +38,8 @@ class FeedViewModel @Inject constructor(
     private val deleteFeedUseCase: DeleteFeedUseCase,
     private val postEmpathyUseCase: PostEmpathyUseCase,
     private val cancelEmpathyUseCase: CancelEmpathyUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val database: FeedDatabase
 ) : ViewModel() {
 
     var feedListState = savedStateHandle.getStateFlow(FEED_LIST_STATE, FeedListState())
@@ -70,10 +72,7 @@ class FeedViewModel @Inject constructor(
         getEntireFeedUseCase(
             sortBy = pair.first,
             emotion = pair.second
-        ).flow.map {
-            uiState.update { uiState -> uiState.copy(isLoading = false) }
-            it
-        }.cachedIn(viewModelScope)
+        ).flow.cachedIn(viewModelScope)
     }
 
     fun reportFeed(
@@ -166,6 +165,13 @@ class FeedViewModel @Inject constructor(
 //                    uiState.update { it.copy(isLoading = false) }
                 }
             }
+        }
+    }
+
+    suspend fun refreshFeeds() {
+        viewModelScope.launch {
+            val dao = database.entireFeedDao
+            dao.deleteAllFeedItems()
         }
     }
 

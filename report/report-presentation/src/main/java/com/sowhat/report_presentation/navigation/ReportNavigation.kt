@@ -27,7 +27,14 @@ fun NavGraphBuilder.myScreen(
         popEnterTransition = null,
         popExitTransition = null
     ) {
-        MyPageRoute(navController = appNavController, snackbarHostState = snackbarHostState)
+        MyPageRoute(
+            navController = appNavController,
+            snackbarHostState = snackbarHostState,
+            isPosted = appNavController
+                .currentBackStackEntry
+                ?.savedStateHandle
+                ?.getStateFlow("isPosted", false)
+        )
     }
 }
 
