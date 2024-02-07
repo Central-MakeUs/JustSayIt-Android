@@ -79,6 +79,9 @@ fun FeedRoute(
     snackbarHostState: SnackbarHostState,
     isPosted: StateFlow<Boolean>?
 ) {
+    // TODO You probably need to do collectAsLazyPagingItems() before declaring your NavHost to save the scroll location
+    // https://stackoverflow.com/questions/66744977/save-and-retain-lazycolumn-scroll-position-while-using-paging-3
+
     val feedListState = viewModel.feedListState.collectAsState().value
     val feedPagingData = viewModel.entireFeedData.collectAsLazyPagingItems()
     val uiState = viewModel.uiState.collectAsState().value
