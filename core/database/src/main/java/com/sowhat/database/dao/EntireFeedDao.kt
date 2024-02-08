@@ -13,6 +13,9 @@ interface EntireFeedDao {
     @Query("SELECT * FROM entire_feed")
     fun getAllFeedItems(): PagingSource<Int, EntireFeedEntity>
 
+    @Query("SELECT * FROM entire_feed")
+    fun getAllFeedEntities(): List<EntireFeedEntity>
+
     @Query("SELECT * FROM entire_feed WHERE storyId=:storyId")
     suspend fun getFeedItemByFeedId(storyId: Long): EntireFeedEntity
 
