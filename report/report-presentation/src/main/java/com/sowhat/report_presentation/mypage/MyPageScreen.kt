@@ -46,6 +46,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.sowhat.database.entity.MyFeedEntity
 import com.sowhat.common.util.ObserveEvents
+import com.sowhat.common.util.rememberLazyListState
 import com.sowhat.designsystem.common.Mood
 import com.sowhat.designsystem.common.rememberNestedScrollViewState
 import com.sowhat.designsystem.component.AppBarMyPage
@@ -93,6 +94,7 @@ fun MyPageRoute(
     LaunchedEffect(key1 = isPosted) {
         if (isPosted?.value == true) {
             Log.i("MyPageRoute", "MyPageRoute: posted")
+            viewModel.refreshFeeds()
             myFeedPagingData.refresh()
             navController.currentBackStackEntry
                 ?.savedStateHandle
@@ -101,7 +103,7 @@ fun MyPageRoute(
     }
 
     val swipeRefreshState = rememberSwipeRefreshState(
-        isRefreshing = myFeedPagingData.loadState.refresh is LoadState.Loading
+        isRefreshing = false
     )
 
     SwipeRefresh(
@@ -258,37 +260,32 @@ private fun MyFeedItemsScreen(
     pagingData: LazyPagingItems<MyFeedEntity>,
     onEdit: (Long) -> Unit,
 ) {
-    Column(
-        modifier = modifier.fillMaxWidth()
-    ) {
-        val lazyListState = rememberLazyListState()
+    val lazyListState = pagingData.rememberLazyListState()
 
-        val isItemIconVisible = remember {
-            derivedStateOf { lazyListState.firstVisibleItemScrollOffset <= 0 }
-        }
+    val isItemIconVisible = remember {
+        derivedStateOf { lazyListState.firstVisibleItemScrollOffset <= 0 }
+    }
 
-        val moodItems = Mood.values().toList()
-        var currentState by remember { mutableStateOf<Mood?>(null) }
-        var currentDate by remember { mutableStateOf<String?>(null) }
+    val moodItems = Mood.values().toList()
+    var currentState by remember { mutableStateOf<Mood?>(null) }
+    var currentDate by remember { mutableStateOf<String?>(null) }
 
-        val isScrollInProgress = lazyListState.isScrollInProgress
+    val isScrollInProgress = lazyListState.isScrollInProgress
 
-        var isCurrentFeedInfoVisible by remember {
-            mutableStateOf(isScrollInProgress)
-        }
+    var isCurrentFeedInfoVisible by remember {
+        mutableStateOf(isScrollInProgress)
+    }
 
-        LaunchedEffect(key1 = isScrollInProgress) {
-            isCurrentFeedInfoVisible = if (!isScrollInProgress) {
-                delay(5000)
-                false
-            } else true
-        }
+    LaunchedEffect(key1 = isScrollInProgress) {
+        isCurrentFeedInfoVisible = if (!isScrollInProgress) {
+            delay(5000)
+            false
+        } else true
+    }
 
-        AnimatedVisibility(
-            visible = lazyListState.isScrollingUp(),
-            enter = expandVertically(),
-            exit = shrinkVertically(),
-        ) {
+    Scaffold(
+        modifier = modifier.fillMaxWidth(),
+        topBar = {
             AppBarMyPage(
                 currentDropdownItem = myFeedUiState.emotion,
                 dropdownItems = moodItems,
@@ -308,8 +305,9 @@ private fun MyFeedItemsScreen(
                 }
             )
         }
-
+    ) { paddingValues ->
         MyFeedList(
+            modifier = Modifier.padding(paddingValues),
             lazyListState = lazyListState,
             currentState = currentState,
             currentDate = currentDate,
@@ -330,6 +328,7 @@ private fun MyFeedItemsScreen(
 
 @Composable
 private fun MyFeedList(
+    modifier: Modifier = Modifier,
     lazyListState: LazyListState,
     currentState: Mood?,
     currentDate: String?,
@@ -343,32 +342,25 @@ private fun MyFeedList(
     onEdit: (Long) -> Unit,
 ) {
     RailBackground(
+        modifier = modifier,
         lazyListState = lazyListState,
         selectedEmotion = myFeedUiState.emotion,
         currentMood = currentState,
         currentDate = currentDate,
         isScrollInProgress = isScrollInProgress
     ) {
-        AnimatedVisibility(
-            visible = (
-                pagingData.loadState.refresh !is LoadState.Loading
-            ),
-            enter = fadeIn(animationSpec = TweenSpec(durationMillis = 1000)),
-            exit = fadeOut(animationSpec = TweenSpec(durationMillis = 1000))
-        ) {
-            MyFeedListContent(
-                lazyListState = lazyListState,
-                pagingData = pagingData,
-                onFirstItemIndexChange = onFirstItemIndexChange,
-                isItemIconVisible = isItemIconVisible,
-                onMyFeedEvent = onMyFeedEvent,
-                currentDate = currentDate,
-                moodItems = moodItems,
-                isScrollInProgress = isScrollInProgress,
-                myFeedUiState = myFeedUiState,
-                onEdit = onEdit,
-            )
-        }
+        MyFeedListContent(
+            lazyListState = lazyListState,
+            pagingData = pagingData,
+            onFirstItemIndexChange = onFirstItemIndexChange,
+            isItemIconVisible = isItemIconVisible,
+            onMyFeedEvent = onMyFeedEvent,
+            currentDate = currentDate,
+            moodItems = moodItems,
+            isScrollInProgress = isScrollInProgress,
+            myFeedUiState = myFeedUiState,
+            onEdit = onEdit,
+        )
     }
 }
 

@@ -32,9 +32,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -46,6 +50,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.sowhat.database.entity.EntireFeedEntity
 import com.sowhat.common.model.UiState
 import com.sowhat.common.util.ObserveEvents
+import com.sowhat.common.util.rememberLazyListState
 import com.sowhat.designsystem.common.MOOD_ANGRY
 import com.sowhat.designsystem.common.MOOD_HAPPY
 import com.sowhat.designsystem.common.MOOD_SAD
@@ -86,6 +91,7 @@ fun FeedRoute(
     val feedPagingData = viewModel.entireFeedData.collectAsLazyPagingItems()
     val uiState = viewModel.uiState.collectAsState().value
     val scope = rememberCoroutineScope()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     val blockSuccessMessage = stringResource(id = R.string.snackbar_block_successful)
     val blockFailureMessage = stringResource(id = R.string.snackbar_block_failure)
@@ -96,6 +102,23 @@ fun FeedRoute(
     val postEmpathyError = stringResource(id = R.string.snackbar_post_empathy_error)
     val postEmpathySuccessful = stringResource(id = R.string.snackbar_post_empathy_successful)
     val cancelEmpathySuccessful = stringResource(id = R.string.snackbar_cancel_empathy_successful)
+
+    LaunchedEffect(key1 = lifecycleOwner.lifecycle.currentState) {
+        when (lifecycleOwner.lifecycle.currentState) {
+            Lifecycle.State.CREATED -> {
+                Log.i("FeedRoute", "FeedRoute: created")
+            }
+            Lifecycle.State.STARTED -> {
+                Log.i("FeedRoute", "FeedRoute: started")
+            }
+            Lifecycle.State.RESUMED -> {
+                Log.i("FeedRoute", "FeedRoute: resumed")
+            }
+            else -> {
+//                Log.i("FeedRoute", "FeedRoute: ${lifecycleOwner.lifecycle.currentState}")
+            }
+        }
+    }
 
     LaunchedEffect(key1 = isPosted) {
         if (isPosted?.value == true) {
@@ -293,13 +316,9 @@ fun FeedScreen(
     empathyEvent: Flow<PostResult>,
 ) {
     TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val lazyListState = rememberLazyListState()
+    val lazyListState = feedPagingData.rememberLazyListState()
     val scope = rememberCoroutineScope()
-
-    val swipeRefreshState = rememberSwipeRefreshState(
-        isRefreshing = false
-
-    )
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
 
     Scaffold(
         modifier = modifier
@@ -312,6 +331,7 @@ fun FeedScreen(
                 .fillMaxSize()
                 .background(JustSayItTheme.Colors.mainBackground)
         )
+
         SwipeRefresh(
             state = swipeRefreshState,
             onRefresh = {
@@ -431,19 +451,12 @@ fun FeedScreen(
                 }
 
                 item {
-//                if (feedLazyPagingItems.loadState.append is LoadState.Loading) {
-//                    AppendingCircularProgress(
-//                        modifier = Modifier
-//                            .padding(vertical = JustSayItTheme.Spacing.spaceBase)
-//                    )
-//                } else {
                     Spacer(
                         modifier = Modifier
                             .height(JustSayItTheme.Spacing.spaceExtraExtraLarge)
                             .fillMaxWidth()
                             .background(JustSayItTheme.Colors.mainBackground)
                     )
-//                }
                 }
             }
         }

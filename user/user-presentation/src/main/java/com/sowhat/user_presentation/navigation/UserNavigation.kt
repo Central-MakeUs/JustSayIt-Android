@@ -2,6 +2,7 @@ package com.sowhat.user_presentation.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -54,12 +55,14 @@ fun NavGraphBuilder.userInfoUpdateScreen(
 }
 
 fun NavController.navigateUpToSetting() {
-    // 백스택에서 현재 화면 이전, 즉 여기서는 설정 화면을 의미함. 이전 화면에 값을 저장하고자 하므로,
-    // current가 아닌 previousBackStackEntry의 savedStateHandle 사용
-    this.previousBackStackEntry
-        ?.savedStateHandle
-        ?.set("isUpdated", true)
-    this.popBackStack()
+    if (this.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+        // 백스택에서 현재 화면 이전, 즉 여기서는 설정 화면을 의미함. 이전 화면에 값을 저장하고자 하므로,
+        // current가 아닌 previousBackStackEntry의 savedStateHandle 사용
+        this.previousBackStackEntry
+            ?.savedStateHandle
+            ?.set("isUpdated", true)
+        this.popBackStack()
+    }
 }
 
 fun NavGraphBuilder.signOutScreen(

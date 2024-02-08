@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.sowhat.common.model.PostingEvent
@@ -84,7 +85,9 @@ private fun ScreenDialog(
             onAccept = onSignOut,
             onDismiss = {
                 onEvent(SignOutEvent.SignOutVisibilityChanged(false))
-                appNavController.popBackStack()
+                if (appNavController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                    appNavController.popBackStack()
+                }
             }
         )
     }
@@ -98,7 +101,9 @@ private fun ScreenDialog(
             onAccept = onWithdraw,
             onDismiss = {
                 onEvent(SignOutEvent.WithdrawVisibilityChanged(false))
-                appNavController.popBackStack()
+                if (appNavController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+                    appNavController.popBackStack()
+                }
             }
         )
     }

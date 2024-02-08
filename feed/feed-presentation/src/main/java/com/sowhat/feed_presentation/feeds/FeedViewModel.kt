@@ -63,6 +63,11 @@ class FeedViewModel @Inject constructor(
     private val empathyEventChannel = Channel<PostResult>()
     val empathyEvent = empathyEventChannel.receiveAsFlow()
 
+    override fun onCleared() {
+        super.onCleared()
+        Log.i("FeedViewModel", "onCleared")
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val entireFeedData = combine(sortBy, emotion) { s, e ->
         Log.i("FeedScreen", "Feed: $s, $e")
