@@ -100,6 +100,7 @@ fun FeedRoute(
     LaunchedEffect(key1 = isPosted) {
         if (isPosted?.value == true) {
             Log.i("MyPageRoute", "MyPageRoute: posted")
+            viewModel.refreshFeeds()
             feedPagingData.refresh()
             navController.currentBackStackEntry
                 ?.savedStateHandle
