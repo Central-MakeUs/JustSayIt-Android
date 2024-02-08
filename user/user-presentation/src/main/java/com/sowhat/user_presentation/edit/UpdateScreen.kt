@@ -147,7 +147,6 @@ fun UpdateScreen(
             )
         }
     ) { paddingValues ->
-
         EditScreenContent(
             modifier = Modifier.padding(paddingValues),
             onProfileClick = onProfileClick,

@@ -43,9 +43,9 @@ class EntireFeedRemoteMediator(
                     Log.i("EntireFeedMediator", "load: refresh")
                     // ***중요 : refresh될 때 스크롤 위치 이슈 해결 : 데이터 로드를 위해 로드키를 불러오는 과정에서 모든 데이터를 지워준다
                     // 이슈 : 주석처리 시, 새로고침 시 다음 페이지가 호출되지 않음
-                    feedDatabase.withTransaction {
-                        dao.deleteAllFeedItems()
-                    }
+//                    feedDatabase.withTransaction {
+//                        dao.deleteAllFeedItems()
+//                    }
                     null
                 }
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
@@ -53,8 +53,16 @@ class EntireFeedRemoteMediator(
 //                    val lastItem = dao.getNthRecord(page * state.config.pageSize - 1)
 //                    page++
 //                    lastItem?.storyId ?: return MediatorResult.Success(endOfPaginationReached = true)
-                    val lastItem = state.lastItemOrNull()
-                    lastItem?.storyId
+//                    val lastItem = state.lastItemOrNull()
+//                    lastItem?.storyId
+                    // withTransaction 필수.
+                    // 없으면 직전에 데이터베이스에 있던 아이템을 모아놓은 데이터베이스 전체의 마지막 아이템의 키가 호출되어 첫 페이지 이상으로 호출되지 않음.
+                    // 이유는 알아봐야함
+                    val lastItem = feedDatabase.withTransaction {
+                        dao.getAllFeedEntities().lastOrNull()
+                    }
+
+                    lastItem?.storyId ?: return MediatorResult.Success(endOfPaginationReached = true)
                 }
             }
 
@@ -128,9 +136,9 @@ class EntireFeedRemoteMediator(
     ) {
         feedDatabase.withTransaction {
             Log.i("EntireFeedMediator", "addFeedItemsToDatabase: start adding")
-//            if (loadType == LoadType.REFRESH) {
-//                dao.deleteAllFeedItems()
-//            }
+            if (loadType == LoadType.REFRESH) {
+                dao.deleteAllFeedItems()
+            }
 
             val myFeedEntities = feedItems.data?.feedItems
             myFeedEntities?.let {

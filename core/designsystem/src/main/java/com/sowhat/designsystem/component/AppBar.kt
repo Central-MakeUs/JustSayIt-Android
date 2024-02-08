@@ -234,7 +234,7 @@ fun AppBar(
             }
         },
         actions = {
-            val textColor = if (isValid) textStyle.color else Gray500
+            val textColor = if (isValid) JustSayItTheme.Colors.mainTypo else Gray500
             actionText?.let {
                 DefaultTextButton(
                     text = actionText,
