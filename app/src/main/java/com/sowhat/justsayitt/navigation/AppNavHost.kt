@@ -1,4 +1,4 @@
-package com.sowhat.justsayit.navigation
+package com.sowhat.justsayitt.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize

@@ -1,4 +1,4 @@
-package com.sowhat.justsayit
+package com.sowhat.justsayitt
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -25,7 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sowhat.common.model.FCMData
 import com.sowhat.common.util.getDate
 import com.sowhat.designsystem.theme.JustSayItTheme
-import com.sowhat.justsayit.navigation.AppNavHost
+import com.sowhat.justsayitt.navigation.AppNavHost
 import com.sowhat.notification.use_case.InsertNotificationDataUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.sowhat.justsayit
+package com.sowhat.justsayitt
 
 import android.app.Application
 import android.app.NotificationChannel

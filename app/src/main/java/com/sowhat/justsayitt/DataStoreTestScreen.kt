@@ -1,4 +1,4 @@
-package com.sowhat.justsayit
+package com.sowhat.justsayitt
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
