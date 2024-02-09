@@ -18,6 +18,16 @@ class JustSayItApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        printFcmToken()
+        initNaverSignIn()
+        initKakaoSignIn()
+        createNotificationChannels()
+
+        val keyHash = Utility.getKeyHash(this)
+        Log.i(TAG, keyHash)
+    }
+
+    private fun printFcmToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w(TAG, "Fetching FCM registration token failed", task.exception)
@@ -30,18 +40,17 @@ class JustSayItApplication : Application() {
             // Log and toast
             Log.d(TAG, token)
         })
-
-        initNaverSignIn()
-        initKakaoSignIn()
-        createNotificationChannels()
-
-        val keyHash = Utility.getKeyHash(this)
-        Log.i(TAG, keyHash)
     }
 
     private fun createNotificationChannels() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.also {
+            createEventChannel(it)
+            createPostChannel(it)
+        }
+    }
 
+    private fun createEventChannel(notificationManager: NotificationManager) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val eventChannel = NotificationChannel(
                 AppFirebaseMessagingService.EVENT_CHANNEL_ID,
@@ -50,6 +59,18 @@ class JustSayItApplication : Application() {
             )
             eventChannel.description = "그냥, 그렇다고에서 제공하는 이벤트 관련 알림 채널입니다."
             notificationManager.createNotificationChannel(eventChannel)
+        }
+    }
+
+    private fun createPostChannel(notificationManager: NotificationManager) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val postChannel = NotificationChannel(
+                PostProgressNotificationService.POST_CHANNEL_ID,
+                "게시 진행도 알림",
+                NotificationManager.IMPORTANCE_LOW,
+            )
+            postChannel.description = "게시글 업로드의 진행도를 나타내기 위한 채널입니다."
+            notificationManager.createNotificationChannel(postChannel)
         }
     }
 
