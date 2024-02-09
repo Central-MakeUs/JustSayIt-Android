@@ -13,6 +13,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
 import com.navercorp.nid.NaverIdLoginSDK
+import com.sowhat.post_presentation.util.PostProgressService
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -59,6 +60,20 @@ class JustSayItApplication : Application(), androidx.work.Configuration.Provider
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.also {
             createEventChannel(it)
+            createPostChannel(it)
+        }
+    }
+
+    private fun createPostChannel(notificationManager: NotificationManager) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            val postChannel = NotificationChannel(
+                PostProgressService.POST_CHANNEL_ID,
+                "게시 진행도 알림",
+                NotificationManager.IMPORTANCE_LOW,
+            )
+            postChannel.description = "게시글 업로드의 진행도를 나타내기 위한 채널입니다."
+            notificationManager.createNotificationChannel(postChannel)
         }
     }
 

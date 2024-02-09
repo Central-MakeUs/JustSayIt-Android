@@ -23,4 +23,6 @@ dependencies {
     implementation(project(":core:di"))
     implementation(project(":core:network"))
     implementation(project(":post:post-domain"))
+
+    implementation ("androidx.lifecycle:lifecycle-service:2.7.0")
 }
