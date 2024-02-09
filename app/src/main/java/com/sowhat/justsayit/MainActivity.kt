@@ -1,7 +1,6 @@
 package com.sowhat.justsayit
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -19,11 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.sowhat.common.model.FCMData
 import com.sowhat.common.util.getDate
@@ -31,8 +28,6 @@ import com.sowhat.designsystem.theme.JustSayItTheme
 import com.sowhat.justsayit.navigation.AppNavHost
 import com.sowhat.notification.use_case.InsertNotificationDataUseCase
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint

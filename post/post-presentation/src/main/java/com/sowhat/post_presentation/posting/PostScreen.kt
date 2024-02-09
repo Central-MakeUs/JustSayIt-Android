@@ -21,20 +21,26 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.sowhat.common.model.PostingEvent
 import com.sowhat.common.model.UiState
+import com.sowhat.common.model.UploadProgress
 import com.sowhat.common.util.ObserveEvents
+import com.sowhat.common.util.UploadCallback
 import com.sowhat.designsystem.common.MoodItem
-import com.sowhat.designsystem.common.noRippleClickable
 import com.sowhat.designsystem.common.rememberMoodItems
 import com.sowhat.designsystem.component.AlertDialog
 import com.sowhat.designsystem.component.AppBar
@@ -52,6 +58,15 @@ import com.sowhat.post_presentation.component.SympathySelection
 import com.sowhat.post_presentation.navigation.navigateBack
 import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.addFocusCleaner
+import com.sowhat.post_presentation.util.PostProgressWork
+import com.sowhat.post_presentation.util.PostProgressWork.Companion.ANONYMOUS
+import com.sowhat.post_presentation.util.PostProgressWork.Companion.EMOTION
+import com.sowhat.post_presentation.util.PostProgressWork.Companion.EMPATHY_LIST
+import com.sowhat.post_presentation.util.PostProgressWork.Companion.IMAGE_URIS
+import com.sowhat.post_presentation.util.PostProgressWork.Companion.OPENED
+import com.sowhat.post_presentation.util.PostProgressWork.Companion.POST_BODY
+import com.sowhat.post_presentation.util.PostProgressWork.Companion.POST_FEED
+import com.sowhat.post_presentation.util.PostProgressWork.Companion.POST_TEXT
 
 @Composable
 fun PostRoute(
@@ -98,7 +113,37 @@ fun PostRoute(
         uiState = uiState,
         isValid = viewModel.isFormValid,
         onEvent = viewModel::onEvent,
-        onSubmit = viewModel::submitPost,
+        onSubmit = {
+            if (viewModel.isFormValid) {
+                val postWork = OneTimeWorkRequestBuilder<PostProgressWork>()
+                    .setConstraints(
+                        Constraints.Builder()
+                            .setRequiredNetworkType(NetworkType.CONNECTED)
+                            .build()
+                    )
+                    .setInputData(
+                        workDataOf(
+                            ANONYMOUS to formState.isAnonymous,
+                            POST_TEXT to formState.postText,
+                            OPENED to formState.isOpened,
+                            EMOTION to formState.currentMood?.postData,
+                            EMPATHY_LIST to formState.sympathyMoodItems.map { it.postData }.toTypedArray(),
+                            IMAGE_URIS to formState.images.map { it.toString() }.toTypedArray()
+                        )
+                    )
+                    .build()
+
+                val workManager = WorkManager.getInstance(context.applicationContext)
+                workManager.beginUniqueWork(
+                    POST_FEED,
+                    ExistingWorkPolicy.REPLACE,
+                    postWork
+                ).enqueue()
+
+                navController.navigateBack()
+            }
+
+        },
         onAddImage = {
             imagePicker.launch("image/*")
         },
@@ -157,7 +202,11 @@ fun PostScreen(
                         ),
                     text = stringResource(com.sowhat.designsystem.R.string.button_post),
                     isActive = isValid,
-                    onClick = { onSubmit() }
+                    onClick = {
+                        UploadProgress.current = 0
+                        UploadProgress.max = 0
+                        onSubmit()
+                    }
                 )
             }
         }

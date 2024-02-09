@@ -12,11 +12,13 @@ internal fun Project.configureHiltAndroid() {
     val libs = extensions.libs
     dependencies {
         add("implementation", libs.findLibrary("hilt.android").get())
+        add("implementation", libs.findLibrary("hilt.ext.work").get())
         add("implementation", libs.findLibrary("hilt.android.testing").get())
 //        add("implementation", libs.findLibrary("hilt.ext.compiler").get())
 //        add("implementation", libs.findLibrary("hilt.ext.work").get())
         add("implementation", libs.findLibrary("hilt.navigation.compose").get())
         add("kapt", libs.findLibrary("hilt.compiler").get())
+        add("kapt", libs.findLibrary("hilt.ext.compiler").get())
     }
 
 }

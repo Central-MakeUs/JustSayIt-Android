@@ -1,5 +1,6 @@
 package com.sowhat.post_presentation.posting
 
+import android.net.Uri
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,6 +11,9 @@ import androidx.lifecycle.viewModelScope
 import com.sowhat.common.model.PostingEvent
 import com.sowhat.common.model.Resource
 import com.sowhat.common.model.UiState
+import com.sowhat.common.model.UploadProgress
+import com.sowhat.common.util.UploadBody
+import com.sowhat.common.util.UploadCallback
 import com.sowhat.post_domain.use_case.SubmitPostUseCase
 import com.sowhat.post_domain.use_case.ValidateCurrentMoodUseCase
 import com.sowhat.post_domain.use_case.ValidatePostImagesUseCase
@@ -24,6 +28,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,7 +39,7 @@ class PostViewModel @Inject constructor(
     private val validatePostImagesUseCase: ValidatePostImagesUseCase,
     private val validatePostTextUseCase: ValidatePostTextUseCase,
     private val validateSympathyUseCase: ValidateSympathyUseCase,
-    private val multipartConverter: MultipartConverter
+    private val multipartConverter: MultipartConverter,
 ) : ViewModel() {
     var formState by mutableStateOf(PostFormState())
         private set
@@ -52,24 +57,30 @@ class PostViewModel @Inject constructor(
     private val postingEventChannel = Channel<PostingEvent>()
     val postingEvent = postingEventChannel.receiveAsFlow()
 
-    fun submitPost() {
+    fun submitPost(callback: UploadCallback) {
         viewModelScope.launch {
             uiState = uiState.copy(isLoading = true)
             if (isFormValid) {
-                val multipartList = multipartConverter.convertUriIntoMultipart(formState.images, PARTNAME_IMG)
+                val imageFiles = multipartConverter.convertUriIntoFile(formState.images)
                 val requestBody = multipartConverter.getPostRequestBodyData(formState)
-
-                requestSubmit(requestBody, multipartList)
+                requestSubmit(callback, requestBody, imageFiles)
             }
         }
     }
 
     private suspend fun requestSubmit(
+        callback: UploadCallback,
         requestBody: RequestBody?,
-        multipartList: List<MultipartBody.Part>?
+        imageFiles: List<File>?
     ) {
         requestBody?.let {
-            val result = submitPostUseCase(requestBody, multipartList)
+            UploadProgress.max = ((imageFiles?.size ?: 0) + 1) * 2
+            val requestBodyAsUploadBody = UploadBody(requestBody, "application/json", callback)
+            val imagesBodyAsUploadBody = imageFiles?.map {
+                val progressBody = UploadBody(it, "image/*", callback)
+                MultipartBody.Part.createFormData(PARTNAME_IMG, it.name, progressBody)
+            }
+            val result = submitPostUseCase(requestBodyAsUploadBody, imagesBodyAsUploadBody)
 
             when (result) {
                 is Resource.Success -> {

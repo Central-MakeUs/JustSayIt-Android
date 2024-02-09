@@ -40,6 +40,22 @@ fun getImageMultipartBody(
 
 }
 
+fun getImageFile(
+    appContext: Context,
+    uri: Uri,
+    fileName: String
+): File {
+    val cacheDir = appContext.cacheDir
+    val file = File(cacheDir, fileName)
+    val inputStream = appContext.contentResolver.openInputStream(uri)
+    val outputStream = FileOutputStream(file)
+    inputStream!!.copyTo(outputStream)
+
+    inputStream.close()
+
+    return file
+}
+
 fun String.toDate(): String = try {
     this.split("T")
         .first()
