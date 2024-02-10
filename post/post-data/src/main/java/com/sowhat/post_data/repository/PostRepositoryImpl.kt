@@ -2,6 +2,7 @@ package com.sowhat.post_data.repository
 
 import com.sowhat.post_data.remote.PostApi
 import com.sowhat.common.model.Resource
+import com.sowhat.common.util.UploadBody
 import com.sowhat.network.util.getHttpErrorResource
 import com.sowhat.network.util.getIOErrorResource
 import com.sowhat.post_domain.repository.PostRepository
@@ -16,7 +17,7 @@ class PostRepositoryImpl(
     override suspend fun submitPost(
         accessToken: String,
 //        memberId: Long,
-        storyInfo: RequestBody,
+        storyInfo: UploadBody,
         storyImg: List<MultipartBody.Part?>?
     ): Resource<Unit?> {
         return try {
@@ -36,7 +37,7 @@ class PostRepositoryImpl(
     private suspend fun getSubmitPostResource(
         accessToken: String,
 //        memberId: Long,
-        storyInfo: RequestBody,
+        storyInfo: UploadBody,
         storyImg: List<MultipartBody.Part?>?
     ): Resource<Unit?> {
         val postResult = postApi.submitPost(

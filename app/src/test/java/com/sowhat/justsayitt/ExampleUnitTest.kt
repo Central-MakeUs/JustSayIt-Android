@@ -1,4 +1,4 @@
-package com.sowhat.justsayit
+package com.sowhat.justsayitt
 
 import org.junit.Test
 

@@ -1,9 +1,12 @@
 package com.sowhat.post_presentation.posting
 
+import android.content.Intent
+import android.os.Build
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -21,20 +24,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat.startForegroundService
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.sowhat.common.model.PostingEvent
 import com.sowhat.common.model.UiState
+import com.sowhat.common.model.UploadProgress
 import com.sowhat.common.util.ObserveEvents
+import com.sowhat.designsystem.R
 import com.sowhat.designsystem.common.MoodItem
-import com.sowhat.designsystem.common.noRippleClickable
+import com.sowhat.designsystem.common.addFocusCleaner
 import com.sowhat.designsystem.common.rememberMoodItems
 import com.sowhat.designsystem.component.AlertDialog
 import com.sowhat.designsystem.component.AppBar
@@ -50,8 +54,14 @@ import com.sowhat.post_presentation.component.PostText
 import com.sowhat.post_presentation.component.PostToggle
 import com.sowhat.post_presentation.component.SympathySelection
 import com.sowhat.post_presentation.navigation.navigateBack
-import com.sowhat.designsystem.R
-import com.sowhat.designsystem.common.addFocusCleaner
+import com.sowhat.post_presentation.util.PostProgressService
+import com.sowhat.post_presentation.util.PostProgressService.Companion.ANONYMOUS
+import com.sowhat.post_presentation.util.PostProgressService.Companion.EMOTION
+import com.sowhat.post_presentation.util.PostProgressService.Companion.EMPATHY_LIST
+import com.sowhat.post_presentation.util.PostProgressService.Companion.IMAGE_URIS
+import com.sowhat.post_presentation.util.PostProgressService.Companion.OPENED
+import com.sowhat.post_presentation.util.PostProgressService.Companion.POST_TEXT
+
 
 @Composable
 fun PostRoute(
@@ -98,7 +108,27 @@ fun PostRoute(
         uiState = uiState,
         isValid = viewModel.isFormValid,
         onEvent = viewModel::onEvent,
-        onSubmit = viewModel::submitPost,
+        onSubmit = {
+            if (viewModel.isFormValid) {
+                val intent = Intent(context.applicationContext, PostProgressService::class.java).apply {
+                    putExtra(ANONYMOUS, formState.isAnonymous)
+                    putExtra(POST_TEXT, formState.postText)
+                    putExtra(OPENED, formState.isOpened)
+                    putExtra(EMOTION, formState.currentMood?.postData)
+                    putExtra(EMPATHY_LIST, formState.sympathyMoodItems.map { it.postData }.toTypedArray())
+                    putExtra(IMAGE_URIS, formState.images.map { it.toString() }.toTypedArray())
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(context, intent)
+                } else {
+                    context.startService(intent)
+                }
+
+                navController.navigateBack()
+            }
+
+        },
         onAddImage = {
             imagePicker.launch("image/*")
         },
@@ -157,7 +187,11 @@ fun PostScreen(
                         ),
                     text = stringResource(com.sowhat.designsystem.R.string.button_post),
                     isActive = isValid,
-                    onClick = { onSubmit() }
+                    onClick = {
+                        UploadProgress.current = 0
+                        UploadProgress.max = 0
+                        onSubmit()
+                    }
                 )
             }
         }

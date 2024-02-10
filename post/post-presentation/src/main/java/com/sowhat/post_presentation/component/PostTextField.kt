@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -65,6 +66,7 @@ fun PostTextField(
                },
                textStyle = JustSayItTheme.Typography.body1
                    .copy(color = JustSayItTheme.Colors.mainTypo),
+               cursorBrush = SolidColor(JustSayItTheme.Colors.mainTypo)
            )
 
            TextLengthCounter(

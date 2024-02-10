@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.sowhat.common.model.PostingEvent
 import com.sowhat.common.model.Resource
 import com.sowhat.common.model.SignOutEvent
+import com.sowhat.common.util.NaverOAuthClient
 import com.sowhat.datastore.AuthDataRepository
 import com.sowhat.user_domain.use_case.WithdrawUserUseCase
 import com.sowhat.user_presentation.common.SignOutUiState
@@ -37,7 +38,8 @@ class SignOutViewModel @Inject constructor(
                 )
             }
 
-            authDataRepository.updateForSignOut()
+            NaverOAuthClient.startNaverLogout()
+            authDataRepository.resetData()
             signOutEventChannel.send(PostingEvent.NavigateUp)
         }
     }
@@ -51,24 +53,19 @@ class SignOutViewModel @Inject constructor(
                 )
             }
 
-            val result = withdrawUserUseCase()
-
-            when (result) {
+            when (val result = withdrawUserUseCase()) {
                 is Resource.Success -> {
                     _uiState.update {
-                        uiState.value.copy(
-                            isLoading = false,
-                        )
+                        uiState.value.copy(isLoading = false)
                     }
 
+                    NaverOAuthClient.startNaverDeleteToken()
                     authDataRepository.resetData()
                     signOutEventChannel.send(PostingEvent.NavigateUp)
                 }
                 is Resource.Error -> {
                     _uiState.update {
-                        uiState.value.copy(
-                            isLoading = false,
-                        )
+                        uiState.value.copy(isLoading = false)
                     }
 
                     signOutEventChannel.send(PostingEvent.Error(message = result.message ?: ""))

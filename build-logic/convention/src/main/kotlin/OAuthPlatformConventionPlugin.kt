@@ -6,7 +6,7 @@ class OAuthPlatformConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.sowhat.justsayit.application.oauth")
+                apply("com.sowhat.justsayitt.application.oauth")
             }
             configureOAuthPlatforms()
         }

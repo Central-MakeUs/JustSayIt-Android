@@ -10,7 +10,8 @@ data class AuthData(
     var platformStatus: String?,
     var fcmToken: String?,
     var deviceNumber: String?,
-    var memberId: Long?
+    var memberId: Long?,
+    var userEmail: String?
 )
 
 // @Serializable

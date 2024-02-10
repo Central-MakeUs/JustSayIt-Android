@@ -5,12 +5,12 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
     id("kotlinx-serialization")
-    id("com.sowhat.justsayit.application")
-    id("com.sowhat.justsayit.application.compose")
-    id("com.sowhat.justsayit.application.oauth")
-    id("com.sowhat.justsayit.application.datastore")
-    id("com.sowhat.justsayit.application.hilt")
-    id("com.sowhat.justsayit.application.common")
+    id("com.sowhat.justsayitt.application")
+    id("com.sowhat.justsayitt.application.compose")
+    id("com.sowhat.justsayitt.application.oauth")
+    id("com.sowhat.justsayitt.application.datastore")
+    id("com.sowhat.justsayitt.application.hilt")
+    id("com.sowhat.justsayitt.application.common")
 }
 
 android {
@@ -18,13 +18,13 @@ android {
         create("release") {
         }
     }
-    namespace = "com.sowhat.justsayit"
+    namespace = "com.sowhat.justsayitt"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.sowhat.justsayit"
+        applicationId = "com.sowhat.justsayitt"
         targetSdk = 34
-        versionCode = 2
+        versionCode = 1
         versionName = "1.0"
 
     }

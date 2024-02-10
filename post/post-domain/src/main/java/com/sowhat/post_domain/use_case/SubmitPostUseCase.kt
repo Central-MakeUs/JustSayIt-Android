@@ -1,6 +1,7 @@
 package com.sowhat.post_domain.use_case
 
 import com.sowhat.common.model.Resource
+import com.sowhat.common.util.UploadBody
 import com.sowhat.datastore.AuthDataRepository
 import com.sowhat.post_domain.repository.PostRepository
 import kotlinx.coroutines.flow.first
@@ -13,7 +14,7 @@ class SubmitPostUseCase @Inject constructor(
     private val authRepository: AuthDataRepository,
 ) {
     suspend operator fun invoke(
-        storyInfo: RequestBody,
+        storyInfo: UploadBody,
         storyImg: List<MultipartBody.Part?>?
     ): Resource<Unit?> {
         val authData = authRepository.authData.first()

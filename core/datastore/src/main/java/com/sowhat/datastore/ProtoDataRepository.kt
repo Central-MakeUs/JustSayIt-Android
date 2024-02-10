@@ -12,6 +12,7 @@ interface AuthDataRepository {
     suspend fun updateFcmToken(fcmToken: String)
     suspend fun updateDeviceNumber(deviceNumber: String)
     suspend fun updateMemberId(memberId: Long)
+    suspend fun updateEmail(email: String)
     suspend fun updateForSignOut()
     suspend fun resetData()
 }
