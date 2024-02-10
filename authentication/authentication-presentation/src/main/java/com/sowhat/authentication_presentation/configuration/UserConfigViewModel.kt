@@ -122,6 +122,10 @@ class UserConfigViewModel @Inject constructor(
         return !isNotValid
     }
 
+    fun resetUiState() {
+        formState = RegistrationFormState()
+    }
+
     fun signUp() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)

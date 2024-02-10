@@ -70,8 +70,10 @@ class JustSayItApplication : Application(), androidx.work.Configuration.Provider
             val postChannel = NotificationChannel(
                 PostProgressService.POST_CHANNEL_ID,
                 "게시 진행도 알림",
-                NotificationManager.IMPORTANCE_DEFAULT,
+                NotificationManager.IMPORTANCE_LOW,
             )
+            postChannel.vibrationPattern = null
+            postChannel.enableVibration(true)
             postChannel.description = "게시글 업로드의 진행도를 나타내기 위한 채널입니다."
             notificationManager.createNotificationChannel(postChannel)
         }

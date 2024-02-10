@@ -96,6 +96,7 @@ fun UserConfigRoute(
         when (uiEvent) {
             is SignUpEvent.NavigateToMain -> {
                 Log.i(USER_CONFIG_SCREEN, "navigate to main")
+                viewModel.resetUiState()
                 navController.navigateToMain(popUpTo = CONFIG_EDIT)
             }
             is SignUpEvent.Error -> {
