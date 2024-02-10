@@ -32,7 +32,7 @@ interface FeedApi {
 //        @Query("report-code") reportCode: String
     ): ResponseBody<Unit?>
 
-    @POST("/members/block")
+    @POST("/members/management/block")
     suspend fun blockUser(
         @Header("Authorization") accessToken: String,
         @Body blockBody: BlockBody

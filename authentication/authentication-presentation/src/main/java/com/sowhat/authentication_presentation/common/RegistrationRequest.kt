@@ -6,12 +6,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RegistrationRequest(
-    @SerialName("token")
-    val token: String,
+    @SerialName("email")
+    val email: String,
     @SerialName("nickname")
     val nickname: String,
-    @SerialName("loginType")
-    val loginType: String,
+    @SerialName("provider")
+    val provider: String,
     @SerialName("gender")
     val gender: String,
     @SerialName("birth")

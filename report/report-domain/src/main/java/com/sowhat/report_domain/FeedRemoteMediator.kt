@@ -126,9 +126,9 @@ class FeedRemoteMediator(
         feedItems: Resource<MyFeed>
     ) {
         feedDatabase.withTransaction {
-//            if (loadType == LoadType.REFRESH) {
-//                dao.deleteAllMyFeedItems()
-//            }
+            if (loadType == LoadType.REFRESH) {
+                dao.deleteAllMyFeedItems()
+            }
 
             val myFeedEntities = feedItems.data?.feedItems
             myFeedEntities?.let {

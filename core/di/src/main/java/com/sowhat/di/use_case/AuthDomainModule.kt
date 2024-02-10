@@ -1,6 +1,7 @@
 package com.sowhat.di.use_case
 
 import com.sowhat.authentication_domain.repository.AuthRepository
+import com.sowhat.authentication_domain.use_case.AutoLoginUseCase
 import com.sowhat.authentication_domain.use_case.PostNewMemberUseCase
 import com.sowhat.authentication_domain.use_case.UserSignInUseCase
 import com.sowhat.authentication_domain.use_case.ValidateDayUseCase
@@ -8,6 +9,7 @@ import com.sowhat.authentication_domain.use_case.ValidateGenderUseCase
 import com.sowhat.authentication_domain.use_case.ValidateMonthUseCase
 import com.sowhat.authentication_domain.use_case.ValidateNicknameUseCase
 import com.sowhat.authentication_domain.use_case.ValidateYearUseCase
+import com.sowhat.datastore.AuthDataRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,6 +19,13 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AuthDomainModule {
+    @Provides
+    @Singleton
+    fun provideAutoLoginUseCase(
+        authDataRepository: AuthDataRepository,
+        authRepository: AuthRepository
+    ): AutoLoginUseCase = AutoLoginUseCase(authRepository, authDataRepository)
+
     @Provides
     @Singleton
     fun providePostNewMemberUseCase(repository: AuthRepository): PostNewMemberUseCase =

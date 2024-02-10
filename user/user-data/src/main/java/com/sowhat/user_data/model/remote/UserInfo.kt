@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserInfo(
-    @SerialName("loginType")
-    val loginType: String,
+    @SerialName("provider")
+    val provider: String,
     @SerialName("memberId")
     val memberId: Int,
     @SerialName("personalInfo")
