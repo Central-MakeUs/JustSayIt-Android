@@ -12,6 +12,7 @@ import com.sowhat.datastore.AuthDataRepository
 import com.sowhat.network.util.toBearerToken
 import com.sowhat.authentication_presentation.common.Platform
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,20 +46,28 @@ class OnboardingViewModel @Inject constructor(
     ) = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(isLoading = true)
 
-        val platformToken = tokens.await().platformToken
-        Log.i("OnboardingScreen", "platformToken : $platformToken")
-
-        if (platformToken.isNullOrBlank()) {
-            Log.i("OnboardingScreen", "platformToken is null : $platformToken")
+        // IO에서 실행한 이유는 ui가 끊기기 때문
+        withContext(Dispatchers.IO) {
             authDataStore.apply {
                 updatePlatform(platform = platform.title)
                 updatePlatformToken(platformToken = derivedPlatformToken)
             }
         }
 
+
+//        val platformToken = tokens.await().platformToken
+//        Log.i("OnboardingScreen", "platformToken : $platformToken")
+//
+//
+//
+//        if (platformToken.isNullOrBlank()) {
+//            Log.i("OnboardingScreen", "platformToken is null : $platformToken")
+//
+//        }
+
         // 만약 액세스 토큰이 없을 때 갱신되었을 수 있기 때문에 여기에 새로 선언
-        val newPlatformToken = authDataStore.authData.first().platformToken
-        val signInData = signInUseCase(newPlatformToken)
+//        val newPlatformToken = authDataStore.authData.first().platformToken
+        val signInData = signInUseCase(derivedPlatformToken)
 
         consumeResources(signInData)
     }

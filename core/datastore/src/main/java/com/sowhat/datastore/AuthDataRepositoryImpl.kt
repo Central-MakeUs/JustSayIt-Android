@@ -53,6 +53,12 @@ class AuthDataRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateEmail(email: String) {
+        authDataStore.updateData { authData ->
+            authData.copy(userEmail = email)
+        }
+    }
+
     override suspend fun updateForSignOut() {
         authDataStore.updateData { authData ->
             authData.copy(
@@ -69,6 +75,7 @@ class AuthDataRepositoryImpl @Inject constructor(
                 refreshToken = null,
                 platformToken = null,
                 platformStatus = null,
+                userEmail = null
 //                fcmToken = null,
 //                deviceNumber = null
             )

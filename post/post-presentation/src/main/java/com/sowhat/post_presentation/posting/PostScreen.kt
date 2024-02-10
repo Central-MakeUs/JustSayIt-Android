@@ -111,7 +111,6 @@ fun PostRoute(
         onSubmit = {
             if (viewModel.isFormValid) {
                 val intent = Intent(context.applicationContext, PostProgressService::class.java).apply {
-                    action = PostProgressService.Actions.START.toString()
                     putExtra(ANONYMOUS, formState.isAnonymous)
                     putExtra(POST_TEXT, formState.postText)
                     putExtra(OPENED, formState.isOpened)
@@ -125,31 +124,6 @@ fun PostRoute(
                 } else {
                     context.startService(intent)
                 }
-
-//                val postWork = OneTimeWorkRequestBuilder<PostProgressService>()
-//                    .setConstraints(
-//                        Constraints.Builder()
-//                            .setRequiredNetworkType(NetworkType.CONNECTED)
-//                            .build()
-//                    )
-//                    .setInputData(
-//                        workDataOf(
-//                            ANONYMOUS to formState.isAnonymous,
-//                            POST_TEXT to formState.postText,
-//                            OPENED to formState.isOpened,
-//                            EMOTION to formState.currentMood?.postData,
-//                            EMPATHY_LIST to formState.sympathyMoodItems.map { it.postData }.toTypedArray(),
-//                            IMAGE_URIS to formState.images.map { it.toString() }.toTypedArray()
-//                        )
-//                    )
-//                    .build()
-//
-//                val workManager = WorkManager.getInstance(context.applicationContext)
-//                workManager.beginUniqueWork(
-//                    POST_FEED,
-//                    ExistingWorkPolicy.REPLACE,
-//                    postWork
-//                ).enqueue()
 
                 navController.navigateBack()
             }

@@ -1,18 +1,12 @@
 package com.sowhat.post_presentation.util
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.Service
-import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.net.Uri
-import android.os.Build
-import android.os.IBinder
 import android.util.Log
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.sowhat.common.model.Resource
@@ -24,7 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import javax.inject.Inject
@@ -43,11 +36,23 @@ class PostProgressService : LifecycleService(), UploadCallback {
     private lateinit var empathyList: List<String>
     private lateinit var uris: List<Uri>
 
-    private val job = SupervisorJob()
-    private val scope = CoroutineScope(Dispatchers.Main + job)
+    private lateinit var postProgressReceiver: PostProgressReceiver
+
+    private val notificationBuilder = NotificationCompat.Builder(this, POST_CHANNEL_ID)
+        .setSmallIcon(com.sowhat.designsystem.R.drawable.ic_app_notification_24)
+        .setColor(Color.argb(0, 0, 0, 0))
+
+    override fun onCreate() {
+        super.onCreate()
+        postProgressReceiver = PostProgressReceiver()
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(Actions.START.toString())
+        intentFilter.addAction(Actions.SUCCESS.toString())
+        intentFilter.addAction(Actions.ERROR.toString())
+        registerReceiver(postProgressReceiver, intentFilter)
+    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
         intent?.apply {
             Log.i(TAG, "onStartCommand: start command")
             anonymous = getBooleanExtra(ANONYMOUS, false)
@@ -66,9 +71,12 @@ class PostProgressService : LifecycleService(), UploadCallback {
     }
 
     private fun startPosting() {
+
         lifecycleScope.launch {
             try {
-                Log.i(TAG, "startPosting")
+                // startForegroundService()가 호출되고 5초 이내에 startForeground()가 수행되어야 하므로 바로 표출 시도
+                showStartNotification()
+                sendBroadcast(Intent(Actions.START.toString()))
 
                 val requestBody = multipartConverter.getPostRequestBodyData(
                     anonymous ?: return@launch,
@@ -85,25 +93,29 @@ class PostProgressService : LifecycleService(), UploadCallback {
                     MultipartBody.Part.createFormData(PARTNAME_IMG, it.name, progressBody)
                 }
 
-                UploadProgress.max = ((uris.size ?: 0) + 1) * 2
+                UploadProgress.max = (uris.size + 1) * 2
                 val result = submitPostUseCase(requestBodyAsUploadBody, imagesBodyAsUploadBody)
 
                 when (result) {
                     is Resource.Success -> {
                         Log.i(TAG, "doWork: post success")
                         showCompleteNotification(postText)
+                        val intent = Intent(Actions.SUCCESS.toString())
+                        sendBroadcast(intent)
                     }
 
                     is Resource.Error -> {
                         showFailureNotification(postText)
+                        val intent = Intent(Actions.ERROR.toString())
+                        sendBroadcast(intent)
                     }
                 }
             } catch (e: Exception) {
                 showFailureNotification("게시글을 업로드하지 못하였습니다.")
+                val intent = Intent(Actions.ERROR.toString())
+                sendBroadcast(intent)
             }
-
         }
-
     }
 
     override fun onProgressUpdate(percentage: Int) {
@@ -120,12 +132,23 @@ class PostProgressService : LifecycleService(), UploadCallback {
     override fun onError() {
     }
 
+    private fun showStartNotification() {
+        val notification = notificationBuilder
+            .setContentText("게시글 업로드를 시작합니다.")
+            .setVibrate(LongArray(0))
+            .setSound(null)
+            .setOngoing(true)
+            .build()
+
+        startForeground(POST_NOTIFICATION_TAG, notification)
+    }
+
     private fun showProgressNotification(progress: Int, max: Int, title: String) {
-        val notification = NotificationCompat.Builder(this, POST_CHANNEL_ID)
-            .setSmallIcon(com.sowhat.designsystem.R.drawable.ic_app_notification_24)
-            .setColor(Color.argb(0, 0, 0, 0))
+        val notification = notificationBuilder
             .setContentTitle(title)
             .setContentText("게시글을 업로드하고 있습니다.")
+            .setVibrate(LongArray(0))
+            .setSound(null)
             .setProgress(max, progress, false)
             .setOngoing(true)
             .build()
@@ -134,9 +157,7 @@ class PostProgressService : LifecycleService(), UploadCallback {
     }
 
     private fun showCompleteNotification(title: String) {
-        val notification = NotificationCompat.Builder(this, POST_CHANNEL_ID)
-            .setSmallIcon(com.sowhat.designsystem.R.drawable.ic_app_notification_24)
-            .setColor(Color.argb(0, 0, 0, 0))
+        val notification = notificationBuilder
             .setContentTitle(title)
             .setContentText("게시글 업로드가 완료되었습니다.")
             .build()
@@ -145,26 +166,27 @@ class PostProgressService : LifecycleService(), UploadCallback {
 
         UploadProgress.max = 0
         UploadProgress.current = 0
+
+        stopSelf()
     }
 
     private fun showFailureNotification(title: String) {
-        val notification = NotificationCompat.Builder(this, POST_CHANNEL_ID)
-            .setSmallIcon(com.sowhat.designsystem.R.drawable.ic_app_notification_24)
-            .setColor(Color.argb(0, 0, 0, 0))
+        val notification = notificationBuilder
             .setContentTitle(title)
             .setContentText("게시글을 업로드하지 못하였습니다.")
-//            .setContentIntent(pendingIntent)
             .build()
 
         startForeground(POST_NOTIFICATION_TAG, notification)
 
         UploadProgress.max = 0
         UploadProgress.current = 0
+
+        stopSelf()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        job.cancel()
+        unregisterReceiver(postProgressReceiver)
     }
 
     companion object {
@@ -186,6 +208,6 @@ class PostProgressService : LifecycleService(), UploadCallback {
     }
 
     enum class Actions {
-        START, STOP
+        START, SUCCESS, ERROR
     }
 }

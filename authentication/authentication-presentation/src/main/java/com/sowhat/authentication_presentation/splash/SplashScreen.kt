@@ -39,7 +39,9 @@ fun SplashRoute(
                 )
             }
             is SplashEvent.Error -> {
-
+                navController.navigateToOnboarding(
+                    popUpTo = navController.currentDestination?.route ?: return@ObserveEvents
+                )
             }
         }
     }

@@ -37,7 +37,7 @@ import com.sowhat.authentication_presentation.component.TermText
 import com.sowhat.authentication_presentation.navigation.navigateToMain
 import com.sowhat.authentication_presentation.navigation.navigateToUserConfig
 import com.sowhat.authentication_presentation.util.GoogleOAuthClient
-import com.sowhat.authentication_presentation.util.NaverOAuthClient
+import com.sowhat.common.util.NaverOAuthClient
 import com.sowhat.common.navigation.ONBOARDING
 import kotlinx.coroutines.launch
 

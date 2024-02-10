@@ -24,7 +24,8 @@ object AuthDataSerializer : Serializer<AuthData> by ProtoSerializer(
         platformStatus = null,
         fcmToken = null,
         deviceNumber = null,
-        memberId = null
+        memberId = null,
+        userEmail = null
     )
 )
 
