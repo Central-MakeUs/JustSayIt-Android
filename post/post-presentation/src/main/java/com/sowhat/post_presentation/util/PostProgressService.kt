@@ -1,5 +1,6 @@
 package com.sowhat.post_presentation.util
 
+import android.app.Notification
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
@@ -41,6 +42,8 @@ class PostProgressService : LifecycleService(), UploadCallback {
     private val notificationBuilder = NotificationCompat.Builder(this, POST_CHANNEL_ID)
         .setSmallIcon(com.sowhat.designsystem.R.drawable.ic_app_notification_24)
         .setColor(Color.argb(0, 0, 0, 0))
+        .setVibrate(null)
+        .setSound(null)
 
     override fun onCreate() {
         super.onCreate()
@@ -133,10 +136,12 @@ class PostProgressService : LifecycleService(), UploadCallback {
     }
 
     private fun showStartNotification() {
-        val notification = notificationBuilder
-            .setContentText("게시글 업로드를 시작합니다.")
-            .setVibrate(LongArray(0))
+        val notification = NotificationCompat.Builder(this, POST_CHANNEL_ID)
+            .setSmallIcon(com.sowhat.designsystem.R.drawable.ic_app_notification_24)
+            .setColor(Color.argb(0, 0, 0, 0))
+            .setVibrate(null)
             .setSound(null)
+            .setContentText("게시글 업로드를 시작합니다.")
             .setOngoing(true)
             .build()
 
@@ -144,44 +149,50 @@ class PostProgressService : LifecycleService(), UploadCallback {
     }
 
     private fun showProgressNotification(progress: Int, max: Int, title: String) {
-        val notification = notificationBuilder
+        val notification = NotificationCompat.Builder(this, POST_CHANNEL_ID)
+            .setSmallIcon(com.sowhat.designsystem.R.drawable.ic_app_notification_24)
+            .setColor(Color.argb(0, 0, 0, 0))
+            .setVibrate(null)
+            .setSound(null)
             .setContentTitle(title)
             .setContentText("게시글을 업로드하고 있습니다.")
-            .setVibrate(LongArray(0))
-            .setSound(null)
             .setProgress(max, progress, false)
             .setOngoing(true)
             .build()
 
+        // https://stackoverflow.com/questions/17394115/multiple-call-to-startforeground
+        stopForeground(STOP_FOREGROUND_DETACH)
         startForeground(POST_NOTIFICATION_TAG, notification)
     }
 
     private fun showCompleteNotification(title: String) {
         val notification = notificationBuilder
             .setContentTitle(title)
+//            .setProgress(0, 0, false)
             .setContentText("게시글 업로드가 완료되었습니다.")
+            .setOngoing(false)
             .build()
 
+        stopForeground(STOP_FOREGROUND_DETACH)
         startForeground(POST_NOTIFICATION_TAG, notification)
 
         UploadProgress.max = 0
         UploadProgress.current = 0
-
-        stopSelf()
     }
 
     private fun showFailureNotification(title: String) {
         val notification = notificationBuilder
             .setContentTitle(title)
+//            .setProgress(0, 0, false)
             .setContentText("게시글을 업로드하지 못하였습니다.")
+            .setOngoing(false)
             .build()
 
+        stopForeground(STOP_FOREGROUND_DETACH)
         startForeground(POST_NOTIFICATION_TAG, notification)
 
         UploadProgress.max = 0
         UploadProgress.current = 0
-
-        stopSelf()
     }
 
     override fun onDestroy() {

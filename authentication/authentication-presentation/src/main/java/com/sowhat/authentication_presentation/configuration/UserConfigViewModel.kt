@@ -122,6 +122,10 @@ class UserConfigViewModel @Inject constructor(
         return !isNotValid
     }
 
+    fun resetUiState() {
+        formState = RegistrationFormState()
+    }
+
     fun signUp() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
@@ -133,10 +137,10 @@ class UserConfigViewModel @Inject constructor(
 
             val availableTokens = tokens.await()
 
-            val platformToken = availableTokens.platformToken
+            val email = availableTokens.userEmail
             val platform = availableTokens.platformStatus
 
-            if (platformToken == null || platform == null) {
+            if (email == null || platform == null) {
                 _uiState.value = _uiState.value.copy(isLoading = false, data = null)
                 signUpEventChannel.send(SignUpEvent.Error("로그인 플랫폼이 존재하지 않습니다."))
                 return@launch
@@ -144,9 +148,7 @@ class UserConfigViewModel @Inject constructor(
 
             val birth = "${formState.year}-${formState.month}-${formState.day}"
             val gender = if (formState.gender == "남") "MALE" else "FEMALE"
-            val loginType = platform
             val nickname = formState.nickname
-            val token = platformToken
 
 //            val jsonObject = JSONObject(
 //            "{\"token\":\"${token}\", " +
@@ -157,9 +159,9 @@ class UserConfigViewModel @Inject constructor(
 //            ).toString()
 
             val requestBody = RegistrationRequest(
-                token = token,
+                email = email,
                 nickname = nickname,
-                loginType = loginType,
+                provider = platform,
                 gender = gender,
                 birth = birth
             )
@@ -170,7 +172,7 @@ class UserConfigViewModel @Inject constructor(
             Log.i("UserConfigScreen", requestBody.toString())
 
             val result = postNewMemberUseCase(
-                loginInfo = requestPart,
+                joinInfo = requestPart,
                 profileImage = formState.profileImage
             )
 

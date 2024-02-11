@@ -1,10 +1,12 @@
 package com.sowhat.authentication_data.repository
 
+import com.google.firebase.installations.remote.TokenResult.ResponseCode
 import com.sowhat.authentication_data.mapper.toNewMember
 import com.sowhat.authentication_data.mapper.toSignIn
 import com.sowhat.authentication_data.remote.AuthApi
 import com.sowhat.authentication_domain.model.NewMember
 import com.sowhat.authentication_domain.model.SignIn
+import com.sowhat.authentication_domain.model.Token
 import com.sowhat.authentication_domain.repository.AuthRepository
 import com.sowhat.common.model.Resource
 import com.sowhat.network.util.getHttpErrorResource
@@ -17,6 +19,17 @@ import java.io.IOException
 class AuthRepositoryImpl(
     private val authApi: AuthApi
 ) : AuthRepository {
+    override suspend fun autoSignIn(accessToken: String?): Resource<Boolean?> {
+        return try {
+            val result = authApi.autoSignIn(accessToken)
+            Resource.Success(result.data, result.code, result.message)
+        } catch (e: HttpException) {
+            getHttpErrorResource(e)
+        } catch (e: IOException) {
+            getIOErrorResource(e)
+        }
+    }
+
     override suspend fun signIn(
         platformToken: String?
     ): Resource<SignIn> {
@@ -30,11 +43,11 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun signUp(
-        loginInfo: RequestBody,
+        joinInfo: RequestBody,
         profileImage: MultipartBody.Part?
     ): Resource<NewMember> {
         return try {
-            getSignUpResource(loginInfo, profileImage)
+            getSignUpResource(joinInfo, profileImage)
         } catch (e: HttpException) {
             getHttpErrorResource(e)
         } catch (e: IOException) {
@@ -43,11 +56,11 @@ class AuthRepositoryImpl(
     }
 
     private suspend fun getSignUpResource(
-        loginInfo: RequestBody,
+        joinInfo: RequestBody,
         profileImage: MultipartBody.Part?
     ): Resource<NewMember> {
         val newMemberDto = authApi.postNewMember(
-            loginInfo = loginInfo,
+            joinInfo = joinInfo,
             profileImg = profileImage
         )
         return newMemberDto.data?.let { signUpData ->
@@ -64,7 +77,7 @@ class AuthRepositoryImpl(
     }
 
     private suspend fun getSignInResource(platformToken: String?): Resource<SignIn> {
-        val signInResult = authApi.signIn(platformToken)
+        val signInResult = authApi.signIn(Token(platformToken))
         return signInResult.data?.let { signInData ->
             Resource.Success(
                 data = signInData.toSignIn(),

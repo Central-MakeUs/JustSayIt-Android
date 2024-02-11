@@ -13,5 +13,5 @@ fun NewMemberInfo.toNewMember() = NewMember(
 fun SignInResult.toSignIn() = SignIn(
     accessToken = accessToken,
     isJoined = isJoined,
-    memberId = memberId
+    email = email
 )

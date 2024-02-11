@@ -8,7 +8,7 @@ import com.sowhat.user_domain.model.ProfileInfoDomain
 import com.sowhat.user_domain.model.UserInfoDomain
 
 fun UserInfo.toUserInfoDomain(): UserInfoDomain = UserInfoDomain(
-    loginType = loginType,
+    loginType = provider,
     memberId = memberId,
     personalInfo = personalInfo.toPersonalInfoDomain(),
     profileInfo = profileInfo.toProfileInfoDomain()

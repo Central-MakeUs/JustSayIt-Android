@@ -10,6 +10,6 @@ data class SignInResult(
     val accessToken: String?,
     @SerialName("isJoined")
     val isJoined: Boolean,
-    @SerialName("memberId")
-    val memberId: Long?
+    @SerialName("email")
+    val email: String?
 )

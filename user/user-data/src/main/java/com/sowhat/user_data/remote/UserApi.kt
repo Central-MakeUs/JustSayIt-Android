@@ -29,7 +29,7 @@ interface UserApi {
         @Part profileImage: MultipartBody.Part?,
     ): ResponseBody<Unit?>
 
-    @POST("/members/quit")
+    @POST("/members/management/quit")
     suspend fun withdrawUser(
         @Header("Authorization") accessToken: String?,
 //        @Path("member-id") memberId: Long,

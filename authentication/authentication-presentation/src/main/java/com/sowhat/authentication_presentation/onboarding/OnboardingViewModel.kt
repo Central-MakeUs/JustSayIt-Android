@@ -47,12 +47,11 @@ class OnboardingViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(isLoading = true)
 
         // IO에서 실행한 이유는 ui가 끊기기 때문
-        withContext(Dispatchers.IO) {
-            authDataStore.apply {
-                updatePlatform(platform = platform.title)
-                updatePlatformToken(platformToken = derivedPlatformToken)
-            }
+        authDataStore.apply {
+            updatePlatform(platform = platform.title)
+            updatePlatformToken(platformToken = derivedPlatformToken)
         }
+
 
 
 //        val platformToken = tokens.await().platformToken
@@ -95,24 +94,30 @@ class OnboardingViewModel @Inject constructor(
         data: SignIn?,
         signInData: Resource<SignIn>
     ) {
-        if (data?.memberId != null && data.isJoined) {
-            data.accessToken?.let {
-                authDataStore.updateAccessToken(it)
-            }
-            authDataStore.updateMemberId(data.memberId!!)
+        if (data?.email != null) {
+            Log.i("email", "consumeSuccessResources: ${data.email}")
+            authDataStore.updateEmail(data.email!!)
             terminateLoading(data = signInData.data)
-            _uiEvent.send(SignInEvent.NavigateToMain)
-            return
+            _uiEvent.send(SignInEvent.Error(message = "서버로부터 이메일을 받아올 수 없습니다."))
+        }
+
+        if (data?.accessToken == null) {
+            terminateLoading(data = signInData.data)
+            _uiEvent.send(SignInEvent.Error(message = "서버로부터 토큰을 받아올 수 없습니다."))
         }
 
         if (data?.isJoined == false) {
             terminateLoading(data = signInData.data)
             _uiEvent.send(SignInEvent.NavigateToSignUp)
             return
+        } else {
+            terminateLoading(data = signInData.data)
+            data?.accessToken?.let {
+                authDataStore.updateAccessToken(it)
+            }
+            _uiEvent.send(SignInEvent.NavigateToMain)
+            return
         }
-
-        terminateLoading(data = signInData.data)
-        _uiEvent.send(SignInEvent.Error(message = "서버로부터 토큰을 받아올 수 없습니다."))
     }
 
     private fun terminateLoading(data: SignIn?) {

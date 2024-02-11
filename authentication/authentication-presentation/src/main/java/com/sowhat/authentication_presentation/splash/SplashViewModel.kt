@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sowhat.authentication_domain.model.SignIn
+import com.sowhat.authentication_domain.use_case.AutoLoginUseCase
 import com.sowhat.authentication_domain.use_case.UserSignInUseCase
 import com.sowhat.authentication_presentation.common.Platform
 import com.sowhat.common.model.Resource
@@ -20,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val signInUseCase: UserSignInUseCase,
+    private val autoLoginUseCase: AutoLoginUseCase,
     private val authDataStore: AuthDataRepository
 ) : ViewModel() {
     private val _uiEvent = Channel<SplashEvent>()
@@ -36,26 +37,23 @@ class SplashViewModel @Inject constructor(
 
     private fun signIn() = viewModelScope.launch {
         val accessToken = tokens.await().accessToken
-        val platformToken = tokens.await().platformToken
-        Log.i("OnboardingScreen", "platformToken : $platformToken")
 
-        if (accessToken == null || platformToken.isNullOrBlank()) {
-            Log.i("OnboardingScreen", "platformToken is null : $platformToken")
+        if (accessToken == null) {
+            Log.i("OnboardingScreen", "accessToken is null")
             _uiEvent.send(SplashEvent.NavigateToSignIn)
             return@launch
         }
 
         // 만약 액세스 토큰이 없을 때 갱신되었을 수 있기 때문에 여기에 새로 선언
-        val signInData = signInUseCase(platformToken)
+        val result = autoLoginUseCase()
 
-        consumeResources(signInData)
+        consumeResources(result)
     }
 
-    private suspend fun consumeResources(signInData: Resource<SignIn>) {
+    private suspend fun consumeResources(signInData: Resource<Boolean?>) {
         when (signInData) {
             is Resource.Success -> {
-                val data = signInData.data
-                consumeSuccessResources(data)
+                consumeSuccessResources(signInData.data)
             }
             is Resource.Error -> {
                 consumeErrorResources(signInData)
@@ -63,26 +61,17 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    private suspend fun consumeErrorResources(signInData: Resource<SignIn>) {
+    private suspend fun consumeErrorResources(signInData: Resource<Boolean?>) {
         _uiEvent.send(
             SplashEvent.Error(message = signInData.message ?: "예상치 못한 오류가 발생했습니다.")
         )
     }
 
     private suspend fun consumeSuccessResources(
-        data: SignIn?
+        data: Boolean?
     ) {
-        if (data?.memberId != null && data.isJoined) {
-            data.accessToken?.let {
-                authDataStore.updateAccessToken(it)
-            }
-            authDataStore.updateMemberId(data.memberId!!)
+        if (data != null) {
             _uiEvent.send(SplashEvent.NavigateToMain)
-            return
-        }
-
-        if (data?.isJoined == false) {
-            _uiEvent.send(SplashEvent.NavigateToSignIn)
             return
         }
 
