@@ -20,6 +20,10 @@ internal fun Project.configureKotlinAndroid() {
             buildConfig = true
         }
 
+        lint {
+            checkReleaseBuilds = false
+        }
+
         defaultConfig {
             minSdk = 24
 
