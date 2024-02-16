@@ -34,6 +34,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -60,6 +61,7 @@ import com.sowhat.designsystem.component.AlertDialogReverse
 import com.sowhat.designsystem.component.AppendingCircularProgress
 import com.sowhat.designsystem.component.CenteredCircularProgress
 import com.sowhat.designsystem.component.ImageDialog
+import com.sowhat.designsystem.component.NoItemNotice
 import com.sowhat.report_presentation.common.MyFeedEvent
 import com.sowhat.report_presentation.common.MyFeedUiState
 import com.sowhat.report_presentation.common.ReportEvent
@@ -163,7 +165,7 @@ fun MyPageRoute(
             imageUrl = myFeedUiState.imageUrl
         )
     }
-    
+
     if (myFeedUiState.isLoading) {
         CenteredCircularProgress()
     }
@@ -284,7 +286,9 @@ private fun MyFeedItemsScreen(
     }
 
     Scaffold(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .background(JustSayItTheme.Colors.mainBackground),
         topBar = {
             AppBarMyPage(
                 currentDropdownItem = myFeedUiState.emotion,
@@ -306,23 +310,37 @@ private fun MyFeedItemsScreen(
             )
         }
     ) { paddingValues ->
-        MyFeedList(
-            modifier = Modifier.padding(paddingValues),
-            lazyListState = lazyListState,
-            currentState = currentState,
-            currentDate = currentDate,
-            isScrollInProgress = isCurrentFeedInfoVisible,
-            pagingData = pagingData,
-            moodItems = moodItems,
-            isItemIconVisible = isItemIconVisible,
-            onFirstItemIndexChange = { myFeed ->
-                currentState = moodItems.find { it.postData == myFeed.writerEmotion }
-                currentDate = myFeed.createdAt.toDate()
-            },
-            myFeedUiState = myFeedUiState,
-            onMyFeedEvent = onMyFeedEvent,
-            onEdit = onEdit,
-        )
+        if (pagingData.itemCount == 0) {
+            Column(
+                modifier = Modifier.padding(paddingValues).fillMaxSize().background(JustSayItTheme.Colors.mainBackground)
+            ) {
+                NoItemNotice(
+                    modifier = Modifier
+
+                        .padding(top = JustSayItTheme.Spacing.spaceXXL),
+                    painter = painterResource(id = R.drawable.ic_pen_24),
+                    text = stringResource(id = R.string.notice_no_feed)
+                )
+            }
+        } else {
+            MyFeedList(
+                modifier = Modifier.padding(paddingValues),
+                lazyListState = lazyListState,
+                currentState = currentState,
+                currentDate = currentDate,
+                isScrollInProgress = isCurrentFeedInfoVisible,
+                pagingData = pagingData,
+                moodItems = moodItems,
+                isItemIconVisible = isItemIconVisible,
+                onFirstItemIndexChange = { myFeed ->
+                    currentState = moodItems.find { it.postData == myFeed.writerEmotion }
+                    currentDate = myFeed.createdAt.toDate()
+                },
+                myFeedUiState = myFeedUiState,
+                onMyFeedEvent = onMyFeedEvent,
+                onEdit = onEdit,
+            )
+        }
     }
 }
 
