@@ -1,6 +1,7 @@
 package com.sowhat.post_presentation.util
 
 import android.app.Notification
+import android.app.NotificationManager
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
@@ -37,7 +38,8 @@ class PostProgressService : LifecycleService(), UploadCallback {
     private lateinit var empathyList: List<String>
     private lateinit var uris: List<Uri>
 
-    private lateinit var postProgressReceiver: PostProgressReceiver
+    private lateinit var notificationManager: NotificationManager
+//    private lateinit var postProgressReceiver: PostProgressReceiver
 
     private val notificationBuilder = NotificationCompat.Builder(this, POST_CHANNEL_ID)
         .setSmallIcon(com.sowhat.designsystem.R.drawable.ic_app_notification_24)
@@ -47,12 +49,13 @@ class PostProgressService : LifecycleService(), UploadCallback {
 
     override fun onCreate() {
         super.onCreate()
-        postProgressReceiver = PostProgressReceiver()
+//        postProgressReceiver = PostProgressReceiver()
+        notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val intentFilter = IntentFilter()
         intentFilter.addAction(Actions.START.toString())
         intentFilter.addAction(Actions.SUCCESS.toString())
         intentFilter.addAction(Actions.ERROR.toString())
-        registerReceiver(postProgressReceiver, intentFilter)
+//        registerReceiver(postProgressReceiver, intentFilter)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -136,6 +139,8 @@ class PostProgressService : LifecycleService(), UploadCallback {
     }
 
     private fun showStartNotification() {
+        Toast.makeText(this, "게시글 업로드를 시작합니다.", Toast.LENGTH_SHORT).show()
+
         val notification = NotificationCompat.Builder(this, POST_CHANNEL_ID)
             .setSmallIcon(com.sowhat.designsystem.R.drawable.ic_app_notification_24)
             .setColor(Color.argb(0, 0, 0, 0))
@@ -166,38 +171,44 @@ class PostProgressService : LifecycleService(), UploadCallback {
     }
 
     private fun showCompleteNotification(title: String) {
+        Toast.makeText(this, "게시글 업로드가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+        stopForeground(STOP_FOREGROUND_REMOVE)
+
         val notification = notificationBuilder
             .setContentTitle(title)
-//            .setProgress(0, 0, false)
             .setContentText("게시글 업로드가 완료되었습니다.")
             .setOngoing(false)
             .build()
 
-        stopForeground(STOP_FOREGROUND_DETACH)
-        startForeground(POST_NOTIFICATION_TAG, notification)
+        notificationManager.notify(POST_NOTIFICATION_TAG, notification)
 
         UploadProgress.max = 0
         UploadProgress.current = 0
+
+        stopSelf()
     }
 
     private fun showFailureNotification(title: String) {
+        Toast.makeText(this, "게시글을 업로드하지 못하였습니다.", Toast.LENGTH_SHORT).show()
+        stopForeground(STOP_FOREGROUND_REMOVE)
+
         val notification = notificationBuilder
             .setContentTitle(title)
-//            .setProgress(0, 0, false)
             .setContentText("게시글을 업로드하지 못하였습니다.")
             .setOngoing(false)
             .build()
 
-        stopForeground(STOP_FOREGROUND_DETACH)
-        startForeground(POST_NOTIFICATION_TAG, notification)
+        notificationManager.notify(POST_NOTIFICATION_TAG, notification)
 
         UploadProgress.max = 0
         UploadProgress.current = 0
+
+        stopSelf()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(postProgressReceiver)
+//        unregisterReceiver(postProgressReceiver)
     }
 
     companion object {
