@@ -142,6 +142,9 @@
     <string name="snackbar_cancel_empathy_successful">공감을 취소하였습니다.</string>
     <string name="snackbar_post_mood_error">감정 추가는 1분뒤에 가능해요.</string>
 
+    <string name="notice_no_notification">아직 도착한 알림이 없어요</string>
+    <string name="notice_no_feed">아직 작성한 글이 없어요</string>
+
     <string name="service_email">justtsayit2024@gmail.com</string>
     <string name="contact_subject">그냥, 그렇다고 서비스 문의</string>
     <string name="service_term_url">https://juniper-drawer-723.notion.site/56e7a2cd2c2746078c11dacf984c941b</string>
