@@ -10,7 +10,7 @@ interface PostRepository {
     suspend fun submitPost(
         accessToken: String,
 //        memberId: Long,
-        storyInfo: UploadBody,
+        storyInfo: RequestBody,
         storyImg: List<MultipartBody.Part?>?
     ): Resource<Unit?>
 

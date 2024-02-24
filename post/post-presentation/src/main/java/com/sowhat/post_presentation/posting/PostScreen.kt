@@ -16,10 +16,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -61,6 +65,7 @@ import com.sowhat.post_presentation.util.PostProgressService.Companion.EMPATHY_L
 import com.sowhat.post_presentation.util.PostProgressService.Companion.IMAGE_URIS
 import com.sowhat.post_presentation.util.PostProgressService.Companion.OPENED
 import com.sowhat.post_presentation.util.PostProgressService.Companion.POST_TEXT
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -73,6 +78,8 @@ fun PostRoute(
     val moods = rememberMoodItems()
     val context = LocalContext.current
     val availableImageCount = 4
+    val snackbarHostState = SnackbarHostState()
+    val scope = rememberCoroutineScope()
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetMultipleContents(),
@@ -108,27 +115,34 @@ fun PostRoute(
         uiState = uiState,
         isValid = viewModel.isFormValid,
         onEvent = viewModel::onEvent,
-        onSubmit = {
-            if (viewModel.isFormValid) {
-                val intent = Intent(context.applicationContext, PostProgressService::class.java).apply {
-                    putExtra(ANONYMOUS, formState.isAnonymous)
-                    putExtra(POST_TEXT, formState.postText)
-                    putExtra(OPENED, formState.isOpened)
-                    putExtra(EMOTION, formState.currentMood?.postData)
-                    putExtra(EMPATHY_LIST, formState.sympathyMoodItems.map { it.postData }.toTypedArray())
-                    putExtra(IMAGE_URIS, formState.images.map { it.toString() }.toTypedArray())
-                }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(context, intent)
-                } else {
-                    context.startService(intent)
-                }
-
-                navController.navigateBack()
-            }
-
-        },
+        onSubmit = viewModel::submitPost
+//        {
+//            try {
+//                if (viewModel.isFormValid) {
+//                    val intent = Intent(context.applicationContext, PostProgressService::class.java).apply {
+//                        putExtra(ANONYMOUS, formState.isAnonymous)
+//                        putExtra(POST_TEXT, formState.postText)
+//                        putExtra(OPENED, formState.isOpened)
+//                        putExtra(EMOTION, formState.currentMood?.postData)
+//                        putExtra(EMPATHY_LIST, formState.sympathyMoodItems.map { it.postData }.toTypedArray())
+//                        putExtra(IMAGE_URIS, formState.images.map { it.toString() }.toTypedArray())
+//                    }
+//
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                        startForegroundService(context, intent)
+//                    } else {
+//                        context.startService(intent)
+//                    }
+//
+//                    navController.navigateBack()
+//                }
+//            } catch (e: Exception) {
+//                scope.launch {
+//                    snackbarHostState.showSnackbar("게시글 업로드 오류가 발생하였습니다.", duration = SnackbarDuration.Short)
+//                }
+//            }
+//        }
+        ,
         onAddImage = {
             imagePicker.launch("image/*")
         },

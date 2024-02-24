@@ -17,7 +17,7 @@ class PostRepositoryImpl(
     override suspend fun submitPost(
         accessToken: String,
 //        memberId: Long,
-        storyInfo: UploadBody,
+        storyInfo: RequestBody,
         storyImg: List<MultipartBody.Part?>?
     ): Resource<Unit?> {
         return try {
@@ -37,7 +37,7 @@ class PostRepositoryImpl(
     private suspend fun getSubmitPostResource(
         accessToken: String,
 //        memberId: Long,
-        storyInfo: UploadBody,
+        storyInfo: RequestBody,
         storyImg: List<MultipartBody.Part?>?
     ): Resource<Unit?> {
         val postResult = postApi.submitPost(

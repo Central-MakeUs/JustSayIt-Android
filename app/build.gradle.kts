@@ -24,8 +24,8 @@ android {
     defaultConfig {
         applicationId = "com.sowhat.justsayitt"
         targetSdk = 34
-        versionCode = 4
-        versionName = "1.0.1"
+        versionCode = 6
+        versionName = "1.0.3"
 
     }
     packaging {

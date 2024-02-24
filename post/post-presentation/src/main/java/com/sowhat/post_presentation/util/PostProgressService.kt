@@ -58,7 +58,7 @@ class PostProgressService : LifecycleService(), UploadCallback {
 //        registerReceiver(postProgressReceiver, intentFilter)
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = try {
         intent?.apply {
             Log.i(TAG, "onStartCommand: start command")
             anonymous = getBooleanExtra(ANONYMOUS, false)
@@ -73,11 +73,13 @@ class PostProgressService : LifecycleService(), UploadCallback {
 
         startPosting()
 
-        return super.onStartCommand(intent, flags, startId)
+        super.onStartCommand(intent, flags, startId)
+    } catch (e: Exception) {
+        showFailureNotification("게시글을 업로드하지 못하였습니다.")
+        super.onStartCommand(intent, flags, startId)
     }
 
     private fun startPosting() {
-
         lifecycleScope.launch {
             try {
                 // startForegroundService()가 호출되고 5초 이내에 startForeground()가 수행되어야 하므로 바로 표출 시도

@@ -14,7 +14,7 @@ class SubmitPostUseCase @Inject constructor(
     private val authRepository: AuthDataRepository,
 ) {
     suspend operator fun invoke(
-        storyInfo: UploadBody,
+        storyInfo: RequestBody,
         storyImg: List<MultipartBody.Part?>?
     ): Resource<Unit?> {
         val authData = authRepository.authData.first()

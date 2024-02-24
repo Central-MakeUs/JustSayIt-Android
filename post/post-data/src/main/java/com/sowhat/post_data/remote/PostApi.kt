@@ -16,7 +16,7 @@ interface PostApi {
     suspend fun submitPost(
         @Header("Authorization") accessToken: String,
 //        @Path("member-id") memberId: Long,
-        @Part("storyInfo") storyInfo: UploadBody,
+        @Part("storyInfo") storyInfo: RequestBody,
         @Part storyImg: List<MultipartBody.Part?>?
     ): ResponseBody<Unit?>
 

@@ -57,30 +57,24 @@ class PostViewModel @Inject constructor(
     private val postingEventChannel = Channel<PostingEvent>()
     val postingEvent = postingEventChannel.receiveAsFlow()
 
-    fun submitPost(callback: UploadCallback) {
+    fun submitPost() {
         viewModelScope.launch {
             uiState = uiState.copy(isLoading = true)
             if (isFormValid) {
-                val imageFiles = multipartConverter.convertUriIntoFile(formState.images)
+                val multipartList = multipartConverter.convertUriIntoMultipart(formState.images, PARTNAME_IMG)
                 val requestBody = multipartConverter.getPostRequestBodyData(formState)
-                requestSubmit(callback, requestBody, imageFiles)
+
+                requestSubmit(requestBody, multipartList)
             }
         }
     }
 
     private suspend fun requestSubmit(
-        callback: UploadCallback,
         requestBody: RequestBody?,
-        imageFiles: List<File>?
+        multipartList: List<MultipartBody.Part>?
     ) {
         requestBody?.let {
-            UploadProgress.max = ((imageFiles?.size ?: 0) + 1) * 2
-            val requestBodyAsUploadBody = UploadBody(requestBody, "application/json", callback)
-            val imagesBodyAsUploadBody = imageFiles?.map {
-                val progressBody = UploadBody(it, "image/*", callback)
-                MultipartBody.Part.createFormData(PARTNAME_IMG, it.name, progressBody)
-            }
-            val result = submitPostUseCase(requestBodyAsUploadBody, imagesBodyAsUploadBody)
+            val result = submitPostUseCase(requestBody, multipartList)
 
             when (result) {
                 is Resource.Success -> {
@@ -100,6 +94,51 @@ class PostViewModel @Inject constructor(
             }
         }
     }
+
+
+//    fun submitPost(callback: UploadCallback) {
+//        viewModelScope.launch {
+//            uiState = uiState.copy(isLoading = true)
+//            if (isFormValid) {
+//                val imageFiles = multipartConverter.convertUriIntoFile(formState.images)
+//                val requestBody = multipartConverter.getPostRequestBodyData(formState)
+//                requestSubmit(callback, requestBody, imageFiles)
+//            }
+//        }
+//    }
+//
+//    private suspend fun requestSubmit(
+//        callback: UploadCallback,
+//        requestBody: RequestBody?,
+//        imageFiles: List<File>?
+//    ) {
+//        requestBody?.let {
+//            UploadProgress.max = ((imageFiles?.size ?: 0) + 1) * 2
+//            val requestBodyAsUploadBody = UploadBody(requestBody, "application/json", callback)
+//            val imagesBodyAsUploadBody = imageFiles?.map {
+//                val progressBody = UploadBody(it, "image/*", callback)
+//                MultipartBody.Part.createFormData(PARTNAME_IMG, it.name, progressBody)
+//            }
+//            val result = submitPostUseCase(requestBodyAsUploadBody, imagesBodyAsUploadBody)
+//
+//            when (result) {
+//                is Resource.Success -> {
+//                    uiState = uiState.copy(isLoading = false)
+//                    postingEventChannel.send(PostingEvent.NavigateUp)
+//                }
+//
+//                is Resource.Error -> {
+//                    uiState = uiState.copy(isLoading = false, errorMessage = result.message)
+//                    postingEventChannel.send(
+//                        PostingEvent.Error(
+//                            result.message
+//                                ?: "예상치 못한 오류가 발생했습니다."
+//                        )
+//                    )
+//                }
+//            }
+//        }
+//    }
 
 
     fun onEvent(event: PostFormEvent) {
